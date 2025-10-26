@@ -9,9 +9,11 @@ const app = express();
 // Enable CORS with credentials
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://pocket-fund-theta.vercel.app' 
-    : 'http://localhost:3000',
-  credentials: true
+    ? ['https://pocket-fund-theta.vercel.app', 'https://pocket-fund-theta.vercel.app/api']
+    : ['http://localhost:3000', 'http://localhost:5000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 declare module 'http' {

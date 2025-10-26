@@ -83,9 +83,16 @@ export async function setupAuth(app: Express) {
   }));
 
   app.get("/api/auth/google/callback", 
-    passport.authenticate("google", { failureRedirect: "/login" }),
+    passport.authenticate("google", { 
+      failureRedirect: process.env.NODE_ENV === "production" 
+        ? "https://pocket-fund-theta.vercel.app/login"
+        : "http://localhost:3000/login"
+    }),
     (req, res) => {
-      res.redirect("/");
+      const redirectUrl = process.env.NODE_ENV === "production"
+        ? "https://pocket-fund-theta.vercel.app"
+        : "http://localhost:3000";
+      res.redirect(redirectUrl);
     }
   );
 

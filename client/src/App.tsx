@@ -50,8 +50,6 @@ function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
-      <Route path="/api/auth/google" component={Login} />
-      <Route path="/api/auth/google/callback" component={Login} />
       <Route path="/" component={() => (
         <ProtectedRoute>
           <Dashboard />
