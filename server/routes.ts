@@ -117,6 +117,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete('/api/transactions/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      await storage.deleteTransaction(id, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+      res.status(500).json({ message: "Failed to delete transaction" });
+    }
+  });
+
   app.post('/api/transactions/:id/categorize', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;

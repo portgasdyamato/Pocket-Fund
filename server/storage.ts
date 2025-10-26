@@ -42,6 +42,7 @@ export interface IStorage {
   getTransactions(userId: string, limit?: number): Promise<Transaction[]>;
   getUntaggedTransactions(userId: string): Promise<Transaction[]>;
   updateTransactionTag(id: string, tag: string): Promise<void>;
+  deleteTransaction(id: string, userId: string): Promise<void>;
   
   // Badge operations
   getBadges(): Promise<Badge[]>;
@@ -136,6 +137,10 @@ export class DatabaseStorage implements IStorage {
 
   async updateTransactionTag(id: string, tag: string): Promise<void> {
     await db.update(transactions).set({ tag }).where(eq(transactions.id, id));
+  }
+
+  async deleteTransaction(id: string, userId: string): Promise<void> {
+    await db.delete(transactions).where(and(eq(transactions.id, id), eq(transactions.userId, userId)));
   }
 
   // Badge operations
