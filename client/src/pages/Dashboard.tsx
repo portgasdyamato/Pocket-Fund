@@ -177,10 +177,6 @@ export default function Dashboard() {
       <AddExpenseModal
         open={isAddExpenseOpen}
         onOpenChange={setIsAddExpenseOpen}
-        onAdd={(expense) => {
-          console.log('Expense added:', expense);
-          // todo: remove mock functionality - In real app, this would save to backend
-        }}
       />
     </div>
   );
