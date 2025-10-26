@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Coffee, Car, ShoppingBag, Ticket, FileText, Tag } from "lucide-react";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface AddExpenseModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd?: (expense: { amount: number; category: string; description: string }) => void;
 }
 
 const categories = [
@@ -20,23 +22,46 @@ const categories = [
   { name: 'Other', icon: Tag, color: 'bg-muted/50 text-muted-foreground border-border' },
 ];
 
-export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpenseModalProps) {
+export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalProps) {
+  const { toast } = useToast();
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (amount && category) {
-      onAdd?.({
-        amount: parseFloat(amount),
-        category,
-        description: description || `${category} expense`
+  const createExpenseMutation = useMutation({
+    mutationFn: async (data: { amount: string; category: string; description: string; date: Date }) => {
+      return await apiRequest("/api/transactions", "POST", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
+      toast({
+        title: "Expense Added",
+        description: "Your expense has been logged successfully",
       });
       setAmount("");
       setCategory("");
       setDescription("");
       onOpenChange(false);
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to add expense. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (amount && category && !createExpenseMutation.isPending) {
+      createExpenseMutation.mutate({
+        amount,
+        category,
+        description: description || `${category} expense`,
+        date: new Date(),
+      });
     }
   };
 
@@ -50,7 +75,7 @@ export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpens
           <div>
             <Label htmlFor="amount" className="text-base font-semibold mb-2 block">Amount</Label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-muted-foreground">$</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-muted-foreground">₹</span>
               <Input
                 id="amount"
                 type="number"
@@ -61,6 +86,7 @@ export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpens
                 className="pl-8 text-3xl font-bold h-16 font-mono"
                 data-testid="input-amount"
                 autoFocus
+                disabled={createExpenseMutation.isPending}
               />
             </div>
           </div>
@@ -78,6 +104,7 @@ export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpens
                     className={`h-auto flex-col gap-2 p-3 ${category === cat.name ? cat.color : ''}`}
                     onClick={() => setCategory(cat.name)}
                     data-testid={`button-category-${cat.name.toLowerCase()}`}
+                    disabled={createExpenseMutation.isPending}
                   >
                     <Icon className="w-5 h-5" />
                     <span className="text-xs font-semibold">{cat.name}</span>
@@ -97,16 +124,17 @@ export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpens
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               data-testid="input-description"
+              disabled={createExpenseMutation.isPending}
             />
           </div>
 
           <Button
             type="submit"
             className="w-full h-12 text-base font-bold"
-            disabled={!amount || !category}
+            disabled={!amount || !category || createExpenseMutation.isPending}
             data-testid="button-submit-expense"
           >
-            Add Expense
+            {createExpenseMutation.isPending ? "Adding..." : "Add Expense"}
           </Button>
         </form>
       </DialogContent>
