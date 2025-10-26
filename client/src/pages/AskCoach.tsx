@@ -15,6 +15,32 @@ interface ChatMessage {
   message: string;
 }
 
+function formatMarkdown(text: string) {
+  const lines = text.split('\n');
+  let formatted = '';
+  
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    
+    // Handle numbered lists (e.g., "1. ", "2. ")
+    if (/^\d+\.\s/.test(line)) {
+      line = line.replace(/^(\d+)\.\s/, '<strong>$1.</strong> ');
+    }
+    
+    // Handle bullet points (lines starting with * or •)
+    if (/^\s*[\*•]\s/.test(line)) {
+      line = line.replace(/^(\s*)[\*•]\s/, '$1• ');
+    }
+    
+    // Handle bold text (**text**)
+    line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    
+    formatted += line + '\n';
+  }
+  
+  return formatted.trim();
+}
+
 export default function AskCoach() {
   const { toast } = useToast();
   const [chatMessage, setChatMessage] = useState("");
@@ -115,7 +141,14 @@ export default function AskCoach() {
                         : 'bg-muted'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                    {msg.role === 'assistant' ? (
+                      <div 
+                        className="text-sm whitespace-pre-wrap prose prose-sm max-w-none dark:prose-invert prose-strong:font-bold prose-strong:text-foreground"
+                        dangerouslySetInnerHTML={{ __html: formatMarkdown(msg.message) }}
+                      />
+                    ) : (
+                      <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                    )}
                   </div>
 
                   {msg.role === 'user' && (
