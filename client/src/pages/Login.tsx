@@ -8,11 +8,7 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    // Use the full URL in production, local URL in development
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://pocket-fund-theta.vercel.app' 
-      : 'http://localhost:5000';
-    window.location.href = `${baseUrl}/api/auth/google`;
+    window.location.href = '/api/auth/google';
   };
 
   return (
