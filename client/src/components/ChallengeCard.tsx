@@ -34,7 +34,7 @@ export default function ChallengeCard({
   };
 
   return (
-    <Card className="p-4" data-testid={`card-challenge-${id}`}>
+    <Card className="p-4 backdrop-blur-xl bg-card/40 border-primary/20 hover:border-primary/40 transition-all hover:shadow-[0_0_25px_rgba(139,92,246,0.2)]" data-testid={`card-challenge-${id}`}>
       <div className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-bold text-base flex-1">{title}</h3>
