@@ -67,7 +67,7 @@ export async function setupAuth(app: Express) {
           await upsertUser(profile);
           return done(null, profile);
         } catch (error) {
-          return done(error, null);
+          return done(error as Error, undefined);
         }
       }
     )
