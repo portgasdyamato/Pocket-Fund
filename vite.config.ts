@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "public",
+    outDir: ".vercel/output/static",
     emptyOutDir: true,
   },
   server: {
