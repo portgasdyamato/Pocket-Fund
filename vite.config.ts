@@ -3,37 +3,25 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
-  plugins: [react()],
-  root: "client",
-  base: "",
-  publicDir: "client/public",
+  plugins: [
+    react(),
+  ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client/src"),
-      "@shared": path.resolve(__dirname, "shared"),
-      "@assets": path.resolve(__dirname, "attached_assets"),
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
+  root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: "../dist",
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    sourcemap: true,
-    rollupOptions: {
-      input: path.resolve(__dirname, "client/index.html"),
-    },
   },
   server: {
-    port: 3000,
-    strictPort: true,
-    proxy: {
-      "/api": {
-        target: "http://localhost:5000",
-        changeOrigin: true,
-        secure: false,
-      },
+    fs: {
+      strict: true,
+      deny: ["**/.*"],
     },
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
   },
 });

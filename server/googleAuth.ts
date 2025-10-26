@@ -60,15 +60,14 @@ export async function setupAuth(app: Express) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        callbackURL: "/api/auth/google/callback",
-        proxy: true
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:5173/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
           await upsertUser(profile);
           return done(null, profile);
         } catch (error) {
-          return done(error as Error, undefined);
+          return done(error, false);
         }
       }
     )
@@ -82,16 +81,9 @@ export async function setupAuth(app: Express) {
   }));
 
   app.get("/api/auth/google/callback", 
-    passport.authenticate("google", { 
-      failureRedirect: process.env.NODE_ENV === "production" 
-        ? "https://pocket-fund-theta.vercel.app/login"
-        : "http://localhost:3000/login"
-    }),
+    passport.authenticate("google", { failureRedirect: "/login" }),
     (req, res) => {
-      const redirectUrl = process.env.NODE_ENV === "production"
-        ? "https://pocket-fund-theta.vercel.app"
-        : "http://localhost:3000";
-      res.redirect(redirectUrl);
+      res.redirect("/");
     }
   );
 

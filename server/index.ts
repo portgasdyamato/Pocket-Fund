@@ -2,20 +2,8 @@ import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import cors from "cors";
 
 const app = express();
-
-// Enable CORS with credentials
-app.use(cors({
-  origin: true,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
-}));
-
-// Trust the proxy
-app.set('trust proxy', 1);
 
 declare module 'http' {
   interface IncomingMessage {

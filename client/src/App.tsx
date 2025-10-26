@@ -18,7 +18,6 @@ import Fight from "@/pages/Fight";
 import GlowUp from "@/pages/GlowUp";
 import LevelUp from "@/pages/LevelUp";
 import TrophyCase from "@/pages/TrophyCase";
-import Login from "@/pages/Login";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -49,7 +48,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 function Router() {
   return (
     <Switch>
-      <Route path="/login" component={Login} />
       <Route path="/" component={() => (
         <ProtectedRoute>
           <Dashboard />
