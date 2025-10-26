@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PlusCircle, Target, MessageCircle, TrendingUp } from "lucide-react";
@@ -12,6 +13,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import AddExpenseModal from "@/components/AddExpenseModal";
 
 export default function Dashboard() {
+  const [, setLocation] = useLocation();
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
 
   // todo: remove mock functionality
@@ -117,7 +119,7 @@ export default function Dashboard() {
               <QuickActionButton
                 icon={MessageCircle}
                 label="Ask Coach"
-                onClick={() => console.log('Ask coach clicked')}
+                onClick={() => setLocation('/coach')}
               />
               <QuickActionButton
                 icon={TrendingUp}
@@ -152,7 +154,7 @@ export default function Dashboard() {
           <Card className="p-6 backdrop-blur-xl bg-card/40 border-border/50">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-lg">Recent Expenses</h3>
-              <Button variant="ghost" size="sm" data-testid="button-view-all-expenses">
+              <Button variant="ghost" size="sm" onClick={() => setLocation('/expenses')} data-testid="button-view-all-expenses">
                 View All
               </Button>
             </div>
