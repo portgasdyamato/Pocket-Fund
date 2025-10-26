@@ -6,9 +6,11 @@ import cors from "cors";
 
 const app = express();
 
-// Configure CORS
+// Enable CORS with credentials
 app.use(cors({
-  origin: ["https://pocket-fund-theta.vercel.app", "http://localhost:5000"],
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://pocket-fund-theta.vercel.app' 
+    : 'http://localhost:3000',
   credentials: true
 }));
 
