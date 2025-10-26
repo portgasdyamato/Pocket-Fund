@@ -1,0 +1,62 @@
+Here is the updated, detailed summary of your app, now including the "Ask Coach" AI assistant and the manual expense logging system.
+
+Project Summary: "The Financial Glow-Up"
+"The Financial Glow-Up" is a gamified financial web app designed for young adults in India. It transforms the often-stressful topics of financial literacy and saving into an active, engaging, and motivational experience called "The Fight."
+
+The app's persona is a "Financial Partner"—an encouraging guide that helps you understand your spending, challenge impulse buys ("Icks"), and celebrate every "Win." It's now enhanced with an AI Financial Coach for expert advice and a Manual Log for tracking cash.
+
+The Core User "Loop"
+The app is built on an effective 4-step loop:
+
+TRACK (Get Your Data): The user securely links their bank account one time using the Account Aggregator (AA) framework. This gives the app a read-only feed of all their bank and UPI transactions.
+
+FIGHT (The Daily Task): The user's main daily task is to visit "The Fight" page. Here, they categorize their imported transactions and manually log their cash spending. They tag everything as "Needs" (rent), "Wants" (coffee), or "Icks" (impulse buys).
+
+STASH (The "Win"): The app challenges the user to "fight back" against their "Icks." Using a pre-approved Razorpay UPI AutoPay Mandate, the user can "Stash" cash with a single tap, moving real money from their bank into their personal "Locker."
+
+GROW (The Glow-Up): The "Locker" is a real Liquid Mutual Fund account in the user's name, where their stashed cash grows and earns interest. Every "Stash" builds their "Save Streak" and unlocks achievements.
+
+App Structure & User Flow
+1. Onboarding (The "Bootcamp")
+A one-time, 4-step wizard for all new users after they sign up (via Google Auth):
+
+Step 1: Set Quest: User names their first savings goal.
+
+Step 2: Connect Intel: User links their bank via Account Aggregator.
+
+Step 3: Unlock Locker: User completes a 2-min eKYC to create their Liquid Mutual Fund account.
+
+Step 4: Enable Stash: User approves the Razorpay UPI Mandate to enable one-tap payments.
+
+2. The Logged-In App (Main Pages via Navbar)
+HQ (Dashboard): The main landing page. Shows a summary of their "Main Quest" progress, "Save Streak," and a prompt for their "Daily Fight" (e.g., "You have 8 new transactions to review!").
+
+The Fight (Transactions): The daily action page.
+
+Shows a single, unified list of all transactions (both auto-imported from the bank and manually added).
+
+Features a [+ Log Expense] button to quickly add cash spending (e.g., "Chai - ₹10").
+
+The most recently added log appears at the top of the list.
+
+Users can tag all items as "Needs," "Wants," or "Icks."
+
+Crucially, users can delete any manually logged expense (but cannot delete the imported bank transactions, which serve as the source of truth).
+
+The Glow-Up (Wallet/Locker): The real-money "wallet." Users see their total "Locker" balance (including interest), manage all savings goals, "Stash" more cash, or "Cash Out" (withdraw) back to their bank.
+
+Level Up (Quests & Learning): The financial literacy hub. Users complete bite-sized lessons (e.g., "The Subscription Slayer") to earn badges.
+
+Ask Coach (AI Assistant):
+
+A new, dedicated page featuring a chat interface.
+
+This is the user's AI Financial Advisor.
+
+Powered by a large language model, it is specifically prompted to act as a highly intelligent financial expert.
+
+It answers user questions in simple, clear language (e.g., "What's the difference between an ETF and a mutual fund?", "How can I improve my credit score?", "Is it better to pay off debt or save?").
+
+Trophy Case (Badges & Streaks): The motivation hub. A visual gallery of all unlocked badges ("First ₹1,000 Stashed," "10-Day Streak") and a calendar tracking their streaks.
+
+Profile (Settings): Users manage their connected accounts, KYC status, notification preferences, and log out.
