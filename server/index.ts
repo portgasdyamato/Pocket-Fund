@@ -8,13 +8,14 @@ const app = express();
 
 // Enable CORS with credentials
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://pocket-fund-theta.vercel.app', 'https://pocket-fund-theta.vercel.app/api']
-    : ['http://localhost:3000', 'http://localhost:5000'],
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
+
+// Trust the proxy
+app.set('trust proxy', 1);
 
 declare module 'http' {
   interface IncomingMessage {

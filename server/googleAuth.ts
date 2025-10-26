@@ -60,9 +60,8 @@ export async function setupAuth(app: Express) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        callbackURL: process.env.NODE_ENV === "production"
-          ? "https://pocket-fund-theta.vercel.app/api/auth/google/callback"
-          : "/api/auth/google/callback",
+        callbackURL: "/api/auth/google/callback",
+        proxy: true
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
