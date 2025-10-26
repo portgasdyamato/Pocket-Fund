@@ -23,7 +23,7 @@ import {
   type InsertStashTransaction,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, isNull } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (Replit Auth compatible)
@@ -130,7 +130,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(transactions)
-      .where(and(eq(transactions.userId, userId), eq(transactions.tag, null)))
+      .where(and(eq(transactions.userId, userId), isNull(transactions.tag)))
       .orderBy(desc(transactions.date));
   }
 
