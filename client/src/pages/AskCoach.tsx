@@ -28,7 +28,7 @@ export default function AskCoach() {
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
       const response = await apiRequest("/api/ai/chat", "POST", { message });
-      return response;
+      return response.json();
     },
     onSuccess: (data: any) => {
       setChatHistory((prev) => [...prev, { role: 'assistant', message: data.response }]);
