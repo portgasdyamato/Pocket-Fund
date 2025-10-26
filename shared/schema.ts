@@ -117,6 +117,8 @@ export const insertGoalSchema = createInsertSchema(goals).omit({
 export const insertTransactionSchema = createInsertSchema(transactions).omit({
   id: true,
   createdAt: true,
+}).extend({
+  date: z.coerce.date(),
 });
 
 export const insertStashTransactionSchema = createInsertSchema(stashTransactions).omit({

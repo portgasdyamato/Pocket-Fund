@@ -21,7 +21,7 @@ export default function AskCoach() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      message: "👋 Hello! I'm your personal financial coach. I'm here to help you with budgeting, saving strategies, understanding your spending habits, and achieving your financial goals. What would you like to know today?"
+      message: "Hello! I'm your personal financial coach. I'm here to help you with budgeting, saving strategies, understanding your spending habits, and achieving your financial goals. What would you like to know today?"
     }
   ]);
 

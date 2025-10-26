@@ -30,8 +30,9 @@ export default function ExpenseLog() {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data: transactions = [], isLoading } = useQuery<Transaction[]>({
+  const { data: transactions = [], isLoading, isError } = useQuery<Transaction[]>({
     queryKey: ["/api/transactions"],
+    retry: false,
   });
 
   const deleteMutation = useMutation({
@@ -136,6 +137,16 @@ export default function ExpenseLog() {
         {isLoading ? (
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">Loading expenses...</p>
+          </Card>
+        ) : isError ? (
+          <Card className="p-12 text-center backdrop-blur-xl bg-card/40 border-border/50">
+            <h2 className="text-2xl font-bold mb-2">Authentication Required</h2>
+            <p className="text-muted-foreground mb-6">
+              Please log in to view and manage your expenses
+            </p>
+            <Button onClick={() => window.location.href = '/api/login'}>
+              Log In
+            </Button>
           </Card>
         ) : transactions.length === 0 ? (
           <Card className="p-12 text-center backdrop-blur-xl bg-card/40 border-border/50">

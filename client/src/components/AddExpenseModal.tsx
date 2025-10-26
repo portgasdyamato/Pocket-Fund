@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Coffee, Car, ShoppingBag, Ticket, FileText, Tag } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import type { InsertTransaction } from "@shared/schema";
 
 interface AddExpenseModalProps {
   open: boolean;
@@ -29,7 +30,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
   const [description, setDescription] = useState("");
 
   const createExpenseMutation = useMutation({
-    mutationFn: async (data: { amount: string; category: string; description: string; date: Date }) => {
+    mutationFn: async (data: { amount: string; category: string; description: string; date: string }) => {
       return await apiRequest("/api/transactions", "POST", data);
     },
     onSuccess: () => {
@@ -56,12 +57,13 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (amount && category && !createExpenseMutation.isPending) {
-      createExpenseMutation.mutate({
+      const transactionData = {
         amount,
         category,
         description: description || `${category} expense`,
-        date: new Date(),
-      });
+        date: new Date().toISOString(),
+      };
+      createExpenseMutation.mutate(transactionData);
     }
   };
 
@@ -80,6 +82,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
                 id="amount"
                 type="number"
                 step="0.01"
+                min="0"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
