@@ -96,7 +96,7 @@ export default function ChallengesPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/">
@@ -113,8 +113,9 @@ export default function ChallengesPage() {
 
       <main className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Stats Card */}
-        <Card className="p-6 mb-6">
-          <div className="grid grid-cols-3 gap-4 text-center">
+        <Card className="p-6 mb-6 backdrop-blur-xl bg-card/40 border-primary/20 shadow-[0_0_30px_rgba(139,92,246,0.12)] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-secondary/5 to-accent/8 pointer-events-none" />
+          <div className="grid grid-cols-3 gap-4 text-center relative z-10">
             <div>
               <p className="text-3xl font-bold text-primary">2,450</p>
               <p className="text-sm text-muted-foreground">Total Points</p>

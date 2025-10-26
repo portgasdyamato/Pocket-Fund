@@ -20,8 +20,8 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
   };
 
   return (
-    <Card className="p-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
+    <Card className="p-6 relative overflow-hidden backdrop-blur-xl bg-card/40 border-primary/30 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent pointer-events-none" />
       <div className="flex flex-col items-center gap-4 relative z-10">
         <div className="relative w-40 h-40 flex items-center justify-center">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">

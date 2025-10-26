@@ -42,7 +42,7 @@ export default function AddExpenseModal({ open, onOpenChange, onAdd }: AddExpens
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md" data-testid="modal-add-expense">
+      <DialogContent className="sm:max-w-md backdrop-blur-2xl bg-card/80 border-primary/30 shadow-[0_0_40px_rgba(139,92,246,0.3)]" data-testid="modal-add-expense">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Log Expense</DialogTitle>
         </DialogHeader>

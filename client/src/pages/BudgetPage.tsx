@@ -25,7 +25,7 @@ export default function BudgetPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/">
@@ -42,9 +42,10 @@ export default function BudgetPage() {
 
       <main className="container mx-auto px-4 py-6 space-y-6 max-w-4xl">
         {/* Overview Card */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-6">Monthly Budget Overview</h2>
-          <div className="space-y-4">
+        <Card className="p-6 backdrop-blur-xl bg-card/40 border-primary/20 shadow-[0_0_30px_rgba(139,92,246,0.12)] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
+          <h2 className="text-2xl font-bold mb-6 relative z-10">Monthly Budget Overview</h2>
+          <div className="space-y-4 relative z-10">
             <div className="flex items-baseline justify-between">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Total Spent</p>
@@ -78,7 +79,7 @@ export default function BudgetPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="p-6 bg-primary/5 border-primary/10">
+        <Card className="p-6 backdrop-blur-xl bg-primary/10 border-primary/30 shadow-[0_0_25px_rgba(139,92,246,0.2)]">
           <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
             <span>💪</span>
             <span>Coach's Tip</span>

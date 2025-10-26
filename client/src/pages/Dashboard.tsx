@@ -74,7 +74,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">The Glow-Up</h1>
@@ -100,8 +100,8 @@ export default function Dashboard() {
             message="You're crushing it! Keep up the momentum." 
           />
           
-          <Card className="p-6 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-accent/5 pointer-events-none" />
+          <Card className="p-6 relative overflow-hidden backdrop-blur-xl bg-card/40 border-secondary/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-accent/10 pointer-events-none" />
             <h3 className="font-bold text-lg mb-4 relative z-10">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3 relative z-10">
               <QuickActionButton
@@ -149,7 +149,7 @@ export default function Dashboard() {
 
         {/* Recent Activity */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="p-6">
+          <Card className="p-6 backdrop-blur-xl bg-card/40 border-border/50">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-lg">Recent Expenses</h3>
               <Button variant="ghost" size="sm" data-testid="button-view-all-expenses">
@@ -163,7 +163,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 backdrop-blur-xl bg-card/40 border-border/50">
             <h3 className="font-bold text-lg mb-4">Recent Wins</h3>
             <div className="space-y-3">
               {mockAchievements.map((achievement) => (

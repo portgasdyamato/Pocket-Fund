@@ -23,7 +23,7 @@ export default function BudgetCategoryCard({
   const isOverBudget = spent > budget;
 
   return (
-    <Card className="p-4" data-testid={`card-budget-${id}`}>
+    <Card className="p-4 backdrop-blur-xl bg-card/40 border-border/50 hover:border-primary/30 transition-all" data-testid={`card-budget-${id}`}>
       <div className="flex items-start gap-3">
         <div className={`p-2 rounded-lg ${color}`}>
           <Icon className="w-5 h-5" />
