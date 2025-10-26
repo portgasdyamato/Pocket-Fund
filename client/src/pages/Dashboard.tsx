@@ -74,7 +74,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">The Glow-Up</h1>
@@ -100,9 +100,10 @@ export default function Dashboard() {
             message="You're crushing it! Keep up the momentum." 
           />
           
-          <Card className="p-6">
-            <h3 className="font-bold text-lg mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
+          <Card className="p-6 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-accent/5 pointer-events-none" />
+            <h3 className="font-bold text-lg mb-4 relative z-10">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-3 relative z-10">
               <QuickActionButton
                 icon={PlusCircle}
                 label="Log Expense"
