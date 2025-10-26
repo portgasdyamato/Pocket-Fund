@@ -1,0 +1,222 @@
+This flow is broken into three parts:
+
+Auth Flow: The "gate" that sorts new users from returning users.
+
+New User "Bootcamp" Flow: The one-time setup and connecting process.
+
+Logged-In App Flow: The main app structure with its navbar and pages.
+
+1. Auth Flow (The "Gate")
+This flow begins when a user clicks [Start the Fight] on your Framer page and is redirected to your app (e.g., app.yourdomain.com).
+
+Page: app.yourdomain.com/auth
+
+Purpose: The single entry point for all users.
+
+UI: Shows a clean modal with the "Glow-Up" logo.
+
+Headline: "Let's get this bread."
+
+Primary CTA: [G] Continue with Google
+
+(Optional: "Or sign up with email")
+
+Small Text: "By continuing, you agree to our Terms of Service."
+
+User Action: Clicks [G] Continue with Google.
+
+Backend Logic:
+
+User authenticates with Google.
+
+The app receives the user's details (email, name).
+
+Database Check: "Does this email exist in our users table?"
+
+IF NO (New User):
+
+Create a new user record (e.g., user_id: 123, email: ..., onboarding_status: 'step_1').
+
+Redirect to: app.yourdomain.com/bootcamp/step-1
+
+IF YES (Returning User):
+
+Fetch the user's record.
+
+Check their onboarding_status.
+
+IF status is NOT 'complete': Redirect them to the step they left off (e.g., .../bootcamp/step-3).
+
+IF status IS 'complete':
+
+Create a secure session.
+
+Redirect to: app.yourdomain.com/hq
+
+2. New User "Bootcamp" Flow (The "Connecting")
+This is the mandatory, one-time wizard for all new users. The user cannot access the main app until this is finished.
+
+Route: .../bootcamp/step-1 (Set Quest)
+
+UI: "Set Your Main Quest" screen.
+
+Action: User names a goal (e.g., "Goa Trip") and a target amount.
+
+On Click [Next]:
+
+Save goal to the database.
+
+Update user: onboarding_status: 'step_2'.
+
+Redirect to .../bootcamp/step-2.
+
+Route: .../bootcamp/step-2 (Connect Intel)
+
+UI: "Get Your Intel" screen.
+
+Action: User clicks [Securely Link Account]. This opens the Account Aggregator (AA) SDK/modal.
+
+On AA Success:
+
+The AA partner sends a token to your app.
+
+Save the token to the user's record.
+
+Update user: onboarding_status: 'step_3'.
+
+Redirect to .../bootcamp/step-3.
+
+Route: .../bootcamp/step-3 (Unlock Locker)
+
+UI: "Unlock Your Locker" screen.
+
+Action: User clicks [Unlock My Locker (2-Min KYC)]. This opens the KYC partner's SDK/modal.
+
+On KYC Success:
+
+The partner confirms KYC.
+
+Your app (via backend) creates a new "Locker" (Liquid Fund account) for the user.
+
+Update user: onboarding_status: 'step_4'.
+
+Redirect to .../bootcamp/step-4.
+
+Route: .../bootcamp/step-4 (Load Ammo)
+
+UI: "Load Your 'Ammo'" screen.
+
+Action: User clicks [Approve One-Tap Stash]. This opens the Razorpay UPI AutoPay SDK/modal (or redirects to the UPI app).
+
+On Mandate Success:
+
+Razorpay confirms the mandate is active.
+
+Save mandate details to the user's record.
+
+Update user: onboarding_status: 'complete'.
+
+Redirect to .../bootcamp/complete.
+
+Route: .../bootcamp/complete
+
+UI: "Bootcamp Complete! You're in the fight."
+
+Action: User clicks [Enter HQ].
+
+Redirect to: app.yourdomain.com/hq
+
+3. Logged-In App Flow (The Main App)
+The user is now fully onboarded. The app consists of a Persistent Navbar and a Main Content Area that changes based on the selected route.
+
+The App "Shell"
+Persistent Navbar (Always visible):
+
+[Logo/HQ] (Links to /hq)
+
+[The Fight] (Links to /fight)
+
+[The Glow-Up] (Links to /glow-up)
+
+[Level Up] (Links to /level-up)
+
+[Trophy Case] (Links to /trophy-case)
+
+[Profile Icon] (Opens Profile/Settings menu)
+
+The Pages (Routes)
+Route: .../hq (Your "Main Page")
+
+Purpose: The dashboard and command center.
+
+UI: A page of widgets:
+
+"Main Quest" progress bar.
+
+"Daily Fight" prompt: "You have 12 transactions to tag." -> Links to /fight.
+
+"Save Streak" calendar.
+
+"Locker" balance summary.
+
+Route: .../fight (Your "First More Page")
+
+Purpose: The daily task of tagging transactions.
+
+UI:
+
+A list of untagged transactions from the Account Aggregator.
+
+User can tap to tag [Need], [Want], or [Ick].
+
+A summary of "This Week's Icks" with a [Fight Back Now] button.
+
+Clicking this opens a "Stash Cash" modal.
+
+Route: .../glow-up (Your "Wallet" Page)
+
+Purpose: The "Locker" where real money is managed.
+
+UI:
+
+"Total Stashed" balance (from the Liquid Fund).
+
+List of all savings goals and their progress.
+
+[Stash Cash] button -> Opens a modal, user enters amount, hits "Stash," and Razorpay pulls the money via the mandate.
+
+[Cash Out] button -> Opens a withdrawal modal.
+
+Route: .../level-up (Your "Quests" & "Learning" Page)
+
+Purpose: Financial literacy, gamified.
+
+UI: A gallery of "Quests."
+
+Each quest is a card (e.g., "The Subscription Slayer," "Credit Score 101").
+
+Clicking a quest might open a new page (.../level-up/quest-name) or a modal with simple, bite-sized learning content (slides, short video).
+
+Route: .../trophy-case (Your "Badges & Tracks" Page)
+
+Purpose: Motivation and achievement.
+
+UI:
+
+A calendar showing their "Save Streak" and "Fight Streak."
+
+A colorful grid of all earned and unearned badges.
+
+Route (from Profile Icon): .../profile
+
+Purpose: Your "Profile Setting" page.
+
+UI: A settings page with tabs:
+
+Profile: Change name, avatar.
+
+Connections: Manage linked bank (AA) and UPI mandate (Razorpay).
+
+Notifications: Toggle email/push reminders.
+
+Logout / Delete Account.
