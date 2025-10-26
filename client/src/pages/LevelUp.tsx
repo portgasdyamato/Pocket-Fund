@@ -74,7 +74,8 @@ export default function LevelUp() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-background px-6 py-8">
+      <div className="max-w-7xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold mb-2" data-testid="text-page-title">Level Up</h1>
         <p className="text-muted-foreground">Complete quests to master financial literacy</p>
@@ -82,7 +83,7 @@ export default function LevelUp() {
 
       <div className="grid md:grid-cols-2 gap-6">
         {quests.map((quest) => (
-          <Card key={quest.id} className="hover-elevate cursor-pointer" data-testid={`card-quest-${quest.id}`}>
+          <Card key={quest.id} className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" data-testid={`card-quest-${quest.id}`}>
             <CardHeader>
               <div className="flex justify-between items-start mb-2">
                 <div className="text-4xl">{quest.icon}</div>
@@ -119,6 +120,7 @@ export default function LevelUp() {
           </p>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

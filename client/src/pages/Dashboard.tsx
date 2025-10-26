@@ -10,7 +10,6 @@ import ChallengeCard from "@/components/ChallengeCard";
 import ExpenseItem from "@/components/ExpenseItem";
 import AchievementBadge from "@/components/AchievementBadge";
 import StreakCounter from "@/components/StreakCounter";
-import ThemeToggle from "@/components/ThemeToggle";
 import AddExpenseModal from "@/components/AddExpenseModal";
 import type { Transaction } from "@shared/schema";
 import { format } from "date-fns";
@@ -98,25 +97,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold">The Glow-Up</h1>
-            <StreakCounter days={12} />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" data-testid="button-notifications">
-              <div className="relative">
-                <MessageCircle className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />
-              </div>
-            </Button>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-6 space-y-6 max-w-6xl">
         {/* Hero Section */}
         <div className="grid gap-6 md:grid-cols-2">
@@ -125,7 +105,7 @@ export default function Dashboard() {
             message="You're crushing it! Keep up the momentum." 
           />
           
-          <Card className="p-6 relative overflow-hidden backdrop-blur-xl bg-card/40 border-secondary/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+          <Card className="group p-6 relative overflow-hidden backdrop-blur-xl bg-card/40 border-secondary/30 shadow-[0_0_30px_rgba(59,130,246,0.15)] hover:border-secondary/60 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fadeIn">
             <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-accent/10 pointer-events-none" />
             <h3 className="font-bold text-lg mb-4 relative z-10">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3 relative z-10">
@@ -174,7 +154,7 @@ export default function Dashboard() {
 
         {/* Recent Activity */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="p-6 backdrop-blur-xl bg-card/40 border-border/50">
+          <Card className="group p-6 backdrop-blur-xl bg-card/40 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-fadeIn">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-lg">Recent Expenses</h3>
               <Button variant="ghost" size="sm" onClick={() => setLocation('/expenses')} data-testid="button-view-all-expenses">
@@ -202,7 +182,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6 backdrop-blur-xl bg-card/40 border-border/50">
+          <Card className="group p-6 backdrop-blur-xl bg-card/40 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-fadeIn">
             <h3 className="font-bold text-lg mb-4">Recent Wins</h3>
             <div className="space-y-3">
               {mockAchievements.map((achievement) => (

@@ -1,8 +1,16 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import cors from "cors";
 
 const app = express();
+
+// Configure CORS
+app.use(cors({
+  origin: ["https://pocket-fund-theta.vercel.app", "http://localhost:5000"],
+  credentials: true
+}));
 
 declare module 'http' {
   interface IncomingMessage {

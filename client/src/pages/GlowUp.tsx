@@ -79,7 +79,8 @@ export default function GlowUp() {
   const totalStashed = totalStashedData?.total || 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-background px-6 py-8">
+      <div className="max-w-7xl mx-auto space-y-8">
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-4xl font-bold mb-2" data-testid="text-page-title">The Glow-Up</h1>
@@ -138,11 +139,12 @@ export default function GlowUp() {
         </Dialog>
       </div>
 
-      <Card data-testid="card-locker-balance">
-        <CardContent className="p-8">
+      <Card data-testid="card-locker-balance" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/30 hover:border-primary/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <CardContent className="p-8 relative z-10">
           <div className="text-center">
             <p className="text-sm text-muted-foreground mb-2">Total in Locker</p>
-            <p className="text-5xl font-bold mb-4" data-testid="text-locker-balance">
+            <p className="text-5xl font-bold mb-4 group-hover:text-primary transition-colors" data-testid="text-locker-balance">
               ₹{totalStashed.toLocaleString('en-IN')}
             </p>
             <p className="text-sm text-muted-foreground">Growing in Liquid Mutual Fund</p>
@@ -202,7 +204,7 @@ export default function GlowUp() {
         {goals.map((goal) => {
           const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
           return (
-            <Card key={goal.id} data-testid={`card-goal-${goal.id}`}>
+            <Card key={goal.id} data-testid={`card-goal-${goal.id}`} className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div>
@@ -295,6 +297,7 @@ export default function GlowUp() {
             )}
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

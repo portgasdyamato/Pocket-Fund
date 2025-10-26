@@ -58,7 +58,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="p-6">
         <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          The Financial Glow-Up
+          Pocket Fund
         </h1>
       </SidebarHeader>
       <SidebarContent>

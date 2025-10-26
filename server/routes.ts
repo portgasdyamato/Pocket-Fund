@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated } from "./googleAuth";
 import { chatWithFinancialAssistant, categorizePurchase, generateFinancialInsight } from "./geminiService";
 import { insertGoalSchema, insertTransactionSchema, insertStashTransactionSchema } from "@shared/schema";
 
@@ -10,7 +10,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
@@ -21,7 +21,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch('/api/user/onboarding', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const { status } = req.body;
       await storage.updateUserOnboarding(userId, status);
       res.json({ success: true });
@@ -33,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/goals', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const goalData = insertGoalSchema.parse({ ...req.body, userId });
       const goal = await storage.createGoal(goalData);
       res.json(goal);
@@ -45,7 +45,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/goals', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const goals = await storage.getGoals(userId);
       res.json(goals);
     } catch (error) {
@@ -56,7 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/goals/main', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const goal = await storage.getMainGoal(userId);
       res.json(goal || null);
     } catch (error) {
@@ -67,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/transactions', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const transactionData = insertTransactionSchema.parse({ ...req.body, userId });
       const transaction = await storage.createTransaction(transactionData);
       res.json(transaction);
@@ -79,7 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/transactions', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
       const transactions = await storage.getTransactions(userId, limit);
       res.json(transactions);
@@ -91,7 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/transactions/untagged', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const transactions = await storage.getUntaggedTransactions(userId);
       res.json(transactions);
     } catch (error) {
@@ -119,7 +119,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/transactions/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const { id } = req.params;
       await storage.deleteTransaction(id, userId);
       res.json({ success: true });
@@ -131,7 +131,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/transactions/:id/categorize', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const { id } = req.params;
       const transactions = await storage.getTransactions(userId, 100);
       const transaction = transactions.find(t => t.id === id);
@@ -164,7 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/user/badges', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const userBadges = await storage.getUserBadges(userId);
       res.json(userBadges);
     } catch (error) {
@@ -185,7 +185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/user/quests', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const userQuests = await storage.getUserQuests(userId);
       res.json(userQuests);
     } catch (error) {
@@ -196,7 +196,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/quests/:id/complete', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const { id } = req.params;
       await storage.completeQuest(userId, id);
       res.json({ success: true });
@@ -208,7 +208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/streak', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const streak = await storage.getStreak(userId);
       res.json(streak || { saveStreak: 0, fightStreak: 0 });
     } catch (error) {
@@ -219,7 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/stash', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const stashData = insertStashTransactionSchema.parse({ ...req.body, userId });
       const stash = await storage.createStashTransaction(stashData);
       
@@ -247,7 +247,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/stash', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const stashTransactions = await storage.getStashTransactions(userId);
       res.json(stashTransactions);
     } catch (error) {
@@ -258,7 +258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/stash/total', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const total = await storage.getTotalStashed(userId);
       res.json({ total });
     } catch (error) {
@@ -269,7 +269,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/ai/chat', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const { message } = req.body;
       
       const user = await storage.getUser(userId);
@@ -297,7 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/ai/insight', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const transactions = await storage.getTransactions(userId, 100);
       
       const totalSpent = transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
