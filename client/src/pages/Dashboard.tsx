@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PlusCircle, Target, MessageCircle, TrendingUp } from "lucide-react";
@@ -11,10 +12,17 @@ import AchievementBadge from "@/components/AchievementBadge";
 import StreakCounter from "@/components/StreakCounter";
 import ThemeToggle from "@/components/ThemeToggle";
 import AddExpenseModal from "@/components/AddExpenseModal";
+import type { Transaction } from "@shared/schema";
+import { format } from "date-fns";
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
+
+  const { data: transactions = [], isLoading: isLoadingTransactions, isError: isTransactionsError } = useQuery<Transaction[]>({
+    queryKey: ["/api/transactions"],
+    retry: false,
+  });
 
   // todo: remove mock functionality
   const mockChallenges = [
@@ -47,13 +55,28 @@ export default function Dashboard() {
     }
   ];
 
-  // todo: remove mock functionality
-  const mockExpenses = [
-    { id: '1', category: 'Food', description: 'Starbucks Latte', amount: 6.50, date: 'Today' },
-    { id: '2', category: 'Transport', description: 'Uber to work', amount: 12.00, date: 'Today' },
-    { id: '3', category: 'Shopping', description: 'New headphones', amount: 89.99, date: 'Yesterday' },
-    { id: '4', category: 'Entertainment', description: 'Movie tickets', amount: 24.00, date: 'Yesterday' },
-  ];
+  const formatDate = (date: Date | string) => {
+    const d = new Date(date);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (d.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (d.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    } else {
+      return format(d, 'MMM d');
+    }
+  };
+
+  const recentExpenses = transactions.slice(0, 4).map(t => ({
+    id: t.id,
+    category: t.category || 'Other',
+    description: t.description,
+    amount: parseFloat(t.amount),
+    date: formatDate(t.date),
+  }));
 
   // todo: remove mock functionality
   const mockAchievements = [
@@ -159,9 +182,23 @@ export default function Dashboard() {
               </Button>
             </div>
             <div className="space-y-1">
-              {mockExpenses.map((expense) => (
-                <ExpenseItem key={expense.id} {...expense} />
-              ))}
+              {isLoadingTransactions ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Loading...
+                </p>
+              ) : isTransactionsError ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Please log in to view your expenses
+                </p>
+              ) : recentExpenses.length > 0 ? (
+                recentExpenses.map((expense) => (
+                  <ExpenseItem key={expense.id} {...expense} />
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No expenses logged yet
+                </p>
+              )}
             </div>
           </Card>
 
