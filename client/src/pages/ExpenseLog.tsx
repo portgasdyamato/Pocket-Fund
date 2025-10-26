@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import ThemeToggle from "@/components/ThemeToggle";
 import AddExpenseModal from "@/components/AddExpenseModal";
 import { format } from "date-fns";
 import type { Transaction } from "@shared/schema";
@@ -112,27 +111,6 @@ export default function ExpenseLog() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold" data-testid="text-page-title">Expense Log</h1>
-            <Badge variant="secondary">{transactions.length} expenses</Badge>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => setIsAddExpenseOpen(true)}
-              data-testid="button-add-expense"
-            >
-              <PlusCircle className="w-4 h-4 mr-2" />
-              Add Expense
-            </Button>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-6 max-w-4xl">
         {isLoading ? (
           <Card className="p-8 text-center">
@@ -144,7 +122,7 @@ export default function ExpenseLog() {
             <p className="text-muted-foreground mb-6">
               Please log in to view and manage your expenses
             </p>
-            <Button onClick={() => window.location.href = '/api/login'}>
+            <Button onClick={() => window.location.href = '/api/auth/google'}>
               Log In
             </Button>
           </Card>

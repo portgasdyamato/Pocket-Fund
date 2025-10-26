@@ -85,14 +85,15 @@ export default function TrophyCase() {
   });
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-background px-6 py-8">
+      <div className="max-w-7xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold mb-2" data-testid="text-page-title">Trophy Case</h1>
         <p className="text-muted-foreground">Your badges, streaks, and achievements</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card data-testid="card-save-streak">
+        <Card data-testid="card-save-streak" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-destructive/20 hover:border-destructive/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Flame className="w-5 h-5 text-destructive" />
@@ -109,7 +110,7 @@ export default function TrophyCase() {
           </CardContent>
         </Card>
 
-        <Card data-testid="card-fight-streak">
+        <Card data-testid="card-fight-streak" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" />
@@ -127,7 +128,7 @@ export default function TrophyCase() {
         </Card>
       </div>
 
-      <Card>
+      <Card className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-secondary/20 hover:border-secondary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
         <CardHeader>
           <CardTitle>Streak Calendar</CardTitle>
         </CardHeader>
@@ -156,7 +157,7 @@ export default function TrophyCase() {
           {achievements.map((achievement) => (
             <Card
               key={achievement.id}
-              className={achievement.unlocked ? "" : "opacity-50"}
+              className={`group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${achievement.unlocked ? 'border-accent/20 hover:border-accent/60' : 'border-border/30 opacity-50'}`}
               data-testid={`card-achievement-${achievement.id}`}
             >
               <CardContent className="p-6">
@@ -182,6 +183,7 @@ export default function TrophyCase() {
             </Card>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Sparkles, User } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import ThemeToggle from "@/components/ThemeToggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface ChatMessage {
@@ -96,16 +95,6 @@ export default function AskCoach() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-primary/20 bg-background/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/30 shadow-[0_8px_32px_rgba(139,92,246,0.1)]">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold" data-testid="text-page-title">Ask Your Coach</h1>
-            <Sparkles className="w-5 h-5 text-primary" />
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-6 max-w-4xl">
         <Card className="h-[calc(100vh-12rem)] flex flex-col backdrop-blur-xl bg-card/40 border-border/50">
           <CardHeader className="border-b">
