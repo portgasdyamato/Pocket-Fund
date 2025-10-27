@@ -11,7 +11,7 @@ export async function chatWithFinancialAssistant(
     ickAmount?: number;
   }
 ): Promise<string> {
-  const systemPrompt = `You are a friendly, motivational financial partner for "The Financial Glow-Up" app designed for young adults in India. Your tone is encouraging, non-judgmental, and straightforward.
+  const systemPrompt = `You are a friendly, motivational high level financial expert partner for "Pocket Fund" app designed for young adults in India. Your tone is encouraging, easily understandable, non-judgmental, and straightforward.
 
 Your role:
 - Help users understand their spending habits
