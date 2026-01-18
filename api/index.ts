@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { eq, sql as drizzleSql } from 'drizzle-orm';
 import { pgTable, varchar, text, timestamp, decimal, boolean } from 'drizzle-orm/pg-core';
 
-// 1. Define Schema Inline
+// Schema Definition
 const usersTable = pgTable("users", {
   id: varchar("id").primaryKey(),
   email: varchar("email").unique(),
@@ -42,23 +42,45 @@ const getDb = () => {
   return dbInstance;
 };
 
-// --- DEBUG (UPGRADED) ---
+// --- DEBUG + AUTO-REPAIR ---
 app.get(['/api/debug', '/debug'], async (req, res) => {
   try {
     const db = getDb();
     const userId = req.cookies?.userId;
-    let userInDb = "N/A";
+    let userInDb: any = null;
+    let repairMessage = "None";
     
     if (db && userId) {
-      const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
-      userInDb = user ? `Found (${user.email})` : "NOT FOUND IN DB";
+      // 1. Check if user exists
+      const rows = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
+      userInDb = rows[0];
+      
+      // 2. AUTO-REPAIR: If cookie exists but user is missing, force create them
+      if (!userInDb) {
+        try {
+          await db.insert(usersTable).values({
+            id: String(userId),
+            email: "repaired_user@example.com",
+            firstName: "Pocket",
+            lastName: "User",
+            onboardingStatus: 'step_1'
+          });
+          repairMessage = "SUCCESS: Missing user record was successfully created!";
+          userInDb = "Created";
+        } catch (repairErr: any) {
+          repairMessage = `FAILED: Could not create user record: ${repairErr.message}`;
+        }
+      } else {
+        repairMessage = "User already exists in database.";
+      }
     }
 
     res.json({
       status: "running",
       dbStatus: db ? "Connected" : "No DB",
-      userInDb,
+      userInDb: userInDb ? "Found" : "NOT FOUND",
       userIdCookie: userId || "Missing",
+      repairMessage,
       env: { NODE_ENV: process.env.NODE_ENV }
     });
   } catch (err: any) {
@@ -100,10 +122,8 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res)
     const googleUser = await userRes.json();
     const userId = String(googleUser.id);
 
-    // CRITICAL: Robust Upsert
     const db = getDb();
     if (db) {
-      console.log(`[Auth] Upserting user ${userId}`);
       await db.insert(usersTable).values({
         id: userId,
         email: googleUser.email,
@@ -113,10 +133,7 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res)
         onboardingStatus: 'step_1'
       }).onConflictDoUpdate({
         target: usersTable.id,
-        set: { 
-          email: googleUser.email,
-          updatedAt: new Date() 
-        }
+        set: { updatedAt: new Date() }
       });
     }
 
@@ -130,7 +147,6 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res)
     
     res.redirect('/hq');
   } catch (err: any) {
-    console.error(`[Auth] Callback Error: ${err.message}`);
     res.redirect(`/?error=auth_failed&msg=${encodeURIComponent(err.message)}`);
   }
 });
