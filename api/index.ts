@@ -92,8 +92,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Save user ID to cookie for authentication
         res.setHeader('Set-Cookie', `userId=${googleUser.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; ${process.env.NODE_ENV === 'production' ? 'Secure;' : ''}`);
         
-        // Redirect to home page (root route)
-        res.redirect(302, '/');
+        // Redirect to dashboard (HQ page)
+        res.redirect(302, '/hq');
         return;
 
       } catch (error) {
