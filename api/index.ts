@@ -1,14 +1,17 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { eq } from 'drizzle-orm';
+import { users, type User, type UpsertUser } from '../shared/schema';
 
 const app = express();
 
-// Use middleware
+// Middleware
 app.use(cookieParser());
 app.use(express.json());
 
-// Robust CORS
+// CORS
 app.use((req, res, next) => {
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
@@ -23,18 +26,49 @@ app.use((req, res, next) => {
   next();
 });
 
-// Helper to get userId from various sources
+// Database initialization
+let db: any = null;
+const initDb = () => {
+  if (!db && process.env.DATABASE_URL) {
+    const sql = neon(process.env.DATABASE_URL);
+    db = drizzle(sql, { schema: { users } });
+  }
+  return db;
+};
+
+// Helper to get userId from cookie
 const getUserId = (req: any) => {
-  // 1. Try cookie-parser
   if (req.cookies?.userId) return req.cookies.userId;
-  
-  // 2. Try manual header parsing
   if (req.headers.cookie) {
     const match = req.headers.cookie.match(/userId=([^;]+)/);
     if (match) return match[1];
   }
-  
   return null;
+};
+
+// Database helpers
+const getUser = async (id: string): Promise<User | undefined> => {
+  const database = initDb();
+  if (!database) throw new Error('Database not initialized');
+  const [user] = await database.select().from(users).where(eq(users.id, id));
+  return user;
+};
+
+const upsertUser = async (userData: UpsertUser): Promise<User> => {
+  const database = initDb();
+  if (!database) throw new Error('Database not initialized');
+  const [user] = await database
+    .insert(users)
+    .values(userData)
+    .onConflictDoUpdate({
+      target: users.id,
+      set: {
+        ...userData,
+        updatedAt: new Date(),
+      },
+    })
+    .returning();
+  return user;
 };
 
 // --- GOOGLE AUTH: INITIATE ---
@@ -87,8 +121,7 @@ app.get('/api/auth/google/callback', async (req, res) => {
 
     // DB Sync
     try {
-      const { storage } = await import('../server/storage');
-      await storage.upsertUser({
+      await upsertUser({
         id: googleUser.id,
         email: googleUser.email,
         firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
@@ -100,7 +133,7 @@ app.get('/api/auth/google/callback', async (req, res) => {
       console.error('[API] DB Sync Error:', e);
     }
 
-    // Set Cookie with brute force (Header + res.cookie)
+    // Set Cookie
     const isProd = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
     const userId = String(googleUser.id);
     
@@ -133,12 +166,8 @@ app.get('/api/auth/user', async (req, res) => {
   }
 
   try {
-    console.log('[API] Attempting to import storage module...');
-    const { storage } = await import('../server/storage');
-    console.log('[API] Storage module imported successfully');
-    
-    console.log(`[API] Fetching user ${userId} from database...`);
-    const user = await storage.getUser(userId);
+    console.log('[API] Fetching user from database...');
+    const user = await getUser(userId);
     
     if (!user) {
       console.log(`[API] User ${userId} not found in database`);
@@ -174,6 +203,7 @@ app.get('/api/goals', (req, res) => res.json([]));
 app.get('/api/stash', (req, res) => res.json([]));
 app.get('/api/streak', (req, res) => res.json({ saveStreak: 0, fightStreak: 0 }));
 
+// --- DEBUG ---
 app.get('/api/debug', async (req, res) => {
   const debug: any = {
     timestamp: new Date().toISOString(),
@@ -191,15 +221,13 @@ app.get('/api/debug', async (req, res) => {
 
   // Test database connection
   try {
-    const { storage } = await import('../server/storage');
-    const { db } = await import('../server/db');
+    const database = initDb();
     
-    if (!db) {
+    if (!database) {
       debug.database = { status: 'ERROR', message: 'Database not initialized (DATABASE_URL missing?)' };
     } else {
-      // Try a simple query
-      const result = await db.execute('SELECT 1 as test');
-      debug.database = { status: 'OK', message: 'Database connection successful', testQuery: result };
+      const result = await database.execute('SELECT 1 as test');
+      debug.database = { status: 'OK', message: 'Database connection successful' };
     }
   } catch (e: any) {
     debug.database = { 
