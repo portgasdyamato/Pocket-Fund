@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { storage } from '../../../server/storage';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -70,11 +71,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
       }
 
-      const user = await userResponse.json();
+      const googleUser = await userResponse.json();
 
-      // For now, just redirect to dashboard with user info in query (temporary solution)
-      // In production, you'd want to create a JWT token or use a proper session store
-      res.redirect(302, `/dashboard?user=${encodeURIComponent(JSON.stringify(user))}`);
+      // Save/update user in database
+      try {
+        await storage.upsertUser({
+          id: googleUser.id,
+          email: googleUser.email,
+          firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
+          lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
+          profileImageUrl: googleUser.picture || null,
+        });
+      } catch (error) {
+        console.error('Error saving user to database:', error);
+        // Continue even if save fails
+      }
+
+      // Save user ID to cookie for authentication
+      // Note: This is a temporary solution. For production, use JWT tokens or proper session management
+      res.setHeader('Set-Cookie', `userId=${googleUser.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; ${process.env.NODE_ENV === 'production' ? 'Secure;' : ''}`);
+      
+      // Redirect to HQ page (dashboard)
+      res.redirect(302, '/hq');
 
     } catch (error: any) {
       console.error('OAuth error:', error);
