@@ -131,10 +131,12 @@ const isAuthenticated = async (req: any, res: any, next: any) => {
 
 // --- AI SERVICE ---
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+
 async function callGemini(requestBody: any): Promise<any | null> {
   if (!GEMINI_API_KEY) return null;
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
+    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
@@ -314,9 +316,29 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) =>
   const db = getDb();
   const rows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
   const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
-  const prompt = `Coach for Pocket Fund. User: ₹${rows[0]?.total || 0} stashed, ${streak?.saveStreak || 0} day streak. Ques: ${req.body.message}`;
-  const ai = await callGemini({ contents: [{ role: "user", parts: [{ text: prompt }] }] });
-  res.json({ response: ai?.candidates?.[0]?.content?.parts?.[0]?.text || "Keep it up!" });
+  
+  const totalStashed = parseFloat((rows[0]?.total as string) || "0");
+  const saveStreak = streak?.saveStreak || 0;
+  
+  const systemPrompt = `You are "Pocket Fund Coach", a friendly, motivational high-level financial expert for young adults in India. 
+Tone: Encouraging, non-judgmental, straightforward.
+Currency: Always use Rupee (₹).
+Context: The user has saved ₹${totalStashed} so far. They have a ${saveStreak}-day saving streak.
+Role: Help them understand spending, celebrate wins, and motivate them to reach their goal. 
+Keep responses concise (2-4 sentences max).`;
+
+  const ai = await callGemini({
+    contents: [{ 
+      role: "user", 
+      parts: [{ text: `${systemPrompt}\n\nUser Question: ${req.body.message}` }] 
+    }]
+  });
+  
+  const responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text || 
+                      ai?.text || 
+                      "I'm here to help you reach your goals! Every small saving counts. What else is on your mind?";
+                      
+  res.json({ response: responseText });
 });
 
 app.get(['/api/auth/google', '/auth/google'], (req, res) => {
