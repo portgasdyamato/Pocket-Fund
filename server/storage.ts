@@ -23,13 +23,14 @@ import {
   type InsertStashTransaction,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, isNull } from "drizzle-orm";
+import { eq, and, desc, isNull, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (Replit Auth compatible)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserOnboarding(id: string, status: string): Promise<void>;
+  updateUserProfile(id: string, data: { firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User>;
   
   // Goal operations
   createGoal(goal: InsertGoal): Promise<Goal>;
@@ -52,7 +53,9 @@ export interface IStorage {
   // Quest operations
   getQuests(): Promise<Quest[]>;
   getUserQuests(userId: string): Promise<UserQuest[]>;
+  getActiveQuests(userId: string): Promise<UserQuest[]>;
   completeQuest(userId: string, questId: string): Promise<void>;
+  joinQuest(userId: string, questId: string): Promise<void>;
   
   // Streak operations
   getStreak(userId: string): Promise<Streak | undefined>;
@@ -62,6 +65,7 @@ export interface IStorage {
   createStashTransaction(stash: InsertStashTransaction): Promise<StashTransaction>;
   getStashTransactions(userId: string): Promise<StashTransaction[]>;
   getTotalStashed(userId: string): Promise<number>;
+  updateWalletBalance(userId: string, amount: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -88,6 +92,25 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserOnboarding(id: string, status: string): Promise<void> {
     await db.update(users).set({ onboardingStatus: status }).where(eq(users.id, id));
+  }
+
+  async updateUserProfile(id: string, data: { firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User> {
+    const updateFields: any = {
+      updatedAt: new Date(),
+    };
+    
+    // Only include fields that are explicitly provided (not undefined)
+    if (data.firstName !== undefined) updateFields.firstName = data.firstName;
+    if (data.lastName !== undefined) updateFields.lastName = data.lastName;
+    if (data.profileImageUrl !== undefined) updateFields.profileImageUrl = data.profileImageUrl;
+    
+    const [updated] = await db
+      .update(users)
+      .set(updateFields)
+      .where(eq(users.id, id))
+      .returning();
+    if (!updated) throw new Error("User not found");
+    return updated;
   }
 
   // Goal operations
@@ -165,6 +188,13 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(userQuests).where(eq(userQuests.userId, userId));
   }
 
+  async getActiveQuests(userId: string): Promise<UserQuest[]> {
+    return await db
+      .select()
+      .from(userQuests)
+      .where(and(eq(userQuests.userId, userId), eq(userQuests.completed, false)));
+  }
+
   async completeQuest(userId: string, questId: string): Promise<void> {
     const [existing] = await db
       .select()
@@ -182,6 +212,22 @@ export class DatabaseStorage implements IStorage {
         questId,
         completed: true,
         completedAt: new Date(),
+      });
+    }
+  }
+
+  async joinQuest(userId: string, questId: string): Promise<void> {
+    const [existing] = await db
+      .select()
+      .from(userQuests)
+      .where(and(eq(userQuests.userId, userId), eq(userQuests.questId, questId)));
+
+    if (!existing) {
+      await db.insert(userQuests).values({
+        userId,
+        questId,
+        completed: false, // Not completed yet
+        completedAt: null,
       });
     }
   }
@@ -236,6 +282,15 @@ export class DatabaseStorage implements IStorage {
       const amount = parseFloat(t.amount);
       return t.type === 'stash' ? total + amount : total - amount;
     }, 0);
+  }
+
+  async updateWalletBalance(userId: string, amount: number): Promise<void> {
+    await db
+      .update(users)
+      .set({ 
+        walletBalance: sql`${users.walletBalance} + ${amount}`
+      })
+      .where(eq(users.id, userId));
   }
 }
 

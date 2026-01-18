@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Wallet, Lock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import ThemeToggle from "@/components/ThemeToggle";
 import { 
   Home, 
@@ -76,6 +83,15 @@ export function NavigationBar() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Fetch balances for navbar
+  const { data: totalStashedData } = useQuery<{ total: number }>({
+    queryKey: ["/api/stash/total"],
+    enabled: isAuthenticated
+  });
+
+  const walletBalance = parseFloat(user?.walletBalance?.toString() || "0");
+  const lockerBalance = parseFloat(totalStashedData?.total?.toString() || "0");
+
   const handleLogout = () => {
     window.location.href = "/api/logout";
   };
@@ -133,7 +149,37 @@ export function NavigationBar() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4 mr-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 cursor-help">
+                    <Wallet className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-semibold text-primary">
+                      ₹{walletBalance.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Wallet Balance (Available to Spend)</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-2 bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20 cursor-help">
+                    <Lock className="w-3.5 h-3.5 text-secondary-foreground" />
+                    <span className="text-xs font-semibold text-secondary-foreground">
+                      ₹{lockerBalance.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Locker Savings (Total Stashed)</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -182,11 +228,17 @@ export function NavigationBar() {
         <div className="md:hidden flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              The Financial Glow-Up
+              Pocket Fund
             </h1>
           </Link>
           
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-primary/10 px-2 py-1 rounded-full border border-primary/20 mr-1">
+               <Wallet className="w-3 h-3 text-primary" />
+               <span className="text-[10px] font-bold text-primary">
+                  ₹{walletBalance.toLocaleString('en-IN')}
+               </span>
+            </div>
             <ThemeToggle />
             <Button
               variant="ghost"

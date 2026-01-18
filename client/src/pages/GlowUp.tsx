@@ -7,17 +7,24 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy } from "lucide-react";
 import type { Goal, StashTransaction } from "@shared/schema";
+import GoalCelebration from "@/components/GoalCelebration";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function GlowUp() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isNewGoalOpen, setIsNewGoalOpen] = useState(false);
   const [isStashOpen, setIsStashOpen] = useState(false);
   const [goalName, setGoalName] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
   const [stashAmount, setStashAmount] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState("");
+  
+  // Celebration State
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [completedGoalName, setCompletedGoalName] = useState("");
 
   const { data: goals = [] } = useQuery<Goal[]>({
     queryKey: ["/api/goals"],
@@ -54,26 +61,46 @@ export default function GlowUp() {
 
   const stashMutation = useMutation({
     mutationFn: async () => {
-      await apiRequest("/api/stash", "POST", {
+      return await apiRequest("/api/stash", "POST", {
         amount: stashAmount,
         type: "stash",
         goalId: selectedGoalId || null,
         status: "completed",
       });
     },
-    onSuccess: () => {
+    onSuccess: async (response) => {
+      const data = await response.json(); // specific fix assuming apiRequest returns Response
+      
       queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stash/total"] });
       queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
       queryClient.invalidateQueries({ queryKey: ["/api/streak"] });
+      // Invalidate user to update wallet balance logic if needed (though Dashboard handles it via query invalidation usually)
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+
       setIsStashOpen(false);
       setStashAmount("");
+      
+      if (data.goalCompleted && selectedGoalId) {
+        const goal = goals.find(g => g.id === selectedGoalId);
+        setCompletedGoalName(goal?.name || "Goal");
+        setShowCelebration(true);
+      }
+      
       setSelectedGoalId("");
+      
       toast({
         title: "Stashed!",
         description: "Your money is now growing in your Locker.",
       });
     },
+    onError: (error) => {
+       toast({
+        title: "Stash Failed",
+        description: error.message || "Could not stash money. Check your wallet balance.",
+        variant: "destructive",
+      });
+    }
   });
 
   const totalStashed = totalStashedData?.total || 0;
@@ -119,12 +146,15 @@ export default function GlowUp() {
                   data-testid="select-goal"
                 >
                   <option value="">General Savings</option>
-                  {goals.map((goal) => (
+                  {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
                     <option key={goal.id} value={goal.id}>
-                      {goal.name}
+                      {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
                     </option>
                   ))}
                 </select>
+               <p className="text-xs text-muted-foreground mt-2">
+                 Wallet Balance: <span className="font-bold text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+               </p>
               </div>
               <Button
                 onClick={() => stashMutation.mutate()}
@@ -200,43 +230,90 @@ export default function GlowUp() {
         </Dialog>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {goals.map((goal) => {
-          const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
-          return (
-            <Card key={goal.id} data-testid={`card-goal-${goal.id}`} className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="w-5 h-5 text-primary" />
-                      {goal.name}
-                      {goal.isMain && (
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          Main
-                        </span>
-                      )}
-                    </CardTitle>
-                    <CardDescription className="mt-1">
-                      ₹{parseFloat(goal.currentAmount).toLocaleString('en-IN')} of ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
-                    </CardDescription>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold">{progress.toFixed(0)}%</div>
-                  </div>
+      <GoalCelebration 
+        isOpen={showCelebration} 
+        onClose={() => setShowCelebration(false)} 
+        goalName={completedGoalName} 
+      />
+
+      <div className="space-y-8">
+        <div>
+          <h3 className="text-lg font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Active Goals</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => {
+              const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
+              return (
+                <Card key={goal.id} data-testid={`card-goal-${goal.id}`} className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <Target className="w-5 h-5 text-primary" />
+                          {goal.name}
+                          {goal.isMain && (
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                              Main
+                            </span>
+                          )}
+                        </CardTitle>
+                        <CardDescription className="mt-1">
+                          ₹{parseFloat(goal.currentAmount).toLocaleString('en-IN')} of ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
+                        </CardDescription>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold">{progress.toFixed(0)}%</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="w-full bg-muted rounded-full h-3">
+                      <div
+                        className="bg-primary h-3 rounded-full transition-all"
+                        style={{ width: `${Math.min(progress, 100)}%` }}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+             {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).length === 0 && (
+                <div className="col-span-2 text-center text-muted-foreground py-8 border rounded-lg border-dashed">
+                  No active goals. Time to dream big!
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="w-full bg-muted rounded-full h-3">
-                  <div
-                    className="bg-primary h-3 rounded-full transition-all"
-                    style={{ width: `${Math.min(progress, 100)}%` }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+             )}
+          </div>
+        </div>
+
+        {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length > 0 && (
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-green-500 uppercase tracking-wider flex items-center gap-2">
+              <Trophy className="w-5 h-5" /> Completed Goals
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6 opacity-80 hover:opacity-100 transition-opacity">
+              {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => {
+                return (
+                  <Card key={goal.id} className="relative overflow-hidden bg-gradient-to-br from-green-500/10 to-transparent border border-green-500/30">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="flex items-center gap-2 line-through text-muted-foreground">
+                            {goal.name}
+                          </CardTitle>
+                          <CardDescription className="mt-1 text-green-500 font-medium">
+                            Target Achieved: ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
+                          </CardDescription>
+                        </div>
+                        <div className="bg-green-500/20 p-2 rounded-full">
+                          <Trophy className="w-6 h-6 text-green-500" />
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {goals.length === 0 && (

@@ -20,11 +20,12 @@ export const users = pgTable("users", {
   email: varchar("email").unique(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
+  profileImageUrl: text("profile_image_url"),
   onboardingStatus: text("onboarding_status").notNull().default("step_1"),
   aaToken: text("aa_token"),
   kycCompleted: boolean("kyc_completed").default(false),
   mandateId: text("mandate_id"),
+  walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
