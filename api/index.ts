@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { storage } from '../server/storage';
+// Updated: 2026-01-18 23:29 - Force redeploy
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
