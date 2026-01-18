@@ -3,10 +3,29 @@ import cookieParser from 'cookie-parser';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
-import { users } from '../shared/schema.js';
-import type { User, UpsertUser } from '../shared/schema.js';
+import { sql } from 'drizzle-orm';
+import { pgTable, varchar, text, timestamp, decimal, boolean } from 'drizzle-orm/pg-core';
 
 const app = express();
+
+// Define users table schema inline
+const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: text("profile_image_url"),
+  onboardingStatus: text("onboarding_status").notNull().default("step_1"),
+  aaToken: text("aa_token"),
+  kycCompleted: boolean("kyc_completed").default(false),
+  mandateId: text("mandate_id"),
+  walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+type User = typeof users.$inferSelect;
+type UpsertUser = typeof users.$inferInsert;
 
 // Middleware
 app.use(cookieParser());
@@ -227,7 +246,7 @@ app.get('/api/debug', async (req, res) => {
     if (!database) {
       debug.database = { status: 'ERROR', message: 'Database not initialized (DATABASE_URL missing?)' };
     } else {
-      const result = await database.execute('SELECT 1 as test');
+      const result = await database.execute(sql`SELECT 1 as test`);
       debug.database = { status: 'OK', message: 'Database connection successful' };
     }
   } catch (e: any) {
