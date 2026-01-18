@@ -90,6 +90,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const googleUser = await userResponse.json();
 
+      /*
       // Save/update user in database
       try {
         await storage.upsertUser({
@@ -103,6 +104,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('Error saving user to database:', error);
         // Continue even if save fails
       }
+      */
 
       // Save user ID to cookie for authentication
       // Note: This is a temporary solution. For production, use JWT tokens or proper session management
