@@ -16,8 +16,6 @@ if (!process.env.SESSION_SECRET) {
   throw new Error("Environment variable SESSION_SECRET not provided");
 }
 
-import { storage } from "./storage";
-
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   
