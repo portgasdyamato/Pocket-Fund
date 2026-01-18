@@ -39,8 +39,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
-    // Google Auth callback
-    if (path.startsWith('/api/auth/google/callback')) {
+    // Google Auth callback - handled by api/auth/google/callback/index.ts
+    // This block is disabled to avoid conflicts with file-based routing
+    if (false && path.startsWith('/api/auth/google/callback')) {
       const code = req.query.code as string;
       
       if (!code) {
