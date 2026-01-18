@@ -1,147 +1,130 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import session from 'express-session';
-import express from 'express';
-
-// Initialize Express app for middleware
-const app = express();
-
-// Configure session
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
-  }
-}));
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Configure Google Strategy
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback',
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        // For now, just pass the profile
-        return done(null, profile);
-      }
-    )
-  );
-
-  passport.serializeUser((user: any, done) => done(null, user));
-  passport.deserializeUser((user: any, done) => done(null, user));
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  try {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
-  const path = req.url || '';
-
-  // Google Auth routes
-  if (path.startsWith('/api/auth/google/callback')) {
-    return new Promise((resolve) => {
-      passport.authenticate('google', { 
-        failureRedirect: '/' 
-      }, (err: any, user: any) => {
-        if (err || !user) {
-          res.redirect('/');
-          return resolve(null);
-        }
-        req.logIn(user, (loginErr) => {
-          if (loginErr) {
-            res.redirect('/');
-            return resolve(null);
-          }
-          res.redirect('/dashboard');
-          return resolve(null);
-        });
-      })(req, res);
-    });
-  }
-
-  if (path.startsWith('/api/auth/google')) {
-    return new Promise((resolve) => {
-      passport.authenticate('google', {
-        scope: ['profile', 'email']
-      })(req, res, () => resolve(null));
-    });
-  }
-
-  if (path.startsWith('/api/logout')) {
-    req.logout(() => {
-      res.redirect('/');
-    });
-    return;
-  }
-
-  // Health check
-  if (path === '/api/health') {
-    return res.status(200).json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      auth: {
-        configured: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
-      }
-    });
-  }
-
-  // Return empty arrays for data endpoints to prevent frontend crashes
-  if (path.includes('/api/transactions')) {
-    return res.status(200).json([]);
-  }
-  
-  if (path.includes('/api/quests')) {
-    return res.status(200).json([]);
-  }
-  
-  if (path.includes('/api/badges')) {
-    return res.status(200).json([]);
-  }
-  
-  if (path.includes('/api/goals')) {
-    return res.status(200).json([]);
-  }
-  
-  if (path.includes('/api/stash')) {
-    return res.status(200).json([]);
-  }
-  
-  if (path.includes('/api/streak')) {
-    return res.status(200).json({ saveStreak: 0, fightStreak: 0 });
-  }
-  
-  if (path.includes('/api/auth/user')) {
-    if (req.isAuthenticated && req.isAuthenticated()) {
-      return res.status(200).json(req.user);
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
     }
-    return res.status(401).json({ message: 'Not authenticated' });
-  }
 
-  // Default response
-  return res.status(200).json({ 
-    message: 'API endpoint', 
-    path: req.url,
-    note: 'Endpoint not implemented yet'
-  });
+    const path = req.url || '';
+
+    // Google Auth - redirect to Google
+    if (path.startsWith('/api/auth/google') && !path.includes('callback')) {
+      const clientId = process.env.GOOGLE_CLIENT_ID;
+      const callbackUrl = process.env.GOOGLE_CALLBACK_URL || 'https://pocket-fund-theta.vercel.app/api/auth/google/callback';
+      
+      if (!clientId) {
+        return res.status(500).json({ error: 'Google OAuth not configured' });
+      }
+
+      const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+        `client_id=${clientId}&` +
+        `redirect_uri=${encodeURIComponent(callbackUrl)}&` +
+        `response_type=code&` +
+        `scope=${encodeURIComponent('profile email')}&` +
+        `access_type=offline&` +
+        `prompt=consent`;
+
+      res.redirect(googleAuthUrl);
+      return;
+    }
+
+    // Google Auth callback
+    if (path.startsWith('/api/auth/google/callback')) {
+      const code = req.query.code as string;
+      
+      if (!code) {
+        res.redirect('/?error=no_code');
+        return;
+      }
+
+      try {
+        // Exchange code for tokens
+        const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID!,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+            redirect_uri: process.env.GOOGLE_CALLBACK_URL || 'https://pocket-fund-theta.vercel.app/api/auth/google/callback',
+            grant_type: 'authorization_code'
+          })
+        });
+
+        const tokens = await tokenResponse.json();
+
+        if (!tokens.access_token) {
+          res.redirect('/?error=token_failed');
+          return;
+        }
+
+        // Get user info
+        const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: { Authorization: `Bearer ${tokens.access_token}` }
+        });
+
+        const user = await userResponse.json();
+
+        // For now, just redirect to dashboard with user info in query (temporary solution)
+        // In production, you'd want to create a JWT token or use a proper session store
+        res.redirect(`/dashboard?user=${encodeURIComponent(JSON.stringify(user))}`);
+        return;
+
+      } catch (error) {
+        console.error('OAuth error:', error);
+        res.redirect('/?error=auth_failed');
+        return;
+      }
+    }
+
+    // Logout
+    if (path.startsWith('/api/logout')) {
+      res.redirect('/');
+      return;
+    }
+
+    // Health check
+    if (path === '/api/health') {
+      return res.status(200).json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        env: {
+          hasGoogleId: !!process.env.GOOGLE_CLIENT_ID,
+          hasGoogleSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+          callbackUrl: process.env.GOOGLE_CALLBACK_URL
+        }
+      });
+    }
+
+    // Return empty arrays for data endpoints
+    if (path.includes('/api/transactions')) return res.status(200).json([]);
+    if (path.includes('/api/quests')) return res.status(200).json([]);
+    if (path.includes('/api/badges')) return res.status(200).json([]);
+    if (path.includes('/api/goals')) return res.status(200).json([]);
+    if (path.includes('/api/stash')) return res.status(200).json([]);
+    if (path.includes('/api/streak')) return res.status(200).json({ saveStreak: 0, fightStreak: 0 });
+    if (path.includes('/api/auth/user')) return res.status(401).json({ message: 'Not authenticated' });
+
+    // Default
+    return res.status(200).json({ 
+      message: 'API endpoint', 
+      path: req.url 
+    });
+
+  } catch (error: any) {
+    console.error('Handler error:', error);
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      message: error?.message 
+    });
+  }
 }
