@@ -5,7 +5,8 @@ export function useAuth() {
   const { data: user, isLoading, error } = useQuery<User>({
     queryKey: ["/api/auth/user"],
     retry: false,
-    staleTime: 0, // Don't cache auth status to avoid login loops
+    staleTime: 0,
+    gcTime: 0, // Ensure no old auth data persists
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     queryFn: async () => {
