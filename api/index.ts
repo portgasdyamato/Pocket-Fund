@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { storage } from '../server/storage';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -112,7 +113,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (path.includes('/api/goals')) return res.status(200).json([]);
     if (path.includes('/api/stash')) return res.status(200).json([]);
     if (path.includes('/api/streak')) return res.status(200).json({ saveStreak: 0, fightStreak: 0 });
-    if (path.includes('/api/auth/user')) return res.status(401).json({ message: 'Not authenticated' });
+    // Get authenticated user
+    if (path.includes('/api/auth/user')) {
+      try {
+        // Get userId from cookie
+        const cookies = req.headers.cookie || '';
+        const userIdMatch = cookies.match(/userId=([^;]+)/);
+        const userId = userIdMatch ? userIdMatch[1] : null;
+
+        if (!userId) {
+          return res.status(401).json({ message: 'Not authenticated' });
+        }
+
+        // Fetch user from database
+        const user = await storage.getUser(userId);
+        if (!user) {
+          return res.status(401).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json(user);
+      } catch (error: any) {
+        console.error('Error fetching user:', error);
+        return res.status(500).json({ message: 'Failed to fetch user' });
+      }
+    }
 
     // Default
     return res.status(200).json({ 
