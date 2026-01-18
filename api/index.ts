@@ -224,6 +224,64 @@ app.get(['/api/transactions', '/transactions'], isAuthenticated, async (req: any
   res.json(transactions);
 });
 
+app.get(['/api/transactions/untagged', '/transactions/untagged'], isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const transactions = await db.select().from(transactionsTable)
+    .where(and(eq(transactionsTable.userId, req.user.id), isNull(transactionsTable.tag)))
+    .orderBy(desc(transactionsTable.date));
+  res.json(transactions);
+});
+
+app.patch('/api/transactions/:id/tag', isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const { id } = req.params;
+  const { tag } = req.body;
+  await db.update(transactionsTable).set({ tag }).where(eq(transactionsTable.id, id));
+  
+  // Update fight streak if tag is added
+  if (tag) {
+    const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
+    if (streak) {
+      await db.update(streaksTable).set({ fightStreak: streak.fightStreak + 1, lastFightDate: new Date() }).where(eq(streaksTable.id, streak.id));
+    } else {
+      await db.insert(streaksTable).values({ userId: req.user.id, fightStreak: 1, lastFightDate: new Date() });
+    }
+  }
+  res.json({ success: true });
+});
+
+app.delete('/api/transactions/:id', isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const { id } = req.params;
+  
+  // Optional: Add back to wallet balance if desired? The original routes.ts just deleted it. 
+  // Let's follow original behavior - just delete.
+  await db.delete(transactionsTable).where(and(eq(transactionsTable.id, id), eq(transactionsTable.userId, req.user.id)));
+  res.json({ success: true });
+});
+
+app.post('/api/transactions/:id/categorize', isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const { id } = req.params;
+  const [transaction] = await db.select().from(transactionsTable).where(eq(transactionsTable.id, id));
+  if (!transaction) return res.status(404).json({ message: "Transaction not found" });
+
+  const aiRes = await callGemini({
+    contents: [{ 
+      role: "user", 
+      parts: [{ text: `Categorize this: "${transaction.description}" (Amount: ${transaction.amount}). Categories: Need, Want, Ick. Reply with JSON { "suggestedCategory": "...", "reasoning": "..." }` }] 
+    }]
+  });
+  
+  const raw = aiRes?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+  try {
+    const cleaned = raw.substring(raw.indexOf('{'), raw.lastIndexOf('}') + 1);
+    res.json(JSON.parse(cleaned));
+  } catch (e) {
+    res.json({ suggestedCategory: "Want", reasoning: "Could not categorize automatically." });
+  }
+});
+
 app.post(['/api/transactions', '/transactions'], isAuthenticated, async (req: any, res) => {
   const db = getDb();
   const amount = parseFloat(req.body.amount || "0");
@@ -340,7 +398,7 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) =>
   const totalStashedRows = await db.select({ total: drizzleSql`sum(amount)` })
     .from(stashTransactionsTable)
     .where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
-  const totalStashed = parseFloat(totalStashedRows[0]?.total || "0");
+  const totalStashed = parseFloat((totalStashedRows[0]?.total as string) || "0");
   
   const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
   
@@ -352,6 +410,33 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) =>
   
   const text = aiRes?.candidates?.[0]?.content?.parts?.[0]?.text || "Coach logic unavailable. Keep saving!";
   res.json({ response: text });
+});
+
+app.get(['/api/stash/total', '/stash/total'], isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const totalRows = await db.select({ total: drizzleSql`sum(amount)` })
+    .from(stashTransactionsTable)
+    .where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
+  res.json({ total: parseFloat(totalRows[0]?.total || "0") });
+});
+
+app.post(['/api/ai/insight', '/ai/insight'], isAuthenticated, async (req: any, res) => {
+  const db = getDb();
+  const transactions = await db.select().from(transactionsTable).where(eq(transactionsTable.userId, req.user.id));
+  
+  const totalSpent = transactions.reduce((sum: number, t: any) => sum + parseFloat(t.amount || "0"), 0);
+  const ickSpent = transactions.filter((t: any) => t.tag === 'Ick').reduce((sum: number, t: any) => sum + parseFloat(t.amount || "0"), 0);
+  const wantSpent = transactions.filter((t: any) => t.tag === 'Want').reduce((sum: number, t: any) => sum + parseFloat(t.amount || "0"), 0);
+  const needSpent = transactions.filter((t: any) => t.tag === 'Need').reduce((sum: number, t: any) => sum + parseFloat(t.amount || "0"), 0);
+  
+  const aiRes = await callGemini({
+    contents: [{ 
+      role: "user", 
+      parts: [{ text: `Stats: Total ₹${totalSpent}, Needs ₹${needSpent}, Wants ₹${wantSpent}, Icks ₹${ickSpent}. Give a 2-sentence motivational insight.` }] 
+    }]
+  });
+  
+  res.json({ insight: aiRes?.candidates?.[0]?.content?.parts?.[0]?.text || "Keep saving!" });
 });
 
 // --- GOOGLE OAUTH FLOW ---
