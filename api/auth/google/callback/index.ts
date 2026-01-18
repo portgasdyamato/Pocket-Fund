@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-// import { storage } from '../../../../server/storage';
+import { storage } from '../../../../server/storage';
 
 // ... inside handler ...
 
@@ -90,7 +90,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const googleUser = await userResponse.json();
 
-      /*
       // Save/update user in database
       try {
         await storage.upsertUser({
