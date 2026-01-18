@@ -2,268 +2,154 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { eq } from 'drizzle-orm';
-import { sql } from 'drizzle-orm';
+import { eq, sql as drizzleSql } from 'drizzle-orm';
 import { pgTable, varchar, text, timestamp, decimal, boolean } from 'drizzle-orm/pg-core';
 
-const app = express();
-
-// Define users table schema inline
-const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+// 1. Define Schema Inline (No imports from other files)
+const usersTable = pgTable("users", {
+  id: varchar("id").primaryKey(),
   email: varchar("email").unique(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: text("profile_image_url"),
   onboardingStatus: text("onboarding_status").notNull().default("step_1"),
-  aaToken: text("aa_token"),
-  kycCompleted: boolean("kyc_completed").default(false),
-  mandateId: text("mandate_id"),
   walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-type User = typeof users.$inferSelect;
-type UpsertUser = typeof users.$inferInsert;
-
-// Middleware
+const app = express();
 app.use(cookieParser());
 app.use(express.json());
 
-// CORS
+// 2. Optimized CORS for Vercel
 app.use((req, res, next) => {
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-requested-with');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
+  if (req.method === 'OPTIONS') return res.status(200).end();
   next();
 });
 
-// Database initialization
-let db: any = null;
-const initDb = () => {
-  if (!db && process.env.DATABASE_URL) {
-    const sql = neon(process.env.DATABASE_URL);
-    db = drizzle(sql, { schema: { users } });
+// 3. Database Singleton
+let dbInstance: any = null;
+const getDb = () => {
+  if (!dbInstance && process.env.DATABASE_URL) {
+    const client = neon(process.env.DATABASE_URL);
+    dbInstance = drizzle(client);
   }
-  return db;
+  return dbInstance;
 };
 
-// Helper to get userId from cookie
-const getUserId = (req: any) => {
-  if (req.cookies?.userId) return req.cookies.userId;
-  if (req.headers.cookie) {
-    const match = req.headers.cookie.match(/userId=([^;]+)/);
-    if (match) return match[1];
-  }
-  return null;
-};
-
-// Database helpers
-const getUser = async (id: string): Promise<User | undefined> => {
-  const database = initDb();
-  if (!database) throw new Error('Database not initialized');
-  const [user] = await database.select().from(users).where(eq(users.id, id));
+// 4. Helper to find User
+const fetchUser = async (id: string) => {
+  const db = getDb();
+  if (!db) return null;
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, id));
   return user;
 };
 
-const upsertUser = async (userData: UpsertUser): Promise<User> => {
-  const database = initDb();
-  if (!database) throw new Error('Database not initialized');
-  const [user] = await database
-    .insert(users)
-    .values(userData)
-    .onConflictDoUpdate({
-      target: users.id,
-      set: {
-        ...userData,
-        updatedAt: new Date(),
-      },
-    })
-    .returning();
-  return user;
-};
+// 5. Routes (Handling both /api/path and /path for Vercel flexibility)
 
-// --- GOOGLE AUTH: INITIATE ---
-app.get('/api/auth/google', (req, res) => {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const callbackUrl = process.env.GOOGLE_CALLBACK_URL || `https://${req.headers.host}/api/auth/google/callback`;
-  
-  console.log(`[API] Initiating Google Auth. Callback: ${callbackUrl}`);
-  
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-    `client_id=${clientId}&` +
-    `redirect_uri=${encodeURIComponent(callbackUrl)}&` +
-    `response_type=code&` +
-    `scope=${encodeURIComponent('profile email')}&` +
-    `access_type=offline&` +
-    `prompt=consent`;
-
-  res.redirect(googleAuthUrl);
+// --- DEBUG ---
+app.get(['/api/debug', '/debug'], async (req, res) => {
+  try {
+    const db = getDb();
+    const dbStatus = db ? "Configured" : "Missing DATABASE_URL";
+    let dbTest = "Not tested";
+    if (db) {
+       await db.execute(drizzleSql`SELECT 1`);
+       dbTest = "Connection Successful";
+    }
+    res.json({
+      status: "running",
+      dbStatus,
+      dbTest,
+      cookies: req.cookies || "No cookies object",
+      userIdCookie: req.cookies?.userId || "Missing",
+      env: { NODE_ENV: process.env.NODE_ENV, VERCEL: process.env.VERCEL }
+    });
+  } catch (err: any) {
+    res.status(500).json({ status: "error", message: err.message, stack: err.stack });
+  }
 });
 
-// --- GOOGLE AUTH: CALLBACK ---
-app.get('/api/auth/google/callback', async (req, res) => {
-  const { code } = req.query;
-  if (!code) return res.redirect('/?error=no_code');
+// --- GOOGLE LOGIN ---
+app.get(['/api/auth/google', '/auth/google'], (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const callbackUrl = `https://${req.headers.host}/api/auth/google/callback`;
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(callbackUrl)}&response_type=code&scope=profile%20email&prompt=consent`;
+  res.redirect(url);
+});
 
+// --- CALLBACK ---
+app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res) => {
+  const code = req.query.code as string;
+  if (!code) return res.redirect('/?error=no_code');
+  
   try {
-    const callbackUrl = process.env.GOOGLE_CALLBACK_URL || `https://${req.headers.host}/api/auth/google/callback`;
-    
-    // Exchange token
+    const callbackUrl = `https://${req.headers.host}/api/auth/google/callback`;
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        code: code as string,
-        client_id: process.env.GOOGLE_CLIENT_ID!,
+        code, client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: callbackUrl,
-        grant_type: 'authorization_code'
+        redirect_uri: callbackUrl, grant_type: 'authorization_code'
       })
     });
-
     const tokens = await tokenRes.json();
-    if (!tokens.access_token) return res.redirect('/?error=token_failed');
-
-    // Get user info
     const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       headers: { Authorization: `Bearer ${tokens.access_token}` }
     });
     const googleUser = await userRes.json();
 
-    // DB Sync
-    try {
-      await upsertUser({
+    // Brute force upsert
+    const db = getDb();
+    if (db) {
+      await db.insert(usersTable).values({
         id: googleUser.id,
         email: googleUser.email,
-        firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
-        lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
-        profileImageUrl: googleUser.picture || null,
+        firstName: googleUser.given_name,
+        lastName: googleUser.family_name,
+        profileImageUrl: googleUser.picture
+      }).onConflictDoUpdate({
+        target: usersTable.id,
+        set: { updatedAt: new Date() }
       });
-      console.log(`[API] User ${googleUser.id} upserted successfully`);
-    } catch (e) {
-      console.error('[API] DB Sync Error:', e);
     }
 
-    // Set Cookie
-    const isProd = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
-    const userId = String(googleUser.id);
-    
-    const cookieOptions = [
-      `userId=${userId}`,
-      'Path=/',
-      `Max-Age=${7 * 24 * 60 * 60}`,
-      'HttpOnly',
-      'SameSite=Lax'
-    ];
-    if (isProd) cookieOptions.push('Secure');
-    
-    res.setHeader('Set-Cookie', cookieOptions.join('; '));
-    console.log(`[API] Cookie set for user ${userId}. Redirecting...`);
-    
-    res.redirect(302, '/hq');
+    res.cookie('userId', googleUser.id, {
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax'
+    });
+    res.redirect('/hq');
   } catch (err) {
-    console.error('[API] Callback Global Error:', err);
     res.redirect('/?error=auth_failed');
   }
 });
 
-// --- AUTH: USER ---
-app.get('/api/auth/user', async (req, res) => {
-  const userId = getUserId(req);
-  console.log(`[API] /api/auth/user check. userId found: ${userId}`);
-
-  if (!userId) {
-    return res.status(401).json({ message: 'Not authenticated' });
-  }
-
+// --- GET USER ---
+app.get(['/api/auth/user', '/auth/user'], async (req, res) => {
+  const userId = req.cookies?.userId;
+  if (!userId) return res.status(401).json({ message: 'No userId cookie' });
+  
   try {
-    console.log('[API] Fetching user from database...');
-    const user = await getUser(userId);
-    
-    if (!user) {
-      console.log(`[API] User ${userId} not found in database`);
-      return res.status(401).json({ message: 'User not found' });
-    }
-    
-    console.log(`[API] User ${userId} found successfully`);
+    const user = await fetchUser(userId);
+    if (!user) return res.status(401).json({ message: 'User not found' });
     res.json(user);
-  } catch (e: any) {
-    console.error('[API] Fetch User Error:', {
-      message: e?.message,
-      stack: e?.stack,
-      name: e?.name
-    });
-    res.status(500).json({ 
-      message: 'Database error',
-      error: e?.message || 'Unknown error'
-    });
+  } catch (err) {
+    res.status(500).json({ message: 'DB Error' });
   }
 });
 
-// --- LOGOUT ---
-app.get('/api/logout', (req, res) => {
-  res.setHeader('Set-Cookie', 'userId=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax');
-  res.redirect('/');
-});
-
-// --- DATA ---
-app.get('/api/transactions', (req, res) => res.json([]));
-app.get('/api/quests', (req, res) => res.json([]));
-app.get('/api/badges', (req, res) => res.json([]));
-app.get('/api/goals', (req, res) => res.json([]));
-app.get('/api/stash', (req, res) => res.json([]));
-app.get('/api/streak', (req, res) => res.json({ saveStreak: 0, fightStreak: 0 }));
-
-// --- DEBUG ---
-app.get('/api/debug', async (req, res) => {
-  const debug: any = {
-    timestamp: new Date().toISOString(),
-    environment: {
-      NODE_ENV: process.env.NODE_ENV,
-      VERCEL: process.env.VERCEL,
-      hasDatabaseUrl: !!process.env.DATABASE_URL,
-      hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
-      hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
-    },
-    cookies: {
-      userId: getUserId(req) || 'No userId cookie found'
-    }
-  };
-
-  // Test database connection
-  try {
-    const database = initDb();
-    
-    if (!database) {
-      debug.database = { status: 'ERROR', message: 'Database not initialized (DATABASE_URL missing?)' };
-    } else {
-      const result = await database.execute(sql`SELECT 1 as test`);
-      debug.database = { status: 'OK', message: 'Database connection successful' };
-    }
-  } catch (e: any) {
-    debug.database = { 
-      status: 'ERROR', 
-      message: e?.message || 'Unknown error',
-      stack: e?.stack?.split('\n').slice(0, 3)
-    };
-  }
-
-  res.json(debug);
-});
-
-app.get('/api/health', (req, res) => res.json({ 
-  status: 'ok', 
-  vercel: process.env.VERCEL === '1',
-  env: process.env.NODE_ENV
-}));
+// --- FALLBACK DATA ---
+app.get('/api/:resource', (req, res) => res.json([]));
 
 export default app;
