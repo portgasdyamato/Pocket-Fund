@@ -1,5 +1,22 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { storage } from '../../../../server/storage';
+// import { storage } from '../../../../server/storage';
+
+// ... inside handler ...
+
+      // Save/update user in database - TEMPORARILY DISABLED
+      /*
+      try {
+        await storage.upsertUser({
+          id: googleUser.id,
+          email: googleUser.email,
+          firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
+          lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
+          profileImageUrl: googleUser.picture || null,
+        });
+      } catch (error) {
+        console.error('Error saving user to database:', error);
+      }
+      */
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
