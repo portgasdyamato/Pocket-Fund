@@ -4,25 +4,17 @@ import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import { storage } from "./storage";
 
-if (!process.env.GOOGLE_CLIENT_ID) {
-  throw new Error("Environment variable GOOGLE_CLIENT_ID not provided");
-}
-
-if (!process.env.GOOGLE_CLIENT_SECRET) {
-  throw new Error("Environment variable GOOGLE_CLIENT_SECRET not provided");
-}
-
-if (!process.env.SESSION_SECRET) {
-  throw new Error("Environment variable SESSION_SECRET not provided");
-}
-
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET environment variable is required");
+  }
   
   // Use default MemoryStore for serverless (sessions won't persist across function invocations)
   // For production, consider using a Redis-based store or JWT tokens
   return session({
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     proxy: true,
@@ -47,6 +39,22 @@ async function upsertUser(profile: any) {
 }
 
 export async function setupAuth(app: Express) {
+  // Check environment variables at runtime, not at module load time
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    console.error("GOOGLE_CLIENT_ID not set");
+    return; // Don't crash, just skip auth setup
+  }
+  
+  if (!process.env.GOOGLE_CLIENT_SECRET) {
+    console.error("GOOGLE_CLIENT_SECRET not set");
+    return;
+  }
+  
+  if (!process.env.SESSION_SECRET) {
+    console.error("SESSION_SECRET not set");
+    return;
+  }
+
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
@@ -55,8 +63,8 @@ export async function setupAuth(app: Express) {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:5000/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
@@ -97,4 +105,3 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   }
   return next();
 };
-
