@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { type Request, Response, NextFunction } from "express";
+import express from "express";
 import { registerRoutes } from "../server/routes";
 import cors from "cors";
 
@@ -7,9 +7,7 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: process.env.NODE_ENV === "development" 
-    ? "http://localhost:5173" 
-    : process.env.CLIENT_URL || "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "https://pocket-fund-theta.vercel.app",
   credentials: true
 }));
 
@@ -22,17 +20,32 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
-// Initialize routes
-let routesInitialized = false;
-const initializeRoutes = async () => {
-  if (!routesInitialized) {
-    await registerRoutes(app);
-    routesInitialized = true;
-  }
-};
+// Initialize routes once
+let isInitialized = false;
+let initPromise: Promise<void> | null = null;
+
+async function initialize() {
+  if (isInitialized) return;
+  if (initPromise) return initPromise;
+  
+  initPromise = registerRoutes(app).then(() => {
+    isInitialized = true;
+    console.log("Routes initialized successfully");
+  }).catch(err => {
+    console.error("Failed to initialize routes:", err);
+    throw err;
+  });
+  
+  return initPromise;
+}
 
 // Vercel serverless function handler
-export default async (req: Request, res: Response) => {
-  await initializeRoutes();
-  return app(req, res);
-};
+export default async function handler(req: any, res: any) {
+  try {
+    await initialize();
+    return app(req, res);
+  } catch (error) {
+    console.error("Handler error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
