@@ -1,4 +1,3 @@
-
 import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "../server/routes";
@@ -23,20 +22,17 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
-// Register routes
-// We need to use an async wrapper because registerRoutes is async
-// but Vercel expects an exported app or a handler.
-// Express apps are valid handlers.
-// However, registerRoutes awaits setupAuth which might await DB connection.
-// We should ensure this happens.
+// Initialize routes
+let routesInitialized = false;
+const initializeRoutes = async () => {
+  if (!routesInitialized) {
+    await registerRoutes(app);
+    routesInitialized = true;
+  }
+};
 
-// To handle async initialization in Vercel/Express:
-// We can lazily initialize inside the handler or just hope top-level await works (it does in newer Node versions on Vercel).
-// But standard Express export doesn't wait.
-
-// Better pattern for Vercel + Express + Async Init:
-registerRoutes(app).catch(err => {
-  console.error("Failed to register routes", err);
-});
-
-export default app;
+// Vercel serverless function handler
+export default async (req: Request, res: Response) => {
+  await initializeRoutes();
+  return app(req, res);
+};
