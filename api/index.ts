@@ -174,6 +174,44 @@ app.get('/api/goals', (req, res) => res.json([]));
 app.get('/api/stash', (req, res) => res.json([]));
 app.get('/api/streak', (req, res) => res.json({ saveStreak: 0, fightStreak: 0 }));
 
+app.get('/api/debug', async (req, res) => {
+  const debug: any = {
+    timestamp: new Date().toISOString(),
+    environment: {
+      NODE_ENV: process.env.NODE_ENV,
+      VERCEL: process.env.VERCEL,
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+      hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+      hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+    },
+    cookies: {
+      userId: getUserId(req) || 'No userId cookie found'
+    }
+  };
+
+  // Test database connection
+  try {
+    const { storage } = await import('../server/storage');
+    const { db } = await import('../server/db');
+    
+    if (!db) {
+      debug.database = { status: 'ERROR', message: 'Database not initialized (DATABASE_URL missing?)' };
+    } else {
+      // Try a simple query
+      const result = await db.execute('SELECT 1 as test');
+      debug.database = { status: 'OK', message: 'Database connection successful', testQuery: result };
+    }
+  } catch (e: any) {
+    debug.database = { 
+      status: 'ERROR', 
+      message: e?.message || 'Unknown error',
+      stack: e?.stack?.split('\n').slice(0, 3)
+    };
+  }
+
+  res.json(debug);
+});
+
 app.get('/api/health', (req, res) => res.json({ 
   status: 'ok', 
   vercel: process.env.VERCEL === '1',
