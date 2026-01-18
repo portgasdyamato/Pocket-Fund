@@ -133,16 +133,30 @@ app.get('/api/auth/user', async (req, res) => {
   }
 
   try {
+    console.log('[API] Attempting to import storage module...');
     const { storage } = await import('../server/storage');
+    console.log('[API] Storage module imported successfully');
+    
+    console.log(`[API] Fetching user ${userId} from database...`);
     const user = await storage.getUser(userId);
+    
     if (!user) {
       console.log(`[API] User ${userId} not found in database`);
       return res.status(401).json({ message: 'User not found' });
     }
+    
+    console.log(`[API] User ${userId} found successfully`);
     res.json(user);
-  } catch (e) {
-    console.error('[API] Fetch User DB Error:', e);
-    res.status(500).json({ message: 'Database error' });
+  } catch (e: any) {
+    console.error('[API] Fetch User Error:', {
+      message: e?.message,
+      stack: e?.stack,
+      name: e?.name
+    });
+    res.status(500).json({ 
+      message: 'Database error',
+      error: e?.message || 'Unknown error'
+    });
   }
 });
 
