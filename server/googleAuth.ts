@@ -17,21 +17,15 @@ if (!process.env.SESSION_SECRET) {
   throw new Error("Environment variable SESSION_SECRET not provided");
 }
 
-import { pool } from "./db";
+import { storage } from "./storage";
 
 export function getSession() {
-  const PgSession = connectPg(session);
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   
-  const sessionStore = new PgSession({
-    pool,
-    tableName: 'sessions',
-    createTableIfMissing: true // Ensure table exists
-  });
-
+  // Use default MemoryStore for serverless (sessions won't persist across function invocations)
+  // For production, consider using a Redis-based store or JWT tokens
   return session({
     secret: process.env.SESSION_SECRET!,
-    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     proxy: true,
