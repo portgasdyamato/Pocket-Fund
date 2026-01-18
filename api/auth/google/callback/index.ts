@@ -1,22 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { storage } from '../../../../server/storage';
-
-// ... inside handler ...
-
-      // Save/update user in database - TEMPORARILY DISABLED
-      /*
-      try {
-        await storage.upsertUser({
-          id: googleUser.id,
-          email: googleUser.email,
-          firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
-          lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
-          profileImageUrl: googleUser.picture || null,
-        });
-      } catch (error) {
-        console.error('Error saving user to database:', error);
-      }
-      */
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -25,6 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL || '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Cache-Control', 'no-store');
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -91,19 +74,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const googleUser = await userResponse.json();
 
       // Save/update user in database
+      // We use dynamic import to avoid top-level crashes if DB init fails
+      let storage: any;
       try {
-        await storage.upsertUser({
-          id: googleUser.id,
-          email: googleUser.email,
-          firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
-          lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
-          profileImageUrl: googleUser.picture || null,
-        });
-      } catch (error) {
-        console.error('Error saving user to database:', error);
-        // Continue even if save fails
+        console.log('Dynamically importing storage...');
+        const mod = await import('../../../../server/storage');
+        storage = mod.storage;
+      } catch (err) {
+        console.error('Failed to load storage module:', err);
       }
-      */
+
+      if (storage) {
+        try {
+          console.log('Saving user to database...');
+          await storage.upsertUser({
+            id: googleUser.id,
+            email: googleUser.email,
+            firstName: googleUser.given_name || googleUser.name?.split(' ')[0],
+            lastName: googleUser.family_name || googleUser.name?.split(' ').slice(1).join(' ') || null,
+            profileImageUrl: googleUser.picture || null,
+          });
+          console.log('User saved successfully');
+        } catch (error) {
+          console.error('Error saving user to database:', error);
+          // Continue even if save fails so user can at least log in
+        }
+      } else {
+        console.warn('Skipping DB save because storage module failed to load');
+      }
 
       // Save user ID to cookie for authentication
       // Note: This is a temporary solution. For production, use JWT tokens or proper session management
