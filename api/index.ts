@@ -1,6 +1,9 @@
 import "dotenv/config";
 import express from "express";
-import { registerRoutes } from "../server/routes";
+import { setupAuth, isAuthenticated } from "../server/googleAuth";
+import { storage } from "../server/storage";
+import { chatWithFinancialAssistant, categorizePurchase, generateFinancialInsight } from "../server/geminiService";
+import { insertGoalSchema, insertTransactionSchema, insertStashTransactionSchema } from "@shared/schema";
 import cors from "cors";
 
 const app = express();
@@ -22,21 +25,37 @@ app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 // Initialize routes once
 let isInitialized = false;
-let initPromise: Promise<void> | null = null;
 
 async function initialize() {
   if (isInitialized) return;
-  if (initPromise) return initPromise;
   
-  initPromise = registerRoutes(app).then(() => {
+  try {
+    // Setup authentication
+    await setupAuth(app);
+    
+    // Register all API routes directly here
+    app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+      try {
+        const userId = req.user.id;
+        const user = await storage.getUser(userId);
+        res.json(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ message: "Failed to fetch user" });
+      }
+    });
+
+    // Add a simple health check
+    app.get('/api/health', (req, res) => {
+      res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    });
+    
     isInitialized = true;
     console.log("Routes initialized successfully");
-  }).catch(err => {
+  } catch (err) {
     console.error("Failed to initialize routes:", err);
     throw err;
-  });
-  
-  return initPromise;
+  }
 }
 
 // Vercel serverless function handler
@@ -46,6 +65,6 @@ export default async function handler(req: any, res: any) {
     return app(req, res);
   } catch (error) {
     console.error("Handler error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error", message: String(error) });
   }
 }
