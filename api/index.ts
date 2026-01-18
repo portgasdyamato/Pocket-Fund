@@ -3,7 +3,8 @@ import cookieParser from 'cookie-parser';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
-import { users, type User, type UpsertUser } from '../shared/schema';
+import { users } from '../shared/schema.js';
+import type { User, UpsertUser } from '../shared/schema.js';
 
 const app = express();
 
