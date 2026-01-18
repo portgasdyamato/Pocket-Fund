@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { eq, sql as drizzleSql } from 'drizzle-orm';
 import { pgTable, varchar, text, timestamp, decimal, boolean } from 'drizzle-orm/pg-core';
 
-// 1. Define Schema Inline (No imports from other files)
+// 1. Define Schema Inline
 const usersTable = pgTable("users", {
   id: varchar("id").primaryKey(),
   email: varchar("email").unique(),
@@ -22,7 +22,6 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 
-// 2. Optimized CORS for Vercel
 app.use((req, res, next) => {
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
@@ -34,7 +33,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// 3. Database Singleton
 let dbInstance: any = null;
 const getDb = () => {
   if (!dbInstance && process.env.DATABASE_URL) {
@@ -44,36 +42,27 @@ const getDb = () => {
   return dbInstance;
 };
 
-// 4. Helper to find User
-const fetchUser = async (id: string) => {
-  const db = getDb();
-  if (!db) return null;
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, id));
-  return user;
-};
-
-// 5. Routes (Handling both /api/path and /path for Vercel flexibility)
-
-// --- DEBUG ---
+// --- DEBUG (UPGRADED) ---
 app.get(['/api/debug', '/debug'], async (req, res) => {
   try {
     const db = getDb();
-    const dbStatus = db ? "Configured" : "Missing DATABASE_URL";
-    let dbTest = "Not tested";
-    if (db) {
-       await db.execute(drizzleSql`SELECT 1`);
-       dbTest = "Connection Successful";
+    const userId = req.cookies?.userId;
+    let userInDb = "N/A";
+    
+    if (db && userId) {
+      const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
+      userInDb = user ? `Found (${user.email})` : "NOT FOUND IN DB";
     }
+
     res.json({
       status: "running",
-      dbStatus,
-      dbTest,
-      cookies: req.cookies || "No cookies object",
-      userIdCookie: req.cookies?.userId || "Missing",
-      env: { NODE_ENV: process.env.NODE_ENV, VERCEL: process.env.VERCEL }
+      dbStatus: db ? "Connected" : "No DB",
+      userInDb,
+      userIdCookie: userId || "Missing",
+      env: { NODE_ENV: process.env.NODE_ENV }
     });
   } catch (err: any) {
-    res.status(500).json({ status: "error", message: err.message, stack: err.stack });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -96,42 +85,53 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res)
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        code, client_id: process.env.GOOGLE_CLIENT_ID!,
+        code, 
+        client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: callbackUrl, grant_type: 'authorization_code'
+        redirect_uri: callbackUrl, 
+        grant_type: 'authorization_code'
       })
     });
+    
     const tokens = await tokenRes.json();
     const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       headers: { Authorization: `Bearer ${tokens.access_token}` }
     });
     const googleUser = await userRes.json();
+    const userId = String(googleUser.id);
 
-    // Brute force upsert
+    // CRITICAL: Robust Upsert
     const db = getDb();
     if (db) {
+      console.log(`[Auth] Upserting user ${userId}`);
       await db.insert(usersTable).values({
-        id: googleUser.id,
+        id: userId,
         email: googleUser.email,
         firstName: googleUser.given_name,
         lastName: googleUser.family_name,
-        profileImageUrl: googleUser.picture
+        profileImageUrl: googleUser.picture,
+        onboardingStatus: 'step_1'
       }).onConflictDoUpdate({
         target: usersTable.id,
-        set: { updatedAt: new Date() }
+        set: { 
+          email: googleUser.email,
+          updatedAt: new Date() 
+        }
       });
     }
 
-    res.cookie('userId', googleUser.id, {
+    res.cookie('userId', userId, {
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       secure: true,
       sameSite: 'lax'
     });
+    
     res.redirect('/hq');
-  } catch (err) {
-    res.redirect('/?error=auth_failed');
+  } catch (err: any) {
+    console.error(`[Auth] Callback Error: ${err.message}`);
+    res.redirect(`/?error=auth_failed&msg=${encodeURIComponent(err.message)}`);
   }
 });
 
@@ -141,15 +141,20 @@ app.get(['/api/auth/user', '/auth/user'], async (req, res) => {
   if (!userId) return res.status(401).json({ message: 'No userId cookie' });
   
   try {
-    const user = await fetchUser(userId);
-    if (!user) return res.status(401).json({ message: 'User not found' });
+    const db = getDb();
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
+    if (!user) return res.status(401).json({ message: 'User not in DB' });
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'DB Error' });
   }
 });
 
-// --- FALLBACK DATA ---
+app.get('/api/logout', (req, res) => {
+  res.clearCookie('userId', { path: '/' });
+  res.redirect('/');
+});
+
 app.get('/api/:resource', (req, res) => res.json([]));
 
 export default app;
