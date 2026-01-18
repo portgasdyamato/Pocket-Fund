@@ -103,10 +103,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.warn('Skipping DB save because storage module failed to load');
       }
 
+      console.log(`Setting auth cookie for userId: ${googleUser.id}`);
       // Save user ID to cookie for authentication
       // Note: This is a temporary solution. For production, use JWT tokens or proper session management
-      res.setHeader('Set-Cookie', `userId=${googleUser.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; ${process.env.NODE_ENV === 'production' ? 'Secure;' : ''}`);
+      const cookieValue = `userId=${googleUser.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; ${process.env.NODE_ENV === 'production' ? 'Secure;' : ''}`;
+      res.setHeader('Set-Cookie', cookieValue);
       
+      console.log('Redirecting to /hq');
       // Redirect to HQ page (dashboard)
       res.redirect(302, '/hq');
 

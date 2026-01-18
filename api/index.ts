@@ -134,12 +134,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Get authenticated user
     if (path.includes('/api/auth/user')) {
       try {
-        // Get userId from cookie
-        const cookies = req.headers.cookie || '';
-        const userIdMatch = cookies.match(/userId=([^;]+)/);
-        const userId = userIdMatch ? userIdMatch[1] : null;
+        const userId = req.cookies?.userId;
+        console.log(`Auth check: userId from cookie = ${userId}`);
 
         if (!userId) {
+          console.log('Auth check: No userId cookie found');
           return res.status(401).json({ message: 'Not authenticated' });
         }
 
