@@ -307,7 +307,7 @@ export default function Dashboard() {
               <QuickActionButton
                 icon={Target}
                 label="Fight Plan"
-                onClick={() => console.log('Fight plan clicked')}
+                onClick={() => setLocation('/fight')}
               />
               <QuickActionButton
                 icon={MessageCircle}
@@ -317,7 +317,7 @@ export default function Dashboard() {
               <QuickActionButton
                 icon={TrendingUp}
                 label="View Stats"
-                onClick={() => console.log('View stats clicked')}
+                onClick={() => setLocation('/glow-up')}
               />
             </div>
           </Card>
