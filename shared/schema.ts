@@ -82,6 +82,7 @@ export const userQuests = pgTable("user_quests", {
   questId: varchar("quest_id").notNull().references(() => quests.id, { onDelete: "cascade" }),
   completed: boolean("completed").default(false).notNull(),
   completedAt: timestamp("completed_at"),
+  completionNote: text("completion_note"),
 });
 
 export const streaks = pgTable("streaks", {

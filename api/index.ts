@@ -164,8 +164,8 @@ const seedData = async () => {
   const quests = await db.select().from(questsTable).limit(1);
   if (quests.length === 0) {
     await db.insert(questsTable).values([
-      { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: "Move ₹50 to your stash.", icon: "target" },
-      { title: "Subscription Audit", description: "Cancel one unused app.", difficulty: "Medium", points: 100, content: "Review your bank statement.", icon: "shield" }
+      { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target" },
+      { title: "Subscription Audit", description: "Cancel one unused app.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield" }
     ]);
   }
   const badges = await db.select().from(badgesTable).limit(1);
@@ -279,7 +279,11 @@ app.post('/api/quests/:id/join', isAuthenticated, async (req: any, res) => {
 });
 
 app.post('/api/quests/:id/complete', isAuthenticated, async (req: any, res) => {
-  await getDb().update(userQuestsTable).set({ completed: true, completedAt: new Date() }).where(and(eq(userQuestsTable.userId, req.user.id), eq(userQuestsTable.questId, req.params.id)));
+  await getDb().update(userQuestsTable).set({ 
+    completed: true, 
+    completedAt: new Date(),
+    completionNote: req.body.completionNote || null
+  }).where(and(eq(userQuestsTable.userId, req.user.id), eq(userQuestsTable.questId, req.params.id)));
   res.json({ success: true });
 });
 

@@ -190,22 +190,27 @@ export default function Dashboard() {
     date: formatDate(t.date),
   }));
 
-  // Prepare Achievements Data
-  // Sort userBadges by earnedAt desc
-  const sortedUserBadges = [...userBadges].sort((a, b) => 
-    new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime()
-  );
-  
-  const recentAchievements = sortedUserBadges.slice(0, 2).map(ub => {
-    const badge = allBadges.find(b => b.id === ub.badgeId);
-    return {
-      id: ub.id,
-      type: 'trophy' as const, // can use badge.icon logic
-      title: badge?.name || 'Unknown Badge',
-      description: badge?.description || '',
-      points: 0 // Badges might not have points unless we add them to schema
-    };
-  });
+  // Prepare Recent Wins Data (Badges + Completed Challenges)
+  const recentAchievements = useMemo(() => {
+    const wins: any[] = [];
+    userBadges.forEach(ub => {
+      const badge = allBadges.find(b => b.id === ub.badgeId);
+      if (badge) wins.push({ id: ub.id, title: badge.name, description: badge.description, type: 'badge', date: ub.earnedAt });
+    });
+    userQuests.forEach(uq => {
+      if (uq.completed) {
+        const quest = allQuests.find(q => q.id === uq.questId);
+        if (quest) wins.push({ id: uq.id, title: quest.title, description: uq.completionNote || "Challenge crushed!", points: quest.points, type: 'challenge', date: uq.completedAt });
+      }
+    });
+    return wins.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3).map(w => ({
+      id: w.id,
+      title: w.title,
+      description: w.description,
+      points: w.points || 0,
+      type: 'trophy' as const
+    }));
+  }, [userBadges, allBadges, userQuests, allQuests]);
   
   // If no recent achievements, maybe show some locked ones to encourage?
   // Or just empty state. For now let's just show earned ones.
