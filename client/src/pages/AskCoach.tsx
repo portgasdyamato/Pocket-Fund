@@ -48,11 +48,25 @@ export default function AskCoach() {
   }, [transcript]);
 
   const toggleListening = () => {
-    if (listening) {
-      SpeechRecognition.stopListening();
-    } else {
-      resetTranscript();
-      SpeechRecognition.startListening({ continuous: true });
+    try {
+      if (listening) {
+        console.log("Stopping listening...");
+        SpeechRecognition.stopListening();
+      } else {
+        console.log("Starting listening...");
+        resetTranscript();
+        SpeechRecognition.startListening({ 
+          continuous: true,
+          language: 'en-IN' // Adding support for Indian English as per the app's context
+        });
+      }
+    } catch (error) {
+      console.error("Speech recognition error:", error);
+      toast({
+        title: "Microphone Error",
+        description: "Could not access your microphone. Please check permissions.",
+        variant: "destructive"
+      });
     }
   };
 
