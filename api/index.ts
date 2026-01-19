@@ -161,11 +161,19 @@ async function callGemini(requestBody: any): Promise<any | null> {
 const seedData = async () => {
   const db = getDb();
   if (!db) return;
-  const quests = await db.select().from(questsTable).limit(1);
-  if (quests.length === 0) {
+  const quests = await db.select().from(questsTable);
+  if (quests.length < 6) {
+    // Clear and re-seed to ensure uniqueness and variety as requested
+    await db.delete(userQuestsTable); // Clear dependent first
+    await db.delete(questsTable);
+    
     await db.insert(questsTable).values([
       { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target" },
-      { title: "Subscription Audit", description: "Cancel one unused app.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield" }
+      { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield" },
+      { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee" },
+      { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap" },
+      { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag" },
+      { title: "Commute GlowUp", description: "Walk or bike once and stash the ₹50 fare saved.", difficulty: "Medium", points: 60, content: JSON.stringify({ target: 50, type: "save" }), icon: "car" }
     ]);
   }
   const badges = await db.select().from(badgesTable).limit(1);
@@ -274,7 +282,16 @@ app.get(['/api/user/quests', '/user/quests'], isAuthenticated, async (req: any, 
 app.post('/api/quests/:id/join', isAuthenticated, async (req: any, res) => {
   const db = getDb();
   const [existing] = await db.select().from(userQuestsTable).where(and(eq(userQuestsTable.userId, req.user.id), eq(userQuestsTable.questId, req.params.id)));
-  if (!existing) await db.insert(userQuestsTable).values({ userId: req.user.id, questId: req.params.id, completed: false });
+  if (!existing) {
+    await db.insert(userQuestsTable).values({ userId: req.user.id, questId: req.params.id, completed: false });
+  } else if (existing.completed) {
+    // Allows resetting the challenge for a new week/session
+    await db.update(userQuestsTable).set({ 
+      completed: false, 
+      completedAt: null, 
+      completionNote: null 
+    }).where(eq(userQuestsTable.id, existing.id));
+  }
   res.json({ success: true });
 });
 

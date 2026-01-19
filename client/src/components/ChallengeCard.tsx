@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Coffee, Shield, Target, Zap, ShoppingBag, Car, Star } from "lucide-react";
 
 interface ChallengeCardProps {
   id: string;
@@ -13,6 +14,7 @@ interface ChallengeCardProps {
   isActive?: boolean;
   isCompleted?: boolean;
   onAction?: () => void;
+  icon?: string;
 }
 
 export default function ChallengeCard({
@@ -24,8 +26,21 @@ export default function ChallengeCard({
   timeRemaining,
   isActive = false,
   isCompleted = false,
-  onAction
+  onAction,
+  icon
 }: ChallengeCardProps) {
+  const getIcon = () => {
+    const iconClass = "w-5 h-5";
+    switch (icon) {
+      case 'coffee': return <Coffee className={iconClass} />;
+      case 'shield': return <Shield className={iconClass} />;
+      case 'target': return <Target className={iconClass} />;
+      case 'zap': return <Zap className={iconClass} />;
+      case 'shopping-bag': return <ShoppingBag className={iconClass} />;
+      case 'car': return <Car className={iconClass} />;
+      default: return <Star className={iconClass} />;
+    }
+  };
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
       case 'Easy': return 'bg-secondary text-secondary-foreground';
@@ -39,7 +54,12 @@ export default function ChallengeCard({
     <Card className={`p-4 backdrop-blur-xl bg-card/40 border-primary/20 hover:border-primary/40 transition-all hover:shadow-[0_0_25px_rgba(139,92,246,0.2)] ${isCompleted ? 'grayscale-[0.5] opacity-90' : ''}`} data-testid={`card-challenge-${id}`}>
       <div className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-bold text-base flex-1">{title}</h3>
+          <div className="flex items-center gap-2 flex-1">
+             <div className={`p-2 rounded-lg ${isCompleted ? 'bg-muted' : 'bg-primary/10 text-primary'}`}>
+                {getIcon()}
+             </div>
+             <h3 className="font-bold text-base leading-tight">{title}</h3>
+          </div>
           <Badge className={getDifficultyColor(difficulty)} data-testid={`badge-difficulty-${id}`}>
             {difficulty}
           </Badge>
@@ -80,14 +100,14 @@ export default function ChallengeCard({
         </div>
 
         <Button
-          variant={isCompleted ? "secondary" : (isActive ? "default" : "outline")}
+          variant={!!isCompleted ? "secondary" : (isActive ? "default" : "outline")}
           size="sm"
-          onClick={isCompleted ? undefined : onAction}
-          className={`w-full ${isCompleted ? "bg-green-500/20 text-green-500 border-green-500/50 hover:bg-green-500/20" : ""}`}
-          disabled={isCompleted}
+          onClick={!!isCompleted ? undefined : onAction}
+          className={`w-full ${!!isCompleted ? "bg-green-500/20 text-green-500 border-green-500/50 hover:bg-green-500/20" : ""}`}
+          disabled={!!isCompleted}
           data-testid={`button-challenge-action-${id}`}
         >
-          {isCompleted ? 'Completed ✅' : (isActive ? 'Continue' : 'Start Challenge')}
+          {!!isCompleted ? 'Completed ✅' : (isActive ? 'Continue' : 'Start Challenge')}
         </Button>
       </div>
     </Card>

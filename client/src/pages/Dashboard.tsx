@@ -105,7 +105,12 @@ export default function Dashboard() {
 
   // Prepare Challenges Data
   const challenges = useMemo(() => {
-    return allQuests.slice(0, 3).map(quest => {
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday start
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    return allQuests.slice(0, 6).map(quest => {
       const userQuest = userQuests.find(uq => uq.questId === quest.id);
       
       let target = 100; // Default
@@ -118,18 +123,28 @@ export default function Dashboard() {
           // ignore
       }
 
-      // Calculate dynamic progress
+      // Check if completed in the CURRENT week
+      const completedThisWeek = userQuest?.completed && 
+        userQuest.completedAt && 
+        new Date(userQuest.completedAt) >= startOfWeek;
+
+      // Calculate dynamic progress based on this week's data
       let calculatedProgress = 0;
-      if (userQuest?.completed) {
+      if (completedThisWeek) {
         calculatedProgress = 100;
-      } else if (userQuest) {
-        // Progress calculation based on quest title/type
-        if (quest.title === "The 1% Rule") {
-          const maxStash = Math.max(0, ...stashTransactions.filter(t => t.type === 'stash').map(t => parseFloat(t.amount)));
-          calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
-        } else if (quest.title === "Subscription Audit") {
-          // Mocking some progress if active, or check if they've tagged something recently
-          calculatedProgress = 0; 
+      } else if (userQuest && !userQuest.completed) {
+        // Only count transactions from THIS week
+        const weeklyStashed = stashTransactions
+          .filter(t => t.type === 'stash' && new Date(t.date) >= startOfWeek)
+          .reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
+
+        if (type === 'save') {
+           calculatedProgress = Math.min(100, Math.round((weeklyStashed / target) * 100));
+        } else if (quest.title === "The 1% Rule") {
+           const maxStash = Math.max(0, ...stashTransactions
+             .filter(t => t.type === 'stash' && new Date(t.date) >= startOfWeek)
+             .map(t => parseFloat(t.amount)));
+           calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
         }
       }
 
@@ -142,9 +157,10 @@ export default function Dashboard() {
         progress: calculatedProgress,
         target: target,
         timeRemaining: 'Ongoing', 
-        isActive: !!userQuest && !userQuest.completed,
-        isCompleted: !!userQuest?.completed,
-        type: type
+        isActive: !!userQuest && !userQuest.completed && !completedThisWeek,
+        isCompleted: !!completedThisWeek,
+        type: type,
+        icon: quest.icon
       };
     });
   }, [allQuests, userQuests, stashTransactions]);
