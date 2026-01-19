@@ -110,8 +110,11 @@ export default function Dashboard() {
     startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday start
     startOfWeek.setHours(0, 0, 0, 0);
 
-    return allQuests.slice(0, 6).map(quest => {
-      const userQuest = userQuests.find(uq => uq.questId === quest.id);
+    return allQuests
+      .filter(q => q.category === 'challenge')
+      .slice(0, 6)
+      .map(quest => {
+        const userQuest = userQuests.find(uq => uq.questId === quest.id);
       
       let target = 100; // Default
       let type = 'count';

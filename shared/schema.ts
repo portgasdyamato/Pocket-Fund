@@ -74,6 +74,7 @@ export const quests = pgTable("quests", {
   points: integer("points").notNull(),
   content: text("content").notNull(),
   icon: text("icon").notNull(),
+  category: text("category").notNull().default("challenge"),
 });
 
 export const userQuests = pgTable("user_quests", {

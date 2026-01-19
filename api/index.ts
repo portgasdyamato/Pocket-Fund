@@ -63,6 +63,7 @@ const questsTable = pgTable("quests", {
   points: integer("points").notNull(),
   content: text("content").notNull(),
   icon: text("icon").notNull(),
+  category: text("category").notNull().default("challenge"),
 });
 
 const userQuestsTable = pgTable("user_quests", {
@@ -168,12 +169,55 @@ const seedData = async () => {
     await db.delete(questsTable);
     
     await db.insert(questsTable).values([
-      { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target" },
-      { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield" },
-      { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee" },
-      { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap" },
-      { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag" },
-      { title: "Commute GlowUp", description: "Walk or bike once and stash the ₹50 fare saved.", difficulty: "Medium", points: 60, content: JSON.stringify({ target: 50, type: "save" }), icon: "car" }
+      { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target", category: "challenge" },
+      { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield", category: "challenge" },
+      { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee", category: "challenge" },
+      { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap", category: "challenge" },
+      { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag", category: "challenge" },
+      { title: "Commute GlowUp", description: "Walk or bike once and stash the ₹50 fare saved.", difficulty: "Medium", points: 60, content: JSON.stringify({ target: 50, type: "save" }), icon: "car", category: "challenge" },
+      
+      // Literacy Quests
+      { 
+        title: "Budget Like a Boss", 
+        description: "Master the 50/30/20 budgeting rule through this interactive guide.", 
+        difficulty: "Easy", 
+        points: 150, 
+        icon: "trending-up", 
+        category: "literacy",
+        content: JSON.stringify({
+          slides: [
+            { title: "The Golden Rule", text: "The 50/30/20 rule is a simple way to budget. It divides your income into 3 buckets: Needs, Wants, and Savings.", icon: "star" },
+            { title: "50% Needs", text: "Half of your income should go to absolute essentials: Rent, Groceries, Bills, and Insurance.", icon: "home" },
+            { title: "30% Wants", text: "Treat yourself! This covers dining out, hobbies, and entertainment. But keep it within 30%.", icon: "shopping-bag" },
+            { title: "20% Savings", text: "This is for your future! Put at least 20% into debt repayment, emergency funds, or investments.", icon: "shield" }
+          ],
+          quiz: {
+            question: "If you earn ₹50,000, how much should go into your 'Savings' bucket under this rule?",
+            options: ["₹25,000", "₹15,000", "₹10,000", "₹5,000"],
+            answer: 2 // ₹10,000 (20%)
+          }
+        })
+      },
+      { 
+        title: "Emergency Fund 101", 
+        description: "Learn why you need a safety net and how to build one.", 
+        difficulty: "Medium", 
+        points: 200, 
+        icon: "shield-check", 
+        category: "literacy",
+        content: JSON.stringify({
+          slides: [
+            { title: "What is it?", text: "An emergency fund is money set aside to cover unexpected life events like medical bills or loss of income.", icon: "help-circle" },
+            { title: "How much?", text: "Most experts recommend saving 3 to 6 months of basic living expenses.", icon: "calculator" },
+            { title: "Where to keep it?", text: "Keep it in a liquid, easily accessible account—like your Pocket Fund Locker!", icon: "lock" }
+          ],
+          quiz: {
+            question: "What is the recommended size for an Emergency Fund?",
+            options: ["1 month of salary", "3-6 months of expenses", "₹1,00,000 fixed", "10% of total wealth"],
+            answer: 1
+          }
+        })
+      }
     ]);
   }
   const badges = await db.select().from(badgesTable).limit(1);
