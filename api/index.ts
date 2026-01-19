@@ -318,6 +318,10 @@ app.post(['/api/stash', '/stash'], isAuthenticated, async (req: any, res) => {
   res.json(txn);
 });
 
+app.get(['/api/stash', '/stash'], isAuthenticated, async (req: any, res) => {
+  res.json(await getDb().select().from(stashTransactionsTable).where(eq(stashTransactionsTable.userId, req.user.id)).orderBy(desc(stashTransactionsTable.createdAt)));
+});
+
 app.get(['/api/stash/total', '/stash/total'], isAuthenticated, async (req: any, res) => {
   const db = getDb();
   const rows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));

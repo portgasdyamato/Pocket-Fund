@@ -85,18 +85,14 @@ export default function Dashboard() {
     }
   });
 
+  const { data: stashTransactions = [] } = useQuery<any[]>({
+    queryKey: ["/api/stash"],
+  });
+
   // Prepare Challenges Data
   const challenges = allQuests.slice(0, 3).map(quest => {
     const userQuest = userQuests.find(uq => uq.questId === quest.id);
-    // Simple logic for determining progress/active state (can be refined based on backend logic)
-    // For now assuming: if userQuest exists and not completed, it's active.
     
-    // We need to parse quest content to get target/real progress logic if complex.
-    // For MVP, if it's a "save" quest, we might check wallet? 
-    // This part is tricky without backend logic returning progress.
-    // We'll simulate progress or use what we have.
-    
-    // Assuming quest.content might contain target info like {"target": 1000, "type": "save"}
     let target = 100; // Default
     let type = 'count';
     try {
@@ -107,15 +103,30 @@ export default function Dashboard() {
         // ignore
     }
 
+    // Calculate dynamic progress
+    let calculatedProgress = 0;
+    if (userQuest?.completed) {
+      calculatedProgress = 100;
+    } else if (userQuest) {
+      // Progress calculation based on quest title/type
+      if (quest.title === "The 1% Rule") {
+        const maxStash = Math.max(0, ...stashTransactions.filter(t => t.type === 'stash').map(t => parseFloat(t.amount)));
+        calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
+      } else if (quest.title === "Subscription Audit") {
+        // Mocking some progress if active, or check if they've tagged something recently
+        calculatedProgress = 0; 
+      }
+    }
+
     return {
       id: quest.id,
       title: quest.title,
       description: quest.description,
       difficulty: (quest.difficulty as "Easy" | "Medium" | "Hard") || "Medium",
       points: quest.points,
-      progress: userQuest?.completed ? target : (userQuest ? 0 : 0), // Needs real progress from API
+      progress: calculatedProgress,
       target: target,
-      timeRemaining: 'Ongoing', // Dynamic?
+      timeRemaining: 'Ongoing', 
       isActive: !!userQuest && !userQuest.completed,
       isCompleted: !!userQuest?.completed,
       type: type

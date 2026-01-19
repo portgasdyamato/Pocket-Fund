@@ -45,23 +45,27 @@ export default function ChallengeCard({
         
         <div className="flex items-center gap-2">
           <div className="flex-1">
-            <Progress value={progress} className="h-2" />
+            <Progress 
+              value={progress} 
+              className="h-2 bg-muted/30" 
+              indicatorClassName={isActive ? "bg-primary" : "bg-muted-foreground/30"}
+            />
           </div>
-          <span className="text-sm font-bold text-primary" data-testid={`text-progress-${id}`}>
+          <span className={`text-sm font-bold ${isActive ? "text-primary" : "text-muted-foreground"}`} data-testid={`text-progress-${id}`}>
             {progress}%
           </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-2xl font-bold text-primary" data-testid={`text-points-${id}`}>
+            <span className={`text-2xl font-bold ${isActive ? "text-primary" : "text-muted-foreground/60"}`} data-testid={`text-points-${id}`}>
               {points}
             </span>
             <span className="text-xs text-muted-foreground font-semibold uppercase">pts</span>
           </div>
           
-          {timeRemaining && (
-            <span className="text-xs text-muted-foreground" data-testid={`text-time-${id}`}>
+          {isActive && timeRemaining && (
+            <span className="text-xs text-primary font-medium animate-pulse" data-testid={`text-time-${id}`}>
               {timeRemaining}
             </span>
           )}
