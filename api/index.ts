@@ -219,6 +219,11 @@ app.get(['/api/goals', '/goals'], isAuthenticated, async (req: any, res) => {
   res.json(await getDb().select().from(goalsTable).where(eq(goalsTable.userId, req.user.id)));
 });
 
+app.get(['/api/goals/main', '/goals/main'], isAuthenticated, async (req: any, res) => {
+  const [goal] = await getDb().select().from(goalsTable).where(and(eq(goalsTable.userId, req.user.id), eq(goalsTable.isMain, true)));
+  res.json(goal || null);
+});
+
 app.post(['/api/goals', '/goals'], isAuthenticated, async (req: any, res) => {
   const [goal] = await getDb().insert(goalsTable).values({
     userId: req.user.id, name: req.body.name, 
@@ -230,6 +235,10 @@ app.post(['/api/goals', '/goals'], isAuthenticated, async (req: any, res) => {
 
 app.get(['/api/transactions', '/transactions'], isAuthenticated, async (req: any, res) => {
   res.json(await getDb().select().from(transactionsTable).where(eq(transactionsTable.userId, req.user.id)).orderBy(desc(transactionsTable.date)).limit(parseInt(req.query.limit || "50")));
+});
+
+app.get(['/api/transactions/untagged', '/transactions/untagged'], isAuthenticated, async (req: any, res) => {
+  res.json(await getDb().select().from(transactionsTable).where(and(eq(transactionsTable.userId, req.user.id), isNull(transactionsTable.tag))).orderBy(desc(transactionsTable.date)));
 });
 
 app.post(['/api/transactions', '/transactions'], isAuthenticated, async (req: any, res) => {
