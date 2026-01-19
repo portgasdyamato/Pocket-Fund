@@ -112,6 +112,19 @@ export default function ExpenseLog() {
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-6 max-w-4xl">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+            Expense Log
+          </h1>
+          <Button 
+            onClick={() => setIsAddExpenseOpen(true)}
+            size="sm"
+            className="rounded-full w-10 h-10 p-0 shadow-lg shadow-primary/20"
+            data-testid="button-add-expense-top"
+          >
+            <PlusCircle className="w-6 h-6" />
+          </Button>
+        </div>
         {isLoading ? (
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">Loading expenses...</p>

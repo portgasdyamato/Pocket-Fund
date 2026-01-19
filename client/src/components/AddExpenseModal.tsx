@@ -36,6 +36,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       toast({
         title: "Expense Added",
         description: "Your expense has been logged successfully",
