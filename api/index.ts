@@ -163,8 +163,9 @@ const seedData = async () => {
   const db = getDb();
   if (!db) return;
   const quests = await db.select().from(questsTable);
-  if (quests.length < 6) {
-    // Clear and re-seed to ensure uniqueness and variety as requested
+  if (quests.length < 8) {
+    console.log("Seeding quests (found " + quests.length + ", expected 8)...");
+    try {
     await db.delete(userQuestsTable); // Clear dependent first
     await db.delete(questsTable);
     
@@ -219,6 +220,9 @@ const seedData = async () => {
         })
       }
     ]);
+    } catch (err) {
+      console.error("Error seeding quests:", err);
+    }
   }
   const badges = await db.select().from(badgesTable).limit(1);
   if (badges.length === 0) {
