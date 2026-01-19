@@ -21,6 +21,8 @@ import AddExpenseModal from "@/components/AddExpenseModal";
 import ChallengeDetailsModal from "@/components/ChallengeDetailsModal";
 import type { Transaction, Quest, UserQuest, Badge, UserBadge } from "@shared/schema";
 import { format } from "date-fns";
+import { useEffect } from "react";
+import ChallengeCelebration from "@/components/ChallengeCelebration";
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
@@ -29,6 +31,9 @@ export default function Dashboard() {
   // State for Challenge Details Modal
   const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+
+  // State for Celebration
+  const [celebratingChallenge, setCelebratingChallenge] = useState<any>(null);
 
   const { data: transactions = [], isLoading: isLoadingTransactions, isError: isTransactionsError } = useQuery<Transaction[]>({
     queryKey: ["/api/transactions"],
@@ -89,6 +94,15 @@ export default function Dashboard() {
     queryKey: ["/api/stash"],
   });
 
+  const completeQuestMutation = useMutation({
+    mutationFn: async (questId: string) => {
+      return await apiRequest(`/api/quests/${questId}/complete`, "POST");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/quests"] });
+    },
+  });
+
   // Prepare Challenges Data
   const challenges = allQuests.slice(0, 3).map(quest => {
     const userQuest = userQuests.find(uq => uq.questId === quest.id);
@@ -132,6 +146,16 @@ export default function Dashboard() {
       type: type
     };
   });
+
+  // Effect to auto-complete challenges
+  useEffect(() => {
+    challenges.forEach(c => {
+      if (c.progress >= 100 && c.isActive && !c.isCompleted) {
+        completeQuestMutation.mutate(c.id);
+        setCelebratingChallenge(c);
+      }
+    });
+  }, [challenges]);
 
   const formatDate = (date: Date | string) => {
     const d = new Date(date);
@@ -351,6 +375,13 @@ export default function Dashboard() {
         isOpen={isChallengeModalOpen}
         onClose={() => setIsChallengeModalOpen(false)}
         challenge={selectedChallenge}
+      />
+
+      <ChallengeCelebration
+        isOpen={!!celebratingChallenge}
+        onClose={() => setCelebratingChallenge(null)}
+        challengeName={celebratingChallenge?.title}
+        points={celebratingChallenge?.points}
       />
     </div>
   );

@@ -11,6 +11,7 @@ interface ChallengeCardProps {
   progress: number;
   timeRemaining?: string;
   isActive?: boolean;
+  isCompleted?: boolean;
   onAction?: () => void;
 }
 
@@ -22,6 +23,7 @@ export default function ChallengeCard({
   progress,
   timeRemaining,
   isActive = false,
+  isCompleted = false,
   onAction
 }: ChallengeCardProps) {
   const getDifficultyColor = (diff: string) => {
@@ -34,7 +36,7 @@ export default function ChallengeCard({
   };
 
   return (
-    <Card className="p-4 backdrop-blur-xl bg-card/40 border-primary/20 hover:border-primary/40 transition-all hover:shadow-[0_0_25px_rgba(139,92,246,0.2)]" data-testid={`card-challenge-${id}`}>
+    <Card className={`p-4 backdrop-blur-xl bg-card/40 border-primary/20 hover:border-primary/40 transition-all hover:shadow-[0_0_25px_rgba(139,92,246,0.2)] ${isCompleted ? 'grayscale-[0.5] opacity-90' : ''}`} data-testid={`card-challenge-${id}`}>
       <div className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-bold text-base flex-1">{title}</h3>
@@ -48,37 +50,44 @@ export default function ChallengeCard({
             <Progress 
               value={progress} 
               className="h-2 bg-muted/30" 
-              indicatorClassName={isActive ? "bg-primary" : "bg-muted-foreground/30"}
+              indicatorClassName={isCompleted ? "bg-green-500" : (isActive ? "bg-primary" : "bg-muted-foreground/30")}
             />
           </div>
-          <span className={`text-sm font-bold ${isActive ? "text-primary" : "text-muted-foreground"}`} data-testid={`text-progress-${id}`}>
+          <span className={`text-sm font-bold ${isCompleted ? "text-green-500" : (isActive ? "text-primary" : "text-muted-foreground")}`} data-testid={`text-progress-${id}`}>
             {progress}%
           </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className={`text-2xl font-bold ${isActive ? "text-primary" : "text-muted-foreground/60"}`} data-testid={`text-points-${id}`}>
+            <span className={`text-2xl font-bold ${isCompleted ? "text-green-500" : (isActive ? "text-primary" : "text-muted-foreground/60")}`} data-testid={`text-points-${id}`}>
               {points}
             </span>
             <span className="text-xs text-muted-foreground font-semibold uppercase">pts</span>
           </div>
           
-          {isActive && timeRemaining && (
+          {isActive && !isCompleted && timeRemaining && (
             <span className="text-xs text-primary font-medium animate-pulse" data-testid={`text-time-${id}`}>
               {timeRemaining}
+            </span>
+          )}
+
+          {isCompleted && (
+            <span className="text-xs text-green-500 font-bold flex items-center gap-1">
+              Done!
             </span>
           )}
         </div>
 
         <Button
-          variant={isActive ? "default" : "outline"}
+          variant={isCompleted ? "secondary" : (isActive ? "default" : "outline")}
           size="sm"
-          onClick={onAction}
-          className="w-full"
+          onClick={isCompleted ? undefined : onAction}
+          className={`w-full ${isCompleted ? "bg-green-500/20 text-green-500 border-green-500/50 hover:bg-green-500/20" : ""}`}
+          disabled={isCompleted}
           data-testid={`button-challenge-action-${id}`}
         >
-          {isActive ? 'Continue' : 'Start Challenge'}
+          {isCompleted ? 'Completed ✅' : (isActive ? 'Continue' : 'Start Challenge')}
         </Button>
       </div>
     </Card>

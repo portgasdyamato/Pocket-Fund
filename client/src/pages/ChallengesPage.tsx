@@ -143,6 +143,7 @@ export default function ChallengesPage() {
               <ChallengeCard
                 key={challenge.id}
                 {...challenge}
+                isCompleted={challenge.progress >= 100}
                 onAction={() => console.log(`Continue challenge ${challenge.id}`)}
               />
             ))}
@@ -153,6 +154,7 @@ export default function ChallengesPage() {
               <ChallengeCard
                 key={challenge.id}
                 {...challenge}
+                isCompleted={false}
                 onAction={() => console.log(`Start challenge ${challenge.id}`)}
               />
             ))}
@@ -163,6 +165,7 @@ export default function ChallengesPage() {
               <ChallengeCard
                 key={challenge.id}
                 {...challenge}
+                isCompleted={true}
                 onAction={() => console.log(`View challenge ${challenge.id}`)}
               />
             ))}
