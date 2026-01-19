@@ -9,7 +9,7 @@ if (!GEMINI_API_KEY) {
 // Use the public Gemini REST endpoint with Gemini 2.5 Flash.
 // Docs: https://ai.google.dev/api/rest/v1beta/models/generateContent
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 async function callGemini(requestBody: any): Promise<any | null> {
   try {
