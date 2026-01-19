@@ -163,8 +163,8 @@ const seedData = async () => {
   const db = getDb();
   if (!db) return;
   const quests = await db.select().from(questsTable);
-  if (quests.length < 8) {
-    console.log("Seeding quests (found " + quests.length + ", expected 8)...");
+  if (quests.length < 10) {
+    console.log("Seeding quests (found " + quests.length + ", expected 10)...");
     try {
     await db.delete(userQuestsTable); // Clear dependent first
     await db.delete(questsTable);
@@ -177,45 +177,89 @@ const seedData = async () => {
       { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag", category: "challenge" },
       { title: "Commute GlowUp", description: "Walk or bike once and stash the ₹50 fare saved.", difficulty: "Medium", points: 60, content: JSON.stringify({ target: 50, type: "save" }), icon: "car", category: "challenge" },
       
-      // Literacy Quests
+      // --- Literacy Quests (In-Depth Content) ---
       { 
-        title: "Budget Like a Boss", 
-        description: "Master the 50/30/20 budgeting rule through this interactive guide.", 
+        title: "The 50/30/20 Framework", 
+        description: "Master the most famous budgeting framework and learn the 'Anti-Budget' strategy.", 
         difficulty: "Easy", 
         points: 150, 
         icon: "trending-up", 
         category: "literacy",
         content: JSON.stringify({
           slides: [
-            { title: "The Golden Rule", text: "The 50/30/20 rule is a simple way to budget. It divides your income into 3 buckets: Needs, Wants, and Savings.", icon: "star" },
-            { title: "50% Needs", text: "Half of your income should go to absolute essentials: Rent, Groceries, Bills, and Insurance.", icon: "home" },
-            { title: "30% Wants", text: "Treat yourself! This covers dining out, hobbies, and entertainment. But keep it within 30%.", icon: "shopping-bag" },
-            { title: "20% Savings", text: "This is for your future! Put at least 20% into debt repayment, emergency funds, or investments.", icon: "shield" }
+            { title: "The Philosophy", text: "Budgeting isn't about restriction; it's about prioritization. The 50/30/20 rule provides a clear roadmap for every rupee you earn.", icon: "star" },
+            { title: "50% Needs: The Foundation", text: "Essentials only: Rent/EMI, Groceries, Electricity, and Basic transport. Strategy: If your Needs exceed 50%, you're 'House Rich, Cash Poor'. Look to downsize fixed costs.", icon: "home" },
+            { title: "30% Wants: The Lifestyle", text: "Dining out, Netflix, Hobbies. Framework: Use the '48-Hour Rule'—wait 2 days before buying a 'Want' over ₹1,000 to kill impulse spending.", icon: "shopping-bag" },
+            { title: "20% Savings: The Future", text: "Investments and Debt. Problem: Many save 'what's left' at the end of the month. Strategy: 'Pay Yourself First' by automating this 20% on salary day.", icon: "shield" },
+            { title: "The Anti-Budget", text: "If tracking every rupee is hard, try the Anti-Budget: Just pull out your 20% savings first, pay your 50% bills, and spend the rest guilt-free.", icon: "zap" }
           ],
           quiz: {
-            question: "If you earn ₹50,000, how much should go into your 'Savings' bucket under this rule?",
-            options: ["₹25,000", "₹15,000", "₹10,000", "₹5,000"],
-            answer: 2 // ₹10,000 (20%)
+            question: "What is the 'Pay Yourself First' strategy?",
+            options: ["Buying a treat after work", "Paying off credit cards early", "Moving your 20% savings as soon as you get paid", "Lending money to family"],
+            answer: 2
           }
         })
       },
       { 
-        title: "Emergency Fund 101", 
-        description: "Learn why you need a safety net and how to build one.", 
+        title: "Emergency Fund Blueprint", 
+        description: "Build a bulletproof safety net using the 'Sinking Fund' framework.", 
         difficulty: "Medium", 
         points: 200, 
         icon: "shield-check", 
         category: "literacy",
         content: JSON.stringify({
           slides: [
-            { title: "What is it?", text: "An emergency fund is money set aside to cover unexpected life events like medical bills or loss of income.", icon: "help-circle" },
-            { title: "How much?", text: "Most experts recommend saving 3 to 6 months of basic living expenses.", icon: "calculator" },
-            { title: "Where to keep it?", text: "Keep it in a liquid, easily accessible account—like your Pocket Fund Locker!", icon: "lock" }
+            { title: "The 3-Tier Strategy", text: "Tier 1: Starter Fund (₹25k-50k) for quick repairs. Tier 2: The Core (3 months expenses). Tier 3: Bulletproof (6-12 months).", icon: "help-circle" },
+            { title: "Avoid the Interest Trap", text: "Problem: Keeping emergency cash in a Zero-interest box. Framework: Keep Tier 1 in savings, but put Tiers 2 & 3 in a Liquid Mutual Fund for higher growth.", icon: "calculator" },
+            { title: "Sinking Funds vs. Emergency", text: "Framework: A car repair is an emergency. A car's annual insurance is a Sinking Fund. Plan for the expected so it doesn't become an emergency.", icon: "target" },
+            { title: "When to use it?", text: "The 'ICK' Test: Is it Immediate? Is it Critical? Is it Known/Expected? If yes to the first two and no to the last, it's an emergency.", icon: "lock" }
           ],
           quiz: {
-            question: "What is the recommended size for an Emergency Fund?",
-            options: ["1 month of salary", "3-6 months of expenses", "₹1,00,000 fixed", "10% of total wealth"],
+            question: "What is the primary difference between an Emergency Fund and a Sinking Fund?",
+            options: ["Only Sinking funds earn interest", "Sinking funds are for expected costs (like Diwali), Emergency for unexpected", "There is no difference", "Emergency funds are only for health"],
             answer: 1
+          }
+        })
+      },
+      { 
+        title: "Debt Destruction Lab", 
+        description: "Snowball vs. Avalanche: Learn the psychology and math of getting debt-free.", 
+        difficulty: "Hard", 
+        points: 300, 
+        icon: "zap", 
+        category: "literacy",
+        content: JSON.stringify({
+          slides: [
+            { title: "The Debt Avalanche (Math)", text: "Strategy: List all debts by Interest Rate. Pay minimums on all, throw every extra rupee at the highest interest rate first. Mathematically fastest.", icon: "trending-down" },
+            { title: "The Debt Snowball (Psychology)", text: "Strategy: List debts by balance size. Pay minimums, but crush the smallest balance first. Why? Small wins create massive momentum.", icon: "trending-up" },
+            { title: "The High-Interest Trap", text: "Credit cards in India often charge 36% to 42% per year. Framework: Never carry a balance. If you do, it's a Financial Emergency—Tier 1 cash should go here.", icon: "alert-triangle" },
+            { title: "Good vs. Bad Debt", text: "Good: Education/Home loans (Asset building, low interest). Bad: Car loans/Personal loans for treats (Depreciating assets, high interest).", icon: "thumbs-down" }
+          ],
+          quiz: {
+            question: "Which debt strategy focuses on clearing the smallest balance first to build emotional momentum?",
+            options: ["The Avalanche", "The Snowball", "The Blizzard", "The Tornado"],
+            answer: 1
+          }
+        })
+      },
+      { 
+        title: "Investment Foundations", 
+        description: "Understand the Power of 72 and the Rule of Compounding.", 
+        difficulty: "Hard", 
+        points: 500, 
+        icon: "coffee", 
+        category: "literacy",
+        content: JSON.stringify({
+          slides: [
+            { title: "The Power of Compounding", text: "Example: ₹10,000/month at 12% for 10 years gives ₹23 Lakhs. For 30 years? It's ₹3.5 CRORE. Time is more important than the amount.", icon: "zap" },
+            { title: "The Rule of 72", text: "Framework: Divide 72 by your interest rate. That's how many years it takes to double your money. (e.g., 72 / 12% = 6 years to double).", icon: "calculator" },
+            { title: "Index Funds vs. Fancy Stocks", text: "Framework: 90% of professional pickers fail to beat the market over time. Most beginners should use Nifty 50 Index funds for steady, low-cost growth.", icon: "line-chart" },
+            { title: "Risk Tolerance", text: "Strategy: Your age is the % of money to keep in safe assets (Debt), the rest in growth (Equity). At age 25, keep 25% in debt and 75% in equity.", icon: "shield" }
+          ],
+          quiz: {
+            question: "According to the Rule of 72, if you earn a 9% return, how long does it take for your money to double?",
+            options: ["9 years", "12 years", "8 years", "5 years"],
+            answer: 2
           }
         })
       }
