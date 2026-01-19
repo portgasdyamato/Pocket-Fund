@@ -134,15 +134,27 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
 async function callGemini(requestBody: any): Promise<any | null> {
-  if (!GEMINI_API_KEY) return null;
+  if (!GEMINI_API_KEY) {
+    console.error("GEMINI_API_KEY is missing");
+    return null;
+  }
   try {
     const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
-    return await res.json();
-  } catch (err) { return null; }
+    
+    const data = await res.json();
+    if (!res.ok) {
+      console.error("Gemini API Error:", data);
+      return null;
+    }
+    return data;
+  } catch (err) { 
+    console.error("Gemini Network Error:", err);
+    return null; 
+  }
 }
 
 // --- SEEDING LOGIC ---
@@ -314,18 +326,43 @@ app.get(['/api/stash/total', '/stash/total'], isAuthenticated, async (req: any, 
 
 app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) => {
   const db = getDb();
-  const rows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
+  
+  // Get Stash Stats
+  const stashRows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
   const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
   
-  const totalStashed = parseFloat((rows[0]?.total as string) || "0");
+  // Get Recent Icks
+  const ickRows = await db.select({ total: drizzleSql`sum(amount)` }).from(transactionsTable).where(and(
+    eq(transactionsTable.userId, req.user.id),
+    eq(transactionsTable.tag, 'Ick')
+  ));
+
+  const totalStashed = parseFloat((stashRows[0]?.total as string) || "0");
+  const totalIcks = parseFloat((ickRows[0]?.total as string) || "0");
   const saveStreak = streak?.saveStreak || 0;
-  
+  const userName = req.user.firstName || "User";
+
   const systemPrompt = `You are "Pocket Fund Coach", a friendly, motivational high-level financial expert for young adults in India. 
-Tone: Encouraging, non-judgmental, straightforward.
+Tone: Encouraging, non-judgmental, straightforward, and slightly "Gen-Z" friendly but professional.
 Currency: Always use Rupee (₹).
-Context: The user has saved ₹${totalStashed} so far. They have a ${saveStreak}-day saving streak.
-Role: Help them understand spending, celebrate wins, and motivate them to reach their goal. 
-Keep responses concise (2-4 sentences max).`;
+User Context:
+- Name: ${userName}
+- Total Saved: ₹${totalStashed}
+- Saving Streak: ${saveStreak} days
+- Recent "Icks" (unnecessary spending): ₹${totalIcks}
+
+Your Role:
+1. Help ${userName} understand their spending habits and how to save more.
+2. Provide actionable financial tips (e.g., the 50/30/20 rule, emergency funds).
+3. Celebrate their saving wins and motivate them to keep their streak alive.
+4. Help them identify and fight "Icks" (impulse buys).
+5. Explain financial terms simply.
+
+Guidelines:
+- Keep responses concise (3-5 sentences).
+- Use ${userName}'s name occasionally.
+- Be positive and supportive.
+- If they ask about their stats, use the context provided.`;
 
   const ai = await callGemini({
     contents: [{ 
@@ -334,9 +371,16 @@ Keep responses concise (2-4 sentences max).`;
     }]
   });
   
-  const responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text || 
-                      ai?.text || 
-                      "I'm here to help you reach your goals! Every small saving counts. What else is on your mind?";
+  let responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text || 
+                     ai?.text;
+
+  if (!responseText) {
+    if (!GEMINI_API_KEY) {
+      responseText = "I'm your Pocket Fund Coach, but my AI brain isn't connected yet! Ask your developer to add a valid GEMINI_API_KEY to the environment variables so I can help you reach your goals.";
+    } else {
+      responseText = "I'm having a bit of trouble thinking right now. But remember: every ₹100 you save today is a step towards your freedom! What else can I help you with?";
+    }
+  }
                       
   res.json({ response: responseText });
 });
