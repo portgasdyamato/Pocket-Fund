@@ -185,6 +185,8 @@ const seedData = async () => {
   }
 };
 
+seedData().catch(console.error);
+
 // --- ROUTES ---
 
 app.get(['/api/auth/user', '/auth/user'], isAuthenticated, (req: any, res) => res.json(req.user));
