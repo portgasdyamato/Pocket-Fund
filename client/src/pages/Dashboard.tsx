@@ -124,25 +124,25 @@ export default function Dashboard() {
       }
 
       // Check if completed in the CURRENT week
-      const completedThisWeek = userQuest?.completed && 
+      const completedThisWeek = !!(userQuest?.completed && 
         userQuest.completedAt && 
-        new Date(userQuest.completedAt) >= startOfWeek;
+        new Date(userQuest.completedAt).getTime() >= startOfWeek.getTime());
 
       // Calculate dynamic progress based on this week's data
       let calculatedProgress = 0;
       if (completedThisWeek) {
         calculatedProgress = 100;
-      } else if (userQuest && !userQuest.completed) {
-        // Only count transactions from THIS week
+      } else {
+        // Calculate weekly stashed amount regardless of quest joining status
         const weeklyStashed = stashTransactions
-          .filter(t => t.type === 'stash' && new Date(t.date) >= startOfWeek)
+          .filter(t => t.type === 'stash' && new Date(t.createdAt).getTime() >= startOfWeek.getTime())
           .reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
 
         if (type === 'save') {
            calculatedProgress = Math.min(100, Math.round((weeklyStashed / target) * 100));
         } else if (quest.title === "The 1% Rule") {
            const maxStash = Math.max(0, ...stashTransactions
-             .filter(t => t.type === 'stash' && new Date(t.date) >= startOfWeek)
+             .filter(t => t.type === 'stash' && new Date(t.createdAt).getTime() >= startOfWeek.getTime())
              .map(t => parseFloat(t.amount)));
            calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
         }
