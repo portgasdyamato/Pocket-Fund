@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PlusCircle, Target, MessageCircle, TrendingUp, Wallet, Plus, Trophy } from "lucide-react";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import HealthScoreCard from "@/components/HealthScoreCard";
@@ -21,7 +21,6 @@ import AddExpenseModal from "@/components/AddExpenseModal";
 import ChallengeDetailsModal from "@/components/ChallengeDetailsModal";
 import type { Transaction, Quest, UserQuest, Badge, UserBadge } from "@shared/schema";
 import { format } from "date-fns";
-import { useEffect } from "react";
 import ChallengeCelebration from "@/components/ChallengeCelebration";
 
 export default function Dashboard() {
@@ -31,6 +30,7 @@ export default function Dashboard() {
   // State for Challenge Details Modal
   const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   // State for Celebration
   const [celebratingChallenge, setCelebratingChallenge] = useState<any>(null);
@@ -104,58 +104,68 @@ export default function Dashboard() {
   });
 
   // Prepare Challenges Data
-  const challenges = allQuests.slice(0, 3).map(quest => {
-    const userQuest = userQuests.find(uq => uq.questId === quest.id);
-    
-    let target = 100; // Default
-    let type = 'count';
-    try {
-        const content = JSON.parse(quest.content);
-        if (content.target) target = content.target;
-        if (content.type) type = content.type;
-    } catch (e) {
-        // ignore
-    }
-
-    // Calculate dynamic progress
-    let calculatedProgress = 0;
-    if (userQuest?.completed) {
-      calculatedProgress = 100;
-    } else if (userQuest) {
-      // Progress calculation based on quest title/type
-      if (quest.title === "The 1% Rule") {
-        const maxStash = Math.max(0, ...stashTransactions.filter(t => t.type === 'stash').map(t => parseFloat(t.amount)));
-        calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
-      } else if (quest.title === "Subscription Audit") {
-        // Mocking some progress if active, or check if they've tagged something recently
-        calculatedProgress = 0; 
+  const challenges = useMemo(() => {
+    return allQuests.slice(0, 3).map(quest => {
+      const userQuest = userQuests.find(uq => uq.questId === quest.id);
+      
+      let target = 100; // Default
+      let type = 'count';
+      try {
+          const content = JSON.parse(quest.content);
+          if (content.target) target = content.target;
+          if (content.type) type = content.type;
+      } catch (e) {
+          // ignore
       }
-    }
 
-    return {
-      id: quest.id,
-      title: quest.title,
-      description: quest.description,
-      difficulty: (quest.difficulty as "Easy" | "Medium" | "Hard") || "Medium",
-      points: quest.points,
-      progress: calculatedProgress,
-      target: target,
-      timeRemaining: 'Ongoing', 
-      isActive: !!userQuest && !userQuest.completed,
-      isCompleted: !!userQuest?.completed,
-      type: type
-    };
-  });
+      // Calculate dynamic progress
+      let calculatedProgress = 0;
+      if (userQuest?.completed) {
+        calculatedProgress = 100;
+      } else if (userQuest) {
+        // Progress calculation based on quest title/type
+        if (quest.title === "The 1% Rule") {
+          const maxStash = Math.max(0, ...stashTransactions.filter(t => t.type === 'stash').map(t => parseFloat(t.amount)));
+          calculatedProgress = Math.min(100, Math.round((maxStash / 50) * 100));
+        } else if (quest.title === "Subscription Audit") {
+          // Mocking some progress if active, or check if they've tagged something recently
+          calculatedProgress = 0; 
+        }
+      }
+
+      return {
+        id: quest.id,
+        title: quest.title,
+        description: quest.description,
+        difficulty: (quest.difficulty as "Easy" | "Medium" | "Hard") || "Medium",
+        points: quest.points,
+        progress: calculatedProgress,
+        target: target,
+        timeRemaining: 'Ongoing', 
+        isActive: !!userQuest && !userQuest.completed,
+        isCompleted: !!userQuest?.completed,
+        type: type
+      };
+    });
+  }, [allQuests, userQuests, stashTransactions]);
+
+  // Track which challenges we've already triggered celebration for in this session
+  const triggeredCelebrations = useRef<string[]>([]);
 
   // Effect to auto-complete challenges
   useEffect(() => {
+    // Only check if we are NOT currently celebrating a challenge to avoid overlaps
+    if (celebratingChallenge) return;
+
     challenges.forEach(c => {
-      if (c.progress >= 100 && c.isActive && !c.isCompleted) {
+      if (c.progress >= 100 && c.isActive && !c.isCompleted && !triggeredCelebrations.current.includes(c.id)) {
+        console.log("Triggering celebration for challenge:", c.title);
+        triggeredCelebrations.current.push(c.id);
         completeQuestMutation.mutate(c.id);
         setCelebratingChallenge(c);
       }
     });
-  }, [challenges]);
+  }, [challenges, celebratingChallenge]);
 
   const formatDate = (date: Date | string) => {
     const d = new Date(date);
