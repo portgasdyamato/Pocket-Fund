@@ -15,7 +15,8 @@ import {
   CheckCircle, 
   Receipt, 
   MessageCircle, 
-  Lock
+  Lock,
+  Mic
 } from "lucide-react";
 
 const fadeIn = {
@@ -212,20 +213,20 @@ export default function Landing() {
               },
               {
                 icon: Shield,
-                title: "Zero-Knowledge",
-                desc: "Industry-leading encryption protocols ensuring your data remains strictly confidential.",
+                title: "Neural Literacy Links",
+                desc: "Master financial concepts through immersive, interactive quests designed to level up your wealth IQ.",
                 color: "primary"
               },
               {
-                icon: Users,
-                title: "Community Sprints",
-                desc: "Join themed challenges with friends to accelerate your collective financial growth.",
+                icon: Mic,
+                title: "Vocal Command Sync",
+                desc: "Interact with your AI strategist using natural voice commands for hands-free financial management.",
                 color: "accent"
               },
               {
                 icon: Star,
-                title: "Wealth Auto-Pilot",
-                desc: "High-yield savings algorithms that optimize your idle capital automatically.",
+                title: "Commendation Hall",
+                desc: "Earn permanent badges and rewards for every strategic victory in your financial saving journey.",
                 color: "secondary"
               }
             ].map((feature, i) => (
