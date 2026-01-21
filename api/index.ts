@@ -132,7 +132,7 @@ const isAuthenticated = async (req: any, res: any, next: any) => {
 
 // --- AI SERVICE ---
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
 
 async function callGemini(requestBody: any): Promise<any | null> {
   if (!GEMINI_API_KEY) {
@@ -499,14 +499,19 @@ Guidelines:
     }]
   });
   
-  let responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text || 
-                     ai?.text;
+  let responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  if (!responseText && ai?.candidates?.[0]?.finishReason === "SAFETY") {
+    responseText = "My tactical algorithms flagged this query as a safety risk. Protocol mismatch. Please rephrase your request.";
+  }
 
   if (!responseText) {
     if (!GEMINI_API_KEY) {
       responseText = "I'm your Pocket Fund Coach, but my AI brain isn't connected yet! Ask your developer to add a valid GEMINI_API_KEY to the environment variables so I can help you reach your goals.";
     } else {
-      responseText = "I'm having a bit of trouble thinking right now. But remember: every ₹100 you save today is a step towards your freedom! What else can I help you with?";
+      // If we got an error object from callGemini but no text
+      const errorMsg = ai?.error?.message || "Internal Neural Link Interruption";
+      responseText = `I'm having a bit of trouble thinking right now (Error: ${errorMsg}). But remember: every ₹100 you save today is a step towards your freedom! What else can I help you with?`;
     }
   }
                       

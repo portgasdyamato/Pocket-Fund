@@ -112,7 +112,9 @@ export default function AskCoach() {
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
       const response = await apiRequest("/api/ai/chat", "POST", { message });
-      return response.json();
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Uplink failure");
+      return data;
     },
     onSuccess: (data: any) => {
       const newIndex = chatHistory.length;
@@ -123,10 +125,10 @@ export default function AskCoach() {
         speak(data.response, newIndex);
       }, 100);
     },
-    onError: () => {
+    onError: (error: any) => {
       toast({
         title: "Uplink Error",
-        description: "Failed to establish neural link with the coach.",
+        description: error.message || "Failed to establish neural link with the coach.",
         variant: "destructive",
       });
     },
@@ -153,7 +155,7 @@ export default function AskCoach() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex flex-col relative overflow-hidden">
+    <div className="h-[calc(100vh-64px)] bg-[#050505] text-white flex flex-col relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
       <div className="absolute top-1/4 -right-24 w-64 h-64 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
