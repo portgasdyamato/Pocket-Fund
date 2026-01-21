@@ -18,7 +18,11 @@ import {
   Calculator,
   Lock,
   TrendingUp,
-  ArrowLeft
+  ArrowLeft,
+  Cpu,
+  Brain,
+  Zap,
+  Globe
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
@@ -39,11 +43,24 @@ const iconMap: Record<string, any> = {
   "shield-check": Shield,
 };
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
+
 export default function LevelUp() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [activeQuest, setActiveQuest] = useState<Quest | null>(null);
-  const [step, setStep] = useState(0); // 0 = intro, 1+ = slides, last = quiz
+  const [step, setStep] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const { width, height } = useWindowSize();
@@ -88,22 +105,18 @@ export default function LevelUp() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Easy": return "bg-primary/10 text-primary";
-      case "Medium": return "bg-secondary/10 text-secondary";
-      case "Hard": return "bg-destructive/10 text-destructive";
-      default: return "bg-muted text-muted-foreground";
+      case "Easy": return "text-green-400 bg-green-400/10";
+      case "Medium": return "text-orange-400 bg-orange-400/10";
+      case "Hard": return "text-red-400 bg-red-400/10";
+      default: return "text-white/40 bg-white/5";
     }
   };
-
-  if (isLoading) {
-    return <div className="p-8 text-center">Loading Quests...</div>;
-  }
 
   if (activeQuest) {
     const content = JSON.parse(activeQuest.content);
     const slides = content.slides || [];
     const quiz = content.quiz;
-    const totalSteps = slides.length + 2; // intro + slides + quiz
+    const totalSteps = slides.length + 2; 
 
     const isLastStep = step === totalSteps - 1;
     const currentSlide = step > 0 && step <= slides.length ? slides[step - 1] : null;
@@ -115,8 +128,8 @@ export default function LevelUp() {
         completeMutation.mutate(activeQuest.id);
       } else if (selectedOption !== null) {
         toast({
-          title: "Not quite!",
-          description: "Try again to find the correct answer.",
+          title: "Neural Mismatch",
+          description: "Data integrity check failed. Try another logic path.",
           variant: "destructive"
         });
       }
@@ -127,236 +140,287 @@ export default function LevelUp() {
     };
 
     return (
-      <div className="min-h-screen bg-background p-4 md:p-8 flex items-center justify-center">
-        {isCompleted && <Confetti width={width} height={height} recycle={false} numberOfPieces={500} />}
+      <div className="min-h-screen bg-[#050505] p-4 md:p-8 flex items-center justify-center relative overflow-hidden">
+        {isCompleted && <Confetti width={width} height={height} recycle={false} numberOfPieces={500} gravity={0.1} colors={['#8B5CF6', '#D946EF', '#2DD4BF']} />}
         
-        <Card className="w-full max-w-2xl overflow-hidden backdrop-blur-xl bg-card/50 border-primary/20 shadow-2xl relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-muted">
-            <motion.div 
-               className="h-full bg-primary"
-               initial={{ width: 0 }}
-               animate={{ width: `${(step / (totalSteps - 1)) * 100}%` }}
-            />
-          </div>
+        {/* Background Decorative Rings */}
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary/20 rounded-full animate-[spin_60s_linear_infinite]" />
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-accent/10 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
+        </div>
 
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <Button variant="ghost" size="icon" onClick={closeQuest}>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div className="flex gap-2">
-              <Badge variant="outline" className="flex items-center gap-1">
-                <Star className="w-3 h-3" />
-                {activeQuest.points} Pts
-              </Badge>
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.9, y: 30 }}
+           animate={{ opacity: 1, scale: 1, y: 0 }}
+           className="w-full max-w-3xl z-10"
+        >
+          <Card className="w-full overflow-hidden glass-morphism border-white/10 shadow-3xl relative">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-white/5">
+              <motion.div 
+                 className="h-full bg-gradient-to-r from-primary to-accent"
+                 initial={{ width: 0 }}
+                 animate={{ width: `${(step / (totalSteps - 1)) * 100}%` }}
+                 transition={{ duration: 0.5 }}
+              />
             </div>
-          </CardHeader>
 
-          <CardContent className="p-8 min-h-[400px] flex flex-col justify-between">
-            <AnimatePresence mode="wait">
-              {isCompleted ? (
-                <motion.div 
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center space-y-6 flex flex-col items-center justify-center h-full"
-                >
-                  <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Trophy className="w-10 h-10 text-primary" />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-bold mb-2">Quest Complete!</h2>
-                    <p className="text-muted-foreground">
-                      You've earned {activeQuest.points} points and leveled up your financial knowledge.
-                    </p>
-                  </div>
-                  <Button size="lg" className="w-full rounded-full" onClick={closeQuest}>
-                    Awesome!
-                  </Button>
-                </motion.div>
-              ) : step === 0 ? (
-                <motion.div 
-                  key="intro"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <div className="flex flex-col items-center text-center space-y-4">
-                     <div className="text-6xl p-4 bg-primary/10 rounded-2xl">
-                        {activeQuest.icon.length > 5 ? (
-                           <TrendingUp className="w-12 h-12 text-primary" />
-                        ) : activeQuest.icon}
-                     </div>
-                     <h2 className="text-3xl font-bold">{activeQuest.title}</h2>
-                     <p className="text-lg text-muted-foreground">{activeQuest.description}</p>
-                  </div>
-                  <div className="bg-muted/30 p-4 rounded-xl border border-primary/10">
-                    <p className="text-sm italic ">By the end of this quest, you'll be a pro at {activeQuest.title.toLowerCase()}!</p>
-                  </div>
-                </motion.div>
-              ) : currentSlide ? (
-                <motion.div 
-                  key={`slide-${step}`}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8"
-                >
-                  <div className="flex flex-col items-center text-center space-y-6 pt-4">
-                    <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
-                      {currentSlide.icon && iconMap[currentSlide.icon] ? (
-                        (() => {
-                          const IconComp = iconMap[currentSlide.icon];
-                          return <IconComp className="w-12 h-12 text-primary" />;
-                        })()
-                      ) : (
-                        <BookOpen className="w-12 h-12 text-primary" />
-                      )}
-                    </div>
-                    <h2 className="text-3xl font-bold">{currentSlide.title}</h2>
-                    <p className="text-xl leading-relaxed text-foreground/90">
-                      {currentSlide.text}
-                    </p>
-                  </div>
-                </motion.div>
-              ) : isLastStep ? (
-                <motion.div 
-                   key="quiz"
-                   initial={{ opacity: 0, scale: 0.95 }}
-                   animate={{ opacity: 1, scale: 1 }}
-                   className="space-y-6"
-                >
-                  <div className="text-center">
-                    <Badge className="mb-4">Final Challenge</Badge>
-                    <h2 className="text-2xl font-bold mb-6">{quiz.question}</h2>
-                  </div>
-                  <div className="space-y-3">
-                    {quiz.options.map((option: string, index: number) => (
-                      <Button
-                        key={index}
-                        variant={selectedOption === index ? "default" : "outline"}
-                        className={`w-full justify-start h-auto py-4 px-6 text-left transition-all ${
-                          selectedOption === index ? 'ring-2 ring-primary ring-offset-2' : ''
-                        }`}
-                        onClick={() => setSelectedOption(index)}
-                      >
-                        <span className="w-8 h-8 rounded-full border flex items-center justify-center mr-4 shrink-0 font-bold">
-                          {String.fromCharCode(65 + index)}
-                        </span>
-                        {option}
-                      </Button>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-
-            {!isCompleted && (
-              <div className="flex gap-4 pt-8">
-                {step > 0 && (
-                  <Button variant="ghost" onClick={handleBack} className="flex-1">
-                    <ChevronLeft className="w-4 h-4 mr-2" /> Back
-                  </Button>
-                )}
-                <Button onClick={handleNext} className="flex-1 rounded-full group">
-                  {isLastStep ? "Submit Quiz" : "Continue"} 
-                  <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 px-8 pt-8">
+              <Button variant="ghost" size="icon" onClick={closeQuest} className="hover:bg-white/5 rounded-xl border border-white/5">
+                <ArrowLeft className="w-5 h-5 text-white/40" />
+              </Button>
+              <div className="flex gap-4">
+                <div className="px-4 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                  <Star className="w-3.5 h-3.5 fill-primary" />
+                  {activeQuest.points} Pts
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardHeader>
+
+            <CardContent className="px-8 pb-10 pt-4 min-h-[480px] flex flex-col justify-between">
+              <AnimatePresence mode="wait">
+                {isCompleted ? (
+                  <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9, rotateY: 90 }}
+                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    className="text-center space-y-8 flex flex-col items-center justify-center h-full py-12"
+                  >
+                    <div className="relative">
+                       <div className="absolute inset-0 bg-primary blur-3xl rounded-full opacity-30 animate-pulse" />
+                       <div className="w-24 h-24 bg-primary text-white rounded-[32%] flex items-center justify-center relative shadow-2xl">
+                          <Trophy className="w-12 h-12" />
+                       </div>
+                    </div>
+                    <div>
+                      <h2 className="text-4xl font-black tracking-tighter mb-4 uppercase italic">Neural Uplink Successful</h2>
+                      <p className="text-white/40 font-medium text-lg max-w-md mx-auto">
+                        Your cognitive matrix has been updated with <span className="text-primary font-black">{activeQuest.points} neurological credits</span>.
+                      </p>
+                    </div>
+                    <Button size="lg" className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xl premium-shadow" onClick={closeQuest}>
+                      Commit Data
+                    </Button>
+                  </motion.div>
+                ) : step === 0 ? (
+                  <motion.div 
+                    key="intro"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-10 py-10"
+                  >
+                    <div className="flex flex-col items-center text-center space-y-6">
+                       <div className="text-[120px] p-8 relative">
+                          <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full" />
+                          <div className="relative filter drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                            {activeQuest.icon.length > 5 ? <TrendingUp className="w-32 h-32 text-primary" /> : activeQuest.icon}
+                          </div>
+                       </div>
+                       <div className="space-y-3">
+                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Mission Briefing</p>
+                          <h2 className="text-5xl font-black tracking-tighter uppercase italic">{activeQuest.title}</h2>
+                          <p className="text-xl text-white/50 font-medium leading-relaxed max-w-xl">{activeQuest.description}</p>
+                       </div>
+                    </div>
+                  </motion.div>
+                ) : currentSlide ? (
+                  <motion.div 
+                    key={`slide-${step}`}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    className="space-y-10 py-8"
+                  >
+                    <div className="flex flex-col items-center text-center space-y-8">
+                      <div className="w-24 h-24 rounded-[30%] bg-white/5 border border-white/10 flex items-center justify-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        {currentSlide.icon && iconMap[currentSlide.icon] ? (
+                          (() => {
+                            const IconComp = iconMap[currentSlide.icon];
+                            return <IconComp className="w-10 h-10 text-primary relative z-10" />;
+                          })()
+                        ) : (
+                          <BookOpen className="w-10 h-10 text-primary relative z-10" />
+                        )}
+                      </div>
+                      <div className="space-y-4">
+                        <h2 className="text-3xl font-black tracking-tight">{currentSlide.title}</h2>
+                        <p className="text-xl leading-relaxed text-white/60 font-medium max-w-2xl">
+                          {currentSlide.text}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : isLastStep ? (
+                  <motion.div 
+                     key="quiz"
+                     initial={{ opacity: 0, scale: 0.95 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     className="space-y-8 py-4"
+                  >
+                    <div className="text-center space-y-4">
+                      <div className="inline-flex px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-black uppercase tracking-widest">Logic Validation</div>
+                      <h2 className="text-3xl font-black tracking-tight leading-tight">{quiz.question}</h2>
+                    </div>
+                    <div className="space-y-4">
+                      {quiz.options.map((option: string, index: number) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          className={`w-full justify-start h-auto py-5 px-6 text-left rounded-2xl border-white/5 bg-white/5 transition-all relative overflow-hidden group ${
+                            selectedOption === index ? 'border-primary bg-primary/10 ring-1 ring-primary/50' : 'hover:bg-white/10 hover:border-white/20'
+                          }`}
+                          onClick={() => setSelectedOption(index)}
+                        >
+                          <div className={`w-8 h-8 rounded-lg border flex items-center justify-center mr-5 shrink-0 font-black text-xs transition-colors ${
+                            selectedOption === index ? 'bg-primary text-white border-transparent' : 'border-white/10 text-white/40'
+                          }`}>
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                          <span className={`font-bold transition-colors ${selectedOption === index ? 'text-white' : 'text-white/60'}`}>{option}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+
+              {!isCompleted && (
+                <div className="flex gap-4 pt-10">
+                  {step > 0 && (
+                    <Button variant="outline" onClick={handleBack} className="flex-1 h-14 rounded-2xl border-white/5 bg-white/5 font-black uppercase tracking-widest text-[10px]">
+                      <ChevronLeft className="w-4 h-4 mr-2" /> REWIND
+                    </Button>
+                  )}
+                  <Button onClick={handleNext} className="flex-[2] h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black uppercase tracking-tighter text-sm premium-shadow-white group">
+                    {isLastStep ? "EXECUTE VALIDATION" : "PROCEED"} 
+                    <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background px-6 py-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold mb-2" data-testid="text-page-title">Level Up</h1>
-            <p className="text-muted-foreground text-lg italic">Master your money through bite-sized missions 🚀</p>
+    <div className="min-h-screen bg-[#050505] text-white">
+      <main className="max-w-7xl mx-auto px-6 py-20 space-y-16">
+        
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-12"
+        >
+          <div className="space-y-4">
+            <h1 className="text-6xl font-black tracking-tighter italic uppercase">Level <span className="text-primary">Up</span></h1>
+            <p className="text-white/40 text-2xl font-medium max-w-2xl leading-relaxed">
+              Ascend the financial hierarchy through <span className="text-white italic">Neural Link Training Missions</span>.
+            </p>
           </div>
-          <div className="p-4 bg-primary/10 rounded-2xl flex items-center gap-4 border border-primary/20">
-            <Trophy className="w-8 h-8 text-primary" />
-            <div>
-              <p className="text-2xl font-bold">Pro Badge</p>
-              <p className="text-xs text-muted-foreground">Complete 5 quests to unlock</p>
+          
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="p-8 glass-morphism border-white/5 rounded-[40px] flex items-center gap-8 group"
+          >
+            <div className="w-20 h-20 bg-primary rounded-[28%] flex items-center justify-center relative shadow-2xl group-hover:rotate-12 transition-transform">
+               <Trophy className="w-10 h-10 text-white" />
             </div>
-          </div>
-        </div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">Current Tier</p>
+              <p className="text-3xl font-black tracking-tight">VANGUARD ELITE</p>
+              <div className="flex items-center gap-2 mt-2">
+                 <div className="h-1.5 w-32 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div initial={{ width: 0 }} animate={{ width: '65%' }} className="h-full bg-primary" />
+                 </div>
+                 <span className="text-[10px] font-bold text-primary italic">65% to Master</span>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Quests Grid */}
+        <motion.div 
+           variants={container}
+           initial="hidden"
+           animate="show"
+           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {literacyQuests.map((quest) => {
             const userQuest = userQuests.find(uq => uq.questId === quest.id);
             const isDone = !!userQuest?.completed;
 
             return (
-              <Card 
-                key={quest.id} 
-                className={`group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border hover:border-primary/60 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer ${
-                  isDone ? 'border-primary/40 opacity-90' : 'border-primary/20'
-                }`} 
-                onClick={() => startQuest(quest)}
-                data-testid={`card-quest-${quest.id}`}
-              >
-                {isDone && (
-                  <div className="absolute top-0 right-0 p-4">
-                    <CheckCircle2 className="w-6 h-6 text-primary fill-primary/10" />
-                  </div>
-                )}
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="text-5xl group-hover:scale-110 transition-transform duration-300">
-                      {iconMap[quest.icon] ? (
-                        (() => {
-                          const IconComp = iconMap[quest.icon];
-                          return <IconComp className="w-12 h-12 text-primary" />;
-                        })()
-                      ) : (
-                        quest.icon.length > 5 ? <TrendingUp className="w-12 h-12 text-primary" /> : quest.icon
-                      )}
+              <motion.div key={quest.id} variants={item}>
+                <Card 
+                  className={`group h-full flex flex-col p-8 rounded-[40px] glass-morphism border-white/5 hover:border-primary/20 transition-all duration-500 cursor-pointer overflow-hidden relative ${
+                    isDone ? 'opacity-60' : ''
+                  }`} 
+                  onClick={() => startQuest(quest)}
+                >
+                  {isDone && (
+                    <div className="absolute top-8 right-8">
+                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                         <CheckCircle2 className="w-5 h-5 text-green-400" />
+                      </div>
                     </div>
+                  )}
+
+                  <div className="mb-8 relative">
+                     <div className="text-[80px] group-hover:scale-110 transition-transform duration-500 filter group-hover:drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+                        {iconMap[quest.icon] ? (
+                          (() => {
+                            const IconComp = iconMap[quest.icon];
+                            return <IconComp className="w-16 h-16 text-primary" />;
+                          })()
+                        ) : (
+                          quest.icon.length > 5 ? <TrendingUp className="w-16 h-16 text-primary" /> : quest.icon
+                        )}
+                     </div>
                   </div>
-                  <CardTitle className="text-2xl mb-2">{quest.title}</CardTitle>
-                  <div className="flex gap-2 mb-4">
-                    <Badge className={getDifficultyColor(quest.difficulty)} variant="secondary">
-                      {quest.difficulty}
-                    </Badge>
-                    <Badge variant="outline" className="flex items-center gap-1 border-primary/40">
-                      <Star className="w-3 h-3 text-primary" />
-                      {quest.points} XP
-                    </Badge>
+
+                  <div className="flex-1 space-y-4">
+                    <h3 className="text-2xl font-black tracking-tight uppercase leading-tight">{quest.title}</h3>
+                    <div className="flex gap-3">
+                      <div className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest ${getDifficultyColor(quest.difficulty)}`}>
+                        {quest.difficulty}
+                      </div>
+                      <div className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-widest text-primary italic">
+                        +{quest.points} XP
+                      </div>
+                    </div>
+                    <p className="text-white/40 text-sm font-medium leading-relaxed line-clamp-2">
+                       {quest.description}
+                    </p>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground line-clamp-2 mb-6">
-                    {quest.description}
-                  </p>
-                  <Button 
-                    variant={isDone ? "outline" : "default"} 
-                    className="w-full rounded-full transition-all group-hover:bg-primary group-hover:text-primary-foreground"
-                    disabled={completeMutation.isPending}
-                  >
-                    {isDone ? "Play Again" : "Start Quest"}
-                  </Button>
-                </CardContent>
-              </Card>
+
+                  <div className="mt-10">
+                    <Button 
+                      variant={isDone ? "outline" : "default"} 
+                      className={`w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
+                        isDone ? 'border-white/10 bg-transparent text-white/40 hover:bg-white/5' : 'bg-primary text-white hover:bg-primary/90 premium-shadow'
+                      }`}
+                    >
+                      {isDone ? "REPEAT SIMULATION" : "INITIATE TRAINING"}
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {literacyQuests.length === 0 && !isLoading && (
-          <Card className="border-dashed border-2 bg-muted/20">
-            <CardContent className="p-12 text-center">
-              <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-2">New Quests Loading...</h3>
-              <p className="text-muted-foreground">Our financial ninjas are preparing your next training missions.</p>
-            </CardContent>
-          </Card>
+          <motion.div variants={item} className="p-20 text-center rounded-[60px] border-2 border-dashed border-white/5 bg-white/[0.02]">
+            <Brain className="w-20 h-20 text-white/10 mx-auto mb-6 animate-pulse" />
+            <h3 className="text-3xl font-black tracking-tight mb-2">DATA TRANSMISSION PENDING</h3>
+            <p className="text-white/30 text-lg">New training modules are being synthesized by the core engine.</p>
+          </motion.div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

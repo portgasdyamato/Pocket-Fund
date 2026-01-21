@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "regenerator-runtime/runtime";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { useMutation } from "@tanstack/react-query";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Button } from "@/components/ui/button";
-import { CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, Sparkles, User, Mic, MicOff, Volume2, VolumeX, Bot, Terminal, ChevronRight } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -24,9 +24,11 @@ export default function AskCoach() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      message: "Hello! I'm your personal financial coach. I'm here to help you with budgeting, saving strategies, understanding your spending habits, and achieving your financial goals. What would you like to know today?"
+      message: "Initialization complete. I am your Digital Wealth Strategist. Ready to optimize your financial protocols. What is our objective today?"
     }
   ]);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Voice Interaction State
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -40,6 +42,12 @@ export default function AskCoach() {
     browserSupportsSpeechRecognition
   } = useSpeechRecognition();
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory]);
+
   // Handle Voice Input
   useEffect(() => {
     if (transcript) {
@@ -50,21 +58,19 @@ export default function AskCoach() {
   const toggleListening = () => {
     try {
       if (listening) {
-        console.log("Stopping listening...");
         SpeechRecognition.stopListening();
       } else {
-        console.log("Starting listening...");
         resetTranscript();
         SpeechRecognition.startListening({ 
           continuous: true,
-          language: 'en-IN' // Adding support for Indian English as per the app's context
+          language: 'en-IN'
         });
       }
     } catch (error) {
       console.error("Speech recognition error:", error);
       toast({
-        title: "Microphone Error",
-        description: "Could not access your microphone. Please check permissions.",
+        title: "Datalink Error",
+        description: "Sensor array malfunctioning. Check microphone permissions.",
         variant: "destructive"
       });
     }
@@ -75,14 +81,12 @@ export default function AskCoach() {
     if (isMuted || !window.speechSynthesis) return;
     if (messageIndex !== undefined && mutedMessages.has(messageIndex)) return;
     
-    // Stop any current speech
     window.speechSynthesis.cancel();
     setCurrentlyPlaying(null);
 
-    // Strip Markdown for speech
     const cleanText = text.replace(/[*#_`]/g, '');
-    
     const utterance = new SpeechSynthesisUtterance(cleanText);
+    
     utterance.onstart = () => {
       setIsSpeaking(true);
       if (messageIndex !== undefined) setCurrentlyPlaying(messageIndex);
@@ -99,54 +103,11 @@ export default function AskCoach() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Handle per-message voice control
-  const handleMessageVoiceClick = (messageIndex: number, messageText: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    // Double-click to toggle mute
-    if (e.detail === 2) {
-      setMutedMessages(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(messageIndex)) {
-          newSet.delete(messageIndex);
-        } else {
-          newSet.add(messageIndex);
-          // Stop if currently playing this message
-          if (currentlyPlaying === messageIndex) {
-            window.speechSynthesis.cancel();
-            setCurrentlyPlaying(null);
-            setIsSpeaking(false);
-          }
-        }
-        return newSet;
-      });
-      return;
-    }
-
-    // Single click to play/pause
-    if (currentlyPlaying === messageIndex) {
-      // Pause if playing
-      window.speechSynthesis.cancel();
-      setCurrentlyPlaying(null);
-      setIsSpeaking(false);
-    } else {
-      // Play if not playing
-      speak(messageText, messageIndex);
-    }
-  };
-
   const toggleMute = () => {
     window.speechSynthesis.cancel();
     setIsMuted(!isMuted);
     setIsSpeaking(false);
   };
-
-  // Stop listening when sending message manually
-  useEffect(() => {
-    if (!listening && transcript) {
-      // Optional: Auto-send could go here, but manual is safer for edits
-    }
-  }, [listening, transcript]);
 
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
@@ -154,19 +115,18 @@ export default function AskCoach() {
       return response.json();
     },
     onSuccess: (data: any) => {
-      const newIndex = chatHistory.length; // Index of the new message
+      const newIndex = chatHistory.length;
       setChatHistory((prev) => [...prev, { role: 'assistant', message: data.response }]);
       setChatMessage("");
       resetTranscript();
-      // Auto-play the new message (will respect global mute and per-message mute)
       setTimeout(() => {
         speak(data.response, newIndex);
       }, 100);
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        title: "Uplink Error",
+        description: "Failed to establish neural link with the coach.",
         variant: "destructive",
       });
     },
@@ -174,7 +134,6 @@ export default function AskCoach() {
 
   const handleSendMessage = () => {
     if (!chatMessage.trim() || chatMutation.isPending) return;
-    
     setChatHistory((prev) => [...prev, { role: 'user', message: chatMessage }]);
     chatMutation.mutate(chatMessage);
   };
@@ -188,232 +147,184 @@ export default function AskCoach() {
 
   const suggestedQuestions = [
     "How can I start saving money?",
-    "What's the 50/30/20 budgeting rule?",
+    "What's the 50/30/20 rule?",
     "How do I reduce impulse buying?",
-    "Tips for building an emergency fund?"
+    "Tips for emergency fund?"
   ];
 
-  const handleSuggestion = (question: string) => {
-    setChatMessage(question);
-  };
-
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Premium Header - Below Main Navbar */}
-      <div className="sticky top-[64px] z-40 border-b border-border/50 bg-card/60 backdrop-blur-xl px-6 py-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/30">
-                <Sparkles className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                  Financial Literacy Coach
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  Your personal AI assistant for financial advice and money management
-                </p>
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+      <div className="absolute top-1/4 -right-24 w-64 h-64 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+      
+      {/* High-Tech Header */}
+      <div className="sticky top-[64px] z-40 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-primary/20 blur-xl group-hover:bg-primary/40 transition-all rounded-full" />
+              <div className="relative w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/50 transition-all">
+                <Bot className="w-6 h-6 text-primary" />
               </div>
             </div>
-            
-            {/* Voice Control */}
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost" 
-                size="sm"
-                onClick={toggleMute}
-                className={`${isSpeaking ? "text-primary animate-pulse" : ""} hover:bg-muted/50`}
-                title={isMuted ? "Unmute Voice" : "Mute Voice"}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                <span className="ml-2 text-xs hidden lg:inline">
-                  {isMuted ? "Voice Off" : (isSpeaking ? "Speaking..." : "Voice On")}
-                </span>
-              </Button>
-              
-              {browserSupportsSpeechRecognition && (
-                <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-                  <div className={`w-2 h-2 rounded-full ${listening ? "bg-primary animate-pulse" : "bg-muted-foreground/30"}`} />
-                  <span>{listening ? "Listening..." : "Ready"}</span>
-                </div>
-              )}
+            <div>
+              <h1 className="text-xl font-black tracking-tight flex items-center gap-2">
+                Neural <span className="text-primary italic">Strategist</span>
+              </h1>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">System Online</span>
+              </div>
             </div>
           </div>
+
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleMute}
+              className={`border-white/10 bg-white/5 rounded-xl px-4 font-bold transition-all ${isSpeaking ? "border-primary text-primary" : "text-white/60"}`}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              <span className="ml-2 hidden md:inline">{isMuted ? "Muted" : (isSpeaking ? "Analyzing..." : "Voice Ready")}</span>
+            </Button>
+          </div>
         </div>
-        
-        {/* Chat Messages Area - Full Height */}
-        <div className="flex-1 overflow-hidden flex flex-col">
-          <ScrollArea className="flex-1 w-full px-6 py-6">
-            <div className="space-y-6 max-w-5xl mx-auto" data-testid="chat-messages">
-              {chatHistory.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'} items-start`}
-                  data-testid={`message-${msg.role}-${index}`}
-                >
+      </div>
+
+      {/* Message Area */}
+      <div className="flex-1 overflow-y-auto px-6 py-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <AnimatePresence mode="popLayout">
+            {chatHistory.map((msg, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                layout
+                className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start`}
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
+                  msg.role === 'user' 
+                  ? 'bg-secondary/10 border-secondary/20 text-secondary' 
+                  : 'bg-primary/10 border-primary/20 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]'
+                }`}>
+                  {msg.role === 'user' ? <User className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
+                </div>
+
+                <div className={`max-w-[85%] md:max-w-[75%] p-6 rounded-2xl glass-morphism border-white/5 relative group ${
+                  msg.role === 'user' ? 'bg-white/5' : 'bg-primary/5 border-primary/10'
+                }`}>
                   {msg.role === 'assistant' && (
-                    <>
-                      <Avatar className="w-10 h-10 flex-shrink-0 border-2 border-primary/20">
-                        <AvatarFallback className="bg-gradient-to-br from-primary/20 to-accent/20 text-primary border-0">
-                          <Sparkles className="w-5 h-5" />
-                        </AvatarFallback>
-                      </Avatar>
-                      {/* Per-message voice control button */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => handleMessageVoiceClick(index, msg.message, e)}
-                        className={`w-8 h-8 flex-shrink-0 rounded-lg hover:bg-muted/50 transition-all ${
-                          mutedMessages.has(index) 
-                            ? 'text-muted-foreground opacity-50' 
-                            : currentlyPlaying === index 
-                            ? 'text-primary animate-pulse' 
-                            : 'text-muted-foreground hover:text-primary'
-                        }`}
-                        title={mutedMessages.has(index) 
-                          ? 'Unmute this message (double-click)' 
-                          : currentlyPlaying === index 
-                          ? 'Click to stop, double-click to mute' 
-                          : 'Click to play, double-click to mute'}
-                      >
-                        {mutedMessages.has(index) ? (
-                          <VolumeX className="w-4 h-4" />
-                        ) : currentlyPlaying === index ? (
-                          <Volume2 className="w-4 h-4" />
-                        ) : (
-                          <Volume2 className="w-4 h-4" />
-                        )}
-                      </Button>
-                    </>
+                    <div className="absolute -top-3 left-4 bg-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-md border border-primary/30">
+                      Response Matrix
+                    </div>
                   )}
                   
-                  <div
-                    className={`max-w-[75%] md:max-w-[70%] rounded-2xl p-5 shadow-md ${
-                      msg.role === 'user'
-                        ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-br-md'
-                        : 'bg-card/80 backdrop-blur-sm border border-border/50 rounded-bl-md'
-                    }`}
-                  >
+                  <div className={`text-sm md:text-base leading-relaxed ${msg.role === 'assistant' ? 'text-white' : 'text-white/80'}`}>
                     {msg.role === 'assistant' ? (
-                      <div className="text-sm md:text-base prose prose-sm md:prose-base max-w-none dark:prose-invert prose-headings:font-semibold prose-headings:text-foreground prose-h1:text-xl prose-h1:mt-3 prose-h1:mb-3 prose-h2:text-lg prose-h2:mt-3 prose-h2:mb-2 prose-h3:text-base prose-h3:mt-2 prose-h3:mb-2 prose-p:my-2 prose-p:leading-relaxed prose-strong:font-bold prose-strong:text-foreground prose-ul:my-3 prose-ol:my-3 prose-li:my-2 prose-li:leading-relaxed prose-code:text-xs prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-primary prose-pre:bg-muted/50 prose-pre:p-3 prose-pre:rounded-lg prose-pre:border prose-pre:border-border prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:my-3">
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            h1: ({node, ...props}) => <h1 className="text-xl font-semibold mt-3 mb-3 text-foreground" {...props} />,
-                            h2: ({node, ...props}) => <h2 className="text-lg font-semibold mt-3 mb-2 text-foreground" {...props} />,
-                            h3: ({node, ...props}) => <h3 className="text-base font-semibold mt-2 mb-2 text-foreground" {...props} />,
-                            p: ({node, ...props}) => <p className="my-2 leading-relaxed text-foreground" {...props} />,
-                            strong: ({node, ...props}) => <strong className="font-bold text-foreground" {...props} />,
-                            ul: ({node, ...props}) => <ul className="list-disc list-inside my-3 space-y-2 ml-2" {...props} />,
-                            ol: ({node, ...props}) => <ol className="list-decimal list-inside my-3 space-y-2 ml-2" {...props} />,
-                            li: ({node, ...props}) => <li className="my-2 leading-relaxed text-foreground" {...props} />,
-                            code: ({node, inline, ...props}: any) => 
-                              inline ? (
-                                <code className="text-xs bg-muted/50 px-1.5 py-0.5 rounded font-mono text-primary" {...props} />
-                              ) : (
-                                <code className="block text-xs bg-muted/50 p-3 rounded-lg font-mono overflow-x-auto border border-border" {...props} />
-                              ),
-                            blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-primary pl-4 italic my-3 text-muted-foreground" {...props} />,
-                          }}
-                        >
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
                           {msg.message}
                         </ReactMarkdown>
                       </div>
                     ) : (
-                      <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.message}</p>
+                      <p className="whitespace-pre-wrap">{msg.message}</p>
                     )}
                   </div>
 
-                  {msg.role === 'user' && (
-                    <Avatar className="w-10 h-10 flex-shrink-0 border-2 border-secondary/20">
-                      <AvatarFallback className="bg-gradient-to-br from-secondary/20 to-primary/20 text-secondary border-0">
-                        <User className="w-5 h-5" />
-                      </AvatarFallback>
-                    </Avatar>
+                  {msg.role === 'assistant' && (
+                    <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                       <span>Processed via GPT-4o-mini</span>
+                       <div className="flex items-center gap-3">
+                          <button 
+                            onClick={() => speak(msg.message, index)}
+                            className="hover:text-primary transition-colors flex items-center gap-1"
+                          >
+                            <Volume2 className="w-3 h-3" /> Replay Voice
+                          </button>
+                       </div>
+                    </div>
                   )}
                 </div>
-              ))}
-              
-              {chatMutation.isPending && (
-                <div className="flex gap-4 justify-start items-start">
-                  <Avatar className="w-10 h-10 flex-shrink-0 border-2 border-primary/20">
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-accent/20 text-primary border-0">
-                      <Sparkles className="w-5 h-5" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl rounded-bl-md p-5 shadow-md">
-                    <div className="flex gap-2">
-                      <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {chatMutation.isPending && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex gap-4 items-center"
+            >
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 animate-pulse">
+                <Bot className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex gap-1.5 p-4 rounded-2xl bg-primary/10 border border-primary/10">
+                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" />
+              </div>
+            </motion.div>
+          )}
+          <div ref={scrollRef} />
         </div>
+      </div>
 
-        {/* Suggested Questions - Only show when chat is empty */}
-        {chatHistory.length === 1 && (
-          <div className="border-t border-border/50 bg-card/40 backdrop-blur-xl px-6 py-4">
-            <p className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide">Suggested questions:</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-5xl mx-auto">
-              {suggestedQuestions.map((question, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="text-sm h-auto py-3 px-4 justify-start text-left hover:bg-primary/10 hover:border-primary/50 transition-all rounded-xl"
-                  onClick={() => handleSuggestion(question)}
-                  data-testid={`button-suggestion-${index}`}
+      {/* Footer Input Section */}
+      <div className="border-t border-white/5 bg-black/40 backdrop-blur-3xl p-6">
+        <div className="max-w-4xl mx-auto">
+          {chatHistory.length === 1 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap gap-2 mb-6"
+            >
+              {suggestedQuestions.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => setChatMessage(q)}
+                  className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:border-primary/50 hover:text-primary transition-all"
                 >
-                  {question}
-                </Button>
+                  {q}
+                </button>
               ))}
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
 
-        {/* Premium Input Bar */}
-        <div className="sticky bottom-0 border-t border-border/50 bg-card/60 backdrop-blur-xl px-6 py-4 shadow-lg">
-          <div className="flex gap-3 max-w-5xl mx-auto">
+          <div className="flex gap-4 items-center">
             <Button
-              variant={listening ? "destructive" : "secondary"}
+              variant="outline"
               size="icon"
               onClick={toggleListening}
-              className={`flex-shrink-0 w-11 h-11 rounded-xl ${listening ? "animate-pulse shadow-lg shadow-destructive/20" : "hover:bg-muted/50"} transition-all`}
-              title={listening ? "Stop Listening" : "Start Listening"}
-              disabled={!browserSupportsSpeechRecognition}
+              className={`w-14 h-14 rounded-2xl border-white/10 bg-white/5 transition-all ${listening ? "border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] animate-pulse" : "hover:border-primary hover:text-primary"}`}
             >
               {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
             </Button>
-            <Input
-              value={chatMessage}
-              onChange={(e) => {
-                 setChatMessage(e.target.value);
-                 if(listening) resetTranscript();
-              }}
-              onKeyPress={handleKeyPress}
-              placeholder={listening ? "Listening..." : "Ask anything about money, budgeting, or saving..."}
-              disabled={chatMutation.isPending}
-              className="flex-1 h-11 rounded-xl bg-background/50 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 text-sm md:text-base"
-              data-testid="input-chat-message"
-            />
-            <Button
-              onClick={() => {
-                SpeechRecognition.stopListening();
-                handleSendMessage();
-              }}
-              disabled={!chatMessage.trim() || chatMutation.isPending}
-              size="icon"
-              className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary hover:bg-primary/90 shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              data-testid="button-send-message"
-            >
-              <Send className="w-5 h-5" />
-            </Button>
+            
+            <div className="flex-1 relative">
+              <Input
+                value={chatMessage}
+                onChange={(e) => setChatMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={listening ? "Listening for vocal commands..." : "Enter protocol or ask for advice..."}
+                className="h-14 bg-white/5 border-white/10 rounded-2xl px-6 font-bold focus:border-primary/50 text-white placeholder:text-white/20"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!chatMessage.trim() || chatMutation.isPending}
+                  size="icon"
+                  className="w-10 h-10 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
     </div>
   );
 }

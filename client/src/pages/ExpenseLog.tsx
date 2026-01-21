@@ -6,13 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Coffee, Car, ShoppingBag, Ticket, FileText, Tag, 
-  Trash2, PlusCircle, Calendar
+  Trash2, Plus, Calendar, Activity, ArrowRight, Filter
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import AddExpenseModal from "@/components/AddExpenseModal";
 import { format } from "date-fns";
 import type { Transaction } from "@shared/schema";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, x: -10 },
+  show: { opacity: 1, x: 0 }
+};
 
 export default function ExpenseLog() {
   const { toast } = useToast();
@@ -42,24 +58,23 @@ export default function ExpenseLog() {
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
       toast({
-        title: "Deleted",
-        description: "Expense deleted successfully",
+        title: "Protocol Success",
+        description: "Data point purged from the ledger.",
       });
       setDeleteId(null);
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to delete expense",
+        title: "Datalink Failure",
+        description: "Could not execute purge sequence.",
         variant: "destructive",
       });
     },
   });
 
   const getCategoryIcon = (cat: string | null) => {
-    const iconClass = "w-5 h-5";
+    const iconClass = "w-4 h-4";
     if (!cat) return <Tag className={iconClass} />;
-    
     switch (cat.toLowerCase()) {
       case 'food': return <Coffee className={iconClass} />;
       case 'transport': return <Car className={iconClass} />;
@@ -71,26 +86,24 @@ export default function ExpenseLog() {
   };
 
   const getCategoryColor = (cat: string | null) => {
-    if (!cat) return 'bg-muted text-muted-foreground';
-    
+    if (!cat) return 'text-white/40';
     switch (cat.toLowerCase()) {
-      case 'food': return 'bg-chart-1/10 text-chart-1';
-      case 'transport': return 'bg-chart-2/10 text-chart-2';
-      case 'shopping': return 'bg-chart-3/10 text-chart-3';
-      case 'entertainment': return 'bg-chart-4/10 text-chart-4';
-      case 'bills': return 'bg-chart-5/10 text-chart-5';
-      default: return 'bg-muted text-muted-foreground';
+      case 'food': return 'text-orange-400';
+      case 'transport': return 'text-blue-400';
+      case 'shopping': return 'text-pink-400';
+      case 'entertainment': return 'text-purple-400';
+      case 'bills': return 'text-green-400';
+      default: return 'text-white/40';
     }
   };
 
-  const getTagColor = (tag: string | null) => {
-    if (!tag) return 'secondary';
-    
+  const getTagStyle = (tag: string | null) => {
+    if (!tag) return 'bg-white/5 text-white/40 border-white/5';
     switch (tag) {
-      case 'Need': return 'default';
-      case 'Want': return 'secondary';
-      case 'Ick': return 'destructive';
-      default: return 'secondary';
+      case 'Need': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      case 'Want': return 'bg-primary/10 text-primary border-primary/20';
+      case 'Ick': return 'bg-destructive/10 text-destructive border-destructive/20';
+      default: return 'bg-white/5 text-white/40 border-white/5';
     }
   };
 
@@ -100,117 +113,135 @@ export default function ExpenseLog() {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
-    if (d.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (d.toDateString() === yesterday.toDateString()) {
-      return 'Yesterday';
-    } else {
-      return format(d, 'MMM d, yyyy');
-    }
+    if (d.toDateString() === today.toDateString()) return 'Today';
+    if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
+    return format(d, 'MMM d, yyyy');
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-6 max-w-4xl">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
-            Expense Log
-          </h1>
-          <Button 
-            onClick={() => setIsAddExpenseOpen(true)}
-            size="sm"
-            className="rounded-full w-10 h-10 p-0 shadow-lg shadow-primary/20"
-            data-testid="button-add-expense-top"
-          >
-            <PlusCircle className="w-6 h-6" />
-          </Button>
-        </div>
+    <div className="min-h-screen bg-[#050505] text-white">
+      <main className="container mx-auto px-6 py-12 max-w-5xl">
+        
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col md:flex-row items-end md:items-center justify-between gap-6 mb-12"
+        >
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Activity className="w-4 h-4 text-primary" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Protocol v1.02</span>
+            </div>
+            <h1 className="text-5xl font-black tracking-tighter">Activity Log</h1>
+            <p className="text-white/40 font-medium mt-2">Every credit, every debit. Trace your financial footprint.</p>
+          </div>
+          
+          <div className="flex gap-4">
+             <Button variant="outline" className="border-white/5 bg-white/5 text-white h-14 px-6 rounded-2xl font-bold hover:bg-white/10">
+               <Filter className="w-5 h-5 mr-2" />
+               Filter Array
+             </Button>
+             <Button 
+                onClick={() => setIsAddExpenseOpen(true)}
+                className="bg-primary hover:bg-primary/90 text-white h-14 px-8 rounded-2xl font-black premium-shadow click-scale"
+             >
+                <Plus className="w-6 h-6 mr-2" />
+                Add Entry
+             </Button>
+          </div>
+        </motion.div>
+
         {isLoading ? (
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground">Loading expenses...</p>
-          </Card>
-        ) : isError ? (
-          <Card className="p-12 text-center backdrop-blur-xl bg-card/40 border-border/50">
-            <h2 className="text-2xl font-bold mb-2">Authentication Required</h2>
-            <p className="text-muted-foreground mb-6">
-              Please log in to view and manage your expenses
-            </p>
-            <Button onClick={() => window.location.href = '/api/auth/google'}>
-              Log In
-            </Button>
-          </Card>
+          <div className="space-y-4">
+            {[1,2,3].map(i => (
+              <div key={i} className="h-24 bg-white/5 rounded-3xl animate-pulse" />
+            ))}
+          </div>
         ) : transactions.length === 0 ? (
-          <Card className="p-12 text-center backdrop-blur-xl bg-card/40 border-border/50">
-            <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-2xl font-bold mb-2">No expenses yet</h2>
-            <p className="text-muted-foreground mb-6">
-              Start logging your expenses to track your spending
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-20 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]"
+          >
+            <Calendar className="w-16 h-16 mx-auto mb-6 text-white/10" />
+            <h2 className="text-3xl font-black mb-2">Void Logs</h2>
+            <p className="text-white/30 font-medium mb-8 max-w-xs mx-auto">
+              No financial signatures detected in the sectors. Initialize your first entry.
             </p>
             <Button
               onClick={() => setIsAddExpenseOpen(true)}
-              data-testid="button-add-first-expense"
+              className="bg-primary text-white px-8 h-12 rounded-xl font-bold"
             >
-              <PlusCircle className="w-4 h-4 mr-2" />
-              Add Your First Expense
+              Initialize Log
             </Button>
-          </Card>
+          </motion.div>
         ) : (
-          <Card className="backdrop-blur-xl bg-card/40 border-border/50">
-            <ScrollArea className="h-[calc(100vh-12rem)]">
-              <div className="p-4 space-y-2">
-                {transactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center gap-3 p-4 rounded-lg hover-elevate group"
-                    data-testid={`item-expense-${transaction.id}`}
-                  >
-                    <div className={`p-2 rounded-full ${getCategoryColor(transaction.category)}`}>
-                      {getCategoryIcon(transaction.category)}
+          <div className="space-y-4">
+            <motion.div 
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="space-y-3"
+            >
+              {transactions.map((t) => (
+                <motion.div
+                  key={t.id}
+                  variants={item}
+                  className="group flex items-center gap-4 p-5 rounded-3xl glass-morphism border-white/5 hover:border-primary/20 hover:bg-white/[0.03] transition-all cursor-pointer relative"
+                >
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border border-white/5 transition-all group-hover:scale-110 ${getCategoryColor(t.category)} bg-white/5`}>
+                    {getCategoryIcon(t.category)}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                       <p className="font-bold text-lg text-white group-hover:text-primary transition-colors truncate">
+                         {t.description}
+                       </p>
+                       <ArrowRight className="w-3 h-3 text-white/0 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm truncate" data-testid={`text-description-${transaction.id}`}>
-                        {transaction.description}
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {transaction.category && (
-                          <Badge variant="secondary" className="text-xs" data-testid={`badge-category-${transaction.id}`}>
-                            {transaction.category}
-                          </Badge>
-                        )}
-                        {transaction.tag && (
-                          <Badge variant={getTagColor(transaction.tag)} className="text-xs" data-testid={`badge-tag-${transaction.id}`}>
-                            {transaction.tag}
-                          </Badge>
-                        )}
-                        <span className="text-xs text-muted-foreground" data-testid={`text-date-${transaction.id}`}>
-                          {formatDate(transaction.date)}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <p className="font-bold text-base font-mono" data-testid={`text-amount-${transaction.id}`}>
-                          ₹{parseFloat(transaction.amount).toFixed(2)}
-                        </p>
-                      </div>
-                      
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => setDeleteId(transaction.id)}
-                        data-testid={`button-delete-${transaction.id}`}
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">
+                        {formatDate(t.date)}
+                      </span>
+                      {t.category && (
+                        <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest ${getCategoryColor(t.category)}`}>
+                          <span className="w-1 h-1 rounded-full bg-current" />
+                          {t.category}
+                        </div>
+                      )}
+                      {t.tag && (
+                        <Badge variant="outline" className={`text-[9px] font-black uppercase px-2 py-0 border-0 rounded-md ${getTagStyle(t.tag)}`}>
+                          {t.tag}
+                        </Badge>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </Card>
+                  
+                  <div className="flex items-center gap-6">
+                    <div className="text-right">
+                      <p className="font-black text-2xl text-white">
+                        ₹{parseFloat(t.amount).toLocaleString('en-IN')}
+                      </p>
+                    </div>
+                    
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive/10 hover:text-destructive w-10 h-10 rounded-xl"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleteId(t.id);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         )}
       </main>
 
@@ -220,23 +251,32 @@ export default function ExpenseLog() {
       />
 
       <AlertDialog open={deleteId !== null} onOpenChange={(open) => !open && setDeleteId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Expense?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this expense from your log.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deleteId && deleteMutation.mutate(deleteId)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              data-testid="button-confirm-delete"
+        <AlertDialogContent className="glass-morphism border-white/10 text-white p-8 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-destructive/50" />
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="w-16 h-16 rounded-3xl bg-destructive/10 flex items-center justify-center border border-destructive/20 mb-2">
+              <Trash2 className="w-8 h-8 text-destructive" />
+            </div>
+            <h2 className="text-2xl font-black">Purge Entry?</h2>
+            <p className="text-white/40 font-medium">
+              This action will permanently delete this data fragment from the master ledger. This cannot be undone.
+            </p>
+          </div>
+          <div className="flex gap-4 mt-8">
+            <Button 
+               variant="outline" 
+               className="flex-1 h-14 border-white/10 bg-white/5 font-bold rounded-2xl" 
+               onClick={() => setDeleteId(null)}
             >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
+              Abort
+            </Button>
+            <Button 
+               className="flex-1 h-14 bg-destructive hover:bg-destructive/90 text-white font-black rounded-2xl premium-shadow"
+               onClick={() => deleteId && deleteMutation.mutate(deleteId)}
+            >
+              Confirm Purge
+            </Button>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>

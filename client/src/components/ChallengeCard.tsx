@@ -2,7 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Coffee, Shield, Target, Zap, ShoppingBag, Car, Star } from "lucide-react";
+import { Coffee, Shield, Target, Zap, ShoppingBag, Car, Star, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface ChallengeCardProps {
   id: string;
@@ -41,75 +42,82 @@ export default function ChallengeCard({
       default: return <Star className={iconClass} />;
     }
   };
-  const getDifficultyColor = (diff: string) => {
+
+  const getDifficultyStyles = (diff: string) => {
     switch (diff) {
-      case 'Easy': return 'bg-secondary text-secondary-foreground';
-      case 'Medium': return 'bg-accent text-accent-foreground';
-      case 'Hard': return 'bg-destructive text-destructive-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case 'Easy': return 'bg-green-500/10 text-green-400 border-green-500/20';
+      case 'Medium': return 'bg-primary/10 text-primary border-primary/20';
+      case 'Hard': return 'bg-destructive/10 text-destructive border-destructive/20';
+      default: return 'bg-muted/10 text-muted-foreground border-white/5';
     }
   };
 
   return (
-    <Card className={`p-4 backdrop-blur-xl bg-card/40 border-primary/20 hover:border-primary/40 transition-all hover:shadow-[0_0_25px_rgba(139,92,246,0.2)] ${isCompleted ? 'grayscale-[0.5] opacity-90' : ''}`} data-testid={`card-challenge-${id}`}>
-      <div className="flex flex-col gap-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2 flex-1">
-             <div className={`p-2 rounded-lg ${isCompleted ? 'bg-muted' : 'bg-primary/10 text-primary'}`}>
-                {getIcon()}
-             </div>
-             <h3 className="font-bold text-base leading-tight">{title}</h3>
-          </div>
-          <Badge className={getDifficultyColor(difficulty)} data-testid={`badge-difficulty-${id}`}>
-            {difficulty}
-          </Badge>
-        </div>
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
+      <Card className={`group relative overflow-hidden glass-morphism border-white/5 p-6 h-full transition-all duration-300 ${isCompleted ? 'opacity-80' : ''}`} data-testid={`card-challenge-${id}`}>
+        {/* Glow Effect on Hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <Progress 
-              value={progress} 
-              className="h-2 bg-muted/30" 
-              indicatorClassName={isCompleted ? "bg-green-500" : (isActive ? "bg-primary" : "bg-muted-foreground/30")}
-            />
+        <div className="relative z-10 flex flex-col h-full gap-5">
+          <div className="flex items-start justify-between">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 ${isCompleted ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-primary/10 border-primary/20 text-primary group-hover:scale-110'}`}>
+              {getIcon()}
+            </div>
+            <Badge variant="outline" className={`rounded-full px-3 py-1 font-bold tracking-tight text-[10px] uppercase border ${getDifficultyStyles(difficulty)}`}>
+              {difficulty}
+            </Badge>
           </div>
-          <span className={`text-sm font-bold ${isCompleted ? "text-green-500" : (isActive ? "text-primary" : "text-muted-foreground")}`} data-testid={`text-progress-${id}`}>
-            {progress}%
-          </span>
-        </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <span className={`text-2xl font-bold ${isCompleted ? "text-green-500" : (isActive ? "text-primary" : "text-muted-foreground/60")}`} data-testid={`text-points-${id}`}>
-              {points}
-            </span>
-            <span className="text-xs text-muted-foreground font-semibold uppercase">pts</span>
+          <div>
+            <h3 className="text-lg font-bold leading-tight mb-2 group-hover:text-primary transition-colors">{title}</h3>
+            <div className="flex items-center gap-1.5 text-white/40 text-xs font-bold uppercase tracking-widest">
+              <Star className="w-3 h-3 fill-accent text-accent" />
+              <span>{points} Potential XP</span>
+            </div>
           </div>
-          
-          {isActive && !isCompleted && timeRemaining && (
-            <span className="text-xs text-primary font-medium animate-pulse" data-testid={`text-time-${id}`}>
-              {timeRemaining}
-            </span>
-          )}
 
-          {isCompleted && (
-            <span className="text-xs text-green-500 font-bold flex items-center gap-1">
-              Done!
-            </span>
-          )}
+          <div className="space-y-2">
+            <div className="flex justify-between items-end mb-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Mission Progress</span>
+              <span className="text-sm font-black text-white">{progress}%</span>
+            </div>
+            <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
+               <motion.div 
+                 initial={{ width: 0 }}
+                 animate={{ width: `${progress}%` }}
+                 transition={{ duration: 1, ease: "easeOut" }}
+                 className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${isCompleted ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)]'}`}
+               />
+            </div>
+          </div>
+
+          <div className="mt-auto">
+            <Button
+              onClick={!!isCompleted ? undefined : onAction}
+              className={`w-full rounded-xl h-12 font-bold transition-all duration-300 ${
+                isCompleted 
+                ? "bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15" 
+                : isActive 
+                ? "bg-primary text-white premium-shadow hover:scale-[1.03]" 
+                : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+              }`}
+              disabled={!!isCompleted}
+            >
+              {isCompleted ? (
+                <span className="flex items-center gap-2">Mission Accomplished</span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  {isActive ? 'Resume Mission' : 'Commence Attack'}
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              )}
+            </Button>
+          </div>
         </div>
-
-        <Button
-          variant={!!isCompleted ? "secondary" : (isActive ? "default" : "outline")}
-          size="sm"
-          onClick={!!isCompleted ? undefined : onAction}
-          className={`w-full ${!!isCompleted ? "bg-green-500/20 text-green-500 border-green-500/50 hover:bg-green-500/20" : ""}`}
-          disabled={!!isCompleted}
-          data-testid={`button-challenge-action-${id}`}
-        >
-          {!!isCompleted ? 'Completed ✅' : (isActive ? 'Continue' : 'Start Challenge')}
-        </Button>
-      </div>
-    </Card>
+      </Card>
+    </motion.div>
   );
 }

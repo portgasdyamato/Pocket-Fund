@@ -7,10 +7,26 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy } from "lucide-react";
+import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock, ArrowRight } from "lucide-react";
 import type { Goal, StashTransaction } from "@shared/schema";
 import GoalCelebration from "@/components/GoalCelebration";
 import { useAuth } from "@/hooks/useAuth";
+import { motion, AnimatePresence } from "framer-motion";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 export default function GlowUp() {
   const { toast } = useToast();
@@ -21,8 +37,6 @@ export default function GlowUp() {
   const [goalAmount, setGoalAmount] = useState("");
   const [stashAmount, setStashAmount] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState("");
-  
-  // Celebration State
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedGoalName, setCompletedGoalName] = useState("");
 
@@ -53,8 +67,8 @@ export default function GlowUp() {
       setGoalName("");
       setGoalAmount("");
       toast({
-        title: "Goal Created!",
-        description: "Your new savings quest has begun.",
+        title: "Mission Initialized",
+        description: `Quest "${goalName}" has been added to your backlog.`,
       });
     },
   });
@@ -69,13 +83,11 @@ export default function GlowUp() {
       });
     },
     onSuccess: async (response) => {
-      const data = await response.json(); // specific fix assuming apiRequest returns Response
-      
+      const data = await response.json();
       queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stash/total"] });
       queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
       queryClient.invalidateQueries({ queryKey: ["/api/streak"] });
-      // Invalidate user to update wallet balance logic if needed (though Dashboard handles it via query invalidation usually)
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
 
       setIsStashOpen(false);
@@ -88,16 +100,15 @@ export default function GlowUp() {
       }
       
       setSelectedGoalId("");
-      
       toast({
-        title: "Stashed!",
-        description: "Your money is now growing in your Locker.",
+        title: "Protocol Success",
+        description: `₹${stashAmount} successfully transferred to secure storage.`,
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
        toast({
-        title: "Stash Failed",
-        description: error.message || "Could not stash money. Check your wallet balance.",
+        title: "Transfer Failed",
+        description: error.message || "Insufficient energy (balance). Refill required.",
         variant: "destructive",
       });
     }
@@ -106,276 +117,308 @@ export default function GlowUp() {
   const totalStashed = totalStashedData?.total || 0;
 
   return (
-    <div className="min-h-screen bg-background px-6 py-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-4xl font-bold mb-2" data-testid="text-page-title">The Glow-Up</h1>
-          <p className="text-muted-foreground">Your Locker • Watch your money grow</p>
-        </div>
-        <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
-          <DialogTrigger asChild>
-            <Button data-testid="button-stash-cash">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Stash Cash
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Stash Cash</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="stash-amount">Amount (₹)</Label>
-                <Input
-                  id="stash-amount"
-                  type="number"
-                  placeholder="500"
-                  value={stashAmount}
-                  onChange={(e) => setStashAmount(e.target.value)}
-                  data-testid="input-stash-amount"
-                />
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/30 relative overflow-hidden">
+      {/* Background Decorative Rings */}
+      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full border border-primary/5 pointer-events-none" />
+      <div className="absolute top-[-5%] right-[-5%] w-[40%] h-[40%] rounded-full border border-primary/5 pointer-events-none" />
+
+      <main className="container mx-auto px-6 py-12 space-y-12 max-w-7xl relative z-10">
+        
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6"
+        >
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="bg-primary/20 text-primary p-2 rounded-lg">
+                <Sparkles className="w-4 h-4" />
               </div>
-              <div>
-                <Label htmlFor="goal-select">Allocate to Goal (Optional)</Label>
-                <select
-                  id="goal-select"
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 py-1"
-                  value={selectedGoalId}
-                  onChange={(e) => setSelectedGoalId(e.target.value)}
-                  data-testid="select-goal"
-                >
-                  <option value="">General Savings</option>
-                  {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
-                    <option key={goal.id} value={goal.id}>
-                      {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
-                    </option>
-                  ))}
-                </select>
-               <p className="text-xs text-muted-foreground mt-2">
-                 Wallet Balance: <span className="font-bold text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
-               </p>
-              </div>
-              <Button
-                onClick={() => stashMutation.mutate()}
-                disabled={stashMutation.isPending || !stashAmount}
-                className="w-full"
-                data-testid="button-confirm-stash"
-              >
-                Stash ₹{stashAmount || 0}
-              </Button>
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-primary/80">Command Center</span>
             </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <Card data-testid="card-locker-balance" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/30 hover:border-primary/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <CardContent className="p-8 relative z-10">
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-2">Total in Locker</p>
-            <p className="text-5xl font-bold mb-4 group-hover:text-primary transition-colors" data-testid="text-locker-balance">
-              ₹{totalStashed.toLocaleString('en-IN')}
-            </p>
-            <p className="text-sm text-muted-foreground">Growing in Liquid Mutual Fund</p>
+            <h1 className="text-5xl md:text-6xl font-black tracking-tighter">The Glow Up</h1>
+            <p className="text-white/40 font-medium mt-2">Manage your locker and monitor your evolution.</p>
           </div>
-        </CardContent>
-      </Card>
+          
+          <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-primary/90 text-white rounded-2xl h-16 px-10 text-xl font-bold premium-shadow click-scale group">
+                <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                Stash Cash
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="glass-morphism border-white/10 text-white p-8">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-black tracking-tight">Financial Protocol</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6 pt-6">
+                <div className="space-y-3">
+                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount to Stash (₹)</Label>
+                  <Input
+                    className="bg-white/5 border-white/10 h-16 text-2xl font-black focus:border-primary transition-all"
+                    placeholder="0.00"
+                    value={stashAmount}
+                    onChange={(e) => setStashAmount(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Mission</Label>
+                  <div className="relative">
+                    <select
+                      className="w-full h-14 rounded-xl border border-white/10 bg-white/5 px-4 text-white appearance-none focus:outline-none focus:border-primary font-bold"
+                      value={selectedGoalId}
+                      onChange={(e) => setSelectedGoalId(e.target.value)}
+                    >
+                      <option value="" className="bg-[#0a0a0a]">General Storage</option>
+                      {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
+                        <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
+                          {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/10">
+                   <div className="flex items-center gap-2">
+                     <Lock className="w-4 h-4 text-primary" />
+                     <span className="text-xs font-bold text-white/60">Current Wallet Energy</span>
+                   </div>
+                   <span className="text-sm font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                </div>
+                <Button
+                  onClick={() => stashMutation.mutate()}
+                  disabled={stashMutation.isPending || !stashAmount}
+                  className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-2xl premium-shadow"
+                >
+                  Initiate Stash Sequence
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </motion.div>
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Your Goals</h2>
-        <Dialog open={isNewGoalOpen} onOpenChange={setIsNewGoalOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" data-testid="button-new-goal">
+        {/* Locker Balance Hero Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="group relative overflow-hidden glass-morphism border-white/5 p-12 text-center">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-50 pointer-events-none" />
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+                <span className="text-xs font-black uppercase tracking-widest text-white/60">Total Vault Value</span>
+              </div>
+              <h2 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent group-hover:scale-[1.02] transition-transform duration-700">
+                ₹{totalStashed.toLocaleString('en-IN')}
+              </h2>
+              <div className="flex items-center justify-center gap-8 mt-8">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Growth Engine</span>
+                  <span className="text-primary font-bold">Liquid Mutual Fund</span>
+                </div>
+                <div className="w-[1px] h-8 bg-white/10" />
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Status</span>
+                  <span className="text-green-400 font-bold uppercase tracking-wider text-xs">Active & Secure</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+
+        {/* Goals Grid */}
+        <section className="space-y-8">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-between items-center"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-8 bg-primary rounded-full" />
+              <h2 className="text-3xl font-bold tracking-tight">Active Missions</h2>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsNewGoalOpen(true)}
+              className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl h-12 px-6 font-bold"
+            >
               <Plus className="w-4 h-4 mr-2" />
               New Goal
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Goal</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="new-goal-name">Goal Name</Label>
-                <Input
-                  id="new-goal-name"
-                  placeholder="e.g., Dream Vacation"
-                  value={goalName}
-                  onChange={(e) => setGoalName(e.target.value)}
-                  data-testid="input-new-goal-name"
-                />
+          </motion.div>
+
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => {
+              const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
+              return (
+                <motion.div key={goal.id} variants={item}>
+                  <Card className="group relative overflow-hidden glass-morphism border-white/5 p-8 h-full hover:scale-[1.02] transition-all duration-300">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="flex justify-between items-start mb-8">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+                        <Target className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="text-right">
+                        <div className="text-3xl font-black text-white">{progress.toFixed(0)}%</div>
+                        <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Completion</div>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                        {goal.name}
+                        {goal.isMain && <Sparkles className="w-4 h-4 text-accent" />}
+                      </h3>
+                      <p className="text-sm font-bold text-white/40">
+                        ₹{parseFloat(goal.currentAmount).toLocaleString('en-IN')} / ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                       <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
+                         <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min(progress, 100)}%` }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)] rounded-full"
+                         />
+                       </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
+            
+            <Dialog open={isNewGoalOpen} onOpenChange={setIsNewGoalOpen}>
+               <DialogContent className="glass-morphism border-white/10 text-white p-8">
+                 <DialogHeader>
+                   <DialogTitle className="text-3xl font-black">Design New Mission</DialogTitle>
+                 </DialogHeader>
+                 <div className="space-y-6 pt-6">
+                   <div className="space-y-2">
+                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Mission Name</Label>
+                     <Input
+                       className="bg-white/5 border-white/10 h-14 text-lg font-bold focus:border-primary"
+                       placeholder="e.g. World Domination"
+                       value={goalName}
+                       onChange={(e) => setGoalName(e.target.value)}
+                     />
+                   </div>
+                   <div className="space-y-2">
+                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Target Capital (₹)</Label>
+                     <Input
+                       className="bg-white/5 border-white/10 h-14 text-lg font-bold focus:border-primary"
+                       type="number"
+                       placeholder="50000"
+                       value={goalAmount}
+                       onChange={(e) => setGoalAmount(e.target.value)}
+                     />
+                   </div>
+                   <Button
+                     onClick={() => createGoalMutation.mutate()}
+                     disabled={createGoalMutation.isPending || !goalName || !goalAmount}
+                     className="w-full h-16 text-lg font-black bg-primary premium-shadow"
+                   >
+                     Launch Mission
+                   </Button>
+                 </div>
+               </DialogContent>
+            </Dialog>
+          </motion.div>
+        </section>
+
+        {/* History / Recent Activity */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+           {/* Completed Missions */}
+           <div className="lg:col-span-4 flex flex-col gap-6">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-accent" />
+                Hall of Fame
+              </h3>
+              <div className="space-y-4">
+                 {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => (
+                   <div key={goal.id} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group">
+                      <div>
+                        <div className="text-sm font-bold line-through text-white/30">{goal.name}</div>
+                        <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Conquered</div>
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                         <Trophy className="w-5 h-5 text-green-500" />
+                      </div>
+                   </div>
+                 ))}
+                 {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length === 0 && (
+                   <div className="p-10 text-center border border-white/5 border-dashed rounded-3xl opacity-30">
+                      <p className="text-sm font-bold">No conquered missions yet.</p>
+                   </div>
+                 )}
               </div>
-              <div>
-                <Label htmlFor="new-goal-amount">Target Amount (₹)</Label>
-                <Input
-                  id="new-goal-amount"
-                  type="number"
-                  placeholder="25000"
-                  value={goalAmount}
-                  onChange={(e) => setGoalAmount(e.target.value)}
-                  data-testid="input-new-goal-amount"
-                />
+           </div>
+
+           {/* Transaction Log */}
+           <div className="lg:col-span-8 flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Recent Protocols</h3>
+                <Button variant="ghost" className="text-primary hover:bg-primary/5 text-xs font-black tracking-widest uppercase">
+                  Export Log
+                </Button>
               </div>
-              <Button
-                onClick={() => createGoalMutation.mutate()}
-                disabled={createGoalMutation.isPending || !goalName || !goalAmount}
-                className="w-full"
-                data-testid="button-create-goal"
-              >
-                Create Goal
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
+              <div className="glass-morphism border-white/5 rounded-3xl overflow-hidden">
+                 {stashTransactions.length > 0 ? (
+                    <div className="divide-y divide-white/[0.03]">
+                      {stashTransactions.slice(0, 8).map((t) => (
+                        <motion.div 
+                          key={t.id}
+                          className="p-6 flex justify-between items-center hover:bg-white/[0.02] transition-colors group"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                              t.type === 'stash' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-destructive/10 border-destructive/20 text-destructive'
+                            }`}>
+                              {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : <ArrowDownCircle className="w-6 h-6" />}
+                            </div>
+                            <div>
+                              <p className="font-bold text-white group-hover:text-primary transition-colors">
+                                {t.type === 'stash' ? 'Funds Stashed' : 'Energy Withdrawal'}
+                              </p>
+                              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mt-1">
+                                {new Date(t.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              </p>
+                            </div>
+                          </div>
+                          <div className={`text-xl font-black ${
+                            t.type === 'stash' ? 'text-primary' : 'text-destructive'
+                          }`}>
+                            {t.type === 'stash' ? '+' : '-'}₹{parseFloat(t.amount).toLocaleString('en-IN')}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                 ) : (
+                    <div className="p-20 text-center text-white/20 italic">
+                      Zero activity detected in the sectors.
+                    </div>
+                 )}
+              </div>
+           </div>
+        </section>
+
+      </main>
 
       <GoalCelebration 
         isOpen={showCelebration} 
         onClose={() => setShowCelebration(false)} 
         goalName={completedGoalName} 
       />
-
-      <div className="space-y-8">
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Active Goals</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => {
-              const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
-              return (
-                <Card key={goal.id} data-testid={`card-goal-${goal.id}`} className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/20 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="flex items-center gap-2">
-                          <Target className="w-5 h-5 text-primary" />
-                          {goal.name}
-                          {goal.isMain && (
-                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                              Main
-                            </span>
-                          )}
-                        </CardTitle>
-                        <CardDescription className="mt-1">
-                          ₹{parseFloat(goal.currentAmount).toLocaleString('en-IN')} of ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
-                        </CardDescription>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold">{progress.toFixed(0)}%</div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="w-full bg-muted rounded-full h-3">
-                      <div
-                        className="bg-primary h-3 rounded-full transition-all"
-                        style={{ width: `${Math.min(progress, 100)}%` }}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-             {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).length === 0 && (
-                <div className="col-span-2 text-center text-muted-foreground py-8 border rounded-lg border-dashed">
-                  No active goals. Time to dream big!
-                </div>
-             )}
-          </div>
-        </div>
-
-        {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-green-500 uppercase tracking-wider flex items-center gap-2">
-              <Trophy className="w-5 h-5" /> Completed Goals
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6 opacity-80 hover:opacity-100 transition-opacity">
-              {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => {
-                return (
-                  <Card key={goal.id} className="relative overflow-hidden bg-gradient-to-br from-green-500/10 to-transparent border border-green-500/30">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="flex items-center gap-2 line-through text-muted-foreground">
-                            {goal.name}
-                          </CardTitle>
-                          <CardDescription className="mt-1 text-green-500 font-medium">
-                            Target Achieved: ₹{parseFloat(goal.targetAmount).toLocaleString('en-IN')}
-                          </CardDescription>
-                        </div>
-                        <div className="bg-green-500/20 p-2 rounded-full">
-                          <Trophy className="w-6 h-6 text-green-500" />
-                        </div>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {goals.length === 0 && (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <Target className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4">No goals yet. Create your first savings quest!</p>
-            <Button onClick={() => setIsNewGoalOpen(true)} data-testid="button-create-first-goal">
-              Create Goal
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
-        <Card>
-          <CardContent className="p-0">
-            {stashTransactions.length > 0 ? (
-              <div className="divide-y">
-                {stashTransactions.slice(0, 10).map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="p-4 flex justify-between items-center"
-                    data-testid={`transaction-${transaction.id}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        transaction.type === 'stash' ? 'bg-primary/10' : 'bg-destructive/10'
-                      }`}>
-                        {transaction.type === 'stash' ? (
-                          <ArrowUpCircle className="w-5 h-5 text-primary" />
-                        ) : (
-                          <ArrowDownCircle className="w-5 h-5 text-destructive" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-medium">
-                          {transaction.type === 'stash' ? 'Stashed' : 'Withdrawn'}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(transaction.createdAt).toLocaleDateString('en-IN')}
-                        </p>
-                      </div>
-                    </div>
-                    <div className={`text-lg font-bold ${
-                      transaction.type === 'stash' ? 'text-primary' : 'text-destructive'
-                    }`}>
-                      {transaction.type === 'stash' ? '+' : '-'}₹{parseFloat(transaction.amount).toLocaleString('en-IN')}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-12 text-center text-muted-foreground">
-                No transactions yet. Start stashing to see your activity here!
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-      </div>
     </div>
   );
 }

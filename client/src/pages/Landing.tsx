@@ -1,297 +1,336 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Target, TrendingUp, Trophy, Zap, Wallet, Shield, Sparkles, ArrowRight, Users, Star, CheckCircle, Receipt, MessageCircle, FileText } from "lucide-react";
+import { motion } from "framer-motion";
+import { 
+  Target, 
+  TrendingUp, 
+  Trophy, 
+  Zap, 
+  Wallet, 
+  Shield, 
+  Sparkles, 
+  ArrowRight, 
+  Users, 
+  Star, 
+  CheckCircle, 
+  Receipt, 
+  MessageCircle, 
+  Lock
+} from "lucide-react";
+
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 }
+};
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function Landing() {
+  const handleLogin = () => {
+    window.location.href = '/api/auth/google';
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-primary/30 rounded-full filter blur-3xl animate-blob" />
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-accent/30 rounded-full filter blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-purple-500/30 rounded-full filter blur-3xl animate-blob animation-delay-4000" />
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/30 relative overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-blob" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[35%] h-[35%] bg-accent/20 rounded-full blur-[120px] animate-blob animation-delay-2000" />
       </div>
 
-      {/* Floating Particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-primary/40 rounded-full animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${3 + Math.random() * 4}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Gradient Grid Overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.03)_1px,transparent_1px)] bg-[size:50px_50px] animate-pulse-slow" />
+      {/* Grid Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-primary/10">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-        
-        <div className="container mx-auto px-6 pt-6 pb-20 relative">
-          {/* Header */}
-          <header className="flex items-center justify-between mb-16">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12  rounded-xl flex items-center justify-center  shadow-primary/20">
-                <img src="/favicon.png" alt="Pocket Fund" className="w-10 h-10 object-contain"  />
-              </div>
-              <h1 className="text-2xl pt-2 font-bold bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent">
-                Pocket Fund
-          </h1>
-            </div>
-          <Button 
-              onClick={() => window.location.href = '/api/auth/google'}
-              className="rounded-full px-6 h-11 bg-gradient-to-r from-primary to-accent hover:shadow-lg transition-shadow"
-            data-testid="button-login"
+      <div className="relative z-10">
+        <header className="container mx-auto px-6 py-8 flex items-center justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3"
           >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center premium-shadow">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold tracking-tight">Pocket Fund</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <Button 
+              onClick={handleLogin}
+              variant="ghost"
+              className="text-white hover:bg-white/5 rounded-full px-6 mr-4"
+            >
+              Log In
+            </Button>
+            <Button 
+              onClick={handleLogin}
+              className="bg-white text-black hover:bg-white/90 rounded-full px-8 font-semibold click-scale"
+            >
               Get Started
-          </Button>
+            </Button>
+          </motion.div>
         </header>
 
-          {/* Hero Content */}
-          <div className="max-w-5xl mx-auto text-center mb-24">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+        <main className="container mx-auto px-6 pt-20 pb-32">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8"
+            >
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Your Smart Money Companion</span>
-            </div>
-            
-            <h2 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
-              Transform Your
+              <span className="text-sm font-medium text-white/80">Reimagining Personal Finance</span>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.1]"
+            >
+              Level Up Your 
               <br />
-              <span className="bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent">
-                Financial Future
-              </span>
-          </h2>
-            
-            <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              The gamified financial app designed for young adults. Track, fight, stash, and grow your money with engaging challenges and real-time insights.
-          </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button 
-            size="lg" 
-                className="rounded-full px-8 py-4 text-lg h-auto bg-gradient-to-r from-primary to-accent hover:shadow-xl transition-all hover:scale-105"
-                onClick={() => window.location.href = '/api/auth/google'}
-            data-testid="button-get-started"
-          >
-                Start Free Today
-                <ArrowRight className="w-5 h-5 ml-2" />
+              <span className="text-gradient">Financial Game</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="text-xl md:text-2xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed"
+            >
+              The first gamified financial ecosystem designed to help you track spending, build savings, and master money management with AI-powered coaching.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <Button 
+                size="lg"
+                onClick={handleLogin}
+                className="bg-gradient-to-r from-primary to-accent text-white rounded-full px-10 py-7 text-lg hover:scale-105 transition-transform duration-300 premium-shadow group"
+              >
+                Join the Mission
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
                 size="lg"
                 variant="outline"
-                className="rounded-full px-8 py-7 text-lg h-auto transition-all"
-                onClick={() => window.location.href = '#features'}
+                className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-full px-10 py-7 text-lg backdrop-blur-md"
               >
-                Learn More
-          </Button>
-        </div>
+                Watch Demo
+              </Button>
+            </motion.div>
 
-            <div className="mt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="mt-16 flex items-center justify-center gap-8 text-sm text-white/40"
+            >
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Free Forever</span>
+                <CheckCircle className="w-4 h-4 text-primary" />
+                <span>Zero Fees</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>No Credit Card</span>
+                <CheckCircle className="w-4 h-4 text-primary" />
+                <span>Bank-Level Security</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Secure & Private</span>
+                <CheckCircle className="w-4 h-4 text-primary" />
+                <span>AI Insights</span>
+              </div>
+            </motion.div>
+          </div>
+        </main>
+
+        {/* Features Grid */}
+        <section className="container mx-auto px-6 py-20 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Master Your Money</h2>
+            <p className="text-white/40 text-lg">Sophisticated tools for the modern saver</p>
+          </div>
+
+          <motion.div 
+            variants={stagger}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {[
+              {
+                icon: Target,
+                title: "Track & Control",
+                desc: "Real-time expense tracking with automated categorization and smart budgets.",
+                color: "primary"
+              },
+              {
+                icon: Zap,
+                title: "The Fighting Spirit",
+                desc: "Identify 'Needs', 'Wants', and eliminate 'Icks' with active spending battles.",
+                color: "accent"
+              },
+              {
+                icon: Lock,
+                title: "Digital Locker",
+                desc: "Secure your savings in a digital vault. Watch your future grow one tap at a time.",
+                color: "secondary"
+              }
+            ].map((feature, i) => (
+              <motion.div key={i} variants={fadeIn}>
+                <Card className="glass-morphism border-white/5 p-8 h-full hover-lift group relative overflow-hidden">
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-${feature.color}/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div className={`w-14 h-14 rounded-2xl bg-${feature.color}/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <feature.icon className={`w-7 h-7 text-${feature.color}`} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
+                  <p className="text-white/50 leading-relaxed text-sm">{feature.desc}</p>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* Gamification Section */}
+        <section className="py-32 relative">
+          <div className="container mx-auto px-6">
+            <div className="glass-morphism border-white/5 rounded-[40px] p-12 md:p-24 overflow-hidden relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+              
+              <div className="grid md:grid-cols-2 items-center gap-16 relative z-10">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 mb-8">
+                    <Trophy className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-bold text-primary">GAMIFIED EXPERIENCE</span>
+                  </div>
+                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-8 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                    Finance has never been this fun.
+                  </h2>
+                  <p className="text-xl text-white/50 mb-12 leading-relaxed">
+                    Earn XP, unlock achievements, and level up your financial status. Turn the tedious chore of budgeting into an epic adventure.
+                  </p>
+                  <Button 
+                    variant="ghost" 
+                    className="text-primary p-0 text-lg hover:gap-3 transition-all font-semibold hover:bg-transparent"
+                  >
+                    Explore Gamification <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </div>
+                
+                <div className="relative">
+                  <div className="aspect-square rounded-[32px] bg-gradient-to-br from-primary to-accent p-1">
+                    <div className="w-full h-full bg-black/90 rounded-[31px] flex items-center justify-center relative overflow-hidden">
+                      {/* AI Coach Preview Mockup */}
+                      <div className="absolute inset-0 p-8 flex flex-col gap-4">
+                        {[1, 2, 3].map((_, i) => (
+                          <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.2 }}
+                            className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-md self-end"
+                          >
+                            <div className="w-32 h-2 bg-white/20 rounded-full mb-2" />
+                            <div className="w-48 h-2 bg-white/10 rounded-full" />
+                          </motion.div>
+                        ))}
+                        <motion.div 
+                          className="mt-auto self-start bg-primary/20 border border-primary/30 p-6 rounded-2xl backdrop-blur-md"
+                        >
+                          <Sparkles className="w-6 h-6 text-primary mb-4" />
+                          <div className="w-48 h-3 bg-white/30 rounded-full mb-2" />
+                          <div className="w-64 h-3 bg-white/20 rounded-full" />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Floating Elements */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl animate-pulse delay-700" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h3 className="text-4xl md:text-5xl font-bold mb-3">
-            Key Features
-          </h3>
-          <p className="text-base text-muted-foreground">
-            Everything you need to manage your finances
-          </p>
-        </div>
+        {/* AI Section */}
+        <section className="container mx-auto px-6 py-20 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">Personal AI Coach</h2>
+            <p className="text-xl text-white/40 max-w-2xl mx-auto mb-16">
+              Get 24/7 financial guidance. From debt management to investment strategies, your AI coach is always here to help you scale your wealth.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {[
+                { label: "XP EARNED", value: "1.2M+" },
+                { label: "TOTAL SAVED", value: "₹4.5Cr" },
+                { label: "HAPPY USERS", value: "50K+" },
+                { label: "AI SESSIONS", value: "200K+" }
+              ].map((stat, i) => (
+                <div key={i} className="p-6 rounded-3xl bg-white/5 border border-white/10">
+                  <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
+                  <div className="text-xs font-bold text-white/30 tracking-widest">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          <Card data-testid="card-feature-track" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/30 hover:border-primary/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary/30 to-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-primary/20">
-                <Target className="w-7 h-7 text-primary" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-primary transition-colors">TRACK</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Monitor your spending in real-time. See where every rupee goes with our smart transaction tracker.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card data-testid="card-feature-fight" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-accent/30 hover:border-accent/80 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-accent/30 to-accent/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
-                <Zap className="w-7 h-7 text-accent" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-accent transition-colors">FIGHT</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Categorize expenses as Needs, Wants, or Icks. Challenge yourself to reduce wasteful spending.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card data-testid="card-feature-stash" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-secondary/30 hover:border-secondary/80 transition-all duration-500 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-secondary/30 to-secondary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-secondary/20">
-                <TrendingUp className="w-7 h-7 text-secondary" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-secondary transition-colors">STASH</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Move money to your digital locker with one tap. Watch your savings grow over time.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card data-testid="card-feature-grow" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-purple-500/30 hover:border-purple-500/80 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500/30 to-purple-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
-                <Trophy className="w-7 h-7 text-purple-500" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-purple-500 transition-colors">GROW</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Build streaks, unlock achievements, and level up. Make saving money exciting and rewarding.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card data-testid="card-feature-expense-log" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-green-500/30 hover:border-green-500/80 transition-all duration-500 hover:shadow-2xl hover:shadow-green-500/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-green-500/30 to-green-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-green-500/20">
-                <Receipt className="w-7 h-7 text-green-500" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-green-500 transition-colors">EXPENSE LOG TRACKER</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Log every expense instantly. Get detailed insights and trends to understand your spending patterns better.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card data-testid="card-feature-ai-coach" className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-blue-500/30 hover:border-blue-500/80 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-6 relative z-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500/30 to-blue-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
-                <MessageCircle className="w-7 h-7 text-blue-500" />
-              </div>
-              <h3 className="text-base font-bold mb-2 group-hover:text-blue-500 transition-colors">AI FINANCIAL COACH</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Get personalized financial advice 24/7. Ask questions and receive instant guidance on saving, budgeting, and investing.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h3 className="text-4xl md:text-5xl font-bold mb-3">
-            Benefits
-          </h3>
-          <p className="text-base text-muted-foreground">
-            Why thousands choose Pocket Fund
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-5">
-          <Card className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-primary/30 hover:border-primary/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-7 relative z-10">
-              <Shield className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
-              <h4 className="text-lg font-bold mb-3 group-hover:text-primary transition-colors">Bank-Level Security</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Your financial data is protected with encryption and secure authentication protocols.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-accent/30 hover:border-accent/80 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-7 relative z-10">
-              <Users className="w-12 h-12 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h4 className="text-lg font-bold mb-3 group-hover:text-accent transition-colors">AI-Powered Insights</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Get personalized financial advice from our AI coach 24/7. Learn as you save.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-card/80 via-card/40 to-card/60 border border-yellow-500/30 hover:border-yellow-500/80 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="p-7 relative z-10">
-              <Star className="w-12 h-12 text-yellow-500 mb-4 group-hover:scale-110 transition-transform" />
-              <h4 className="text-lg font-bold mb-3 group-hover:text-yellow-500 transition-colors">Gamification</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Turn saving into a game with challenges, badges, and rewards that keep you motivated.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="max-w-4xl mx-auto text-center">
-          <Card className="group relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-primary/10 via-card/80 to-accent/10 border border-primary/40 p-12 hover:shadow-2xl transition-all hover:-translate-y-1">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <CardContent className="relative z-10">
-              <Trophy className="w-20 h-20 text-primary mx-auto mb-6 group-hover:scale-110 transition-transform" />
-              <h3 className="text-4xl font-bold mb-4 group-hover:text-primary transition-colors">Ready to Transform Your Finances?</h3>
-              <p className="text-base text-muted-foreground mb-8 max-w-xl mx-auto">
-                Join thousands of users who are already taking control of their financial future with Pocket Fund
-              </p>
+        {/* Final CTA */}
+        <section className="py-40 relative overflow-hidden">
+          <div className="absolute inset-0 bg-primary/5 blur-[150px]" />
+          <div className="container mx-auto px-6 text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-5xl md:text-7xl font-bold mb-12 tracking-tight">
+                Ready to take 
+                <br />
+                the <span className="text-gradient">Throne?</span>
+              </h2>
               <Button 
                 size="lg"
-                className="rounded-full px-10 py-7 text-lg h-auto bg-gradient-to-r from-primary to-accent hover:shadow-xl transition-all hover:scale-110"
-                onClick={() => window.location.href = '/api/auth/google'}
-                data-testid="button-start-journey"
+                onClick={handleLogin}
+                className="bg-white text-black hover:bg-white/90 rounded-full px-12 py-8 text-xl font-bold click-scale premium-shadow"
               >
-                Start Your Journey Today
-                <ArrowRight className="w-5 h-5 ml-2" />
+                Launch Your Dashboard
               </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+            </motion.div>
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 py-8 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div className="flex items-center gap-3 mb-4 md:mb-0">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+        {/* Footer */}
+        <footer className="container mx-auto px-6 py-20 border-t border-white/5 text-center">
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
               <Wallet className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg">Pocket Fund</span>
+            <span className="font-bold text-lg tracking-tight">Pocket Fund</span>
           </div>
-          <p className="text-muted-foreground text-xs">
-            © 2025 Pocket Fund. All rights reserved.
-          </p>
+          <p className="text-white/20 text-sm">© 2026 Pocket Fund Ecosystem. All Rights Reserved.</p>
+        </footer>
       </div>
-      </footer>
     </div>
   );
 }
