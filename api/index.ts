@@ -132,12 +132,12 @@ const isAuthenticated = async (req: any, res: any, next: any) => {
 
 // --- AI SERVICE ---
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
 async function callGemini(requestBody: any): Promise<any | null> {
   if (!GEMINI_API_KEY) {
-    console.error("GEMINI_API_KEY is missing");
-    return null;
+    console.error("GEMINI_API_KEY is missing from environment");
+    return { error: { message: "GEMINI_API_KEY is not configured in Vercel environment variables." } };
   }
   try {
     const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
@@ -147,14 +147,11 @@ async function callGemini(requestBody: any): Promise<any | null> {
     });
     
     const data = await res.json();
-    if (!res.ok) {
-      console.error("Gemini API Error:", data);
-      return null;
-    }
+    // Return data regardless of status so we can parse the error message
     return data;
-  } catch (err) { 
+  } catch (err: any) { 
     console.error("Gemini Network Error:", err);
-    return null; 
+    return { error: { message: err.message || "Network error while connecting to Gemini API" } }; 
   }
 }
 
