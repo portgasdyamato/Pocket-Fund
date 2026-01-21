@@ -530,7 +530,7 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res)
   const gUser = await uRes.json();
   await getDb().insert(usersTable).values({ id: String(gUser.id), email: gUser.email, firstName: gUser.given_name, lastName: gUser.family_name, profileImageUrl: gUser.picture, onboardingStatus: 'step_1' }).onConflictDoUpdate({ target: usersTable.id, set: { email: gUser.email, updatedAt: new Date() } });
   res.cookie('userId', String(gUser.id), { path: '/', maxAge: 7*24*60*60*1000, httpOnly: true, secure: true, sameSite: 'lax' });
-  res.redirect('/hq');
+  res.redirect('/');
 });
 
 app.get('/api/logout', (req, res) => { res.clearCookie('userId', { path: '/' }); res.redirect('/'); });

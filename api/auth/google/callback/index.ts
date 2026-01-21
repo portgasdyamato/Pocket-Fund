@@ -111,7 +111,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       
       console.log('Redirecting to /hq');
       // Redirect to HQ page (dashboard)
-      res.redirect(302, '/hq');
+      res.redirect(302, '/');
 
     } catch (error: any) {
       console.error('OAuth error:', error);

@@ -13,7 +13,6 @@ import ExpenseLog from "@/pages/ExpenseLog";
 import Profile from "@/pages/Profile";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/not-found";
-import HQ from "@/pages/HQ";
 import Fight from "@/pages/Fight";
 import GlowUp from "@/pages/GlowUp";
 import LevelUp from "@/pages/LevelUp";
@@ -51,11 +50,6 @@ function Router() {
       <Route path="/" component={() => (
         <ProtectedRoute>
           <Dashboard />
-        </ProtectedRoute>
-      )} />
-      <Route path="/hq" component={() => (
-        <ProtectedRoute>
-          <HQ />
         </ProtectedRoute>
       )} />
       <Route path="/fight" component={() => (
