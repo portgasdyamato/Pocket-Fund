@@ -196,7 +196,7 @@ export default function Landing() {
               {
                 icon: MessageCircle,
                 title: "AI Glow-Up Coach",
-                desc: "Get 24/7 personalized guidance from our advanced financial intelligence engine.",
+                desc: "Get 24/7 personalized guidance from our advanced Gemini 1.5 Flash engine.",
                 color: "primary"
               },
               {

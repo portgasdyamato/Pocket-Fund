@@ -159,7 +159,7 @@ export default function AskCoach() {
       <div className="absolute top-1/4 -right-24 w-64 h-64 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
       
       {/* High-Tech Header */}
-      <div className="sticky top-[64px] z-40 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
+      <div className="z-40 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative group">
@@ -236,7 +236,7 @@ export default function AskCoach() {
 
                   {msg.role === 'assistant' && (
                     <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                       <span>Processed via Gemini 2.5 Flash</span>
+                       <span>Processed via Gemini 1.5 Flash</span>
                        <div className="flex items-center gap-3">
                           <button 
                             onClick={() => speak(msg.message, index)}
