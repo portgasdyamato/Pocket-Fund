@@ -238,7 +238,7 @@ export default function AskCoach() {
 
                   {msg.role === 'assistant' && (
                     <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                       <span>Processed via Gemini 1.5 Flash</span>
+                       <span>Processed via Gemini 2.5 Flash</span>
                        <div className="flex items-center gap-3">
                           <button 
                             onClick={() => speak(msg.message, index)}
