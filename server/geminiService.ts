@@ -42,7 +42,7 @@ export async function chatWithFinancialAssistant(
     ickAmount?: number;
   }
 ): Promise<string> {
-  const systemPrompt = `You are a friendly, motivational high level financial expert partner for "Pocket Fund" app designed for young adults in India. Your tone is encouraging, easily understandable, non-judgmental, and straightforward.
+  const systemPrompt = `You are a friendly, motivational high level financial expert partner powered by Gemini 2.5 Flash for the "Pocket Fund" app designed for young adults in India. Your tone is encouraging, easily understandable, non-judgmental, and straightforward.
 
 Your role:
 - Help users understand their spending habits

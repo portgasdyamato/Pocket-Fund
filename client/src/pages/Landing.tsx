@@ -130,9 +130,10 @@ export default function Landing() {
               <Button 
                 size="lg"
                 variant="outline"
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-full px-10 py-7 text-lg backdrop-blur-md"
               >
-                Watch Demo
+                Learn More
               </Button>
             </motion.div>
 
@@ -159,7 +160,7 @@ export default function Landing() {
         </main>
 
         {/* Features Grid */}
-        <section className="container mx-auto px-6 py-20 relative z-10">
+        <section id="features" className="container mx-auto px-6 py-20 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Master Your Money</h2>
             <p className="text-white/40 text-lg">Sophisticated tools for the modern saver</p>
@@ -170,7 +171,7 @@ export default function Landing() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {[
               {
@@ -190,16 +191,52 @@ export default function Landing() {
                 title: "Digital Locker",
                 desc: "Secure your savings in a digital vault. Watch your future grow one tap at a time.",
                 color: "secondary"
+              },
+              {
+                icon: MessageCircle,
+                title: "AI Glow-Up Coach",
+                desc: "Get 24/7 personalized guidance from our advanced financial intelligence engine.",
+                color: "primary"
+              },
+              {
+                icon: Trophy,
+                title: "Mission Matrix",
+                desc: "Detailed breakdowns of your challenges, streaks, and gamified progress.",
+                color: "accent"
+              },
+              {
+                icon: TrendingUp,
+                title: "Smart Analytics",
+                desc: "High-fidelity visualizations of your financial trajectory and spending patterns.",
+                color: "secondary"
+              },
+              {
+                icon: Shield,
+                title: "Zero-Knowledge",
+                desc: "Industry-leading encryption protocols ensuring your data remains strictly confidential.",
+                color: "primary"
+              },
+              {
+                icon: Users,
+                title: "Community Sprints",
+                desc: "Join themed challenges with friends to accelerate your collective financial growth.",
+                color: "accent"
+              },
+              {
+                icon: Star,
+                title: "Wealth Auto-Pilot",
+                desc: "High-yield savings algorithms that optimize your idle capital automatically.",
+                color: "secondary"
               }
             ].map((feature, i) => (
               <motion.div key={i} variants={fadeIn}>
-                <Card className="glass-morphism border-white/5 p-8 h-full hover-lift group relative overflow-hidden">
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-${feature.color}/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                  <div className={`w-14 h-14 rounded-2xl bg-${feature.color}/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className={`w-7 h-7 text-${feature.color}`} />
+                <Card className="glass-morphism border-white/5 p-10 h-full hover-lift group relative overflow-hidden rounded-[32px]">
+                  <div className={`absolute top-0 right-0 w-48 h-48 bg-${feature.color}/10 blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+                  <div className={`w-16 h-16 rounded-2xl bg-${feature.color}/10 border border-${feature.color}/20 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                    <feature.icon className={`w-8 h-8 text-${feature.color}`} />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                  <p className="text-white/50 leading-relaxed text-sm">{feature.desc}</p>
+                  <h3 className="text-2xl font-black mb-4 uppercase tracking-tight">{feature.title}</h3>
+                  <p className="text-white/50 leading-relaxed font-medium">{feature.desc}</p>
                 </Card>
               </motion.div>
             ))}
