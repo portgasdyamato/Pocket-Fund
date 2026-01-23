@@ -8,7 +8,6 @@ import {
   userQuests,
   streaks,
   stashTransactions,
-  razorpayPayments,
   type User,
   type UpsertUser,
   type Goal,
@@ -22,8 +21,6 @@ import {
   type Streak,
   type StashTransaction,
   type InsertStashTransaction,
-  type RazorpayPayment,
-  type InsertRazorpayPayment,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, isNull, sql } from "drizzle-orm";
@@ -69,11 +66,6 @@ export interface IStorage {
   getStashTransactions(userId: string): Promise<StashTransaction[]>;
   getTotalStashed(userId: string): Promise<number>;
   updateWalletBalance(userId: string, amount: number): Promise<void>;
-
-  // Razorpay operations
-  createRazorpayPayment(payment: InsertRazorpayPayment): Promise<RazorpayPayment>;
-  getRazorpayPaymentByOrderId(orderId: string): Promise<RazorpayPayment | undefined>;
-  updateRazorpayPaymentStatus(orderId: string, status: string, paymentId?: string, signature?: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -299,25 +291,6 @@ export class DatabaseStorage implements IStorage {
         walletBalance: sql`${users.walletBalance} + ${amount}`
       })
       .where(eq(users.id, userId));
-  }
-
-  // Razorpay operations
-  async createRazorpayPayment(payment: InsertRazorpayPayment): Promise<RazorpayPayment> {
-    const [newPayment] = await db.insert(razorpayPayments).values(payment).returning();
-    return newPayment;
-  }
-
-  async getRazorpayPaymentByOrderId(orderId: string): Promise<RazorpayPayment | undefined> {
-    const [payment] = await db.select().from(razorpayPayments).where(eq(razorpayPayments.orderId, orderId));
-    return payment;
-  }
-
-  async updateRazorpayPaymentStatus(orderId: string, status: string, paymentId?: string, signature?: string): Promise<void> {
-    const updates: any = { status };
-    if (paymentId) updates.paymentId = paymentId;
-    if (signature) updates.signature = signature;
-    
-    await db.update(razorpayPayments).set(updates).where(eq(razorpayPayments.orderId, orderId));
   }
 }
 

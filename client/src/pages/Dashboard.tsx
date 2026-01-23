@@ -60,20 +60,6 @@ export default function Dashboard() {
   const [celebratingChallenge, setCelebratingChallenge] = useState<any>(null);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [topUpAmount, setTopUpAmount] = useState("");
-  const [razorpayKey, setRazorpayKey] = useState("");
-  
-  useEffect(() => {
-    const fetchKey = async () => {
-      try {
-        const res = await apiRequest("/api/wallet/razorpay/key", "GET");
-        const data = await res.json();
-        setRazorpayKey(data.key);
-      } catch (err) {
-        console.error("Failed to fetch Razorpay key", err);
-      }
-    };
-    fetchKey();
-  }, []);
   
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -106,69 +92,21 @@ export default function Dashboard() {
 
   const topUpMutation = useMutation({
     mutationFn: async () => {
-      // 1. Create order on backend
-      const response = await apiRequest("/api/wallet/razorpay/order", "POST", {
-        amount: parseFloat(topUpAmount),
-      });
-      const order = await response.json();
-
-      // 2. Open Razorpay Checkout
-      return new Promise((resolve, reject) => {
-        const options = {
-          key: razorpayKey || "rzp_test_mock_id",
-          amount: order.amount,
-          currency: "INR",
-          name: "Financial Glow Up",
-          description: "Wallet Top Up",
-          order_id: order.id,
-          handler: async (response: any) => {
-            // 3. Verify payment on backend
-            try {
-              const verifyRes = await apiRequest("/api/wallet/razorpay/verify", "POST", {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              });
-              
-              if (verifyRes.ok) {
-                resolve(await verifyRes.json());
-              } else {
-                reject(new Error("Payment verification failed"));
-              }
-            } catch (err) {
-              reject(err);
-            }
-          },
-          prefill: {
-            name: `${user?.firstName} ${user?.lastName}`,
-            email: user?.email,
-          },
-          theme: {
-            color: "#8B5CF6", // Primary violet color
-          },
-        };
-
-        const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-          reject(new Error(response.error.description));
-        });
-        rzp.open();
+      return await apiRequest("/api/wallet/add", "POST", {
+        amount: topUpAmount,
       });
     },
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+    onSuccess: async (response) => {
+      const data = await response.json();
+      queryClient.setQueryData(["/api/auth/user"], (old: any) => ({
+        ...old,
+        walletBalance: data.newBalance
+      }));
       setIsTopUpOpen(false);
       setTopUpAmount("");
       toast({
-        title: "Energy Refilled",
-        description: `Successfully added ₹${topUpAmount} via Secure Gateway`,
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Grid Failure",
-        description: error.message || "Payment sequence interrupted.",
-        variant: "destructive"
+        title: "Success",
+        description: `Added ₹${topUpAmount} to your wallet`,
       });
     }
   });

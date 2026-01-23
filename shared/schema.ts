@@ -105,17 +105,6 @@ export const stashTransactions = pgTable("stash_transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const razorpayPayments = pgTable("razorpay_payments", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  orderId: text("order_id").notNull(),
-  paymentId: text("payment_id"),
-  signature: text("signature"),
-  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
-  status: text("status").notNull().default("created"), // created, paid, failed
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -140,11 +129,6 @@ export const insertStashTransactionSchema = createInsertSchema(stashTransactions
   createdAt: true,
 });
 
-export const insertRazorpayPaymentSchema = createInsertSchema(razorpayPayments).omit({
-  id: true,
-  createdAt: true,
-});
-
 export type UpsertUser = typeof users.$inferInsert;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -165,6 +149,3 @@ export type Streak = typeof streaks.$inferSelect;
 
 export type InsertStashTransaction = z.infer<typeof insertStashTransactionSchema>;
 export type StashTransaction = typeof stashTransactions.$inferSelect;
-
-export type InsertRazorpayPayment = z.infer<typeof insertRazorpayPaymentSchema>;
-export type RazorpayPayment = typeof razorpayPayments.$inferSelect;
