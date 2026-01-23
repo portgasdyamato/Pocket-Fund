@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./googleAuth";
 import { chatWithFinancialAssistant, categorizePurchase, generateFinancialInsight } from "./geminiService";
 import { insertGoalSchema, insertTransactionSchema, insertStashTransactionSchema } from "@shared/schema";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
@@ -334,6 +336,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const amount = parseFloat(stashData.amount);
       const isStash = stashData.type === 'stash';
 
+      // Lock Logic: Check if withdrawing from a goal
+      if (!isStash && stashData.goalId) {
+        const goal = (await storage.getGoals(userId)).find(g => g.id === stashData.goalId);
+        if (goal) {
+          const currentAmount = parseFloat(goal.currentAmount);
+          const targetAmount = parseFloat(goal.targetAmount);
+          if (currentAmount < targetAmount) {
+            return res.status(403).json({ 
+              message: `Savings Locker is locked. You need to reach your goal of ₹${targetAmount} before you can withdraw. Currently saved: ₹${currentAmount}.`,
+              isLocked: true
+            });
+          }
+        }
+      }
+
       // Check wallet balance for stashing
       if (isStash) {
         const user = await storage.getUser(userId);
@@ -441,6 +458,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error generating insight:", error);
       res.status(500).json({ message: "Failed to generate insight" });
+    }
+  });
+
+  // Razorpay Integration
+  const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_mock_id",
+    key_secret: process.env.RAZORPAY_KEY_SECRET || "mock_secret",
+  });
+
+  app.get('/api/wallet/razorpay/key', isAuthenticated, (_req, res) => {
+    res.json({ key: process.env.RAZORPAY_KEY_ID || "rzp_test_mock_id" });
+  });
+
+  app.post('/api/wallet/razorpay/order', isAuthenticated, async (req: any, res) => {
+    try {
+      const { amount } = req.body; // amount in INR
+      const userId = req.user.id;
+
+      if (!amount || isNaN(amount) || amount <= 0) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
+
+      const options = {
+        amount: Math.round(amount * 100), // Razorpay expects amount in paise
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`,
+      };
+
+      const order = await razorpay.orders.create(options);
+      
+      // Store order in DB
+      await storage.createRazorpayPayment({
+        userId,
+        orderId: order.id,
+        amount: amount.toString(),
+        status: 'created',
+      });
+
+      res.json(order);
+    } catch (error) {
+      console.error("Error creating Razorpay order:", error);
+      res.status(500).json({ message: "Failed to create payment order" });
+    }
+  });
+
+  app.post('/api/wallet/razorpay/verify', isAuthenticated, async (req: any, res) => {
+    try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+      const userId = req.user.id;
+
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "mock_secret")
+        .update(body.toString())
+        .digest("hex");
+
+      const isSignatureValid = expectedSignature === razorpay_signature;
+
+      if (isSignatureValid) {
+        // Update payment status
+        const payment = await storage.getRazorpayPaymentByOrderId(razorpay_order_id);
+        if (payment && payment.status !== 'paid') {
+          await storage.updateRazorpayPaymentStatus(razorpay_order_id, 'paid', razorpay_payment_id, razorpay_signature);
+          
+          // Credit wallet
+          await storage.updateWalletBalance(userId, parseFloat(payment.amount));
+          
+          res.json({ success: true, message: "Payment verified and wallet credited" });
+        } else {
+          res.status(400).json({ message: "Payment already processed or not found" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid payment signature" });
+      }
+    } catch (error) {
+      console.error("Error verifying Razorpay payment:", error);
+      res.status(500).json({ message: "Payment verification failed" });
     }
   });
 

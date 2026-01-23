@@ -74,16 +74,19 @@ export default function GlowUp() {
   });
 
   const stashMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (type: "stash" | "withdraw" = "stash") => {
+      const amount = type === "stash" ? stashAmount : (goals.find(g => g.id === selectedGoalId)?.currentAmount || "0");
       return await apiRequest("/api/stash", "POST", {
-        amount: stashAmount,
-        type: "stash",
+        amount: amount,
+        type: type,
         goalId: selectedGoalId || null,
         status: "completed",
       });
     },
-    onSuccess: async (response) => {
+    onSuccess: async (response, variables) => {
       const data = await response.json();
+      const type = typeof variables === 'string' ? variables : "stash";
+      
       queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stash/total"] });
       queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
@@ -93,7 +96,7 @@ export default function GlowUp() {
       setIsStashOpen(false);
       setStashAmount("");
       
-      if (data.goalCompleted && selectedGoalId) {
+      if (type === "stash" && data.goalCompleted && selectedGoalId) {
         const goal = goals.find(g => g.id === selectedGoalId);
         setCompletedGoalName(goal?.name || "Goal");
         setShowCelebration(true);
@@ -101,14 +104,16 @@ export default function GlowUp() {
       
       setSelectedGoalId("");
       toast({
-        title: "Protocol Success",
-        description: `₹${stashAmount} successfully transferred to secure storage.`,
+        title: type === "stash" ? "Protocol Success" : "Withdrawal Complete",
+        description: type === "stash" 
+          ? `₹${stashAmount} successfully transferred to secure storage.`
+          : `Funds successfully returned to your main wallet.`,
       });
     },
     onError: (error: any) => {
        toast({
-        title: "Transfer Failed",
-        description: error.message || "Insufficient energy (balance). Refill required.",
+        title: "Protocol Failure",
+        description: error.message || "Sequence interrupted. Check your energy levels.",
         variant: "destructive",
       });
     }
@@ -187,7 +192,7 @@ export default function GlowUp() {
                    <span className="text-sm font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
                 </div>
                 <Button
-                  onClick={() => stashMutation.mutate()}
+                  onClick={() => stashMutation.mutate("stash")}
                   disabled={stashMutation.isPending || !stashAmount}
                   className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-2xl premium-shadow"
                 >
@@ -267,9 +272,12 @@ export default function GlowUp() {
                       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
                         <Target className="w-6 h-6 text-primary" />
                       </div>
-                      <div className="text-right">
-                        <div className="text-3xl font-black text-white">{progress.toFixed(0)}%</div>
-                        <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Completion</div>
+                      <div className="text-right flex flex-col items-end">
+                        <div className="flex items-center gap-2">
+                          <Lock className="w-3 h-3 text-white/20" />
+                          <div className="text-3xl font-black text-white">{progress.toFixed(0)}%</div>
+                        </div>
+                        <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Locked until goal</div>
                       </div>
                     </div>
 
@@ -345,17 +353,30 @@ export default function GlowUp() {
                 Hall of Fame
               </h3>
               <div className="space-y-4">
-                 {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => (
-                   <div key={goal.id} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group">
-                      <div>
-                        <div className="text-sm font-bold line-through text-white/30">{goal.name}</div>
-                        <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Conquered</div>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                         <Trophy className="w-5 h-5 text-green-500" />
-                      </div>
-                   </div>
-                 ))}
+                  {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => (
+                    <div key={goal.id} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-4 group">
+                       <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-bold text-white/50">{goal.name}</div>
+                            <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Conquered</div>
+                          </div>
+                          <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                             <Trophy className="w-5 h-5 text-green-500" />
+                          </div>
+                       </div>
+                       <Button 
+                          className="w-full bg-green-500/10 hover:bg-green-500/20 text-green-500 border border-green-500/20 font-bold"
+                          onClick={() => {
+                            setSelectedGoalId(goal.id);
+                            stashMutation.mutate("withdraw");
+                          }}
+                          disabled={stashMutation.isPending && selectedGoalId === goal.id}
+                       >
+                          <ArrowDownCircle className="w-4 h-4 mr-2" />
+                          Claim ₹{parseFloat(goal.currentAmount).toLocaleString('en-IN')}
+                       </Button>
+                    </div>
+                  ))}
                  {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length === 0 && (
                    <div className="p-10 text-center border border-white/5 border-dashed rounded-3xl opacity-30">
                       <p className="text-sm font-bold">No conquered missions yet.</p>
