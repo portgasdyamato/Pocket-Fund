@@ -27,12 +27,12 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
       <div className="flex flex-col items-center justify-center gap-6 relative z-10 h-full">
         <div className="relative w-44 h-44 flex items-center justify-center">
           {/* Circular Progress SVG */}
-          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 240 240">
             {/* Background Circle */}
             <circle
-              cx="80"
-              cy="80"
-              r="70"
+              cx="120"
+              cy="120"
+              r="85"
               fill="none"
               stroke="rgba(255,255,255,0.05)"
               strokeWidth="10"
@@ -40,19 +40,19 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
             />
             {/* Main Progress Circle */}
             <motion.circle
-              cx="80"
-              cy="80"
-              r="70"
+              cx="120"
+              cy="120"
+              r="85"
               fill="none"
               stroke="currentColor"
               strokeWidth="10"
               strokeLinecap="round"
-              initial={{ strokeDasharray: "0 440" }}
-              animate={{ strokeDasharray: `${(score / 100) * 440} 440` }}
+              initial={{ strokeDasharray: "0 534" }}
+              animate={{ strokeDasharray: `${(score / 100) * 534} 534` }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               className={getScoreColor(score)}
               style={{
-                filter: `drop-shadow(0 0 8px ${getGlowColor(score)})`
+                filter: `drop-shadow(0 0 15px ${getGlowColor(score)})`
               }}
             />
           </svg>
