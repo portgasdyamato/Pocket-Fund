@@ -294,53 +294,89 @@ export default function Dashboard() {
             {/* Wallet & Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div variants={item}>
-                <Card className="glass-morphism border-white/5 p-8 h-full relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full" />
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex justify-between items-start mb-8">
-                      <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
-                        <Wallet className="w-6 h-6 text-primary" />
-                      </div>
-                      <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
-                        <DialogTrigger asChild>
-                          <Button variant="ghost" size="icon" className="hover:bg-white/5 text-white/40 hover:text-white">
-                            <Plus className="w-6 h-6" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="glass-morphism border-white/10 text-white">
-                          <DialogHeader>
-                            <DialogTitle className="text-2xl font-bold">Refill Energy</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-6 pt-6">
-                            <div className="space-y-3">
-                              <Label className="text-sm font-bold text-white/60">Amount to Add (₹)</Label>
-                              <Input 
-                                type="number" 
-                                className="bg-white/5 border-white/10 h-14 text-xl font-bold focus:border-primary transition-all"
-                                placeholder="0.00"
-                                value={topUpAmount}
-                                onChange={(e) => setTopUpAmount(e.target.value)}
-                              />
-                            </div>
-                            <Button 
-                              className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90" 
-                              onClick={() => topUpMutation.mutate()}
-                              disabled={topUpMutation.isPending || !topUpAmount}
-                            >
-                              Confirm Energy Boost
-                            </Button>
+                <Card className="glass-morphism border-white/5 p-8 h-full relative overflow-hidden group min-h-[420px] flex flex-col justify-between">
+                  {/* Premium Background Effects */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -mr-32 -mt-32" />
+                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 blur-[100px] rounded-full -ml-24 -mb-24" />
+                  
+                  <div className="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-12">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase">Vault Secure</span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[10px] font-bold text-white/60 tracking-widest uppercase">Active Balance</span>
                           </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                    <div className="mt-auto">
-                      <p className="text-white/40 text-sm font-bold tracking-widest uppercase mb-1">Available Funds</p>
-                      <div className="text-5xl font-black tracking-tighter">
-                        ₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}
+                        </div>
+                        <div className="flex gap-2">
+                          <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-white/40 hover:text-white transition-all click-scale">
+                                <Plus className="w-6 h-6 border-2 border-white/20 rounded-lg p-0.5" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="glass-morphism border-white/10 text-white p-8">
+                              <DialogHeader>
+                                <DialogTitle className="text-3xl font-black tracking-tight">Refill Energy</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-8 pt-8">
+                                <div className="space-y-4">
+                                  <Label className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Amount to Add (₹)</Label>
+                                  <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-3xl font-black text-white/20">₹</span>
+                                    <Input 
+                                      type="number" 
+                                      className="bg-white/5 border-white/10 h-20 pl-12 text-4xl font-black focus:border-primary transition-all rounded-3xl"
+                                      placeholder="0.00"
+                                      value={topUpAmount}
+                                      onChange={(e) => setTopUpAmount(e.target.value)}
+                                    />
+                                  </div>
+                                </div>
+                                <Button 
+                                  className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-3xl premium-shadow click-scale" 
+                                  onClick={() => topUpMutation.mutate()}
+                                  disabled={topUpMutation.isPending || !topUpAmount}
+                                >
+                                  Confirm Energy Boost
+                                </Button>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-4 text-green-400 text-sm font-bold">
-                        <ArrowUpRight className="w-4 h-4" />
-                        <span>+12.5% vs last week</span>
+
+                      {/* Wallet Visual Element */}
+                      <div className="w-full h-32 relative mb-8">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/[0.01] rounded-3xl border border-white/10 flex flex-col p-6 justify-between overflow-hidden">
+                          <div className="flex justify-between items-start">
+                            <div className="w-10 h-8 bg-gradient-to-br from-yellow-300/40 to-yellow-600/20 rounded-md border border-yellow-500/20" /> {/* Chip */}
+                            <Wallet className="w-6 h-6 text-white/20" />
+                          </div>
+                          <div className="flex gap-4">
+                            <div className="text-[10px] font-mono text-white/20">****</div>
+                            <div className="text-[10px] font-mono text-white/20">****</div>
+                            <div className="text-[10px] font-mono text-white/20">****</div>
+                            <div className="text-[10px] font-mono text-white/40">{user?.id?.toString().slice(-4) || '8842'}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-auto">
+                      <p className="text-white/30 text-[10px] font-black tracking-[0.4em] uppercase mb-2">Available Funds</p>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-black text-white/20">₹</span>
+                        <div className="text-6xl font-black tracking-tighter tabular-nums text-white">
+                          {parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 mt-6 p-3 rounded-2xl bg-green-500/5 border border-green-500/10 w-fit">
+                        <div className="flex items-center gap-1.5 text-green-400 text-xs font-black">
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                          <span>+12.5% THIS WEEK</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -355,18 +391,21 @@ export default function Dashboard() {
             {/* Quick Actions Grid */}
             <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Zap, label: "Fight Plan", path: "/fight", color: "text-accent", bg: "bg-accent/10", border: "border-accent/20" },
-                { icon: TrendingUp, label: "Glow Up", path: "/glow-up", color: "text-primary", bg: "bg-primary/10", border: "border-primary/20" },
-                { icon: MessageCircle, label: "AI Coach", path: "/coach", color: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-400/20" },
-                { icon: Activity, label: "Analytics", path: "/expenses", color: "text-secondary", bg: "bg-secondary/10", border: "border-secondary/20" }
+                { icon: Zap, label: "FIGHT PLAN", path: "/fight", color: "text-[#f59e0b]", bg: "bg-[#f59e0b]/5", border: "border-[#f59e0b]/10", glow: "shadow-[#f59e0b]/20" },
+                { icon: TrendingUp, label: "GLOW UP", path: "/glow-up", color: "text-[#8b5cf6]", bg: "bg-[#8b5cf6]/5", border: "border-[#8b5cf6]/10", glow: "shadow-[#8b5cf6]/20" },
+                { icon: MessageCircle, label: "AI COACH", path: "/coach", color: "text-[#0ea5e9]", bg: "bg-[#0ea5e9]/5", border: "border-[#0ea5e9]/10", glow: "shadow-[#0ea5e9]/20" },
+                { icon: Activity, label: "ANALYTICS", path: "/expenses", color: "text-[#10b981]", bg: "bg-[#10b981]/5", border: "border-[#10b981]/10", glow: "shadow-[#10b981]/20" }
               ].map((action, i) => (
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className={`flex flex-col items-center justify-center p-6 rounded-3xl border ${action.border} ${action.bg} hover:scale-105 transition-all duration-300 click-scale group`}
+                  className={`flex flex-col items-center justify-center p-8 rounded-[32px] border ${action.border} ${action.bg} hover:scale-[1.03] hover:shadow-2xl ${action.glow} transition-all duration-300 click-scale group relative overflow-hidden`}
                 >
-                  <action.icon className={`w-8 h-8 ${action.color} mb-3 group-hover:scale-110 transition-transform`} />
-                  <span className="text-sm font-bold text-white/80">{action.label}</span>
+                  <div className={`absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
+                  <div className={`w-14 h-14 rounded-2xl ${action.bg} border ${action.border} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500`}>
+                    <action.icon className={`w-7 h-7 ${action.color}`} />
+                  </div>
+                  <span className="text-[10px] font-black text-white/40 tracking-[0.2em] group-hover:text-white transition-colors">{action.label}</span>
                 </button>
               ))}
             </motion.div>
