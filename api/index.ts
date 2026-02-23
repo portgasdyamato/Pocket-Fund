@@ -100,21 +100,36 @@ app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 
 app.use((req, res, next) => {
-  const origin = req.headers.origin || '*';
+  // Always use the request's host/origin instead of '*' when credentials: true is needed
+  const origin = req.headers.origin || (req.headers.host ? `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}` : '*');
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-requested-with');
   res.setHeader('Cache-Control', 'no-store, max-age=0');
+  
+  // Log request for debugging in Vercel logs
+  if (!req.path.startsWith('/_next') && !req.path.includes('hot-update')) {
+    console.log(`[Req] ${req.method} ${req.path}`);
+  }
+
   if (req.method === 'OPTIONS') return res.status(200).end();
   next();
 });
 
 let dbInstance: any = null;
 const getDb = () => {
-  if (!dbInstance && process.env.DATABASE_URL) {
-    const client = neon(process.env.DATABASE_URL);
-    dbInstance = drizzle(client);
+  if (!process.env.DATABASE_URL) {
+    console.error('[DB] DATABASE_URL is missing in environment variables!');
+    return null;
+  }
+  if (!dbInstance) {
+    try {
+      const client = neon(process.env.DATABASE_URL);
+      dbInstance = drizzle(client);
+    } catch (err: any) {
+      console.error('[DB] Initialization error:', err?.message);
+    }
   }
   return dbInstance;
 };
@@ -123,20 +138,23 @@ const getDb = () => {
 const isAuthenticated = async (req: any, res: any, next: any) => {
   const userId = req.cookies?.userId;
   if (!userId) {
-    console.log('[Auth] isAuthenticated: no userId cookie, path:', req.path);
+    console.log(`[Auth] 401: No userId cookie for path: ${req.path}`);
     return res.status(401).json({ message: "Not authenticated" });
   }
+  
   try {
     const db = getDb();
+    if (!db) throw new Error("DB not available");
+
     const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
     if (!user) {
-      console.log('[Auth] isAuthenticated: userId cookie present but user not in DB:', userId);
+      console.log(`[Auth] 401: Cookie has userId ${userId} but not found in DB`);
       return res.status(401).json({ message: "User not found" });
     }
     req.user = user;
     next();
   } catch (err: any) {
-    console.error('[Auth] isAuthenticated DB error:', err?.message);
+    console.error(`[Auth] Middleware error at ${req.path}:`, err?.message);
     return res.status(500).json({ message: "Auth check failed" });
   }
 };
@@ -530,7 +548,11 @@ Guidelines:
 
 // Helper — always use env var so it exactly matches what's in Google Console
 const getCallbackUrl = (req: any): string => {
-  return process.env.GOOGLE_CALLBACK_URL || `https://${req.headers.host}/api/auth/google/callback`;
+  if (process.env.GOOGLE_CALLBACK_URL) return process.env.GOOGLE_CALLBACK_URL;
+  
+  const protocol = req.headers['x-forwarded-proto'] || 'http';
+  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  return `${protocol}://${host}/api/auth/google/callback`;
 };
 
 app.get(['/api/auth/google', '/auth/google'], (req: any, res: any) => {
@@ -567,7 +589,7 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req: any,
 
   try {
     const callbackUrl = getCallbackUrl(req);
-    console.log('[Auth] Exchanging code for tokens, callbackUrl:', callbackUrl);
+    console.log('[Auth] Exchanging code for tokens. Callback:', callbackUrl);
 
     // 1. Exchange code for access token
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -583,8 +605,6 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req: any,
     });
 
     const tokens = await tokenRes.json();
-    console.log('[Auth] Token exchange status:', tokenRes.status, tokens.error || 'OK');
-
     if (!tokens.access_token) {
       console.error('[Auth] Token exchange failed:', JSON.stringify(tokens));
       return res.redirect('/?auth_error=token_failed');
@@ -595,53 +615,69 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req: any,
       headers: { Authorization: `Bearer ${tokens.access_token}` },
     });
     const gUser = await userRes.json();
-    console.log('[Auth] Google user fetched:', gUser.email, 'id:', gUser.id);
-
-    if (!gUser.id) {
-      console.error('[Auth] Failed to get user from Google:', JSON.stringify(gUser));
+    
+    if (!gUser.id || !gUser.email) {
+      console.error('[Auth] Invalid user info from Google:', JSON.stringify(gUser));
       return res.redirect('/?auth_error=userinfo_failed');
     }
 
-    // 3. Upsert user in DB (only update safe identity fields, never walletBalance)
-    await getDb()
-      .insert(usersTable)
-      .values({
+    // DEBUG LOG FOR USER'S FRIEND
+    if (gUser.email === 'preetin614@gmail.com') {
+      console.log(`[Auth][DEBUG] Friend detected: ${gUser.email}. Running DB logic.`);
+    }
+
+    const db = getDb();
+    if (!db) throw new Error("Database initialization failed");
+
+    // 3. ROBUST UPSERT: 
+    // First, try to find user by ID
+    let [existingUser] = await db.select().from(usersTable).where(eq(usersTable.id, String(gUser.id)));
+    
+    // If not found by ID, try by email (prevents unique constraint crash)
+    if (!existingUser) {
+      const [userWithEmail] = await db.select().from(usersTable).where(eq(usersTable.email, gUser.email));
+      existingUser = userWithEmail;
+    }
+
+    if (existingUser) {
+      // UPDATE existing user with latest info
+      await db.update(usersTable).set({
+        id: String(gUser.id), // Ensure the Google ID is linked
+        email: gUser.email,
+        firstName: gUser.given_name,
+        lastName: gUser.family_name,
+        profileImageUrl: gUser.picture,
+        updatedAt: new Date(),
+      }).where(eq(usersTable.email, gUser.email));
+      console.log(`[Auth] Existing user updated: ${gUser.email}`);
+    } else {
+      // NEW USER: Insert
+      await db.insert(usersTable).values({
         id: String(gUser.id),
         email: gUser.email,
         firstName: gUser.given_name,
         lastName: gUser.family_name,
         profileImageUrl: gUser.picture,
         onboardingStatus: 'step_1',
-      })
-      .onConflictDoUpdate({
-        target: usersTable.id,
-        set: {
-          email: gUser.email,
-          firstName: gUser.given_name,
-          lastName: gUser.family_name,
-          profileImageUrl: gUser.picture,
-          updatedAt: new Date(),
-        },
       });
-
-    console.log('[Auth] User upserted, setting auth cookie for userId:', gUser.id);
+      console.log(`[Auth] New user created: ${gUser.email}`);
+    }
 
     // 4. Set auth cookie
-    // 'lax' is generally better for top-level redirects (Google -> App)
+    const isHttps = req.headers['x-forwarded-proto'] === 'https' || req.secure;
     res.cookie('userId', String(gUser.id), {
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       httpOnly: true,
-      secure: true,
+      secure: isHttps,
       sameSite: 'lax',
     });
 
-    // 5. Redirect to dashboard
-    console.log('[Auth] Login successful for:', gUser.email, 'Redirecting to /');
+    console.log(`[Auth] Success for ${gUser.email}. Redirecting to app.`);
     return res.redirect('/');
 
   } catch (err: any) {
-    console.error('[Auth] Callback error:', err?.message || err);
+    console.error('[Auth] CALLBACK ERROR:', err?.stack || err?.message);
     return res.redirect('/?auth_error=server_error');
   }
 });
