@@ -122,12 +122,23 @@ const getDb = () => {
 // --- AUTH MIDDLEWARE ---
 const isAuthenticated = async (req: any, res: any, next: any) => {
   const userId = req.cookies?.userId;
-  if (!userId) return res.status(401).json({ message: "Not authenticated" });
-  const db = getDb();
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
-  if (!user) return res.status(401).json({ message: "User not found" });
-  req.user = user;
-  next();
+  if (!userId) {
+    console.log('[Auth] isAuthenticated: no userId cookie, path:', req.path);
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+  try {
+    const db = getDb();
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, String(userId)));
+    if (!user) {
+      console.log('[Auth] isAuthenticated: userId cookie present but user not in DB:', userId);
+      return res.status(401).json({ message: "User not found" });
+    }
+    req.user = user;
+    next();
+  } catch (err: any) {
+    console.error('[Auth] isAuthenticated DB error:', err?.message);
+    return res.status(500).json({ message: "Auth check failed" });
+  }
 };
 
 // --- AI SERVICE ---
@@ -515,24 +526,129 @@ Guidelines:
   res.json({ response: responseText });
 });
 
-app.get(['/api/auth/google', '/auth/google'], (req, res) => {
+// ─── GOOGLE OAUTH ───────────────────────────────────────────────────────────
+
+// Helper — always use env var so it exactly matches what's in Google Console
+const getCallbackUrl = (req: any): string => {
+  return process.env.GOOGLE_CALLBACK_URL || `https://${req.headers.host}/api/auth/google/callback`;
+};
+
+app.get(['/api/auth/google', '/auth/google'], (req: any, res: any) => {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const callbackUrl = `https://${req.headers.host}/api/auth/google/callback`;
-  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(callbackUrl)}&response_type=code&scope=profile%20email&prompt=consent`);
+  if (!clientId) {
+    return res.status(500).json({ error: 'GOOGLE_CLIENT_ID not configured' });
+  }
+  const callbackUrl = getCallbackUrl(req);
+  console.log('[Auth] Starting Google OAuth, callbackUrl:', callbackUrl);
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: callbackUrl,
+    response_type: 'code',
+    scope: 'profile email',
+    prompt: 'select_account',    // Always show account picker
+    access_type: 'online',
+  });
+  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
 });
 
-app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req, res) => {
-  const { code } = req.query;
-  const callbackUrl = `https://${req.headers.host}/api/auth/google/callback`;
-  const tRes = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ code: code as string, client_id: process.env.GOOGLE_CLIENT_ID!, client_secret: process.env.GOOGLE_CLIENT_SECRET!, redirect_uri: callbackUrl, grant_type: 'authorization_code' }) });
-  const tokens = await tRes.json();
-  const uRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', { headers: { Authorization: `Bearer ${tokens.access_token}` } });
-  const gUser = await uRes.json();
-  await getDb().insert(usersTable).values({ id: String(gUser.id), email: gUser.email, firstName: gUser.given_name, lastName: gUser.family_name, profileImageUrl: gUser.picture, onboardingStatus: 'step_1' }).onConflictDoUpdate({ target: usersTable.id, set: { email: gUser.email, updatedAt: new Date() } });
-  res.cookie('userId', String(gUser.id), { path: '/', maxAge: 7*24*60*60*1000, httpOnly: true, secure: true, sameSite: 'lax' });
+app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req: any, res: any) => {
+  const { code, error: oauthError } = req.query;
+
+  // Google returned an error (e.g., user denied access)
+  if (oauthError) {
+    console.error('[Auth] Google OAuth error:', oauthError);
+    return res.redirect('/?auth_error=' + encodeURIComponent(String(oauthError)));
+  }
+
+  if (!code) {
+    console.error('[Auth] No code received from Google');
+    return res.redirect('/?auth_error=no_code');
+  }
+
+  try {
+    const callbackUrl = getCallbackUrl(req);
+    console.log('[Auth] Exchanging code for tokens, callbackUrl:', callbackUrl);
+
+    // 1. Exchange code for access token
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code: code as string,
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        redirect_uri: callbackUrl,
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    const tokens = await tokenRes.json();
+    console.log('[Auth] Token exchange status:', tokenRes.status, tokens.error || 'OK');
+
+    if (!tokens.access_token) {
+      console.error('[Auth] Token exchange failed:', JSON.stringify(tokens));
+      return res.redirect('/?auth_error=token_failed');
+    }
+
+    // 2. Fetch user profile from Google
+    const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.access_token}` },
+    });
+    const gUser = await userRes.json();
+    console.log('[Auth] Google user fetched:', gUser.email, 'id:', gUser.id);
+
+    if (!gUser.id) {
+      console.error('[Auth] Failed to get user from Google:', JSON.stringify(gUser));
+      return res.redirect('/?auth_error=userinfo_failed');
+    }
+
+    // 3. Upsert user in DB (only update safe identity fields, never walletBalance)
+    await getDb()
+      .insert(usersTable)
+      .values({
+        id: String(gUser.id),
+        email: gUser.email,
+        firstName: gUser.given_name,
+        lastName: gUser.family_name,
+        profileImageUrl: gUser.picture,
+        onboardingStatus: 'step_1',
+      })
+      .onConflictDoUpdate({
+        target: usersTable.id,
+        set: {
+          email: gUser.email,
+          firstName: gUser.given_name,
+          lastName: gUser.family_name,
+          profileImageUrl: gUser.picture,
+          updatedAt: new Date(),
+        },
+      });
+
+    console.log('[Auth] User upserted, setting auth cookie for userId:', gUser.id);
+
+    // 4. Set auth cookie
+    // sameSite:'none' + secure:true is required for cookies set during OAuth cross-site redirects
+    res.cookie('userId', String(gUser.id), {
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+
+    // 5. Redirect to dashboard
+    console.log('[Auth] Login successful, redirecting to dashboard');
+    return res.redirect('/');
+
+  } catch (err: any) {
+    console.error('[Auth] Callback error:', err?.message || err);
+    return res.redirect('/?auth_error=server_error');
+  }
+});
+
+app.get(['/api/logout', '/logout'], (req: any, res: any) => {
+  res.clearCookie('userId', { path: '/', secure: true, sameSite: 'none' });
   res.redirect('/');
 });
-
-app.get('/api/logout', (req, res) => { res.clearCookie('userId', { path: '/' }); res.redirect('/'); });
 
 export default app;

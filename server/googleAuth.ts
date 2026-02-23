@@ -13,15 +13,15 @@ export function getSession() {
   
   return session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
+    resave: true,            // Must be true to avoid race conditions with MemoryStore
     saveUninitialized: false,
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: false,         // false for localhost (http, not https)
+      sameSite: "lax",      // lax works for same-origin OAuth redirects
       maxAge: sessionTtl,
-      domain: process.env.NODE_ENV === "development" ? "localhost" : undefined
+      // DO NOT set domain for localhost — it breaks cookies in modern browsers
     },
   });
 }
@@ -109,8 +109,16 @@ export async function setupAuth(app: Express) {
   app.get("/api/auth/google/callback", 
     passport.authenticate("google", { failureRedirect: "/?auth_error=1" }),
     (req, res) => {
-      // Successful authentication — redirect to dashboard
-      res.redirect("/");
+      // CRITICAL: explicitly save session before redirecting
+      // Without this, the MemoryStore write is async and the browser
+      // may follow the redirect before the session is persisted,
+      // causing /api/auth/user to return 401 (showing the landing page again).
+      req.session.save((err) => {
+        if (err) {
+          console.error("[Auth] Session save error after login:", err);
+        }
+        res.redirect("/");
+      });
     }
   );
 

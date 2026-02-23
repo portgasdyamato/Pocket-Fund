@@ -4,30 +4,26 @@ import type { User } from "@shared/schema";
 export function useAuth() {
   const { data: user, isLoading, error } = useQuery<User>({
     queryKey: ["/api/auth/user"],
-    retry: false,
-    staleTime: 0,
-    gcTime: 0, // Ensure no old auth data persists
+    retry: 3,                    // Retry up to 3 times — handles post-OAuth session race condition
+    retryDelay: 500,             // Wait 500ms between retries
+    staleTime: 30_000,           // Cache for 30s to avoid hammering the server
+    gcTime: 0,                   // Don't persist old auth data after GC
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     queryFn: async () => {
-      console.log("[Auth] Checking authentication status...");
       const response = await fetch("/api/auth/user", {
         credentials: "include"
       });
       
       if (response.status === 401) {
-        console.warn("[Auth] User is not authenticated (401)");
         return null;
       }
       
       if (!response.ok) {
-        console.error(`[Auth] Error fetching user: ${response.status} ${response.statusText}`);
-        throw new Error("Failed to fetch user");
+        throw new Error(`Auth check failed: ${response.status}`);
       }
       
-      const userData = await response.json();
-      console.log("[Auth] Successfully authenticated as:", userData.email);
-      return userData;
+      return await response.json();
     }
   });
 
