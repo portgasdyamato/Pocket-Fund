@@ -182,7 +182,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.updateTransactionTag(id, tag);
       
       if (tag) {
-        await storage.updateStreak(req.user.claims.sub, 'fight');
+        await storage.updateStreak(req.user.id, 'fight');
       }
       
       res.json({ success: true });

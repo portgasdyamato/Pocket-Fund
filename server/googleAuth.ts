@@ -11,8 +11,6 @@ export function getSession() {
     throw new Error("SESSION_SECRET environment variable is required");
   }
   
-  // Use default MemoryStore for serverless (sessions won't persist across function invocations)
-  // For production, consider using a Redis-based store or JWT tokens
   return session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -29,8 +27,9 @@ export function getSession() {
 }
 
 async function upsertUser(profile: any) {
+  // Only upsert safe identity fields — never touch walletBalance or other user data
   await storage.upsertUser({
-    id: profile.id,
+    id: String(profile.id),  // Ensure it's always a string
     email: profile.emails?.[0]?.value,
     firstName: profile.name?.givenName,
     lastName: profile.name?.familyName,
@@ -39,10 +38,9 @@ async function upsertUser(profile: any) {
 }
 
 export async function setupAuth(app: Express) {
-  // Check environment variables at runtime, not at module load time
   if (!process.env.GOOGLE_CLIENT_ID) {
     console.error("GOOGLE_CLIENT_ID not set");
-    return; // Don't crash, just skip auth setup
+    return;
   }
   
   if (!process.env.GOOGLE_CLIENT_SECRET) {
@@ -70,31 +68,57 @@ export async function setupAuth(app: Express) {
       async (accessToken, refreshToken, profile, done) => {
         try {
           await upsertUser(profile);
-          return done(null, profile);
+          // Fetch the full user from DB to ensure we have the correct object
+          const dbUser = await storage.getUser(String(profile.id));
+          if (!dbUser) {
+            return done(new Error("Failed to create/retrieve user"), false);
+          }
+          return done(null, dbUser);
         } catch (error) {
+          console.error("[Auth] Error in GoogleStrategy:", error);
           return done(error, false);
         }
       }
     )
   );
 
-  passport.serializeUser((user: Express.User, cb) => cb(null, user));
-  passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+  // ✅ FIXED: Store only the user's DB ID in the session (not the giant profile object)
+  passport.serializeUser((user: any, cb) => {
+    cb(null, user.id);
+  });
+
+  // ✅ FIXED: Re-fetch the user from DB using the stored ID
+  passport.deserializeUser(async (id: string, cb) => {
+    try {
+      const user = await storage.getUser(String(id));
+      if (!user) {
+        return cb(null, false);
+      }
+      cb(null, user);
+    } catch (error) {
+      console.error("[Auth] deserializeUser error:", error);
+      cb(error, false);
+    }
+  });
 
   app.get("/api/auth/google", passport.authenticate("google", {
-    scope: ["profile", "email"]
+    scope: ["profile", "email"],
+    prompt: "select_account"  // Always show account picker for multi-account support
   }));
 
   app.get("/api/auth/google/callback", 
-    passport.authenticate("google", { failureRedirect: "/login" }),
+    passport.authenticate("google", { failureRedirect: "/?auth_error=1" }),
     (req, res) => {
+      // Successful authentication — redirect to dashboard
       res.redirect("/");
     }
   );
 
   app.get("/api/logout", (req, res) => {
     req.logout(() => {
-      res.redirect("/");
+      req.session.destroy(() => {
+        res.redirect("/");
+      });
     });
   });
 }
