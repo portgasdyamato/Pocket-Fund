@@ -627,17 +627,17 @@ app.get(['/api/auth/google/callback', '/auth/google/callback'], async (req: any,
     console.log('[Auth] User upserted, setting auth cookie for userId:', gUser.id);
 
     // 4. Set auth cookie
-    // sameSite:'none' + secure:true is required for cookies set during OAuth cross-site redirects
+    // 'lax' is generally better for top-level redirects (Google -> App)
     res.cookie('userId', String(gUser.id), {
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
     });
 
     // 5. Redirect to dashboard
-    console.log('[Auth] Login successful, redirecting to dashboard');
+    console.log('[Auth] Login successful for:', gUser.email, 'Redirecting to /');
     return res.redirect('/');
 
   } catch (err: any) {

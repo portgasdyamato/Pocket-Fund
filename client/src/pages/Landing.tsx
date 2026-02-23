@@ -38,8 +38,45 @@ export default function Landing() {
     window.location.href = '/api/auth/google';
   };
 
+  // Read auth error from URL — set by server when OAuth fails
+  const params = new URLSearchParams(window.location.search);
+  const authError = params.get('auth_error');
+
+  const errorMessages: Record<string, string> = {
+    token_failed: 'Google sign-in failed. This usually means the app is in "Testing" mode in Google Cloud Console and the account is not added as a Test User.',
+    userinfo_failed: 'Could not fetch your Google profile. Please try again.',
+    no_code: 'Google did not return an auth code. Try signing in again.',
+    server_error: 'A server error occurred during sign-in. Check Vercel logs.',
+    access_denied: 'You cancelled the sign-in.',
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/30 relative overflow-hidden">
+      {/* Auth Error Banner */}
+      {authError && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] max-w-lg w-[90%]">
+          <div className="bg-red-500/20 border border-red-500/30 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-3 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-sm font-black text-center">!</span>
+              </div>
+              <p className="text-red-400 font-black text-base">Authentication Failed</p>
+            </div>
+            <p className="text-red-100/80 text-sm leading-relaxed">
+              {errorMessages[authError] || `Error: ${authError}`}
+            </p>
+            <div className="bg-red-500/10 rounded-xl p-3 border border-red-500/20 mt-2">
+              <p className="text-xs text-red-300 font-bold mb-1">PRO-TIP FOR DEVELOPER:</p>
+              <p className="text-[11px] text-red-200/60 leading-tight italic">
+                Check Google Cloud Console → OAuth Consent Screen → Publishing Status. 
+                If it's "Testing", you MUST add your friend's email (preetin614@gmail.com) 
+                to the "Test users" list or click "Publish App".
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-blob" />
