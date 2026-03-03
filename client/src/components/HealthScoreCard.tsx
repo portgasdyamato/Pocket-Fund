@@ -70,92 +70,127 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
         </div>
 
         {/* Circular Matrix Progress */}
-        <div className="relative w-56 h-56 flex items-center justify-center overflow-visible">
+        <div className="relative w-64 h-64 flex items-center justify-center overflow-visible">
           {/* Animated Background Rings */}
           <div className="absolute inset-0 flex items-center justify-center overflow-visible">
             <motion.div 
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
               className="w-full h-full border border-dashed border-white/5 rounded-full"
             />
             <motion.div 
               animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute w-[80%] h-[80%] border border-dotted border-white/10 rounded-full"
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute w-[85%] h-[85%] border border-dotted border-white/10 rounded-full"
+            />
+            {/* Inner Glow Pulse */}
+            <motion.div 
+              animate={{ opacity: [0.05, 0.1, 0.05], scale: [0.95, 1.05, 0.95] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className={`absolute w-[60%] h-[60%] rounded-full blur-3xl ${info.color} opacity-10`}
             />
           </div>
 
-          <svg className="w-full h-full transform -rotate-90 relative z-10 overflow-visible" viewBox="-30 -30 300 300">
+          <svg className="w-full h-full transform -rotate-90 relative z-10 overflow-visible" viewBox="-40 -40 320 320">
             <defs>
-              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={info.glow} />
-                <stop offset="100%" stopColor="transparent" />
+              <linearGradient id="mainProgressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={info.glow} stopOpacity="0.2" />
+                <stop offset="50%" stopColor={info.glow} stopOpacity="1" />
+                <stop offset="100%" stopColor="white" />
               </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
             </defs>
-            {/* Background Circle */}
+            
+            {/* Background Track with glass effect */}
             <circle
               cx="120"
               cy="120"
-              r="95"
+              r="100"
               fill="none"
               stroke="rgba(255,255,255,0.03)"
-              strokeWidth="12"
+              strokeWidth="14"
               strokeLinecap="round"
             />
-            {/* Main Progress Circle */}
+            
+            {/* Main Progress Circle with Gradient and Glow */}
             <motion.circle
               cx="120"
               cy="120"
-              r="95"
+              r="100"
               fill="none"
-              stroke="currentColor"
-              strokeWidth="12"
+              stroke="url(#mainProgressGradient)"
+              strokeWidth="14"
               strokeLinecap="round"
-              strokeDasharray="597"
-              initial={{ strokeDashoffset: 597 }}
-              animate={{ strokeDashoffset: 597 - (score / 100) * 597 }}
-              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className={info.color}
+              strokeDasharray="628"
+              initial={{ strokeDashoffset: 628 }}
+              animate={{ strokeDashoffset: 628 - (score / 100) * 628 }}
+              transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{
-                filter: `drop-shadow(0 0 25px ${info.glow})`
+                filter: `drop-shadow(0 0 12px ${info.glow})`
               }}
             />
+
+            {/* Glowing Head Point */}
+            <motion.circle
+              cx="120"
+              cy="20"
+              r="4"
+              fill="white"
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: 1,
+                rotate: (score / 100) * 360 
+              }}
+              transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              transform-origin="120 120"
+              style={{ filter: 'drop-shadow(0 0 8px white)' }}
+            />
             
-            {/* Inner Decorative Dashes */}
-            {[...Array(12)].map((_, i) => (
-              <line
-                key={i}
-                x1="120"
-                y1="35"
-                x2="120"
-                y2="45"
-                stroke="rgba(255,255,255,0.1)"
-                strokeWidth="2"
-                transform={`rotate(${i * 30} 120 120)`}
-              />
-            ))}
+            {/* Precision Tick Marks */}
+            {[...Array(60)].map((_, i) => {
+              const rotate = i * 6;
+              const isMajor = i % 5 === 0;
+              return (
+                <line
+                  key={i}
+                  x1="120"
+                  y1={isMajor ? "28" : "32"}
+                  x2="120"
+                  y2="38"
+                  stroke={isMajor ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)"}
+                  strokeWidth={isMajor ? "2" : "1"}
+                  transform={`rotate(${rotate} 120 120)`}
+                />
+              );
+            })}
           </svg>
           
           <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-col items-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8, type: "spring", damping: 15 }}
+              className="flex flex-col items-center justify-center gap-1"
             >
-              <div className="flex items-center gap-1.5 mb-[-2px]">
-                <Activity className={`w-3.5 h-3.5 ${info.color} opacity-60`} />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Vitality</span>
+              <div className="flex items-center gap-1.5 mb-[-4px]">
+                <Activity className={`w-3.5 h-3.5 ${info.color} opacity-80`} />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Vitality</span>
               </div>
-              <div className="relative group">
-                <span className={`text-7xl font-black tracking-tighter tabular-nums ${info.color} relative z-10`}>
+              
+              <div className="relative flex items-center justify-center">
+                <span className={`text-7xl font-black tracking-tighter tabular-nums ${info.color} relative z-10 drop-shadow-2xl`}>
                   {score}
                 </span>
-                <span className={`absolute inset-0 blur-2xl ${info.color} opacity-20 scale-110`}>
-                  {score}
-                </span>
+                <div className={`absolute inset-0 blur-3xl ${info.color} opacity-20 scale-150 rounded-full`} />
               </div>
-              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mt-1">
+
+              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mt-[-4px]">
                 Score Matrix
               </span>
             </motion.div>
