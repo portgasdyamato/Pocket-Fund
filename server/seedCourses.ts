@@ -226,6 +226,14 @@ const LITERACY_COURSES = [
   }
 ];
 
+const CHALLENGE_QUESTS = [
+  { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target", category: "challenge" },
+  { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield", category: "challenge" },
+  { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee", category: "challenge" },
+  { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap", category: "challenge" },
+  { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag", category: "challenge" },
+];
+
 export async function seedLiteracyCourses() {
   const { db } = await import("./db");
   const { quests } = await import("@shared/schema");
@@ -234,13 +242,21 @@ export async function seedLiteracyCourses() {
 
   const { eq } = await import("drizzle-orm");
   
-  // Wipe ALL literacy quests before re-seeding to ensure fresh content and correct quiz counts
-  await db.delete(quests).where(eq(quests.category, "literacy"));
-  console.log("🗑️  Nuked all stale literacy courses to make room for the new content library.");
+  // Wipe ALL quests (literacy AND challenges) for a clean state
+  await db.delete(quests);
+  console.log("🗑️  Nuked all stale quests to make room for the new content library.");
 
+  // Insert Challenges
+  for (const challenge of CHALLENGE_QUESTS) {
+    await db.insert(quests).values(challenge);
+    console.log(`✅ Deployed Challenge: "${challenge.title}"`);
+  }
+
+  // Insert Mega-Courses
   for (const course of LITERACY_COURSES) {
     await db.insert(quests).values(course);
     console.log(`✅ Deployed Mega-Course: "${course.title}" (${course.points} XP)`);
   }
-  console.log(`✨ Done! ${LITERACY_COURSES.length} high-fidelity, article-length courses deployed to the database.`);
+  
+  console.log(`✨ Done! ${CHALLENGE_QUESTS.length + LITERACY_COURSES.length} high-fidelity courses and challenges are live.`);
 }

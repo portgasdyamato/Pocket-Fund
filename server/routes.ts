@@ -322,11 +322,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: re-seed courses
   app.post('/api/admin/seed-courses', async (_req, res) => {
     try {
+      console.log("[Admin API] Force re-seeding literacy courses...");
       await seedLiteracyCourses();
-      res.json({ success: true, message: `Seeded courses successfully.` });
-    } catch (error) {
-      console.error("Error seeding courses:", error);
-      res.status(500).json({ message: "Failed to seed courses" });
+      res.json({ success: true, message: `High-fidelity course content synchronized successfully.` });
+    } catch (error: any) {
+      console.error("Critical error during course seeding:", error);
+      res.status(500).json({ message: error.message || "Failed to seed courses" });
     }
   });
 

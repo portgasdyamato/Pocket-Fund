@@ -191,30 +191,38 @@ export default function LearnPage() {
             <AnimatePresence mode="wait">
               {/* Completed */}
               {isCompleted ? (
-                <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center text-center py-20 space-y-8">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-primary blur-3xl opacity-20 rounded-full" />
-                    <div className="w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-[32%] flex items-center justify-center relative shadow-2xl">
-                      <Trophy className="w-16 h-16 text-white" />
+                /* Completion Screen - THE WOW FACTOR */
+                <motion.div key="done" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16 px-8 max-w-2xl mx-auto">
+                  <div className="relative mb-12">
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", damping: 10 }} className="w-32 h-32 rounded-[40px] bg-gradient-to-tr from-yellow-400 to-orange-500 mx-auto flex items-center justify-center premium-shadow relative z-10">
+                      <Trophy className="w-16 h-16 text-black" />
+                    </motion.div>
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-44 h-44 -top-6 -left-6 mx-auto border-2 border-dashed border-yellow-500/20 rounded-full" />
+                  </div>
+
+                  <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-4">Mastery <span className="text-primary">Achieved!</span></h2>
+                  <p className="text-white/50 text-xl font-medium mb-10 leading-relaxed">
+                    You've successfully completed <span className="text-white">"{activeQuest.title}"</span>. 
+                    Your financial intelligence is growing.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-4 mb-12">
+                    <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Knowledge</p>
+                      <p className="text-3xl font-black italic">100%</p>
+                    </div>
+                    <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-1">XP Earned</p>
+                      <p className="text-3xl font-black italic">+{activeQuest.points}</p>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">Course Complete</p>
-                    <h2 className="text-5xl font-black tracking-tighter mb-4">{activeQuest.title}</h2>
-                    <p className="text-xl text-white/50 max-w-lg mx-auto">You've mastered this lesson and earned <span className="text-yellow-400 font-black">{activeQuest.points} XP</span> toward your financial education.</p>
+
+                  <div className="flex flex-col gap-4">
+                    <Button onClick={closeQuest} className="h-16 rounded-2xl bg-primary text-white font-black text-lg uppercase tracking-widest premium-shadow hover:scale-[1.02] active:scale-[0.98] transition-all">
+                      Collect Rewards & Continue
+                    </Button>
+                    <p className="text-white/20 text-xs font-bold uppercase tracking-[0.3em]">Module Verified by Financial GlowUp Academy</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 w-full max-w-sm">
-                    {[{label: "Slides Read", val: slides.length}, {label: "Questions", val: quizzes.length}, {label: "XP Earned", val: `+${activeQuest.points}`}].map(s => (
-                      <div key={s.label} className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
-                        <p className="text-2xl font-black text-primary">{s.val}</p>
-                        <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">{s.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <Button size="lg" onClick={closeQuest} className="h-14 px-12 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-base premium-shadow">
-                    Back to Courses
-                  </Button>
                 </motion.div>
 
               ) : step === 0 ? (
@@ -418,8 +426,8 @@ export default function LearnPage() {
                     await refetchQuests();
                     await refetchUserQuests();
                     toast({ title: "Database Synchronized", description: "The latest course content has been downloaded." });
-                  } catch (e) {
-                    toast({ title: "Sync Failed", variant: "destructive" });
+                  } catch (e: any) {
+                    toast({ title: "Sync Failed", description: e.message || "Could not reach database.", variant: "destructive" });
                   }
                 }}
               >
@@ -427,7 +435,7 @@ export default function LearnPage() {
               </Button>
             </div>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter italic uppercase">Learn <span className="text-primary">& Earn</span></h1>
-            <p className="text-white/40 text-lg mt-3 max-w-xl">Master money through deep-dive articles and comprehensive knowledge checks.</p>
+            <p className="text-white/40 text-lg mt-3 max-w-xl font-medium leading-relaxed">Master money through deep-dive articles and comprehensive knowledge checks. <span className="text-primary/60">Level up your financial IQ.</span></p>
           </div>
           {/* Progress overview */}
           <div className="flex gap-4 shrink-0">
@@ -490,26 +498,29 @@ export default function LearnPage() {
                       <div className="flex items-center gap-2 mb-2">
                         <span className={`px-2 py-0.5 rounded-lg border text-[9px] font-black uppercase tracking-widest ${getDifficultyColor(quest.difficulty)}`}>{quest.difficulty}</span>
                       </div>
-                      <h3 className="text-xl font-black tracking-tight leading-snug mb-2">{quest.title}</h3>
-                      <p className="text-sm text-white/40 leading-relaxed line-clamp-2">{quest.description}</p>
+                    <h3 className="text-xl font-black tracking-tight mb-2 group-hover:text-primary transition-colors">{quest.title}</h3>
+                    <p className="text-sm text-white/40 line-clamp-2 mb-6 leading-relaxed flex-1">{quest.description}</p>
                     </div>
 
-                    {/* Meta */}
-                    <div className="flex items-center justify-between mt-5 pt-4 border-t border-white/5">
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] text-white/30 font-bold">{content.slides.length} lessons</span>
-                        <span className="text-white/10">·</span>
-                        <span className="text-[10px] text-white/30 font-bold">{content.quizzes.length} quiz</span>
+                    <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
+                      <div className="flex items-center gap-4">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-white/20">Duration</span>
+                          <span className="text-[11px] font-black text-white/60">~{content.slides.length * 2} mins</span>
+                        </div>
+                        <div className="w-px h-6 bg-white/5" />
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-white/20">Questions</span>
+                          <span className="text-[11px] font-black text-white/60">{content.quizzes.length} Checks</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-[10px] font-black text-yellow-400">+{quest.points} XP</span>
+                      
+                      <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                        isDone ? "bg-green-500/10 text-green-500 border border-green-500/20" : "bg-primary text-white premium-shadow hover:scale-105 active:scale-95"
+                      }`}>
+                        {isDone ? "Review" : "Start Now"}
                       </div>
                     </div>
-
-                    <Button className={`w-full mt-4 h-11 rounded-xl font-black text-xs uppercase tracking-widest ${isDone ? "bg-white/5 border border-white/10 text-white/40 hover:bg-white/10" : "bg-primary hover:bg-primary/90 text-white"}`}>
-                      {isDone ? "Review Again" : "Start Learning"}
-                    </Button>
                   </div>
                 </div>
               </motion.div>
