@@ -506,7 +506,9 @@ export default function LearnPage() {
                       <div className="flex items-center gap-4">
                         <div className="flex flex-col">
                           <span className="text-[9px] font-black uppercase tracking-widest text-white/20">Duration</span>
-                          <span className="text-[11px] font-black text-white/60">~{content.slides.length * 2} mins</span>
+                          <span className="text-[11px] font-black text-white/60">
+                            ~{(content as any).duration || content.slides.length * 2} mins
+                          </span>
                         </div>
                         <div className="w-px h-6 bg-white/5" />
                         <div className="flex flex-col">
