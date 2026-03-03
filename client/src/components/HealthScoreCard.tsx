@@ -47,7 +47,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
   const StatusIcon = info.icon;
 
   return (
-    <Card className="glass-morphism border-white/5 p-8 h-full relative overflow-hidden group min-h-[420px] flex flex-col justify-between">
+    <Card className="glass-morphism border-white/5 p-8 h-full relative group min-h-[420px] flex flex-col justify-between">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className={`absolute -top-24 -right-24 w-64 h-64 bg-gradient-to-br ${info.gradient} opacity-5 blur-[100px] rounded-full`} />
@@ -70,9 +70,9 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
         </div>
 
         {/* Circular Matrix Progress */}
-        <div className="relative w-56 h-56 flex items-center justify-center">
+        <div className="relative w-56 h-56 flex items-center justify-center overflow-visible">
           {/* Animated Background Rings */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center overflow-visible">
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -85,7 +85,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
             />
           </div>
 
-          <svg className="w-full h-full transform -rotate-90 relative z-10" viewBox="0 0 240 240">
+          <svg className="w-full h-full transform -rotate-90 relative z-10 overflow-visible" viewBox="-30 -30 300 300">
             <defs>
               <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor={info.glow} />
@@ -117,7 +117,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               className={info.color}
               style={{
-                filter: `drop-shadow(0 0 20px ${info.glow})`
+                filter: `drop-shadow(0 0 25px ${info.glow})`
               }}
             />
             
