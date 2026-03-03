@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChallengeCard from "@/components/ChallengeCard";
 import ThemeToggle from "@/components/ThemeToggle";
 import StreakCounter from "@/components/StreakCounter";
-import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star } from "lucide-react";
+import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star, Brain } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import type { Quest, UserQuest } from "@shared/schema";
 
 const container = {
   hidden: { opacity: 0 },
@@ -25,91 +29,69 @@ const item = {
 };
 
 export default function ChallengesPage() {
-  const [activeTab, setActiveTab] = useState("active");
+  const [activeTab, setActiveTab] = useState("available");
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const activeChallenges = [
-    {
-      id: '1',
-      title: 'No Coffee Shop Week',
-      difficulty: 'Medium' as const,
-      points: 500,
-      progress: 42,
-      timeRemaining: '3 days left',
-      isActive: true
-    },
-    {
-      id: '2',
-      title: 'Save $100 This Week',
-      difficulty: 'Easy' as const,
-      points: 250,
-      progress: 65,
-      timeRemaining: '2 days left',
-      isActive: true
-    },
-  ];
+  const { data: allQuests = [], isLoading: isLoadingQuests } = useQuery<Quest[]>({
+    queryKey: ["/api/quests"],
+  });
 
-  const availableChallenges = [
-    {
-      id: '3',
-      title: 'Track Every Expense',
-      difficulty: 'Hard' as const,
-      points: 1000,
-      progress: 0,
-      timeRemaining: '1 week',
-      isActive: false
-    },
-    {
-      id: '4',
-      title: 'Cook 5 Meals at Home',
-      difficulty: 'Medium' as const,
-      points: 400,
-      progress: 0,
-      timeRemaining: '1 week',
-      isActive: false
-    },
-    {
-      id: '5',
-      title: 'No Impulse Buys',
-      difficulty: 'Hard' as const,
-      points: 750,
-      progress: 0,
-      timeRemaining: '3 days',
-      isActive: false
-    },
-    {
-      id: '6',
-      title: 'Save $50 This Week',
-      difficulty: 'Easy' as const,
-      points: 200,
-      progress: 0,
-      timeRemaining: '1 week',
-      isActive: false
-    },
-  ];
+  const { data: userQuests = [] } = useQuery<UserQuest[]>({
+    queryKey: ["/api/user/quests"],
+  });
 
-  const completedChallenges = [
-    {
-      id: '7',
-      title: 'First Week Logging',
-      difficulty: 'Easy' as const,
-      points: 100,
-      progress: 100,
-      isActive: false
+  const joinMutation = useMutation({
+    mutationFn: async (questId: string) => {
+      return await apiRequest(`/api/quests/${questId}/join`, "POST");
     },
-    {
-      id: '8',
-      title: 'Budget Setup Pro',
-      difficulty: 'Medium' as const,
-      points: 300,
-      progress: 100,
-      isActive: false
-    },
-  ];
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/quests"] });
+      toast({ title: "Challenge Accepted!", description: "Check your dashboard for progress." });
+      setActiveTab("active");
+    }
+  });
+
+  const challenges = useMemo(() => {
+    return allQuests
+      .filter(q => q.category === 'challenge')
+      .map(quest => {
+        const userQuest = userQuests.find(uq => uq.questId === quest.id);
+        
+        return {
+          id: quest.id,
+          title: quest.title,
+          description: quest.description,
+          difficulty: (quest.difficulty as "Easy" | "Medium" | "Hard") || "Medium",
+          points: quest.points,
+          progress: userQuest?.completed ? 100 : 0,
+          isActive: !!userQuest && !userQuest.completed,
+          isCompleted: !!userQuest?.completed,
+          icon: quest.icon
+        };
+      });
+  }, [allQuests, userQuests]);
+
+  const activeChallenges = challenges.filter(c => c.isActive);
+  const availableChallenges = challenges.filter(c => !c.isActive && !c.isCompleted);
+  const completedChallenges = challenges.filter(c => c.isCompleted);
+
+  const stats = useMemo(() => {
+    const xp = challenges
+      .filter(c => c.isCompleted)
+      .reduce((sum, c) => sum + c.points, 0);
+    
+    return {
+      totalPoints: xp,
+      completedCount: completedChallenges.length,
+      activeCount: activeChallenges.length
+    };
+  }, [challenges, completedChallenges, activeChallenges]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
       {/* Premium Header */}
-      <header className="sticky top-[64px] z-50 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
+      <header className="sticky top-0 z-50 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/">
@@ -119,13 +101,10 @@ export default function ChallengesPage() {
             </Link>
             <div className="h-8 w-px bg-white/10 hidden md:block" />
             <h1 className="text-xl font-black tracking-tight flex items-center gap-2 uppercase tracking-widest">
-              Available <span className="text-primary italic">Challenges</span>
+              Financial <span className="text-primary italic">Missions</span>
             </h1>
           </div>
           <div className="flex items-center gap-4">
-             <div className="hidden md:block">
-                <StreakCounter days={12} />
-             </div>
              <ThemeToggle />
           </div>
         </div>
@@ -152,17 +131,17 @@ export default function ChallengesPage() {
                         <Zap className="w-6 h-6" />
                       </div>
                    </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-primary">2,450</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Reward Points Earned</p>
+                   <p className="text-4xl font-black font-mono tracking-tighter text-primary">{stats.totalPoints}</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Mission Rewards (XP)</p>
                  </div>
                  <div className="space-y-2">
                    <div className="flex justify-center mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
+                      <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
                         <CheckCircle2 className="w-6 h-6" />
                       </div>
                    </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-secondary">08</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Challenges Completed</p>
+                   <p className="text-4xl font-black font-mono tracking-tighter text-green-500">{stats.completedCount}</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Missions Completed</p>
                  </div>
                  <div className="space-y-2">
                    <div className="flex justify-center mb-4">
@@ -170,8 +149,8 @@ export default function ChallengesPage() {
                         <Target className="w-6 h-6" />
                       </div>
                    </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-accent">02</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active Challenges</p>
+                   <p className="text-4xl font-black font-mono tracking-tighter text-accent">{stats.activeCount}</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active Operations</p>
                  </div>
                </div>
             </div>
@@ -180,17 +159,17 @@ export default function ChallengesPage() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="flex justify-center mb-10">
               <TabsList className="bg-white/5 border border-white/10 p-1 h-14 rounded-2xl w-full max-w-lg">
-                <TabsTrigger value="active" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full">
+                <TabsTrigger value="active" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
                   <Swords className="w-4 h-4 mr-2" />
                   In Progress
                 </TabsTrigger>
-                <TabsTrigger value="available" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full">
+                <TabsTrigger value="available" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
                   <Star className="w-4 h-4 mr-2" />
                   Available
                 </TabsTrigger>
-                <TabsTrigger value="completed" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full">
+                <TabsTrigger value="completed" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
                   <Trophy className="w-4 h-4 mr-2" />
-                  Completed
+                  History
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -202,17 +181,22 @@ export default function ChallengesPage() {
                    variants={container}
                    initial="hidden"
                    animate="show"
-                   className="space-y-4"
+                   className="grid gap-6 sm:grid-cols-2"
                 >
                   {activeChallenges.map((challenge) => (
                     <motion.div key={challenge.id} variants={item}>
                       <ChallengeCard
                         {...challenge}
-                        isCompleted={challenge.progress >= 100}
-                        onAction={() => console.log(`Continue challenge ${challenge.id}`)}
+                        onAction={() => window.location.href = '/'}
                       />
                     </motion.div>
                   ))}
+                  {activeChallenges.length === 0 && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Target className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">No active missions. Pick one from 'Available'.</p>
+                    </div>
+                  )}
                 </motion.div>
               </TabsContent>
 
@@ -222,17 +206,22 @@ export default function ChallengesPage() {
                    variants={container}
                    initial="hidden"
                    animate="show"
-                   className="grid gap-6 sm:grid-cols-2"
+                   className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
                 >
                   {availableChallenges.map((challenge, idx) => (
                     <motion.div key={challenge.id} variants={item} transition={{ delay: idx * 0.05 }}>
                       <ChallengeCard
                         {...challenge}
-                        isCompleted={false}
-                        onAction={() => console.log(`Start challenge ${challenge.id}`)}
+                        onAction={() => joinMutation.mutate(challenge.id)}
                       />
                     </motion.div>
                   ))}
+                  {availableChallenges.length === 0 && !isLoadingQuests && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Brain className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">All missions accepted or completed!</p>
+                    </div>
+                  )}
                 </motion.div>
               </TabsContent>
 
@@ -242,17 +231,21 @@ export default function ChallengesPage() {
                    variants={container}
                    initial="hidden"
                    animate="show"
-                   className="space-y-4"
+                   className="grid gap-6 sm:grid-cols-2"
                 >
                   {completedChallenges.map((challenge) => (
                     <motion.div key={challenge.id} variants={item}>
                       <ChallengeCard
                         {...challenge}
-                        isCompleted={true}
-                        onAction={() => console.log(`View challenge ${challenge.id}`)}
                       />
                     </motion.div>
                   ))}
+                  {completedChallenges.length === 0 && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Trophy className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">No missions completed yet. Time to start your journey!</p>
+                    </div>
+                  )}
                 </motion.div>
               </TabsContent>
             </AnimatePresence>

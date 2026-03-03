@@ -588,12 +588,28 @@ app.post('/api/quests/:id/join', isAuthenticated, async (req: any, res) => {
 });
 
 app.post('/api/quests/:id/complete', isAuthenticated, async (req: any, res) => {
-  await getDb().update(userQuestsTable).set({ 
-    completed: true, 
-    completedAt: new Date(),
-    completionNote: req.body.completionNote || null
-  }).where(and(eq(userQuestsTable.userId, req.user.id), eq(userQuestsTable.questId, req.params.id)));
-  res.json({ success: true });
+  const db = getDb();
+  const [existing] = await db.select().from(userQuestsTable).where(and(eq(userQuestsTable.userId, req.user.id), eq(userQuestsTable.questId, req.params.id)));
+  
+  if (existing) {
+    await db.update(userQuestsTable).set({ 
+      completed: true, 
+      completedAt: new Date(),
+      completionNote: req.body.completionNote || null
+    }).where(eq(userQuestsTable.id, existing.id));
+  } else {
+    await db.insert(userQuestsTable).values({
+      userId: req.user.id,
+      questId: req.params.id,
+      completed: true,
+      completedAt: new Date(),
+      completionNote: req.body.completionNote || null
+    });
+  }
+
+  // Also fetch the quest points to return for the UI
+  const [quest] = await db.select().from(questsTable).where(eq(questsTable.id, req.params.id));
+  res.json({ success: true, pointsEarned: quest?.points, questTitle: quest?.title });
 });
 
 app.get(['/api/streak', '/streak'], isAuthenticated, async (req: any, res) => {
