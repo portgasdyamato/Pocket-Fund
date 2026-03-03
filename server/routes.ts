@@ -74,6 +74,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch('/api/user/vault-pin', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const { pin } = req.body;
+      
+      if (!pin || pin.length !== 4 || !/^\d+$/.test(pin)) {
+        return res.status(400).json({ message: "PIN must be exactly 4 digits" });
+      }
+
+      await storage.updateVaultPin(userId, pin);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Error updating vault PIN:", error);
+      res.status(500).json({ message: error.message || "Failed to update vault PIN" });
+    }
+  });
+
   app.post('/api/wallet/add', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.id;

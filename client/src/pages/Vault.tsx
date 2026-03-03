@@ -33,9 +33,9 @@ export default function GlowUp() {
   const { user } = useAuth();
   const [isNewGoalOpen, setIsNewGoalOpen] = useState(false);
   const [isStashOpen, setIsStashOpen] = useState(false);
-  const [vaultStep, setVaultStep] = useState<'action' | 'verify'>('action');
-  const [verificationCode, setVerificationCode] = useState("");
+  const [vaultStep, setVaultStep] = useState<'action' | 'setup' | 'verify'>('action');
   const [enteredCode, setEnteredCode] = useState("");
+  const [newPin, setNewPin] = useState("");
   const [goalName, setGoalName] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
   const [stashAmount, setStashAmount] = useState("");
@@ -79,8 +79,11 @@ export default function GlowUp() {
   const stashMutation = useMutation({
     mutationFn: async (type: 'stash' | 'withdraw') => {
       // For withdrawals, check code first
-      if (type === 'withdraw' && enteredCode !== verificationCode) {
-        throw new Error("Invalid security code.");
+      if (type === 'withdraw') {
+        if (!user?.vaultPin) throw new Error("Please set up your security PIN first.");
+        if (enteredCode !== user.vaultPin) {
+          throw new Error("Invalid security PIN.");
+        }
       }
       
       return await apiRequest("/api/stash", "POST", {
@@ -117,6 +120,28 @@ export default function GlowUp() {
     }
   });
 
+  const setupPinMutation = useMutation({
+    mutationFn: async (pin: string) => {
+      return await apiRequest("/api/user/vault-pin", "PATCH", { pin });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      setVaultStep('action');
+      setNewPin("");
+      toast({
+        title: "Security PIN Set",
+        description: "Your vault is now protected with your custom PIN.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Setup Failed",
+        description: error.message || "Failed to set PIN.",
+        variant: "destructive",
+      });
+    }
+  });
+
   const handleWithdrawClick = () => {
     if (!stashAmount || parseFloat(stashAmount) <= 0) {
       toast({ title: "Invalid Amount", variant: "destructive" });
@@ -129,15 +154,23 @@ export default function GlowUp() {
       return;
     }
 
-    const code = Math.floor(1000 + Math.random() * 9000).toString();
-    setVerificationCode(code);
-    setVaultStep('verify');
+    if (!user?.vaultPin) {
+      setVaultStep('setup');
+    } else {
+      setVaultStep('verify');
+    }
+  };
+
+  const getPinRestrictionMessage = () => {
+    if (!user?.vaultPinUpdatedAt) return null;
+    const updatedAt = new Date(user.vaultPinUpdatedAt);
+    const now = new Date();
+    const diffDays = Math.ceil((now.getTime() - updatedAt.getTime()) / (1000 * 60 * 60 * 24));
     
-    toast({
-      title: "Security Code Sent",
-      description: `Your one-time withdrawal code is: ${code}`,
-      duration: 10000,
-    });
+    if (diffDays < 30) {
+      return `You can change your PIN again in ${30 - diffDays} days.`;
+    }
+    return null;
   };
 
   const claimGoalMutation = useMutation({
@@ -220,15 +253,27 @@ export default function GlowUp() {
                     exit={{ opacity: 0, x: 20 }}
                     className="space-y-6"
                   >
-                    <DialogHeader>
-                      <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
-                      <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
-                    </DialogHeader>
+                    <div className="flex justify-between items-start">
+                      <DialogHeader>
+                        <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
+                        <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
+                      </DialogHeader>
+                      {user?.vaultPin && !getPinRestrictionMessage() && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-[10px] uppercase font-black tracking-widest text-white/30 hover:text-primary"
+                          onClick={() => setVaultStep('setup')}
+                        >
+                          Reset PIN
+                        </Button>
+                      )}
+                    </div>
                     <div className="space-y-6">
                       <div className="space-y-3">
                         <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount (₹)</Label>
                         <input
-                          className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none"
+                          className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none text-white"
                           placeholder="0.00"
                           value={stashAmount}
                           onChange={(e) => setStashAmount(e.target.value)}
@@ -285,6 +330,56 @@ export default function GlowUp() {
                       </div>
                     </div>
                   </motion.div>
+                ) : vaultStep === 'setup' ? (
+                  <motion.div
+                    key="setup"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="space-y-8"
+                  >
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                        <Lock className="w-10 h-10 text-primary" />
+                      </div>
+                      <h2 className="text-3xl font-black tracking-tight">{user?.vaultPin ? 'Update PIN' : 'Set Vault PIN'}</h2>
+                      <p className="text-white/40 mt-2 font-medium">Create a 4-digit PIN to secure your withdrawals.</p>
+                      {getPinRestrictionMessage() && (
+                        <p className="text-xs text-destructive mt-4 font-bold uppercase tracking-widest border border-destructive/20 bg-destructive/5 p-2 rounded-lg">
+                          {getPinRestrictionMessage()}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex justify-center gap-4 py-4">
+                      <Input
+                        type="password"
+                        className="w-48 bg-white/5 border-white/10 h-16 rounded-xl text-center text-4xl font-black tracking-[0.5em] focus:border-primary transition-all outline-none"
+                        maxLength={4}
+                        placeholder="••••"
+                        value={newPin}
+                        onChange={(e) => setNewPin(e.target.value)}
+                        autoFocus
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <Button
+                        onClick={() => setupPinMutation.mutate(newPin)}
+                        disabled={setupPinMutation.isPending || newPin.length < 4 || !!getPinRestrictionMessage()}
+                        className="w-full h-16 text-lg"
+                      >
+                        {setupPinMutation.isPending ? 'Setting PIN...' : 'Save Security PIN'}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-white/40 hover:text-white"
+                        onClick={() => setVaultStep('action')}
+                      >
+                        Go Back
+                      </Button>
+                    </div>
+                  </motion.div>
                 ) : (
                   <motion.div
                     key="verify"
@@ -297,12 +392,13 @@ export default function GlowUp() {
                       <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6">
                         <ShieldCheck className="w-10 h-10 text-primary" />
                       </div>
-                      <h2 className="text-3xl font-black tracking-tight">Verify Identity</h2>
-                      <p className="text-white/40 mt-2 font-medium">Please enter the 4-digit code to authorize this withdrawal.</p>
+                      <h2 className="text-3xl font-black tracking-tight">Verify PIN</h2>
+                      <p className="text-white/40 mt-2 font-medium">Enter your secret 4-digit PIN to authorize this withdrawal.</p>
                     </div>
 
                     <div className="flex justify-center gap-4 py-4">
                       <Input
+                        type="password"
                         className="w-48 bg-white/5 border-white/10 h-16 rounded-xl text-center text-4xl font-black tracking-[0.5em] focus:border-primary transition-all outline-none"
                         maxLength={4}
                         placeholder="••••"

@@ -31,6 +31,7 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserOnboarding(id: string, status: string): Promise<void>;
   updateUserProfile(id: string, data: { firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User>;
+  updateVaultPin(id: string, pin: string): Promise<User>;
   
   // Goal operations
   createGoal(goal: InsertGoal): Promise<Goal>;
@@ -305,6 +306,20 @@ export class DatabaseStorage implements IStorage {
         walletBalance: sql`${users.walletBalance} + ${amount}`
       })
       .where(eq(users.id, userId));
+  }
+
+  async updateVaultPin(id: string, pin: string): Promise<User> {
+    const [updated] = await db
+      .update(users)
+      .set({ 
+        vaultPin: pin,
+        vaultPinUpdatedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, id))
+      .returning();
+    if (!updated) throw new Error("User not found");
+    return updated;
   }
 }
 

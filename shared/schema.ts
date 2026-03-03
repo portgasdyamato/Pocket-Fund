@@ -26,6 +26,8 @@ export const users = pgTable("users", {
   kycCompleted: boolean("kyc_completed").default(false),
   mandateId: text("mandate_id"),
   walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0").notNull(),
+  vaultPin: varchar("vault_pin", { length: 4 }),
+  vaultPinUpdatedAt: timestamp("vault_pin_updated_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
