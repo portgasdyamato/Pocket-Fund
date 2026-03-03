@@ -26,9 +26,18 @@ export default function Analytics() {
     return acc;
   }, {});
 
+  const TAG_COLORS: Record<string, string> = {
+    'Need': '#2563eb',       // Blue-600
+    'Want': '#9333ea',       // Purple-600 (Primary)
+    'Ick': '#dc2626',        // Red-600
+    'Goal Claim': '#16a34a',  // Green-600
+    'Uncategorized': '#3f3f46' // Zinc-600
+  };
+
   const tagData = Object.keys(tagBreakdown).map(name => ({
     name,
-    value: tagBreakdown[name]
+    value: tagBreakdown[name],
+    fill: TAG_COLORS[name] || TAG_COLORS['Uncategorized']
   }));
 
   // Calculate Category Breakdown
@@ -55,9 +64,12 @@ export default function Analytics() {
     amount: monthlySpending[name]
   }));
 
-  const totalSpent = transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
-  const totalSaved = stashTransactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
-  const savingsRate = totalSpent > 0 ? (totalSaved / (totalSpent + totalSaved)) * 100 : 0;
+  const totalSpent = transactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
+  const totalSaved = stashTransactions.reduce((sum, t) => {
+    const amount = parseFloat(t.amount || "0");
+    return t.type === 'stash' ? sum + amount : sum - amount;
+  }, 0);
+  const savingsRate = (totalSpent + totalSaved) > 0 ? (Math.max(0, totalSaved) / (totalSpent + Math.max(0, totalSaved))) * 100 : 0;
 
   const container = {
     hidden: { opacity: 0 },
@@ -178,7 +190,7 @@ export default function Analytics() {
                       dataKey="value"
                     >
                       {tagData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell key={`cell-${index}`} fill={entry.fill} stroke="rgba(0,0,0,0.2)" />
                       ))}
                     </Pie>
                     <RechartsTooltip 

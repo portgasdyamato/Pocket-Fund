@@ -278,11 +278,11 @@ export default function Profile() {
                       <>
                         <Button onClick={() => setIsEditing(true)} className="w-full bg-primary hover:bg-primary/90 text-white font-black h-12 rounded-2xl premium-shadow">
                           <Edit3 className="w-4 h-4 mr-2" />
-                          Modify Identity
+                          Edit Profile
                         </Button>
                         <Button variant="outline" onClick={handleLogout} className="w-full border-white/10 bg-white/5 font-black h-12 rounded-2xl hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 active:scale-95 transition-all">
                           <LogOut className="w-4 h-4 mr-2" />
-                          Terminate Session
+                          Log Out
                         </Button>
                       </>
                     ) : (
