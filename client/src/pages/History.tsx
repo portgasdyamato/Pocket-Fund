@@ -179,31 +179,66 @@ export default function ExpenseLog() {
               <h1 className="text-6xl font-black tracking-tighter">History</h1>
               <p className="text-white/40 font-medium max-w-md">Precision tracking and AI-powered categorization for your global financial footprint.</p>
             </div>
-            
-            <div className="flex gap-4">
+                       <div className="flex items-center gap-4">
                <DropdownMenu>
                  <DropdownMenuTrigger asChild>
-                   <Button variant="outline" className={`h-16 px-8 rounded-[24px] font-black border-white/5 transition-all text-sm tracking-tight ${filterTag ? 'bg-primary border-primary text-white' : 'bg-white/5 text-white hover:bg-white/10'}`}>
-                     <Filter className="w-5 h-5 mr-3" />
-                     {filterTag ? `Only ${filterTag}` : 'All Types'}
-                   </Button>
+                   <motion.button
+                     whileHover={{ scale: 1.02 }}
+                     whileTap={{ scale: 0.98 }}
+                     className={`h-16 px-8 rounded-[32px] font-black border transition-all flex items-center shadow-xl group/trigger relative overflow-hidden
+                       ${filterTag ? 'bg-primary border-primary text-white shadow-primary/20' : 'bg-white/5 border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20'}`}
+                   >
+                     {/* Active Glow Effect */}
+                     {filterTag && <div className="absolute inset-0 bg-white/20 animate-pulse pointer-events-none" />}
+                     
+                     <Filter className={`w-5 h-5 mr-3 transition-transform group-hover/trigger:rotate-12 ${filterTag ? 'text-white' : 'text-primary'}`} />
+                     <span className="text-sm uppercase tracking-widest">{filterTag ? `${filterTag} Mode` : 'Global Filter'}</span>
+                   </motion.button>
                  </DropdownMenuTrigger>
-                 <DropdownMenuContent className="w-56 p-2 rounded-2xl bg-black border-white/10 shadow-2xl backdrop-blur-3xl">
-                   <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-xl h-12 font-bold focus:bg-white/10">All Transactions</DropdownMenuItem>
-                   <DropdownMenuSeparator className="bg-white/5" />
-                   <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-xl h-12 font-bold text-blue-400 focus:bg-blue-400/10">Needs Only</DropdownMenuItem>
-                   <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-xl h-12 font-bold text-primary focus:bg-primary/10">Wants Only</DropdownMenuItem>
-                   <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-xl h-12 font-bold text-destructive focus:bg-destructive/10">Icks Only</DropdownMenuItem>
+                 <DropdownMenuContent className="w-64 p-3 rounded-[32px] bg-zinc-900/90 backdrop-blur-3xl border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.6)] animate-in fade-in zoom-in-95 duration-200">
+                    <div className="px-3 py-2 mb-2">
+                       <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 italic">Metadata Filtering</span>
+                    </div>
+                    <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-2xl h-14 font-black text-sm uppercase tracking-widest focus:bg-white/10 flex items-center gap-3 transition-colors cursor-pointer group">
+                       <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                          <Zap className="w-4 h-4 text-white/40 group-hover:text-white" />
+                       </div>
+                       All Activities
+                    </DropdownMenuItem>
+                    <div className="h-px bg-white/5 my-2 mx-2" />
+                    <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-2xl h-14 font-black text-sm uppercase tracking-widest text-blue-400 focus:bg-blue-400/10 flex items-center gap-3 transition-colors cursor-pointer group">
+                       <div className="w-8 h-8 rounded-lg bg-blue-400/10 border border-blue-400/20 flex items-center justify-center">
+                          <ShieldCheck className="w-4 h-4" />
+                       </div>
+                       Needs Only
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-2xl h-14 font-black text-sm uppercase tracking-widest text-primary focus:bg-primary/10 flex items-center gap-3 transition-colors cursor-pointer group">
+                       <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                          <Star className="w-4 h-4" />
+                       </div>
+                       Wants Only
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-2xl h-14 font-black text-sm uppercase tracking-widest text-destructive focus:bg-destructive/10 flex items-center gap-3 transition-colors cursor-pointer group">
+                       <div className="w-8 h-8 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+                          <TrendingDown className="w-4 h-4" />
+                       </div>
+                       Icks Only
+                    </DropdownMenuItem>
                  </DropdownMenuContent>
                </DropdownMenu>
-
-               <Button 
+ 
+               <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setIsAddExpenseOpen(true)}
-                  className="bg-white text-black hover:bg-white/90 h-16 px-10 rounded-[24px] font-black text-sm premium-shadow click-scale tracking-tight"
+                  className="bg-white text-black h-16 px-10 rounded-[32px] font-black text-sm uppercase tracking-[0.2em] flex items-center shadow-[0_20px_40px_rgba(255,255,255,0.1)] group/btn relative overflow-hidden"
                >
-                  <Plus className="w-6 h-6 mr-3 border-2 border-black/10 rounded-lg p-0.5" />
-                  New Record
-               </Button>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-black/[0.02] to-transparent pointer-events-none" />
+                  <div className="w-8 h-8 bg-black rounded-xl flex items-center justify-center mr-4 shadow-xl transition-transform group-hover/btn:rotate-90">
+                    <Plus className="w-5 h-5 text-white" />
+                  </div>
+                  New Entry
+               </motion.button>
             </div>
           </div>
 
