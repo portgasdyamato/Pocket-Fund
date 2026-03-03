@@ -60,10 +60,16 @@ export default function LearnPage() {
     },
   });
 
-  const { masteryPercentage, completedCount } = useMemo(() => {
-    if (literacyQuests.length === 0) return { masteryPercentage: 0, completedCount: 0 };
-    const done = literacyQuests.filter(q => userQuests.some(uq => uq.questId === q.id && uq.completed)).length;
-    return { masteryPercentage: Math.round((done / literacyQuests.length) * 100), completedCount: done };
+  const { masteryPercentage, completedCount, totalEarnedXP } = useMemo(() => {
+    if (literacyQuests.length === 0) return { masteryPercentage: 0, completedCount: 0, totalEarnedXP: 0 };
+    const completedLiteracy = literacyQuests.filter(q => userQuests.some(uq => uq.questId === q.id && uq.completed));
+    const done = completedLiteracy.length;
+    const xp = completedLiteracy.reduce((sum, q) => sum + (q.points || 0), 0);
+    return { 
+      masteryPercentage: Math.round((done / literacyQuests.length) * 100), 
+      completedCount: done,
+      totalEarnedXP: xp
+    };
   }, [literacyQuests, userQuests]);
 
   const courseData = useMemo(() => {
@@ -411,75 +417,115 @@ export default function LearnPage() {
     <div className="min-h-screen bg-[#050505] text-white">
       <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
 
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-          <div>
-            <div className="flex items-center gap-4 mb-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Financial Academy</p>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="h-7 px-3 rounded-lg border-white/10 text-[8px] font-black uppercase tracking-widest bg-white/[0.02]"
-                onClick={async () => {
-                  try {
-                    await apiRequest("/api/admin/seed-courses", "POST");
-                    await refetchQuests();
-                    await refetchUserQuests();
-                    toast({ title: "Database Synchronized", description: "The latest course content has been downloaded." });
-                  } catch (e: any) {
-                    toast({ title: "Sync Failed", description: e.message || "Could not reach database.", variant: "destructive" });
-                  }
-                }}
-              >
-                Sync Latest Content
-              </Button>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter italic uppercase">Learn <span className="text-primary">& Earn</span></h1>
-            <p className="text-white/40 text-lg mt-3 max-w-xl font-medium leading-relaxed">Master money through deep-dive articles and comprehensive knowledge checks. <span className="text-primary/60">Level up your financial IQ.</span></p>
-          </div>
-          {/* Progress overview */}
-          <div className="flex gap-4 shrink-0 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-            {[
-              { label: "Done", val: completedCount, icon: CheckCircle2, color: "from-emerald-500/20 to-emerald-500/5", iconColor: "text-emerald-400", borderColor: "border-emerald-500/20" },
-              { label: "Catalogue", val: literacyQuests.length, icon: BookOpen, color: "from-primary/20 to-primary/5", iconColor: "text-primary", borderColor: "border-primary/20" },
-              { label: "Progress", val: `${masteryPercentage}%`, icon: BarChart3, color: "from-amber-500/20 to-amber-500/5", iconColor: "text-amber-400", borderColor: "border-amber-500/20" },
-            ].map(({ label, val, icon: Icon, color, iconColor, borderColor }) => (
-              <div key={label} className={`p-6 rounded-[32px] bg-gradient-to-b ${color} border ${borderColor} text-center min-w-[120px] backdrop-blur-md shadow-xl shadow-black/20 group hover:scale-105 transition-transform duration-300`}>
-                <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform`}>
-                  <Icon className={`w-6 h-6 ${iconColor}`} />
+        {/* Unified Mastery Hub Header */}
+        <div className="relative overflow-hidden rounded-[48px] border border-white/5 bg-white/[0.02] p-8 md:p-12 shadow-2xl">
+           {/* Abstract Decorative Background */}
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
+           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] -ml-48 -mb-48 pointer-events-none" />
+
+           <div className="relative z-10 flex flex-col lg:flex-row gap-12 items-center lg:items-center">
+              
+              {/* Left Column: Branding & Intro */}
+              <div className="flex-1 space-y-8 text-center lg:text-left">
+                <div className="flex flex-col md:flex-row items-center gap-4 lg:justify-start justify-center">
+                  <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                    <Brain className="w-4 h-4 text-primary" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Financial Academy</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 px-4 rounded-xl border border-white/5 text-[9px] font-black uppercase tracking-[0.2em] bg-white/[0.02] hover:bg-white/10 text-white/40 hover:text-white transition-all shadow-inner"
+                    onClick={async () => {
+                      try {
+                        await apiRequest("/api/admin/seed-courses", "POST");
+                        await refetchQuests();
+                        await refetchUserQuests();
+                        toast({ title: "Database Synchronized", description: "The latest course content has been downloaded." });
+                      } catch (e: any) {
+                        toast({ title: "Sync Failed", description: e.message || "Could not reach database.", variant: "destructive" });
+                      }
+                    }}
+                  >
+                    Sync Latest Content
+                  </Button>
                 </div>
-                <p className={`text-3xl font-black italic tracking-tighter ${iconColor}`}>{val}</p>
-                <p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em] mt-1">{label}</p>
+
+                <div className="space-y-4">
+                  <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase leading-[0.85] text-white">
+                    Learn <span className="text-primary italic">& Earn</span>
+                  </h1>
+                  <p className="text-white/40 text-lg md:text-xl max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
+                    Master your capital through deep-dive courses. Level up your <span className="text-white/60">financial IQ</span> and unlock your ultimate earning potential.
+                  </p>
+                </div>
               </div>
-            ))}
-          </div>
+
+              {/* Right Column: High-Impact Mastery Card */}
+              <div className="w-full lg:w-[440px] shrink-0">
+                 <div className="p-8 rounded-[40px] bg-white/[0.03] border border-white/10 backdrop-blur-3xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    
+                    <div className="relative z-10 space-y-8">
+                       <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 italic">Academy Progress</p>
+                          </div>
+                          <div className="px-3 py-1 rounded-xl bg-primary text-[10px] font-black text-white shadow-lg shadow-primary/20">
+                            LEVEL {Math.floor(completedCount / 3) + 1}
+                          </div>
+                       </div>
+
+                       <div className="flex items-baseline gap-4">
+                          <span className="text-8xl font-black italic tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                            {masteryPercentage}%
+                          </span>
+                          <div className="flex flex-col">
+                             <span className="text-[11px] font-black uppercase text-white/40 tracking-widest">Mastery</span>
+                             <span className="text-xs font-black uppercase text-primary tracking-[0.2em]">Journey</span>
+                          </div>
+                       </div>
+
+                       {/* The Progress Track */}
+                       <div className="space-y-4">
+                          <div className="relative h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-1">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${masteryPercentage}%` }}
+                              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                              className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full shadow-[0_0_20px_rgba(139,92,246,0.3)] relative"
+                            >
+                               <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.3)_50%,transparent_100%)] animate-shimmer" />
+                            </motion.div>
+                          </div>
+                          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 px-1">
+                            <span>Entry Class</span>
+                            <span>Expert Investor</span>
+                          </div>
+                       </div>
+
+                       {/* Mini Stats Grid */}
+                       <div className="grid grid-cols-3 gap-4 pt-8 border-t border-white/5">
+                          {[
+                            { label: 'Completed', val: completedCount, icon: CheckCircle2, color: 'text-emerald-400' },
+                            { label: 'Courses', val: literacyQuests.length, icon: BookOpen, color: 'text-primary' },
+                            { label: 'Total XP', val: totalEarnedXP, icon: Star, color: 'text-amber-400' }
+                          ].map((stat) => (
+                            <div key={stat.label} className="text-center group/stat">
+                               <p className={`text-xl font-black italic mb-0.5 transition-transform group-hover/stat:scale-110 ${stat.color}`}>{stat.val}</p>
+                               <p className="text-[9px] text-white/20 font-black uppercase tracking-widest">{stat.label}</p>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
         </div>
 
-        {/* Overall progress bar */}
-        <div className="relative p-8 rounded-[32px] bg-white/[0.02] border border-white/5 overflow-hidden shadow-2xl">
-          <div className="absolute top-0 left-0 w-1 h-full bg-primary/40" />
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div>
-              <h3 className="text-xl font-black italic uppercase tracking-tight">Your Mastery <span className="text-primary">Journey</span></h3>
-              <p className="text-white/30 text-xs font-bold uppercase tracking-widest mt-1">Keep learning to unlock advanced investing modules</p>
-            </div>
-            <div className="flex items-end gap-2">
-              <span className="text-4xl font-black italic tracking-tighter text-primary">{masteryPercentage}%</span>
-              <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Complete</span>
-            </div>
-          </div>
-          <div className="relative h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${masteryPercentage}%` }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_20px_rgba(139,92,246,0.3)]"
-            />
-          </div>
-        </div>
-
-        {/* Course cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Course cards grid with improved spacing */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {literacyQuests.map((quest, idx) => {
             const isDone = userQuests.some(uq => uq.questId === quest.id && uq.completed);
             const Icon = iconMap[quest.icon] || TrendingUp;
