@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { seedLiteracyCourses } from "./seedCourses";
 import cors from "cors";
 
 const app = express();
@@ -59,6 +60,13 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
+
+  // Seed literacy courses on startup
+  try {
+    await seedLiteracyCourses();
+  } catch (err) {
+    console.error("Seeding error (non-fatal):", err);
+  }
 
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     console.error('Error:', err);

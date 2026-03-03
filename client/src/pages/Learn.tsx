@@ -79,14 +79,23 @@ export default function LevelUp() {
 
   const completeMutation = useMutation({
     mutationFn: async (questId: string) => {
-      await apiRequest(`/api/quests/${questId}/complete`, "POST", {
+      const res = await apiRequest(`/api/quests/${questId}/complete`, "POST", {
         completionNote: "Literacy Quest Completed!"
       });
+      return res;
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/user/quests"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/quests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/streak"] });
       setIsCompleted(true);
+      if (data?.pointsEarned) {
+        toast({
+          title: `+${data.pointsEarned} XP Earned! 🎉`,
+          description: `You've completed "${data.questTitle || 'the course'}". Keep learning to unlock more rewards!`,
+        });
+      }
     },
   });
 
@@ -115,28 +124,60 @@ export default function LevelUp() {
   if (activeQuest) {
     const content = JSON.parse(activeQuest.content);
     const slides = content.slides || [];
-    const quiz = content.quiz;
-    const totalSteps = slides.length + 2; 
+    const quizzes = content.quizzes || (content.quiz ? [content.quiz] : []);
+    const totalSteps = slides.length + quizzes.length + 1; // +1 for intro
 
+    const isSlideStep = step > 0 && step <= slides.length;
+    const isQuizStep = step > slides.length && step < totalSteps;
     const isLastStep = step === totalSteps - 1;
-    const currentSlide = step > 0 && step <= slides.length ? slides[step - 1] : null;
+
+    const currentSlide = isSlideStep ? slides[step - 1] : null;
+    const currentQuizIdx = isQuizStep ? step - slides.length - 1 : (isLastStep && !isCompleted ? quizzes.length - 1 : null);
+    const currentQuiz = currentQuizIdx !== null ? quizzes[currentQuizIdx] : null;
+
+    const [showSolution, setShowSolution] = useState(false);
 
     const handleNext = () => {
-      if (step < totalSteps - 1) {
+      if (step < slides.length) {
         setStep(step + 1);
-      } else if (selectedOption === quiz.answer) {
-        completeMutation.mutate(activeQuest.id);
-      } else if (selectedOption !== null) {
-        toast({
-          title: "Neural Mismatch",
-          description: "Data integrity check failed. Try another logic path.",
-          variant: "destructive"
-        });
+        setSelectedOption(null);
+        setShowSolution(false);
+      } else if (isQuizStep || (isLastStep && !isCompleted)) {
+        if (selectedOption === null) {
+          toast({
+            title: "Analysis Required",
+            description: "Please select an option to proceed.",
+          });
+          return;
+        }
+
+        if (selectedOption === currentQuiz.answer) {
+          if (step < totalSteps - 1) {
+            setStep(step + 1);
+            setSelectedOption(null);
+            setShowSolution(false);
+          } else {
+            completeMutation.mutate(activeQuest.id);
+          }
+        } else {
+          setShowSolution(true);
+          toast({
+            title: "Neutral Mismatch",
+            description: "Correct logic path identified. Review and retry or continue.",
+            variant: "destructive"
+          });
+        }
+      } else {
+        setStep(step + 1);
       }
     };
 
     const handleBack = () => {
-      if (step > 0) setStep(step - 1);
+      if (step > 0) {
+        setStep(step - 1);
+        setSelectedOption(null);
+        setShowSolution(false);
+      }
     };
 
     return (
@@ -251,36 +292,68 @@ export default function LevelUp() {
                       </div>
                     </div>
                   </motion.div>
-                ) : isLastStep ? (
+                ) : currentQuiz ? (
                   <motion.div 
-                     key="quiz"
+                     key={`quiz-${step}`}
                      initial={{ opacity: 0, scale: 0.95 }}
                      animate={{ opacity: 1, scale: 1 }}
                      className="space-y-8 py-4"
                   >
                     <div className="text-center space-y-4">
-                      <div className="inline-flex px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-black uppercase tracking-widest">Knowledge Check</div>
-                      <h2 className="text-3xl font-black tracking-tight leading-tight">{quiz.question}</h2>
+                      <div className="inline-flex px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-black uppercase tracking-widest">Question {currentQuizIdx ? currentQuizIdx + 1 : 1} of {quizzes.length}</div>
+                      <h2 className="text-3xl font-black tracking-tight leading-tight">{currentQuiz.question}</h2>
                     </div>
                     <div className="space-y-4">
-                      {quiz.options.map((option: string, index: number) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          className={`w-full justify-start h-auto py-5 px-6 text-left rounded-2xl border-white/5 bg-white/5 transition-all relative overflow-hidden group ${
-                            selectedOption === index ? 'border-primary bg-primary/10 ring-1 ring-primary/50' : 'hover:bg-white/10 hover:border-white/20'
-                          }`}
-                          onClick={() => setSelectedOption(index)}
-                        >
-                          <div className={`w-8 h-8 rounded-lg border flex items-center justify-center mr-5 shrink-0 font-black text-xs transition-colors ${
-                            selectedOption === index ? 'bg-primary text-white border-transparent' : 'border-white/10 text-white/40'
-                          }`}>
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <span className={`font-bold transition-colors ${selectedOption === index ? 'text-white' : 'text-white/60'}`}>{option}</span>
-                        </Button>
-                      ))}
+                      {currentQuiz.options.map((option: string, index: number) => {
+                        const isCorrect = index === currentQuiz.answer;
+                        const isSelected = selectedOption === index;
+                        const isWrongSelection = isSelected && !isCorrect && showSolution;
+
+                        return (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            className={`w-full justify-start h-auto py-5 px-6 text-left rounded-2xl border-white/5 bg-white/5 transition-all relative overflow-hidden group ${
+                              isSelected 
+                                ? isWrongSelection ? 'border-red-500 bg-red-500/10' : 'border-primary bg-primary/10 ring-1 ring-primary/50' 
+                                : showSolution && isCorrect ? 'border-green-500 bg-green-500/10' : 'hover:bg-white/10 hover:border-white/20'
+                            }`}
+                            onClick={() => !showSolution && setSelectedOption(index)}
+                            disabled={showSolution}
+                          >
+                            <div className={`w-8 h-8 rounded-lg border flex items-center justify-center mr-5 shrink-0 font-black text-xs transition-colors ${
+                              isSelected 
+                                ? isWrongSelection ? 'bg-red-500 text-white border-transparent' : 'bg-primary text-white border-transparent'
+                                : showSolution && isCorrect ? 'bg-green-500 text-white border-transparent' : 'border-white/10 text-white/40'
+                            }`}>
+                              {String.fromCharCode(65 + index)}
+                            </div>
+                            <div className="flex flex-col">
+                              <span className={`font-bold transition-colors ${isSelected ? 'text-white' : 'text-white/60'}`}>{option}</span>
+                              {isWrongSelection && <span className="text-[10px] text-red-400 mt-1 font-black uppercase tracking-widest">Incorrect Input</span>}
+                              {showSolution && isCorrect && <span className="text-[10px] text-green-400 mt-1 font-black uppercase tracking-widest">Correct Solution</span>}
+                            </div>
+                          </Button>
+                        );
+                      })}
                     </div>
+
+                    {showSolution && (
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                        <p className="text-sm text-white/60 mb-4">You selected the wrong path. The correct answer is demonstrated above.</p>
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="rounded-xl h-10 px-6 font-black uppercase tracking-widest text-[10px]"
+                          onClick={() => {
+                            setShowSolution(false);
+                            setSelectedOption(null);
+                          }}
+                        >
+                          Retry Selection
+                        </Button>
+                      </motion.div>
+                    )}
                   </motion.div>
                 ) : null}
               </AnimatePresence>
@@ -293,7 +366,7 @@ export default function LevelUp() {
                     </Button>
                   )}
                   <Button onClick={handleNext} className="flex-[2] h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black uppercase tracking-tighter text-sm premium-shadow-white group">
-                    {isLastStep ? "Submit Answer" : "Next Step"} 
+                    {showSolution ? "Move Forward" : isLastStep ? "Finalize Quest" : "Next Step"} 
                     <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
@@ -304,6 +377,19 @@ export default function LevelUp() {
       </div>
     );
   }
+
+  const { masteryPercentage, totalXPEarned } = useMemo(() => {
+    if (literacyQuests.length === 0) return { masteryPercentage: 0, totalXPEarned: 0 };
+    const completedCount = literacyQuests.filter(q => userQuests.some(uq => uq.questId === q.id && uq.completed)).length;
+    const xp = userQuests.filter(uq => uq.completed).reduce((sum, uq) => {
+      const q = literacyQuests.find(lq => lq.id === uq.questId);
+      return sum + (q?.points || 0);
+    }, 0);
+    return { 
+      masteryPercentage: Math.round((completedCount / literacyQuests.length) * 100),
+      totalXPEarned: xp
+    };
+  }, [literacyQuests, userQuests]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
@@ -331,12 +417,12 @@ export default function LevelUp() {
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">Member Status</p>
-              <p className="text-3xl font-black tracking-tight">FINANCIAL PRO</p>
+              <p className="text-3xl font-black tracking-tight">{masteryPercentage >= 100 ? 'FINANCIAL ELITE' : masteryPercentage >= 50 ? 'FINANCIAL PRO' : 'FINANCIAL NOVICE'}</p>
               <div className="flex items-center gap-2 mt-2">
                  <div className="h-1.5 w-32 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: '65%' }} className="h-full bg-primary" />
+                    <motion.div initial={{ width: 0 }} animate={{ width: `${masteryPercentage}%` }} className="h-full bg-primary" />
                  </div>
-                 <span className="text-[10px] font-bold text-primary italic">65% to Master</span>
+                 <span className="text-[10px] font-bold text-primary italic">{masteryPercentage}% to Master</span>
               </div>
             </div>
           </motion.div>

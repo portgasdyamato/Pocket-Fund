@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./googleAuth";
 import { chatWithFinancialAssistant, categorizePurchase, generateFinancialInsight } from "./geminiService";
 import { insertGoalSchema, insertTransactionSchema, insertStashTransactionSchema } from "@shared/schema";
+import { seedLiteracyCourses } from "./seedCourses";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
@@ -308,10 +309,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.id;
       const { id } = req.params;
       await storage.completeQuest(userId, id);
-      res.json({ success: true });
+      // Return quest info so the client can display points earned
+      const allQuests = await storage.getQuests();
+      const quest = allQuests.find(q => q.id === id);
+      res.json({ success: true, pointsEarned: quest?.points || 0, questTitle: quest?.title || '' });
     } catch (error) {
       console.error("Error completing quest:", error);
       res.status(500).json({ message: "Failed to complete quest" });
+    }
+  });
+
+  // Admin: re-seed courses
+  app.post('/api/admin/seed-courses', async (_req, res) => {
+    try {
+      await seedLiteracyCourses();
+      res.json({ success: true, message: `Seeded courses successfully.` });
+    } catch (error) {
+      console.error("Error seeding courses:", error);
+      res.status(500).json({ message: "Failed to seed courses" });
     }
   });
 
