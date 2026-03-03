@@ -346,8 +346,8 @@ export default function Dashboard() {
                         <div className="flex gap-2">
                           <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
                             <DialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-white/40 hover:text-white transition-all click-scale">
-                                <Plus className="w-6 h-6 border-2 border-white/20 rounded-lg p-0.5" />
+                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-purple-600 border border-purple-500/20 hover:bg-purple-500 text-white transition-all click-scale shadow-[0_10px_20px_rgba(147,51,234,0.3)]">
+                                <Plus className="w-6 h-6" />
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="glass-morphism border-white/10 text-white p-8">
