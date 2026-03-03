@@ -15,6 +15,8 @@ const usersTable = pgTable("users", {
   profileImageUrl: text("profile_image_url"),
   onboardingStatus: text("onboarding_status").notNull().default("step_1"),
   walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0").notNull(),
+  vaultPin: varchar("vault_pin", { length: 4 }),
+  vaultPinUpdatedAt: timestamp("vault_pin_updated_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -26,6 +28,7 @@ const goalsTable = pgTable("goals", {
   targetAmount: decimal("target_amount", { precision: 10, scale: 2 }).notNull(),
   currentAmount: decimal("current_amount", { precision: 10, scale: 2 }).default("0").notNull(),
   isMain: boolean("is_main").default(false).notNull(),
+  completed: boolean("completed").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -265,6 +268,21 @@ app.patch(['/api/user/profile', '/user/profile'], isAuthenticated, async (req: a
   res.json(updated);
 });
 
+app.patch(['/api/user/vault-pin', '/user/vault-pin'], isAuthenticated, async (req: any, res: any) => {
+  const { pin } = req.body;
+  if (!pin || pin.length !== 4 || !/^\d+$/.test(pin)) {
+    return res.status(400).json({ message: "PIN must be exactly 4 digits" });
+  }
+
+  await getDb().update(usersTable).set({ 
+    vaultPin: pin, 
+    vaultPinUpdatedAt: new Date(),
+    updatedAt: new Date() 
+  }).where(eq(usersTable.id, req.user.id));
+  
+  res.json({ success: true });
+});
+
 app.post(['/api/wallet/add', '/wallet/add'], isAuthenticated, async (req: any, res) => {
   const amount = parseFloat(req.body.amount || "0");
   const [updated] = await getDb().update(usersTable).set({
@@ -281,6 +299,26 @@ app.get(['/api/goals', '/goals'], isAuthenticated, async (req: any, res) => {
 app.get(['/api/goals/main', '/goals/main'], isAuthenticated, async (req: any, res) => {
   const [goal] = await getDb().select().from(goalsTable).where(and(eq(goalsTable.userId, req.user.id), eq(goalsTable.isMain, true)));
   res.json(goal || null);
+});
+
+app.post(['/api/goals/:id/claim', '/goals/:id/claim'], isAuthenticated, async (req: any, res: any) => {
+  const db = getDb();
+  const [goal] = await db.select().from(goalsTable).where(and(eq(goalsTable.userId, req.user.id), eq(goalsTable.id, req.params.id)));
+  
+  if (!goal) return res.status(404).json({ message: "Goal not found" });
+  if (parseFloat((goal as any).currentAmount) < parseFloat((goal as any).targetAmount)) return res.status(400).json({ message: "Goal not reached" });
+  if ((goal as any).completed) return res.status(400).json({ message: "Already claimed" });
+
+  await db.insert(stashTransactionsTable).values({
+    userId: req.user.id,
+    amount: (goal as any).targetAmount,
+    type: 'claim',
+    goalId: goal.id,
+    status: 'completed'
+  });
+
+  await db.update(goalsTable).set({ completed: true } as any).where(eq(goalsTable.id, goal.id));
+  res.json({ success: true });
 });
 
 app.post(['/api/goals', '/goals'], isAuthenticated, async (req: any, res) => {
