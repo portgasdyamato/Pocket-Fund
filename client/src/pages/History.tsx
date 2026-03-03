@@ -290,27 +290,30 @@ export default function ExpenseLog() {
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.04, y: -4 }}
+                            whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-4 px-2 rounded-2xl border transition-all duration-300 group/btn relative overflow-hidden
-                              ${btn.color === 'blue' ? 'bg-blue-500/[0.05] border-blue-500/10 hover:border-blue-500/30 text-blue-400 hover:bg-blue-500/15' : 
-                                btn.color === 'primary' ? 'bg-primary/[0.05] border-primary/10 hover:border-primary/30 text-primary hover:bg-primary/15' : 
-                                'bg-destructive/[0.05] border-destructive/10 hover:border-destructive/30 text-destructive hover:bg-destructive/15'}`}
+                            className={`flex flex-col items-center justify-center py-6 px-4 rounded-[32px] border-2 transition-all duration-500 group/btn relative backdrop-blur-xl shadow-2xl
+                              ${btn.color === 'blue' ? 'bg-[#0A0C10] border-blue-500/10 text-blue-400 hover:border-blue-400' : 
+                                btn.color === 'primary' ? 'bg-[#0D0A10] border-primary/10 text-primary hover:border-primary' : 
+                                'bg-[#100A0A] border-destructive/10 text-destructive hover:border-destructive'}`}
                           >
-                            <div className={`absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity bg-gradient-to-b from-transparent to-current/5`} />
+                            {/* Premium Inner Glow */}
+                            <div className={`absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-current/5 via-transparent to-current/10`} />
                             
-                            <btn.icon className="w-5 h-5 mb-2 opacity-40 group-hover/btn:opacity-100 transition-all group-hover/btn:scale-110" />
+                            <div className={`p-3 rounded-2xl mb-3 bg-white/[0.03] border border-white/5 group-hover/btn:bg-current/10 group-hover/btn:border-current/20 transition-all duration-500`}>
+                               <btn.icon className="w-6 h-6 group-hover/btn:scale-110 transition-transform duration-500" />
+                            </div>
                             
-                            <span className="text-[10px] font-black tracking-[0.2em] leading-none mb-1">{btn.label}</span>
-                            <span className="text-[7px] font-bold opacity-20 group-hover/btn:opacity-40 uppercase tracking-tighter">{btn.desc}</span>
+                            <span className="text-[11px] font-black tracking-[0.25em] leading-none mb-1.5 uppercase drop-shadow-sm">{btn.label}</span>
+                            <span className="text-[8px] font-black opacity-30 group-hover/btn:opacity-60 uppercase tracking-[0.1em] transition-opacity">{btn.desc}</span>
                             
-                            {/* Interactive Glow Point */}
-                            <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 blur-md opacity-0 group-hover/btn:opacity-100 transition-opacity ${
-                              btn.color === 'blue' ? 'bg-blue-500' : 
-                              btn.color === 'primary' ? 'bg-primary' : 
-                              'bg-destructive'
-                            }`} />
+                            {/* High-Class Accent Dot */}
+                            <div className={`absolute bottom-3 w-1.5 h-1.5 rounded-full blur-[2px] opacity-0 group-hover/btn:opacity-100 transition-all duration-700
+                              ${btn.color === 'blue' ? 'bg-blue-400 shadow-[0_0_12px_#60a5fa]' : 
+                                btn.color === 'primary' ? 'bg-primary shadow-[0_0_12px_#8b5cf6]' : 
+                                'bg-destructive shadow-[0_0_12px_#ef4444]'}`} 
+                            />
                           </motion.button>
                         ))}
                       </div>
