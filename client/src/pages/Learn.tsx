@@ -419,8 +419,6 @@ export default function LearnPage() {
 
         {/* Compact Mastery Hub Header */}
         <div className="relative overflow-hidden rounded-[32px] p-6 md:p-10">
-           {/* Abstract Decorative Background */}
-           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
            
            <div className="relative z-10 flex flex-col lg:flex-row gap-8 items-center lg:items-center">
               
@@ -456,10 +454,11 @@ export default function LearnPage() {
                 </div>
               </div>
 
-              {/* Right Column: Compact Mastery Card */}
+              {/* Right Column: Compact Mastery Card - High Contrast Redesign */}
               <div className="w-full lg:w-[360px] shrink-0">
-                 <div className="p-6 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-3xl shadow-xl relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                 <div className="p-6 rounded-[32px] bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-white/10 backdrop-blur-3xl shadow-2xl relative overflow-hidden group hover:border-primary/40 transition-all duration-500 shadow-black/40">
+                    {/* Inner Glass Glow */}
+                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-[60px] pointer-events-none" />
                     
                     <div className="relative z-10 space-y-6">
                        <div className="flex items-center justify-between">
@@ -467,44 +466,43 @@ export default function LearnPage() {
                             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                             <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 italic">Progress</p>
                           </div>
-                          <div className="px-2.5 py-0.5 rounded-lg bg-primary text-[9px] font-black text-white">
+                          <div className="px-2.5 py-0.5 rounded-lg bg-primary text-[9px] font-black text-white shadow-lg shadow-primary/30">
                             LEVEL {Math.floor(completedCount / 3) + 1}
                           </div>
                        </div>
 
                        <div className="flex items-baseline gap-3">
-                          <span className="text-6xl font-black italic tracking-tighter text-white">
+                          <span className="text-6xl font-black italic tracking-tighter text-white drop-shadow-lg">
                             {masteryPercentage}%
                           </span>
                           <div className="flex flex-col leading-none">
                              <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mastery Hub</span>
-
                           </div>
                        </div>
 
                        {/* The Progress Track */}
                        <div className="space-y-3">
-                          <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
+                          <div className="relative h-3.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10 p-0.5 shadow-inner">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${masteryPercentage}%` }}
                               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                              className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full relative"
+                              className="h-full bg-primary rounded-full relative shadow-[0_0_15px_rgba(139,92,246,0.4)]"
                             >
-                               <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.3)_50%,transparent_100%)] animate-shimmer" />
+                               <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.4)_50%,transparent_100%)] animate-shimmer" />
                             </motion.div>
                           </div>
                        </div>
 
                        {/* Compact Stats Grid */}
-                       <div className="grid grid-cols-3 gap-2 pt-6 border-t border-white/5">
+                       <div className="grid grid-cols-3 gap-2 pt-6 border-t border-white/10">
                           {[
                             { label: 'Done', val: completedCount, color: 'text-emerald-400' },
                             { label: 'Courses', val: literacyQuests.length, color: 'text-primary' },
                             { label: 'Total XP', val: totalEarnedXP, color: 'text-amber-400' }
                           ].map((stat) => (
                             <div key={stat.label} className="text-center">
-                               <p className={`text-lg font-black italic mb-0.5 ${stat.color}`}>{stat.val}</p>
+                               <p className={`text-lg font-black italic mb-0.5 ${stat.color} drop-shadow-sm`}>{stat.val}</p>
                                <p className="text-[8px] text-white/20 font-black uppercase tracking-widest">{stat.label}</p>
                             </div>
                           ))}
