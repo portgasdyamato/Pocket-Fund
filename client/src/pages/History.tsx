@@ -263,57 +263,68 @@ export default function ExpenseLog() {
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative p-0.5 rounded-[32px] overflow-hidden group/card bg-gradient-to-br from-orange-400/20 to-transparent"
+                    className="relative p-[1px] rounded-[40px] overflow-hidden group/card bg-white/5"
                   >
-                    <Card className="h-full bg-black border-none rounded-[31px] p-8 space-y-8 relative overflow-hidden">
-                      {/* Premium card effects */}
-                      <div className="absolute top-0 right-0 p-12 opacity-[0.03] group-hover/card:scale-125 transition-transform duration-1000">
-                        {getCategoryIcon(t.category)}
-                      </div>
-
-                      <div className="space-y-2 relative">
-                        <div className="flex items-center gap-2">
-                           <div className={`p-1.5 rounded-lg bg-white/5 border border-white/10 ${getCategoryColor(t.category)}`}>
-                             {getCategoryIcon(t.category)}
+                    {/* High-Impact Glow Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-transparent to-orange-500/5 opacity-50 group-hover/card:opacity-100 transition-opacity duration-700" />
+                    
+                    <Card className="h-full bg-zinc-900/90 backdrop-blur-3xl border border-white/10 rounded-[39px] p-8 space-y-8 relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                      {/* Inner Shine Effect */}
+                      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      
+                      <div className="space-y-6 relative">
+                        <div className="flex items-center justify-between">
+                           <div className="flex items-center gap-3">
+                              <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner ${getCategoryColor(t.category)}`}>
+                                {getCategoryIcon(t.category)}
+                              </div>
+                              <div>
+                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 block mb-0.5">Category</span>
+                                 <span className={`text-xs font-black uppercase tracking-widest ${getCategoryColor(t.category)}`}>{t.category}</span>
+                              </div>
                            </div>
-                           <span className="text-[10px] font-black uppercase tracking-widest text-white/30">{t.category}</span>
+                           <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5">
+                              <span className="text-[9px] font-mono text-white/40 uppercase tracking-tighter">ID-{t.id.slice(-4)}</span>
+                           </div>
                         </div>
-                        <h4 className="text-2xl font-black tracking-tight leading-tight truncate group-hover/card:text-orange-400 transition-colors">{t.description}</h4>
-                        <div className="text-4xl font-black tabular-nums tracking-tighter">₹{parseFloat(t.amount).toLocaleString('en-IN')}</div>
+
+                        <div className="space-y-3">
+                           <h4 className="text-2xl font-black tracking-tight leading-tight line-clamp-2 min-h-[4rem] text-white/90 group-hover/card:text-white transition-colors">
+                             {t.description}
+                           </h4>
+                           <div className="flex items-baseline gap-2">
+                             <span className="text-xl font-black text-orange-400">₹</span>
+                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                               {parseFloat(t.amount).toLocaleString('en-IN')}
+                             </span>
+                           </div>
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-3 gap-3">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival', icon: ShieldCheck, glow: 'shadow-blue-500/20' },
-                          { label: 'WANT', id: 'Want', color: 'primary', id2: 'want', desc: 'Lifestyle', icon: Star, glow: 'shadow-primary/20' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste', icon: TrendingDown, glow: 'shadow-destructive/20' }
+                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival', icon: ShieldCheck },
+                          { label: 'WANT', id: 'Want', color: 'primary', desc: 'Lifestyle', icon: Star },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste', icon: TrendingDown }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
                             whileHover={{ scale: 1.04, y: -4 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-6 px-4 rounded-[32px] border-2 transition-all duration-500 group/btn relative backdrop-blur-xl shadow-2xl
-                              ${btn.color === 'blue' ? 'bg-[#0A0C10] border-blue-500/10 text-blue-400 hover:border-blue-400' : 
-                                btn.color === 'primary' ? 'bg-[#0D0A10] border-primary/10 text-primary hover:border-primary' : 
-                                'bg-[#100A0A] border-destructive/10 text-destructive hover:border-destructive'}`}
+                            className={`flex flex-col items-center justify-center py-6 px-4 rounded-[32px] border transition-all duration-500 group/btn relative overflow-hidden backdrop-blur-md
+                              ${btn.color === 'blue' ? 'bg-blue-400/10 border-blue-400/30 text-blue-400 hover:bg-blue-400/20 hover:border-blue-400' : 
+                                btn.color === 'primary' ? 'bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary' : 
+                                'bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20 hover:border-destructive'}`}
                           >
-                            {/* Premium Inner Glow */}
-                            <div className={`absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-current/5 via-transparent to-current/10`} />
+                            <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 bg-gradient-to-t from-current/10 to-transparent transition-opacity" />
                             
-                            <div className={`p-3 rounded-2xl mb-3 bg-white/[0.03] border border-white/5 group-hover/btn:bg-current/10 group-hover/btn:border-current/20 transition-all duration-500`}>
+                            <div className={`p-3 rounded-2xl mb-3 bg-black/20 border border-white/5 group-hover/btn:bg-black/40 group-hover/btn:border-current/30 transition-all duration-500`}>
                                <btn.icon className="w-6 h-6 group-hover/btn:scale-110 transition-transform duration-500" />
                             </div>
                             
-                            <span className="text-[11px] font-black tracking-[0.25em] leading-none mb-1.5 uppercase drop-shadow-sm">{btn.label}</span>
+                            <span className="text-[11px] font-black tracking-[0.2em] leading-none mb-1.5 uppercase">{btn.label}</span>
                             <span className="text-[8px] font-black opacity-30 group-hover/btn:opacity-60 uppercase tracking-[0.1em] transition-opacity">{btn.desc}</span>
-                            
-                            {/* High-Class Accent Dot */}
-                            <div className={`absolute bottom-3 w-1.5 h-1.5 rounded-full blur-[2px] opacity-0 group-hover/btn:opacity-100 transition-all duration-700
-                              ${btn.color === 'blue' ? 'bg-blue-400 shadow-[0_0_12px_#60a5fa]' : 
-                                btn.color === 'primary' ? 'bg-primary shadow-[0_0_12px_#8b5cf6]' : 
-                                'bg-destructive shadow-[0_0_12px_#ef4444]'}`} 
-                            />
                           </motion.button>
                         ))}
                       </div>
