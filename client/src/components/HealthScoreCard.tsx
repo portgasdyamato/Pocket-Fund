@@ -20,29 +20,37 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
   }, [controls]);
 
   const getScoreInfo = (score: number) => {
-    if (score >= 80) return { 
-      color: "text-[#10b981]", 
-      glow: "rgba(16, 185, 129, 0.8)", 
-      label: "ELITE", 
+    if (score >= 85) return { 
+      color: "text-green-400", 
+      glow: "rgba(34, 197, 94, 0.4)", 
+      label: "EXCELLENT", 
       icon: ShieldCheck,
-      gradient: "from-[#10b981] to-[#34d399]",
-      hex: "#10b981"
+      hex: "#22c55e",
+      tip: "Your financial health is top-tier. Your discipline is paying off!"
     };
-    if (score >= 60) return { 
-      color: "text-[#6366f1]", 
-      glow: "rgba(99, 102, 241, 0.8)", 
+    if (score >= 70) return { 
+      color: "text-indigo-400", 
+      glow: "rgba(129, 140, 248, 0.4)", 
       label: "STABLE", 
       icon: TrendingUp,
-      gradient: "from-[#6366f1] to-[#818cf8]",
-      hex: "#6366f1"
+      hex: "#818cf8",
+      tip: "You have a solid foundation. Keep hitting those goals."
+    };
+    if (score >= 50) return { 
+      color: "text-blue-400", 
+      glow: "rgba(96, 165, 250, 0.4)", 
+      label: "IMPROVING", 
+      icon: Activity,
+      hex: "#60a5fa",
+      tip: "You're on the right track. Consistency will raise your score."
     };
     return { 
-      color: "text-[#f43f5e]", 
-      glow: "rgba(244, 63, 94, 0.8)", 
+      color: "text-red-400", 
+      glow: "rgba(248, 113, 113, 0.4)", 
       label: "CRITICAL", 
       icon: AlertCircle,
-      gradient: "from-[#f43f5e] to-[#fb7185]",
-      hex: "#f43f5e"
+      hex: "#f87171",
+      tip: "Score is low. Try saving more or clearing your 'Ick' spending."
     };
   };
 
@@ -99,6 +107,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
             />
             
             {/* Main Progress Circle with Unified Solid Glow */}
+            {/* Main Progress Circle - Glow synchronized via CSS property to avoid lag */}
             <motion.circle
               cx="120"
               cy="120"
@@ -109,10 +118,13 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               strokeLinecap="round"
               strokeDasharray="628"
               initial={{ strokeDashoffset: 628 }}
-              animate={{ strokeDashoffset: 628 - (score / 100) * 628 }}
+              animate={{ 
+                strokeDashoffset: 628 - (score / 100) * 628,
+                stroke: info.hex 
+              }}
               transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{
-                filter: `drop-shadow(0 0 16px ${info.hex})`
+                filter: `drop-shadow(0 0 12px ${info.hex})`
               }}
             />
 
@@ -168,7 +180,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
                   {score}
                 </span>
                 {/* Score Core Glow - Fully Synchronized */}
-                <div className={`absolute inset-0 blur-[50px] opacity-50 scale-125 rounded-full transition-colors duration-1000`} style={{ backgroundColor: info.hex }} />
+                <div className="absolute inset-0 blur-[50px] opacity-40 scale-125 rounded-full" style={{ backgroundColor: info.hex }} />
               </div>
 
               <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mt-1">
@@ -180,13 +192,16 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
 
         {/* Footer Text Area */}
         <div className="text-center w-full mt-auto">
-          <h3 className="text-xl font-black text-white tracking-tight mb-3">Financial Health</h3>
-          <div className="relative p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm">
-            <p className="text-sm text-white/50 leading-relaxed font-medium">
-              {message}
-            </p>
-            {/* Subtle progress highlight at bottom of message box */}
-            <div className={`absolute bottom-0 left-0 h-[2px] w-full opacity-60`} style={{ background: `linear-gradient(to right, transparent, ${info.hex}, transparent)` }} />
+          <h3 className="text-xl font-black text-white tracking-tight mb-2 uppercase italic opacity-90">Health Analysis</h3>
+          <div className="relative p-4 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm overflow-hidden min-h-[80px] flex items-center justify-center">
+             <div className="space-y-1">
+               <p className="text-xs font-black text-white/40 uppercase tracking-widest">{info.label} STATUS</p>
+               <p className="text-sm text-white/70 leading-relaxed font-medium">
+                 {message}
+               </p>
+             </div>
+            {/* Dynamic progress highlight at bottom of message box */}
+            <div className={`absolute bottom-0 left-0 h-[3px] w-full transition-all duration-500`} style={{ background: info.hex, boxShadow: `0 0 15px ${info.hex}` }} />
           </div>
         </div>
       </div>

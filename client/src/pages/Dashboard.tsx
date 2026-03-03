@@ -39,7 +39,7 @@ import AchievementBadge from "@/components/AchievementBadge";
 import AddExpenseModal from "@/components/AddExpenseModal";
 import ChallengeDetailsModal from "@/components/ChallengeDetailsModal";
 import ChallengeCelebration from "@/components/ChallengeCelebration";
-import type { Transaction, Quest, UserQuest, Badge, UserBadge } from "@shared/schema";
+import type { Transaction, Quest, UserQuest, Badge, UserBadge, Goal } from "@shared/schema";
 import { format } from "date-fns";
 
 const container = {
@@ -93,6 +93,10 @@ export default function Dashboard() {
 
   const { data: stashTransactions = [] } = useQuery<any[]>({
     queryKey: ["/api/stash"],
+  });
+
+  const { data: goals = [] } = useQuery<Goal[]>({
+    queryKey: ["/api/goals"],
   });
 
   const topUpMutation = useMutation({
@@ -197,6 +201,7 @@ export default function Dashboard() {
   }, [challenges, celebratingChallenge]);
 
   const { healthScore, totalXP, message } = useMemo(() => {
+    // 1. Calculate Experience Points (XP)
     const xp = userQuests
       .filter(uq => uq.completed)
       .reduce((sum, uq) => {
@@ -204,12 +209,67 @@ export default function Dashboard() {
         return sum + (quest?.points || 0);
       }, 0);
 
-    let score = 50;
-    // Add real logic for health score here based on user data
-    if (userQuests.length > 0) score += 10;
+    // 2. Comprehensive Financial Health Score Logic (0-100)
+    let score = 30; // Base score (Neutral)
+
+    // A. Goal Progress Factor (+25 points max)
+    if (goals.length > 0) {
+      const completedGoals = goals.filter(g => g.completed).length;
+      const completionRate = completedGoals / goals.length;
+      score += completionRate * 15;
+
+      const totalTarget = goals.reduce((sum, g) => sum + parseFloat(g.targetAmount || "0"), 0);
+      const totalCurrent = goals.reduce((sum, g) => sum + parseFloat(g.currentAmount || "0"), 0);
+      if (totalTarget > 0) {
+        score += (totalCurrent / totalTarget) * 10;
+      }
+    }
+
+    // B. Savings Behavior Factor (+25 points max)
+    const stashedAmount = stashTransactions
+      .filter(t => t.type === 'stash')
+      .reduce((acc, t) => acc + parseFloat(t.amount || "0"), 0);
+    const withdrawnAmount = stashTransactions
+      .filter(t => t.type === 'withdraw' || t.type === 'claim')
+      .reduce((acc, t) => acc + parseFloat(t.amount || "0"), 0);
+    const netSavings = stashedAmount - withdrawnAmount;
     
-    return { healthScore: Math.min(100, score), totalXP: xp, message: "Your financial health is stable. Keep it up!" };
-  }, [userQuests, allQuests]);
+    if (netSavings > 0) {
+      score += Math.min(25, (netSavings / 1000) * 5); // Reward for raw savings volume
+    }
+
+    // C. Challenge & Discipline Factor (+20 points max)
+    if (userQuests.length > 0) {
+      const completionRate = userQuests.filter(uq => uq.completed).length / userQuests.length;
+      score += completionRate * 20;
+    }
+
+    // D. Wallet & Liquidity Factor (+10 points max)
+    const balance = parseFloat(user?.walletBalance?.toString() || "0");
+    if (balance > 500) score += 10;
+    else if (balance > 100) score += 5;
+
+    // E. Penalty for "Icks" (Impulse buys)
+    const icks = transactions.filter(t => t.tag === 'Ick').length;
+    score -= icks * 2;
+
+    const finalScore = Math.max(0, Math.min(100, Math.round(score)));
+
+    // Range-based messaging
+    let msg = "Your financial health is stable. Keep it up!";
+    if (finalScore >= 80) msg = "Excellent! You've mastered your budget and your savings are thriving.";
+    else if (finalScore >= 60) msg = "Great job! You're building solid financial habits and reaching your goals.";
+    else if (finalScore < 40) msg = "Caution: Your spending might be outpacing your savings. Time for a budget review!";
+
+    return { healthScore: finalScore, totalXP: xp, message: msg };
+  }, [userQuests, allQuests, goals, stashTransactions, transactions, user?.walletBalance]);
+
+  const healthLabel = useMemo(() => {
+    if (healthScore >= 85) return { label: "EXCELLENT", color: "text-green-400" };
+    if (healthScore >= 70) return { label: "STABLE", color: "text-indigo-400" };
+    if (healthScore >= 50) return { label: "IMPROVING", color: "text-blue-400" };
+    return { label: "CRITICAL", color: "text-red-400" };
+  }, [healthScore]);
 
   const recentAchievements = useMemo(() => {
     const wins: any[] = [];
@@ -287,9 +347,11 @@ export default function Dashboard() {
             </div>
             <div>
               <h2 className="text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Member'}!</h2>
-              <div className="flex items-center gap-2 text-white/40 mt-1">
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium">Active Member Status</span>
+              <div className="flex items-center gap-2 mt-1">
+                <ShieldCheck className={`w-4 h-4 ${healthLabel.color}`} />
+                <span className={`text-sm font-black uppercase tracking-widest ${healthLabel.color}`}>
+                  {healthLabel.label} MEMBER STATUS
+                </span>
               </div>
             </div>
           </div>
