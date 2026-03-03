@@ -192,8 +192,8 @@ export function NavigationBar() {
               <div className="hidden lg:flex items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-2 bg-primary/20 px-3 py-1.5 rounded-full border border-primary/30 cursor-pointer hover:bg-primary/30 transition-all click-scale group">
-                      <Wallet className="w-3.5 h-3.5 text-primary group-hover:scale-110 transition-transform" />
+                    <div className="flex items-center gap-2 bg-purple-600 px-3 py-1.5 rounded-full border border-purple-500/30 cursor-pointer hover:bg-purple-500 transition-all click-scale group shadow-[0_5px_15px_rgba(147,51,234,0.3)]">
+                      <Wallet className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-bold text-white">
                         ₹{walletBalance.toLocaleString('en-IN')}
                       </span>
@@ -283,8 +283,8 @@ export function NavigationBar() {
             </Link>
             
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 bg-primary/15 px-2.5 py-1.5 rounded-full border border-primary/25">
-                <Wallet className="w-3 h-3 text-primary" />
+              <div className="flex items-center gap-1.5 bg-purple-600 px-2.5 py-1.5 rounded-full border border-purple-500/25 shadow-[0_4px_10px_rgba(147,51,234,0.3)]">
+                <Wallet className="w-3 h-3 text-white" />
                 <span className="text-xs font-bold text-white">
                   ₹{walletBalance.toLocaleString('en-IN')}
                 </span>
@@ -421,10 +421,10 @@ export function NavigationBar() {
 
                   {/* Balance chips */}
                   <div className="flex gap-2 mt-2">
-                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-primary/10 border border-primary/20">
-                      <Wallet className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-purple-600 border border-purple-500/20 shadow-[0_8px_16px_rgba(147,51,234,0.2)]">
+                      <Wallet className="w-3.5 h-3.5 text-white flex-shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-[9px] font-black text-white/30 uppercase tracking-wider">Wallet</p>
+                        <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Wallet</p>
                         <p className="text-xs font-black text-white truncate">₹{walletBalance.toLocaleString('en-IN')}</p>
                       </div>
                     </div>
