@@ -417,25 +417,24 @@ export default function LearnPage() {
     <div className="min-h-screen bg-[#050505] text-white">
       <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
 
-        {/* Unified Mastery Hub Header */}
-        <div className="relative overflow-hidden rounded-[48px] border border-white/5 bg-white/[0.02] p-8 md:p-12 shadow-2xl">
+        {/* Compact Mastery Hub Header */}
+        <div className="relative overflow-hidden rounded-[32px] border border-white/5 bg-white/[0.02] p-6 md:p-10 shadow-xl">
            {/* Abstract Decorative Background */}
-           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
-           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] -ml-48 -mb-48 pointer-events-none" />
-
-           <div className="relative z-10 flex flex-col lg:flex-row gap-12 items-center lg:items-center">
+           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
+           
+           <div className="relative z-10 flex flex-col lg:flex-row gap-8 items-center lg:items-center">
               
-              {/* Left Column: Branding & Intro */}
-              <div className="flex-1 space-y-8 text-center lg:text-left">
-                <div className="flex flex-col md:flex-row items-center gap-4 lg:justify-start justify-center">
-                  <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                    <Brain className="w-4 h-4 text-primary" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Financial Academy</span>
+              {/* Left Column: Compact Branding & Intro */}
+              <div className="flex-1 space-y-6 text-center lg:text-left">
+                <div className="flex flex-col md:flex-row items-center gap-3 lg:justify-start justify-center">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+                    <Brain className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Financial Academy</span>
                   </div>
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="h-8 px-4 rounded-xl border border-white/5 text-[9px] font-black uppercase tracking-[0.2em] bg-white/[0.02] hover:bg-white/10 text-white/40 hover:text-white transition-all shadow-inner"
+                    className="h-7 px-3 rounded-xl border border-white/5 text-[8px] font-black uppercase tracking-[0.2em] bg-white/[0.02] hover:bg-white/10 text-white/40 hover:text-white transition-all shadow-inner"
                     onClick={async () => {
                       try {
                         await apiRequest("/api/admin/seed-courses", "POST");
@@ -451,70 +450,66 @@ export default function LearnPage() {
                   </Button>
                 </div>
 
-                <div className="space-y-4">
-                  <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase leading-[0.85] text-white">
+                <div className="space-y-3">
+                  <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic uppercase leading-[0.9] text-white">
                     Learn <span className="text-primary italic">& Earn</span>
                   </h1>
-                  <p className="text-white/40 text-lg md:text-xl max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
+                  <p className="text-white/40 text-base md:text-lg max-w-lg font-medium leading-relaxed mx-auto lg:mx-0">
                     Master your capital through deep-dive courses. Level up your <span className="text-white/60">financial IQ</span> and unlock your ultimate earning potential.
                   </p>
                 </div>
               </div>
 
-              {/* Right Column: High-Impact Mastery Card */}
-              <div className="w-full lg:w-[440px] shrink-0">
-                 <div className="p-8 rounded-[40px] bg-white/[0.03] border border-white/10 backdrop-blur-3xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
+              {/* Right Column: Compact Mastery Card */}
+              <div className="w-full lg:w-[360px] shrink-0">
+                 <div className="p-6 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-3xl shadow-xl relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     
-                    <div className="relative z-10 space-y-8">
+                    <div className="relative z-10 space-y-6">
                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 italic">Academy Progress</p>
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 italic">Progress</p>
                           </div>
-                          <div className="px-3 py-1 rounded-xl bg-primary text-[10px] font-black text-white shadow-lg shadow-primary/20">
+                          <div className="px-2.5 py-0.5 rounded-lg bg-primary text-[9px] font-black text-white">
                             LEVEL {Math.floor(completedCount / 3) + 1}
                           </div>
                        </div>
 
-                       <div className="flex items-baseline gap-4">
-                          <span className="text-8xl font-black italic tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                       <div className="flex items-baseline gap-3">
+                          <span className="text-6xl font-black italic tracking-tighter text-white">
                             {masteryPercentage}%
                           </span>
-                          <div className="flex flex-col">
-                             <span className="text-[11px] font-black uppercase text-white/40 tracking-widest">Mastery</span>
-                             <span className="text-xs font-black uppercase text-primary tracking-[0.2em]">Journey</span>
+                          <div className="flex flex-col leading-none">
+                             <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mastery</span>
+                             <span className="text-[11px] font-black uppercase text-primary tracking-[0.2em]">Hub</span>
                           </div>
                        </div>
 
                        {/* The Progress Track */}
-                       <div className="space-y-4">
-                          <div className="relative h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-1">
+                       <div className="space-y-3">
+                          <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${masteryPercentage}%` }}
                               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                              className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full shadow-[0_0_20px_rgba(139,92,246,0.3)] relative"
+                              className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full relative"
                             >
                                <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.3)_50%,transparent_100%)] animate-shimmer" />
                             </motion.div>
                           </div>
-                          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 px-1">
-                            <span>Entry Class</span>
-                            <span>Expert Investor</span>
-                          </div>
                        </div>
 
-                       {/* Mini Stats Grid */}
-                       <div className="grid grid-cols-3 gap-4 pt-8 border-t border-white/5">
+                       {/* Compact Stats Grid */}
+                       <div className="grid grid-cols-3 gap-2 pt-6 border-t border-white/5">
                           {[
-                            { label: 'Completed', val: completedCount, icon: CheckCircle2, color: 'text-emerald-400' },
-                            { label: 'Courses', val: literacyQuests.length, icon: BookOpen, color: 'text-primary' },
-                            { label: 'Total XP', val: totalEarnedXP, icon: Star, color: 'text-amber-400' }
+                            { label: 'Done', val: completedCount, color: 'text-emerald-400' },
+                            { label: 'Courses', val: literacyQuests.length, color: 'text-primary' },
+                            { label: 'Total XP', val: totalEarnedXP, color: 'text-amber-400' }
                           ].map((stat) => (
-                            <div key={stat.label} className="text-center group/stat">
-                               <p className={`text-xl font-black italic mb-0.5 transition-transform group-hover/stat:scale-110 ${stat.color}`}>{stat.val}</p>
-                               <p className="text-[9px] text-white/20 font-black uppercase tracking-widest">{stat.label}</p>
+                            <div key={stat.label} className="text-center">
+                               <p className={`text-lg font-black italic mb-0.5 ${stat.color}`}>{stat.val}</p>
+                               <p className="text-[8px] text-white/20 font-black uppercase tracking-widest">{stat.label}</p>
                             </div>
                           ))}
                        </div>
