@@ -434,9 +434,9 @@ export default function Dashboard() {
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-purple-600 hover:bg-purple-500 shadow-xl transition-all duration-300 click-scale group"
+                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-purple-600 border border-white/10 hover:bg-purple-500 shadow-2xl transition-all duration-300 click-scale group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-black border border-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <div className="w-14 h-14 rounded-2xl bg-purple-500 shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                     <action.icon className="w-7 h-7 text-white" />
                   </div>
                   <span className="text-[10px] font-black text-white tracking-[0.2em] transition-colors">{action.label}</span>
