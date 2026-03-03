@@ -418,9 +418,9 @@ export default function LearnPage() {
       <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
 
         {/* Compact Mastery Hub Header */}
-        <div className="relative overflow-hidden rounded-[32px] border border-white/5 bg-white/[0.02] p-6 md:p-10 shadow-xl">
+        <div className="relative overflow-hidden rounded-[32px] p-6 md:p-10 ">
            {/* Abstract Decorative Background */}
-           <div className="absolute top-0 right-0 w-[400px] h-[400px]  -mr-48 -mt-48 pointer-events-none" />
+           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
            
            <div className="relative z-10 flex flex-col lg:flex-row gap-8 items-center lg:items-center">
               
