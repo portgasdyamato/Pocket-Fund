@@ -303,8 +303,8 @@ export default function ExpenseLog() {
                          </div>
                       </div>
 
-                      {/* Actions Area - Distinguished Horizontal Bars */}
-                      <div className="flex flex-col gap-2.5 relative z-10 px-1">
+                      {/* Actions Area - Compact Content-Fit Tokens */}
+                      <div className="flex flex-row flex-wrap items-center justify-center gap-3 relative z-10">
                         {[
                           { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', glow: 'group-hover/btn:bg-blue-400/10' },
                           { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary', glow: 'group-hover/btn:bg-primary/10' },
@@ -312,17 +312,17 @@ export default function ExpenseLog() {
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.02, x: 6 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.05, y: -4 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-row items-center gap-5 px-6 py-5 rounded-[28px] border transition-all duration-300 group/btn
-                               bg-[#0C0C0C] border-white/[0.05] hover:border-white/10 hover:shadow-2xl
+                            className={`flex flex-row items-center gap-3 px-5 py-3.5 rounded-full border transition-all duration-300 group/btn w-fit
+                               bg-[#0C0C0C] border-white/[0.05] hover:border-white/10 hover:shadow-xl
                                ${btn.accent} ${btn.glow}`}
                           >
-                            <div className={`flex-shrink-0 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05] group-hover/btn:scale-110 group-hover/btn:border-current transition-all duration-500`}>
-                               <btn.icon className="w-5 h-5 opacity-90" />
+                            <div className="flex-shrink-0 transition-transform duration-500 group-hover/btn:scale-110">
+                               <btn.icon className="w-4 h-4 opacity-90" />
                             </div>
-                            <span className="text-[13px] font-black uppercase tracking-[0.25em] text-white group-hover/btn:text-white transition-colors">{btn.label}</span>
+                            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-white/70 group-hover/btn:text-white transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
