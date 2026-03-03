@@ -303,29 +303,26 @@ export default function ExpenseLog() {
                          </div>
                       </div>
 
-                      {/* Actions Area - Sleek Horizontal Precision Bars */}
-                      <div className="grid grid-cols-1 gap-3 relative z-10">
+                      {/* Actions Area - Distinguished Horizontal Bars */}
+                      <div className="flex flex-col gap-2.5 relative z-10 px-1">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', bg: 'hover:bg-blue-400/10' },
-                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary', bg: 'hover:bg-primary/10' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive', bg: 'hover:bg-destructive/10' }
+                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', glow: 'group-hover/btn:bg-blue-400/10' },
+                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary', glow: 'group-hover/btn:bg-primary/10' },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive', glow: 'group-hover/btn:bg-destructive/10' }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.02, x: 8 }}
+                            whileHover={{ scale: 1.02, x: 6 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-row items-center gap-4 px-6 py-4 rounded-[24px] border-2 transition-all duration-300 group/btn
-                               bg-zinc-800 border-white/[0.05] hover:border-white/20 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)]
-                               ${btn.bg} ${btn.accent}`}
+                            className={`flex flex-row items-center gap-5 px-6 py-5 rounded-[28px] border transition-all duration-300 group/btn
+                               bg-[#0C0C0C] border-white/[0.05] hover:border-white/10 hover:shadow-2xl
+                               ${btn.accent} ${btn.glow}`}
                           >
-                            <div className={`p-2 rounded-xl bg-white/[0.05] border border-white/[0.1] group-hover/btn:scale-110 transition-transform`}>
-                               <btn.icon className="w-5 h-5 opacity-90 brightness-125" />
+                            <div className={`flex-shrink-0 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05] group-hover/btn:scale-110 group-hover/btn:border-current transition-all duration-500`}>
+                               <btn.icon className="w-5 h-5 opacity-90" />
                             </div>
-                            <div className="flex flex-col items-start leading-none">
-                              <span className="text-[14px] font-black uppercase tracking-[0.2em] text-white group-hover/btn:text-white transition-colors">{btn.label}</span>
-                              <span className="text-[8px] font-bold opacity-30 mt-1 uppercase tracking-widest">Metadata Assignment</span>
-                            </div>
+                            <span className="text-[13px] font-black uppercase tracking-[0.25em] text-white group-hover/btn:text-white transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
