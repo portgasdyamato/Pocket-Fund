@@ -294,9 +294,9 @@ export default function ExpenseLog() {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
                             className={`flex flex-col items-center justify-center py-4 px-2 rounded-2xl border transition-all duration-300 group/btn relative overflow-hidden
-                              ${btn.color === 'blue' ? 'border-blue-500/10 hover:border-blue-500/30 text-blue-400 hover:bg-blue-500/5' : 
-                                btn.color === 'primary' ? 'border-primary/10 hover:border-primary/30 text-primary hover:bg-primary/5' : 
-                                'border-destructive/10 hover:border-destructive/30 text-destructive hover:bg-destructive/5'}`}
+                              ${btn.color === 'blue' ? 'bg-blue-500/[0.05] border-blue-500/10 hover:border-blue-500/30 text-blue-400 hover:bg-blue-500/15' : 
+                                btn.color === 'primary' ? 'bg-primary/[0.05] border-primary/10 hover:border-primary/30 text-primary hover:bg-primary/15' : 
+                                'bg-destructive/[0.05] border-destructive/10 hover:border-destructive/30 text-destructive hover:bg-destructive/15'}`}
                           >
                             <div className={`absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity bg-gradient-to-b from-transparent to-current/5`} />
                             
