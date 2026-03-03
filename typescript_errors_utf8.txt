@@ -1,0 +1,14 @@
+﻿client/src/components/AddExpenseModal.tsx(126,22): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?
+client/src/components/AddExpenseModal.tsx(140,24): error TS2304: Cannot find name 'AnimatePresence'.
+client/src/components/AddExpenseModal.tsx(142,28): error TS2304: Cannot find name 'motion'.
+client/src/components/AddExpenseModal.tsx(149,25): error TS2304: Cannot find name 'AnimatePresence'.
+client/src/components/AddExpenseModal.tsx(157,23): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?
+client/src/components/AddExpenseModal.tsx(193,22): error TS2304: Cannot find name 'Zap'.
+client/src/components/examples/AddExpenseModal.tsx(14,9): error TS2322: Type '{ open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>>; onAdd: (expense: any) => void; }' is not assignable to type 'IntrinsicAttributes & AddExpenseModalProps'.
+  Property 'onAdd' does not exist on type 'IntrinsicAttributes & AddExpenseModalProps'.
+client/src/components/examples/AddExpenseModal.tsx(14,17): error TS7006: Parameter 'expense' implicitly has an 'any' type.
+client/src/pages/Dashboard.tsx(247,28): error TS2304: Cannot find name 'Coffee'.
+client/src/pages/Dashboard.tsx(248,33): error TS2552: Cannot find name 'Car'. Did you mean 'Card'?
+client/src/pages/Dashboard.tsx(249,32): error TS2304: Cannot find name 'ShoppingBag'.
+client/src/pages/Dashboard.tsx(250,37): error TS2304: Cannot find name 'Ticket'.
+client/src/pages/Dashboard.tsx(251,29): error TS2304: Cannot find name 'FileText'.

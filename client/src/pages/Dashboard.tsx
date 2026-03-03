@@ -16,7 +16,12 @@ import {
   ShieldCheck,
   Zap,
   ArrowUpRight,
-  TrendingDown
+  TrendingDown,
+  Coffee,
+  Car,
+  ShoppingBag,
+  Ticket,
+  FileText
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
