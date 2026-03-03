@@ -8,7 +8,6 @@ import {
   userQuests,
   streaks,
   stashTransactions,
-  otps,
   type User,
   type UpsertUser,
   type Goal,
@@ -69,10 +68,6 @@ export interface IStorage {
   getStashTransactions(userId: string): Promise<StashTransaction[]>;
   getTotalStashed(userId: string): Promise<number>;
   updateWalletBalance(userId: string, amount: number): Promise<void>;
-  
-  // OTP operations
-  createOTP(userId: string, code: string): Promise<void>;
-  verifyOTP(userId: string, code: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -310,38 +305,6 @@ export class DatabaseStorage implements IStorage {
         walletBalance: sql`${users.walletBalance} + ${amount}`
       })
       .where(eq(users.id, userId));
-  }
-
-  async createOTP(userId: string, code: string): Promise<void> {
-    const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
-    
-    // Cleanup old OTPs for this user
-    await db.delete(otps).where(eq(otps.userId, userId));
-    
-    await db.insert(otps).values({
-      userId,
-      code,
-      expiresAt
-    });
-  }
-
-  async verifyOTP(userId: string, code: string): Promise<boolean> {
-    const [match] = await db
-      .select()
-      .from(otps)
-      .where(and(
-        eq(otps.userId, userId),
-        eq(otps.code, code),
-        sql`${otps.expiresAt} > now()`
-      ));
-    
-    if (match) {
-      // Consume the OTP
-      await db.delete(otps).where(eq(otps.id, match.id));
-      return true;
-    }
-    return false;
   }
 }
 

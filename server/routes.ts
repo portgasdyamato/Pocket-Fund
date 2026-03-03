@@ -2,10 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./googleAuth";
-import { categorizePurchase, generateFinancialInsight, chatWithFinancialAssistant } from "./geminiService";
+import { chatWithFinancialAssistant, categorizePurchase, generateFinancialInsight } from "./geminiService";
 import { insertGoalSchema, insertTransactionSchema, insertStashTransactionSchema } from "@shared/schema";
 import { seedLiteracyCourses } from "./seedCourses";
-import { sendOTP } from "./emailService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
@@ -127,15 +126,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!goal) {
         return res.status(404).json({ message: "Goal not found" });
-      }
-
-      const { code } = req.body;
-      if (!code) {
-        return res.status(400).json({ message: "Security code is required for claiming." });
-      }
-      const isValid = await storage.verifyOTP(userId, code);
-      if (!isValid) {
-        return res.status(400).json({ message: "Invalid or expired security code." });
       }
       
       const current = parseFloat(goal.currentAmount);
@@ -395,49 +385,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/vault/request-otp', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.id;
-      const user = await storage.getUser(userId);
-      
-      if (!user?.email) {
-        return res.status(400).json({ message: "No email associated with this account." });
-      }
-
-      const code = Math.floor(1000 + Math.random() * 9000).toString();
-      await storage.createOTP(userId, code);
-      const result = await sendOTP(user.email, code, user.firstName || undefined);
-      
-      res.json({ success: true, mocked: result.mocked });
-    } catch (error) {
-      console.error("Error requesting OTP:", error);
-      res.status(500).json({ message: "Failed to send security code." });
-    }
-  });
-
   app.post('/api/stash', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.id;
-      const { code, ...stashPayload } = req.body;
-      const stashData = insertStashTransactionSchema.parse({ ...stashPayload, userId });
+      const stashData = insertStashTransactionSchema.parse({ ...req.body, userId });
       
-      const isWithdraw = stashData.type === 'withdraw' || stashData.type === 'claim';
-
-      // 1. Verification Step for Withdrawals
-      if (isWithdraw) {
-        if (!code) {
-          return res.status(400).json({ message: "Security code is required for withdrawals." });
-        }
-        const isValid = await storage.verifyOTP(userId, code);
-        if (!isValid) {
-          return res.status(400).json({ message: "Invalid or expired security code." });
-        }
-      }
-
       const amount = parseFloat(stashData.amount);
       const isStash = stashData.type === 'stash';
 
-      // 2. Balance Verification
+      // Check wallet balance for stashing
       if (isStash) {
         const user = await storage.getUser(userId);
         const currentBalance = parseFloat(user?.walletBalance?.toString() || "0");

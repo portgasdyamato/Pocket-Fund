@@ -34,7 +34,7 @@ export default function GlowUp() {
   const [isNewGoalOpen, setIsNewGoalOpen] = useState(false);
   const [isStashOpen, setIsStashOpen] = useState(false);
   const [vaultStep, setVaultStep] = useState<'action' | 'verify'>('action');
-  const [pendingGoalId, setPendingGoalId] = useState<string | null>(null);
+  const [verificationCode, setVerificationCode] = useState("");
   const [enteredCode, setEnteredCode] = useState("");
   const [goalName, setGoalName] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
@@ -78,12 +78,16 @@ export default function GlowUp() {
 
   const stashMutation = useMutation({
     mutationFn: async (type: 'stash' | 'withdraw') => {
+      // For withdrawals, check code first
+      if (type === 'withdraw' && enteredCode !== verificationCode) {
+        throw new Error("Invalid security code.");
+      }
+      
       return await apiRequest("/api/stash", "POST", {
         amount: stashAmount,
         type: type,
         goalId: selectedGoalId || null,
         status: "completed",
-        code: type === 'withdraw' ? enteredCode : undefined
       });
     },
     onSuccess: async () => {
@@ -113,46 +117,32 @@ export default function GlowUp() {
     }
   });
 
-  const requestOTPMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("/api/vault/request-otp", "POST");
-      return await response.json();
-    },
-    onSuccess: (data) => {
-      setVaultStep('verify');
-      toast({
-        title: data.mocked ? "[DEMO] Security Code Logged" : "Security Code Sent",
-        description: data.mocked 
-          ? "Check the server logs/console for your 4-digit code." 
-          : "We've sent a 4-digit verification code to your registered email.",
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Security Request Failed",
-        description: error.message || "Could not send verification code.",
-        variant: "destructive",
-      });
-    }
-  });
-
   const handleWithdrawClick = () => {
     if (!stashAmount || parseFloat(stashAmount) <= 0) {
       toast({ title: "Invalid Amount", variant: "destructive" });
       return;
     }
     
+    // Check if enough funds in vault
     if (parseFloat(stashAmount) > totalStashed) {
       toast({ title: "Insufficient Funds", description: "You don't have that much in your vault.", variant: "destructive" });
       return;
     }
 
-    requestOTPMutation.mutate();
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    setVerificationCode(code);
+    setVaultStep('verify');
+    
+    toast({
+      title: "Security Code Sent",
+      description: `Your one-time withdrawal code is: ${code}`,
+      duration: 10000,
+    });
   };
 
   const claimGoalMutation = useMutation({
-    mutationFn: async ({ id, code }: { id: string; code: string }) => {
-      return await apiRequest(`/api/goals/${id}/claim`, "POST", { code });
+    mutationFn: async (id: string) => {
+      return await apiRequest(`/api/goals/${id}/claim`, "POST");
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
@@ -160,17 +150,12 @@ export default function GlowUp() {
       queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       
-      const goal = goals.find(g => g.id === variables.id);
+      const goal = goals.find(g => g.id === variables);
       if (goal) {
         setCompletedGoalName(goal.name);
         setShowCelebration(true);
       }
       
-      setIsStashOpen(false);
-      setVaultStep('action');
-      setPendingGoalId(null);
-      setEnteredCode("");
-
       toast({
         title: "Goal Accomplished!",
         description: "Funds have been claimed and the goal is complete.",
@@ -184,14 +169,6 @@ export default function GlowUp() {
       });
     }
   });
-
-  const handleClaimClick = (id: string, name: string) => {
-    setPendingGoalId(id);
-    setCompletedGoalName(name);
-    setIsStashOpen(true);
-    setVaultStep('verify');
-    requestOTPMutation.mutate();
-  };
 
   const totalStashed = totalStashedData?.total || 0;
 
@@ -321,9 +298,7 @@ export default function GlowUp() {
                         <ShieldCheck className="w-10 h-10 text-primary" />
                       </div>
                       <h2 className="text-3xl font-black tracking-tight">Verify Identity</h2>
-                      <p className="text-white/40 mt-2 font-medium">
-                        {pendingGoalId ? `Confirm you want to claim "${completedGoalName}".` : `To withdraw ₹${stashAmount}, enter the code sent to your email.`}
-                      </p>
+                      <p className="text-white/40 mt-2 font-medium">Please enter the 4-digit code to authorize this withdrawal.</p>
                     </div>
 
                     <div className="flex justify-center gap-4 py-4">
@@ -339,25 +314,16 @@ export default function GlowUp() {
 
                     <div className="space-y-4">
                       <Button
-                        onClick={() => {
-                          if (pendingGoalId) {
-                            claimGoalMutation.mutate({ id: pendingGoalId, code: enteredCode });
-                          } else {
-                            stashMutation.mutate('withdraw');
-                          }
-                        }}
-                        disabled={stashMutation.isPending || claimGoalMutation.isPending || enteredCode.length < 4}
+                        onClick={() => stashMutation.mutate('withdraw')}
+                        disabled={stashMutation.isPending || enteredCode.length < 4}
                         className="w-full h-16 text-lg"
                       >
-                        {stashMutation.isPending || claimGoalMutation.isPending ? 'Verifying...' : 'Authorize Transaction'}
+                        {stashMutation.isPending ? 'Verifying...' : 'Authorize Withdrawal'}
                       </Button>
                       <Button
                         variant="ghost"
                         className="w-full text-white/40 hover:text-white"
-                        onClick={() => {
-                          setVaultStep('action');
-                          setPendingGoalId(null);
-                        }}
+                        onClick={() => setVaultStep('action')}
                       >
                         Go Back
                       </Button>
@@ -477,7 +443,7 @@ export default function GlowUp() {
                             className="w-full bg-green-600 hover:bg-green-500 text-white font-black uppercase tracking-widest text-xs h-12 shadow-[0_5px_15px_rgba(34,197,94,0.3)]"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleClaimClick(goal.id, goal.name);
+                              claimGoalMutation.mutate(goal.id);
                             }}
                             disabled={claimGoalMutation.isPending}
                           >

@@ -106,14 +106,6 @@ export const stashTransactions = pgTable("stash_transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const otps = pgTable("otps", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  code: text("code").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
