@@ -143,7 +143,7 @@ export default function GlowUp() {
           
           <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90 text-white rounded-2xl h-16 px-10 text-xl font-bold premium-shadow click-scale group">
+              <Button className="border-none bg-primary hover:bg-primary/90 text-white rounded-2xl h-16 px-10 text-xl font-bold premium-shadow click-scale group">
                 <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 Secure Savings
               </Button>
