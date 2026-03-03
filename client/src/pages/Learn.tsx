@@ -63,6 +63,7 @@ export default function LevelUp() {
   const [step, setStep] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
   const { width, height } = useWindowSize();
 
   const { data: allQuests = [], isLoading } = useQuery<Quest[]>({
@@ -104,12 +105,15 @@ export default function LevelUp() {
     setStep(0);
     setSelectedOption(null);
     setIsCompleted(false);
+    setShowSolution(false);
   };
 
   const closeQuest = () => {
     setActiveQuest(null);
     setStep(0);
     setIsCompleted(false);
+    setShowSolution(false);
+    setSelectedOption(null);
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -135,7 +139,6 @@ export default function LevelUp() {
     const currentQuizIdx = isQuizStep ? step - slides.length - 1 : (isLastStep && !isCompleted ? quizzes.length - 1 : null);
     const currentQuiz = currentQuizIdx !== null ? quizzes[currentQuizIdx] : null;
 
-    const [showSolution, setShowSolution] = useState(false);
 
     const handleNext = () => {
       if (step < slides.length) {
