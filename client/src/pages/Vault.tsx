@@ -387,8 +387,11 @@ export default function GlowUp() {
                               {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : <ArrowDownCircle className="w-6 h-6" />}
                             </div>
                             <div>
-                              <p className="font-bold text-white group-hover:text-primary transition-colors">
+                              <p className="font-bold text-white group-hover:text-primary transition-colors flex items-center gap-2">
                                 {t.type === 'stash' ? 'Deposited' : 'Withdrawn'}
+                                <span className="text-[10px] text-white/50 bg-white/5 px-2 py-0.5 rounded-full border border-white/10 uppercase tracking-widest">
+                                  {t.goalId ? goals.find(g => g.id === t.goalId)?.name || 'General Vault' : 'General Vault'}
+                                </span>
                               </p>
                               <p className="text-xs font-bold text-white/30 uppercase tracking-widest mt-1">
                                 {new Date(t.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
