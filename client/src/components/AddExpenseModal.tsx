@@ -73,30 +73,30 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl bg-black border-white/5 p-0 overflow-hidden rounded-[40px] shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+      <DialogContent className="sm:max-w-lg bg-black border-white/5 p-0 overflow-hidden rounded-[32px] shadow-[0_0_60px_rgba(0,0,0,0.5)]">
         {/* Dynamic Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 p-6 sm:p-10 space-y-8 sm:space-y-10 max-h-[85vh] overflow-y-auto">
-          <DialogHeader className="mb-4 sm:mb-8">
+        <div className="relative z-10 p-6 sm:p-8 space-y-6 sm:space-y-8 max-h-[80vh] overflow-y-auto">
+          <DialogHeader className="mb-2 sm:mb-4">
             <div className="flex justify-between items-center w-full">
-              <DialogTitle className="text-2xl sm:text-4xl font-black tracking-tighter">Add Entry</DialogTitle>
+              <DialogTitle className="text-xl sm:text-3xl font-black tracking-tighter">Add Entry</DialogTitle>
               <div className="flex flex-col items-end">
-                <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
-                <span className="text-lg sm:text-xl font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
+                <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
+                <span className="text-base sm:text-lg font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
               </div>
             </div>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-10">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Large Amount Input Section */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="relative flex flex-col items-center">
-                <div className="flex items-center justify-center gap-4 w-full">
-                  <span className="text-4xl sm:text-6xl font-black text-white/20 italic">₹</span>
+                <div className="flex items-center justify-center gap-3 w-full">
+                  <span className="text-3xl sm:text-5xl font-black text-white/20 italic">₹</span>
                   <Input
                     id="amount"
                     type="number"
@@ -105,13 +105,13 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="bg-transparent border-none text-5xl sm:text-7xl font-black h-20 sm:h-28 text-center focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter w-full"
+                    className="bg-transparent border-none text-4xl sm:text-6xl font-black h-16 sm:h-24 text-center focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter w-full"
                     data-testid="input-amount"
                     autoFocus
                     disabled={createExpenseMutation.isPending}
                   />
                 </div>
-                <div className="h-0.5 w-[80%] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-30 rounded-full mx-auto" />
+                <div className="h-0.5 w-[70%] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-30 rounded-full mx-auto" />
               </div>
             </div>
 
