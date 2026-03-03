@@ -106,7 +106,7 @@ export default function Dashboard() {
       setTopUpAmount("");
       toast({
         title: "Funds Added",
-        description: `₹${topUpAmount} successfully added to your wallet`,
+        description: `₹${parseFloat(topUpAmount).toLocaleString('en-IN')} successfully added to your wallet`,
       });
     }
   });
@@ -227,13 +227,42 @@ export default function Dashboard() {
     }));
   }, [userBadges, allBadges, userQuests, allQuests]);
 
-  const recentExpenses = transactions.slice(0, 5).map(t => ({
-    id: t.id,
-    category: t.category || 'Other',
-    description: t.description,
-    amount: parseFloat(t.amount),
-    date: format(new Date(t.date), 'MMM d'),
-  }));
+  const recentExpenses = useMemo(() => {
+    return [...transactions]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5)
+      .map(t => ({
+        id: t.id,
+        category: t.category || 'Other',
+        description: t.description,
+        tag: t.tag,
+        amount: parseFloat(t.amount),
+        date: format(new Date(t.date), 'MMM d'),
+      }));
+  }, [transactions]);
+
+  const getCategoryIcon = (cat: string) => {
+    const iconClass = "w-5 h-5";
+    switch (cat.toLowerCase()) {
+      case 'food': return <Coffee className={iconClass} />;
+      case 'transport': return <Car className={iconClass} />;
+      case 'shopping': return <ShoppingBag className={iconClass} />;
+      case 'entertainment': return <Ticket className={iconClass} />;
+      case 'bills': return <FileText className={iconClass} />;
+      default: return <Zap className={iconClass} />;
+    }
+  };
+
+  const getCategoryColor = (cat: string) => {
+    switch (cat.toLowerCase()) {
+      case 'food': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+      case 'transport': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      case 'shopping': return 'bg-pink-500/10 text-pink-400 border-pink-500/20';
+      case 'entertainment': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+      case 'bills': return 'bg-green-500/10 text-green-400 border-green-500/20';
+      default: return 'bg-white/5 text-white/40 border-white/10';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-primary/30">
@@ -492,17 +521,28 @@ export default function Dashboard() {
                     </div>
                   ) : recentExpenses.length > 0 ? (
                     recentExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all">
+                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all group cursor-pointer" onClick={() => setLocation('/history')}>
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${expense.category === 'Ick' ? 'bg-destructive/10 text-destructive' : 'bg-green-500/10 text-green-500'}`}>
-                            {expense.category === 'Ick' ? <TrendingDown className="w-5 h-5" /> : <TrendingUp className="w-5 h-5" />}
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all ${getCategoryColor(expense.category)}`}>
+                            {getCategoryIcon(expense.category)}
                           </div>
                           <div>
-                            <div className="text-sm font-bold text-white/90">{expense.description}</div>
-                            <div className="text-xs text-white/40">{expense.date} • {expense.category}</div>
+                            <div className="text-sm font-bold text-white/90 group-hover:text-primary transition-colors">{expense.description}</div>
+                            <div className="text-[10px] font-black uppercase tracking-wider text-white/30 flex items-center gap-2">
+                              {expense.date} • {expense.category}
+                              {expense.tag && (
+                                <span className={`px-1.5 py-0.5 rounded-md text-[8px] border ${
+                                  expense.tag === 'Need' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                                  expense.tag === 'Want' ? 'bg-primary/10 text-primary border-primary/20' :
+                                  'bg-destructive/10 text-destructive border-destructive/20'
+                                }`}>
+                                  {expense.tag}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <div className="text-sm font-black text-white">₹{expense.amount}</div>
+                        <div className="text-sm font-black text-white">₹{expense.amount.toLocaleString('en-IN')}</div>
                       </div>
                     ))
                   ) : (

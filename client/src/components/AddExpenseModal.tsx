@@ -8,6 +8,7 @@ import { Coffee, Car, ShoppingBag, Ticket, FileText, Tag } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { InsertTransaction } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AddExpenseModalProps {
   open: boolean;
@@ -15,15 +16,16 @@ interface AddExpenseModalProps {
 }
 
 const categories = [
-  { name: 'Food', icon: Coffee, color: 'bg-chart-1/10 text-chart-1 border-chart-1/20' },
-  { name: 'Transport', icon: Car, color: 'bg-chart-2/10 text-chart-2 border-chart-2/20' },
-  { name: 'Shopping', icon: ShoppingBag, color: 'bg-chart-3/10 text-chart-3 border-chart-3/20' },
-  { name: 'Entertainment', icon: Ticket, color: 'bg-chart-4/10 text-chart-4 border-chart-4/20' },
-  { name: 'Bills', icon: FileText, color: 'bg-chart-5/10 text-chart-5 border-chart-5/20' },
-  { name: 'Other', icon: Tag, color: 'bg-muted/50 text-muted-foreground border-border' },
+  { name: 'Food', icon: Coffee, color: 'text-orange-400', bg: 'bg-orange-400/10', border: 'border-orange-400/20', shadow: 'shadow-orange-400/10' },
+  { name: 'Transport', icon: Car, color: 'text-blue-400', bg: 'bg-blue-400/10', border: 'border-blue-400/20', shadow: 'shadow-blue-400/10' },
+  { name: 'Shopping', icon: ShoppingBag, color: 'text-pink-400', bg: 'bg-pink-400/10', border: 'border-pink-400/20', shadow: 'shadow-pink-400/10' },
+  { name: 'Entertainment', icon: Ticket, color: 'text-purple-400', bg: 'bg-purple-400/10', border: 'border-purple-400/20', shadow: 'shadow-purple-400/10' },
+  { name: 'Bills', icon: FileText, color: 'text-green-400', bg: 'bg-green-400/10', border: 'border-green-400/20', shadow: 'shadow-green-400/10' },
+  { name: 'Other', icon: Tag, color: 'text-white/40', bg: 'bg-white/5', border: 'border-white/10', shadow: 'shadow-white/5' },
 ];
 
 export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalProps) {
+  const { user } = useAuth();
   const { toast } = useToast();
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -46,10 +48,10 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
       setDescription("");
       onOpenChange(false);
     },
-    onError: () => {
+    onError: (error: any) => {
       toast({
         title: "Error",
-        description: "Failed to add expense. Please try again.",
+        description: error.message || "Failed to add expense. Please try again.",
         variant: "destructive",
       });
     },
@@ -70,77 +72,132 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md backdrop-blur-2xl bg-card/80 border-primary/30 shadow-[0_0_40px_rgba(139,92,246,0.3)]" data-testid="modal-add-expense">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Add Transaction</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <Label htmlFor="amount" className="text-base font-semibold mb-2 block">Amount</Label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-muted-foreground">₹</span>
+      <DialogContent className="sm:max-w-xl bg-black border-white/5 p-0 overflow-hidden rounded-[40px] shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+        {/* Dynamic Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 p-10 space-y-10">
+          <DialogHeader className="mb-8">
+            <div className="flex justify-between items-center w-full">
+              <DialogTitle className="text-4xl font-black tracking-tighter">Add Transaction</DialogTitle>
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Vault Balance</span>
+                <span className="text-xl font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmit} className="space-y-10">
+            {/* Large Amount Input Section */}
+            <div className="space-y-4">
+              <div className="relative">
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-5xl font-black text-white/10 italic pr-4 border-r border-white/5">₹</span>
+                <Input
+                  id="amount"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="bg-transparent border-none text-8xl font-black h-32 pl-16 focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter"
+                  data-testid="input-amount"
+                  autoFocus
+                  disabled={createExpenseMutation.isPending}
+                />
+              </div>
+              <div className="h-0.5 w-full bg-gradient-to-r from-primary/50 via-primary/5 to-transparent opacity-30 rounded-full" />
+            </div>
+
+            {/* Premium Category Grid */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-primary" />
+                <Label className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Select Category</Label>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {categories.map((cat) => {
+                  const Icon = cat.icon;
+                  const isSelected = category === cat.name;
+                  return (
+                    <motion.button
+                      key={cat.name}
+                      type="button"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`relative flex flex-col items-start p-5 rounded-3xl border transition-all duration-500 text-left overflow-hidden group
+                        ${isSelected 
+                          ? `${cat.bg} ${cat.border} ${cat.shadow} shadow-2xl` 
+                          : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05] hover:border-white/10'
+                        }`}
+                      onClick={() => setCategory(cat.name)}
+                      disabled={createExpenseMutation.isPending}
+                    >
+                      {/* Selection Glow */}
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute top-0 right-0 w-12 h-12 bg-white/20 blur-2xl rounded-full -mr-6 -mt-6"
+                          />
+                        )}
+                      </AnimatePresence>
+
+                      <div className={`p-3 rounded-2xl mb-4 transition-all duration-500 ${isSelected ? 'bg-white text-black' : `${cat.bg} ${cat.color}`}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`text-sm font-black transition-colors ${isSelected ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>
+                        {cat.name}
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 px-1">
+                <FileText className="w-4 h-4 text-primary" />
+                <Label htmlFor="description" className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Description</Label>
+              </div>
               <Input
-                id="amount"
-                type="number"
-                step="0.01"
-                min="0"
-                placeholder="0.00"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="pl-8 text-3xl font-bold h-16 font-mono"
-                data-testid="input-amount"
-                autoFocus
+                id="description"
+                placeholder="What was this entry for?"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="bg-white/5 border-white/10 h-16 px-6 text-lg font-bold rounded-2xl focus:border-primary/50 transition-all"
+                data-testid="input-description"
                 disabled={createExpenseMutation.isPending}
               />
             </div>
-          </div>
 
-          <div>
-            <Label className="text-base font-semibold mb-3 block">Category</Label>
-            <div className="grid grid-cols-3 gap-2">
-              {categories.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <Button
-                    key={cat.name}
-                    type="button"
-                    variant="outline"
-                    className={`h-auto flex-col gap-2 p-3 ${category === cat.name ? cat.color : ''}`}
-                    onClick={() => setCategory(cat.name)}
-                    data-testid={`button-category-${cat.name.toLowerCase()}`}
-                    disabled={createExpenseMutation.isPending}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="text-xs font-semibold">{cat.name}</span>
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div>
-            <Label htmlFor="description" className="text-base font-semibold mb-2 block">
-              Description (optional)
-            </Label>
-            <Input
-              id="description"
-              placeholder="What was this for?"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              data-testid="input-description"
-              disabled={createExpenseMutation.isPending}
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full h-12 text-base font-bold bg-primary hover:bg-primary/90 text-white rounded-xl"
-            disabled={!amount || !category || createExpenseMutation.isPending}
-            data-testid="button-submit-expense"
-          >
-            {createExpenseMutation.isPending ? "Confirming..." : "Confirm Entry"}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="w-full h-20 text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all"
+              disabled={!amount || !category || createExpenseMutation.isPending}
+              data-testid="button-submit-expense"
+            >
+              <div className="flex items-center gap-3">
+                {createExpenseMutation.isPending ? (
+                  <>
+                    <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                    <span>Processing Entry...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-6 h-6 fill-white" />
+                    <span>Confirm Transaction</span>
+                  </>
+                )}
+              </div>
+            </Button>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

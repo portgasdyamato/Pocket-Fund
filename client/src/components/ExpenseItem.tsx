@@ -1,15 +1,16 @@
-import { Coffee, Car, ShoppingBag, Ticket, FileText, Tag, TrendingDown, Trash2 } from "lucide-react";
+import { Coffee, Car, ShoppingBag, Ticket, FileText, Tag as TagIcon, TrendingDown, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ExpenseItemProps {
   id: string;
   category: string;
   description: string;
+  tag?: string | null;
   amount: number;
   date: string;
 }
 
-export default function ExpenseItem({ id, category, description, amount, date }: ExpenseItemProps) {
+export default function ExpenseItem({ id, category, description, tag, amount, date }: ExpenseItemProps) {
   const getCategoryIcon = (cat: string) => {
     const iconClass = "w-5 h-5";
     switch (cat.toLowerCase()) {
@@ -19,7 +20,7 @@ export default function ExpenseItem({ id, category, description, amount, date }:
       case 'entertainment': return <Ticket className={iconClass} />;
       case 'bills': return <FileText className={iconClass} />;
       case 'ick': return <TrendingDown className={iconClass} />;
-      default: return <Tag className={iconClass} />;
+      default: return <TagIcon className={iconClass} />;
     }
   };
 
@@ -37,42 +38,44 @@ export default function ExpenseItem({ id, category, description, amount, date }:
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01, backgroundColor: "rgba(255,255,255,0.03)" }}
-      className="flex items-center gap-4 p-4 rounded-2xl border border-white/5 transition-all group cursor-pointer" 
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.03)" }}
+      className="flex items-center gap-4 p-5 rounded-[24px] border border-white/5 transition-all group cursor-pointer relative overflow-hidden" 
       data-testid={`item-expense-${id}`}
     >
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 ${getCategoryColor(category)} group-hover:scale-110`}>
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 ${getCategoryColor(category)} bg-black group-hover:scale-110 shadow-2xl`}>
         {getCategoryIcon(category)}
       </div>
       
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
-          <p className="font-bold text-sm text-white group-hover:text-primary transition-colors truncate" data-testid={`text-description-${id}`}>
+          <p className="font-black text-sm text-white group-hover:text-primary transition-colors truncate uppercase tracking-tight" data-testid={`text-description-${id}`}>
             {description}
           </p>
-          {category.toLowerCase() === 'ick' && (
-            <span className="bg-destructive/10 text-destructive text-[8px] font-black uppercase px-2 py-0.5 rounded-full border border-destructive/20">
-              Ick Defeated
+          {tag && (
+            <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full border ${
+              tag === 'Need' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+              tag === 'Want' ? 'bg-primary/10 text-primary border-primary/20' :
+              'bg-destructive/10 text-destructive border-destructive/20'
+            }`}>
+              {tag}
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
           <span>{date}</span>
           <span className="w-1 h-1 rounded-full bg-white/10" />
-          <span>{category}</span>
+          <span className={getCategoryColor(category).split(' ')[1]}>{category}</span>
         </div>
       </div>
       
-      <div className="text-right flex flex-col items-end">
-        <p className="font-black text-base text-white" data-testid={`text-amount-${id}`}>
+      <div className="text-right">
+        <p className="font-black text-lg text-white tabular-nums tracking-tighter" data-testid={`text-amount-${id}`}>
           ₹{amount.toLocaleString('en-IN')}
         </p>
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-           <button className="p-1 hover:text-destructive transition-colors">
-             <Trash2 className="w-3.5 h-3.5" />
-           </button>
+        <div className="text-[8px] font-black text-white/20 uppercase tracking-widest mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          Verified Entry
         </div>
       </div>
     </motion.div>
