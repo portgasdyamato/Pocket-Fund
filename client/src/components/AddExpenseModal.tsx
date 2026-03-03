@@ -73,55 +73,52 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-black border-white/5 p-0 overflow-hidden rounded-[32px] shadow-[0_0_60px_rgba(0,0,0,0.5)]">
+      <DialogContent className="sm:max-w-md bg-black border-white/5 p-0 overflow-hidden rounded-[32px] shadow-[0_0_60px_rgba(0,0,0,0.5)]">
         {/* Dynamic Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 p-6 sm:p-8 space-y-6 sm:space-y-8 max-h-[80vh] overflow-y-auto">
-          <DialogHeader className="mb-2 sm:mb-4">
+        <div className="relative z-10 p-6 space-y-5">
+          <DialogHeader>
             <div className="flex justify-between items-center w-full">
-              <DialogTitle className="text-xl sm:text-3xl font-black tracking-tighter">Add Entry</DialogTitle>
-              <div className="flex flex-col items-end">
-                <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
-                <span className="text-base sm:text-lg font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
+              <DialogTitle className="text-xl font-black tracking-tighter">New Entry</DialogTitle>
+              <div className="flex flex-col items-end leading-none">
+                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
+                <span className="text-base font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
               </div>
             </div>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Large Amount Input Section */}
-            <div className="space-y-3">
-              <div className="relative flex flex-col items-center">
-                <div className="flex items-center justify-center gap-3 w-full">
-                  <span className="text-3xl sm:text-5xl font-black text-white/20 italic">₹</span>
-                  <Input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="0.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="bg-transparent border-none text-4xl sm:text-6xl font-black h-16 sm:h-24 text-center focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter w-full"
-                    data-testid="input-amount"
-                    autoFocus
-                    disabled={createExpenseMutation.isPending}
-                  />
-                </div>
-                <div className="h-0.5 w-[70%] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-30 rounded-full mx-auto" />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Amount Input */}
+            <div className="relative group">
+              <div className="flex items-center justify-center gap-3 w-full bg-white/[0.03] rounded-2xl border border-white/5 p-4 focus-within:border-primary/30 transition-all">
+                <span className="text-2xl font-black text-white/20 italic">₹</span>
+                <Input
+                  id="amount"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="bg-transparent border-none text-4xl font-black h-12 text-center focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter w-full"
+                  data-testid="input-amount"
+                  autoFocus
+                  disabled={createExpenseMutation.isPending}
+                />
               </div>
             </div>
 
-            {/* Premium Category Grid */}
-            <div className="space-y-6">
+            {/* Compact Category Grid */}
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Tag className="w-4 h-4 text-primary" />
-                <Label className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Select Category</Label>
+                <Tag className="w-3 h-3 text-primary" />
+                <Label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">Category</Label>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2">
                 {categories.map((cat) => {
                   const Icon = cat.icon;
                   const isSelected = category === cat.name;
@@ -129,32 +126,17 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
                     <motion.button
                       key={cat.name}
                       type="button"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`relative flex flex-col items-start p-5 rounded-3xl border transition-all duration-500 text-left overflow-hidden group
+                      whileTap={{ scale: 0.95 }}
+                      className={`relative flex flex-col items-center justify-center p-3 rounded-2xl border transition-all duration-300 overflow-hidden
                         ${isSelected 
-                          ? `${cat.bg} ${cat.border} ${cat.shadow} shadow-2xl` 
-                          : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05] hover:border-white/10'
+                          ? `${cat.bg} ${cat.border} shadow-lg shadow-black/40` 
+                          : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'
                         }`}
                       onClick={() => setCategory(cat.name)}
                       disabled={createExpenseMutation.isPending}
                     >
-                      {/* Selection Glow */}
-                      <AnimatePresence>
-                        {isSelected && (
-                          <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute top-0 right-0 w-12 h-12 bg-white/20 blur-2xl rounded-full -mr-6 -mt-6"
-                          />
-                        )}
-                      </AnimatePresence>
-
-                      <div className={`p-3 rounded-2xl mb-4 transition-all duration-500 ${isSelected ? 'bg-white text-black' : `${cat.bg} ${cat.color}`}`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <span className={`text-sm font-black transition-colors ${isSelected ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>
+                      <Icon className={`w-4 h-4 mb-1.5 ${isSelected ? 'text-white' : cat.color}`} />
+                      <span className={`text-[10px] font-black transition-colors ${isSelected ? 'text-white' : 'text-white/40'}`}>
                         {cat.name}
                       </span>
                     </motion.button>
@@ -163,44 +145,43 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 px-1">
-                <FileText className="w-4 h-4 text-primary" />
-                <Label htmlFor="description" className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Description</Label>
+            {/* Compact Description Input */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <FileText className="w-3 h-3 text-primary" />
+                <Label htmlFor="description" className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">Details</Label>
               </div>
               <Input
                 id="description"
-                placeholder="What was this entry for?"
+                placeholder="What was this for?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="bg-white/5 border-white/10 h-16 px-6 text-lg font-bold rounded-2xl focus:border-primary/50 transition-all"
+                className="bg-white/5 border-white/10 h-11 px-4 text-xs font-bold rounded-xl focus:border-primary/50 transition-all"
                 data-testid="input-description"
                 disabled={createExpenseMutation.isPending}
               />
             </div>
 
-            <div className="pt-6 pb-4">
-              <Button
-                type="submit"
-                className="w-full h-16 sm:h-20 text-lg sm:text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all"
-                disabled={!amount || !category || createExpenseMutation.isPending}
-                data-testid="button-submit-expense"
-              >
-                <div className="flex items-center gap-3">
-                  {createExpenseMutation.isPending ? (
-                    <>
-                      <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-                      <span>Processing Entry...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-6 h-6 fill-white" />
-                      <span>Confirm Transaction</span>
-                    </>
-                  )}
-                </div>
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              className="w-full h-14 text-sm font-black bg-primary hover:bg-primary/90 text-white rounded-2xl premium-shadow click-scale transition-all"
+              disabled={!amount || !category || createExpenseMutation.isPending}
+              data-testid="button-submit-expense"
+            >
+              <div className="flex items-center gap-2">
+                {createExpenseMutation.isPending ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4 fill-white" />
+                    <span>Confirm Transaction</span>
+                  </>
+                )}
+              </div>
+            </Button>
           </form>
         </div>
       </DialogContent>
