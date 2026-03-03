@@ -191,27 +191,31 @@ const seedData = async () => {
   try {
     const seed = await import('../server/seedCourses');
     const CHALLENGE_QUESTS = seed.CHALLENGE_QUESTS;
-    const ALL_COURSES = [
+    const COURSES = [
       ...seed.EASY_SHORT_COURSES, 
       ...seed.MEDIUM_COURSES, 
       ...seed.HARD_LONG_COURSES
     ];
 
-    const EXPECTED_TOTAL = CHALLENGE_QUESTS.length + ALL_COURSES.length;
-
+    const ALL_ITEMS = [...CHALLENGE_QUESTS, ...COURSES];
     const currentQuests = await db.select().from(questsTable);
-    if (currentQuests.length < EXPECTED_TOTAL) { 
-      console.log(`Seeding MEGA library: ${ALL_COURSES.length} courses + ${CHALLENGE_QUESTS.length} challenges...`);
-      await db.delete(userQuestsTable);
+    
+    if (currentQuests.length < ALL_ITEMS.length) { 
+      console.log(`[Seed] Delta detected. Current: ${currentQuests.length}, Required: ${ALL_ITEMS.length}. Refreshing library...`);
+      
+      // We don't delete userQuests anymore to prevent progress loss
+      // Just clear the library. Quests with existing IDs in user_quests will stay linked if we don't change IDs,
+      // but since they have default UUIDs, we have to clear them.
       await db.delete(questsTable);
       
-      for (const c of CHALLENGE_QUESTS) {
-        await db.insert(questsTable).values(c);
+      // Batch in chunks of 5 to avoid payload size or timeout issues
+      const CHUNK_SIZE = 5;
+      for (let i = 0; i < ALL_ITEMS.length; i += CHUNK_SIZE) {
+        const chunk = ALL_ITEMS.slice(i, i + CHUNK_SIZE);
+        await db.insert(questsTable).values(chunk);
+        console.log(`[Seed] Progress: ${Math.min(i + CHUNK_SIZE, ALL_ITEMS.length)}/${ALL_ITEMS.length} items synced.`);
       }
-
-      for (const course of ALL_COURSES) {
-        await db.insert(questsTable).values(course);
-      }
+      console.log("[Seed] MEGA library sync complete.");
     }
 
     const currentBadges = await db.select().from(badgesTable);
@@ -221,8 +225,9 @@ const seedData = async () => {
         { name: "Ick Fighter", description: "Successfully tagged an Ick", icon: "sword", requirement: "Tag 1 expense" }
       ]);
     }
-  } catch (err) {
-    console.error("[Seed] Error:", err);
+  } catch (err: any) {
+    console.error("[Seed] ERROR:", err);
+    throw err; // Re-throw so the endpoint knows it failed
   }
 };
 
@@ -231,13 +236,13 @@ app.post('/api/admin/seed-courses', async (req: any, res: any) => {
   try {
     const db = getDb();
     if (!db) return res.status(500).json({ message: "DB not available" });
-    console.log("[Admin] Forcing database re-seed...");
-    await db.delete(userQuestsTable);
-    await db.delete(questsTable);
+    console.log("[Admin] Forced library re-sync requested...");
+    // We clear quests only inside seedData now with better logic
     await seedData();
-    res.json({ success: true, message: "Database re-seeded with MEGA courses." });
+    res.json({ success: true, message: "Database synchronized successfully." });
   } catch (err: any) {
-    res.status(500).json({ message: err.message });
+    console.error("[Admin] Sync failed:", err);
+    res.status(500).json({ message: err.message || "Internal sync error" });
   }
 });
 
