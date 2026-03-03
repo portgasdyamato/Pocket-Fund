@@ -106,13 +106,14 @@ export default function Landing() {
             <Button 
               onClick={handleLogin}
               variant="ghost"
-              className="text-white hover:bg-white/5 rounded-full px-6 mr-4"
+              className="rounded-full px-6 mr-4"
             >
               Log In
             </Button>
             <Button 
               onClick={handleLogin}
-              className="bg-white text-black hover:bg-white/90 rounded-full px-8 font-semibold click-scale"
+              variant="secondary"
+              className="rounded-full px-8"
             >
               Get Started
             </Button>
@@ -160,7 +161,7 @@ export default function Landing() {
               <Button 
                 size="lg"
                 onClick={handleLogin}
-                className="bg-gradient-to-r from-primary to-accent text-white rounded-full px-10 py-7 text-lg hover:scale-105 transition-transform duration-300 premium-shadow group"
+                className="rounded-full px-10"
               >
                 Start Your Journey
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -169,7 +170,7 @@ export default function Landing() {
                 size="lg"
                 variant="outline"
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-full px-10 py-7 text-lg backdrop-blur-md"
+                className="rounded-full px-10"
               >
                 Learn More
               </Button>
@@ -386,8 +387,9 @@ export default function Landing() {
               </h2>
               <Button 
                 size="lg"
+                variant="secondary"
                 onClick={handleLogin}
-                className="bg-white text-black hover:bg-white/90 rounded-full px-12 py-8 text-xl font-bold click-scale premium-shadow"
+                className="rounded-full px-12 h-20 text-xl font-black uppercase tracking-widest"
               >
                 Open Your Dashboard
               </Button>

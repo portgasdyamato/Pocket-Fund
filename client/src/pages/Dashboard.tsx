@@ -437,8 +437,8 @@ export default function Dashboard() {
                   className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-purple-600 hover:bg-purple-500 hover:scale-[1.03] shadow-[0_15px_30px_rgba(147,51,234,0.15)] hover:shadow-[0_20px_40px_rgba(147,51,234,0.3)] transition-all duration-300 click-scale group relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.1] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md shadow-[0_5px_15px_rgba(0,0,0,0.1)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                    <action.icon className={`w-7 h-7 ${action.color} drop-shadow-[0_0_8px_currentColor]`} />
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <action.icon className={`w-7 h-7 ${action.color} drop-shadow-[0_0_12px_currentColor]`} />
                   </div>
                   <span className="text-[10px] font-black text-white tracking-[0.2em] transition-colors">{action.label}</span>
                 </button>
