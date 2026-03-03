@@ -80,7 +80,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
           <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 p-10 space-y-10">
+        <div className="relative z-10 p-6 sm:p-10 space-y-8 sm:space-y-10 max-h-[85vh] overflow-y-auto">
           <DialogHeader className="mb-8">
             <div className="flex justify-between items-center w-full">
               <DialogTitle className="text-4xl font-black tracking-tighter">Add Transaction</DialogTitle>
@@ -104,7 +104,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="bg-transparent border-none text-8xl font-black h-32 pl-16 focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter"
+                  className="bg-transparent border-none text-6xl sm:text-8xl font-black h-24 sm:h-32 pl-12 sm:pl-16 focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter"
                   data-testid="input-amount"
                   autoFocus
                   disabled={createExpenseMutation.isPending}
@@ -179,7 +179,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
 
             <Button
               type="submit"
-              className="w-full h-20 text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all"
+              className="w-full h-16 sm:h-20 text-lg sm:text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all sticky bottom-0 z-20"
               disabled={!amount || !category || createExpenseMutation.isPending}
               data-testid="button-submit-expense"
             >

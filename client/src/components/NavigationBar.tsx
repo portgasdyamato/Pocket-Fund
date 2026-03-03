@@ -206,8 +206,8 @@ export function NavigationBar() {
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-2 bg-accent/20 px-3 py-1.5 rounded-full border border-accent/30 cursor-pointer hover:bg-accent/30 transition-all click-scale group">
-                      <Lock className="w-3.5 h-3.5 text-accent group-hover:scale-110 transition-transform" />
+                    <div className="flex items-center gap-2 bg-green-600 px-3 py-1.5 rounded-full border border-green-500/30 cursor-pointer hover:bg-green-500 transition-all click-scale group shadow-[0_5px_15px_rgba(34,197,94,0.3)]">
+                      <Lock className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-bold text-white">
                         ₹{lockerBalance.toLocaleString('en-IN')}
                       </span>
@@ -428,10 +428,10 @@ export function NavigationBar() {
                         <p className="text-xs font-black text-white truncate">₹{walletBalance.toLocaleString('en-IN')}</p>
                       </div>
                     </div>
-                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-accent/10 border border-accent/20">
-                      <Lock className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-green-600 border border-green-500/20 shadow-[0_8px_16px_rgba(34,197,94,0.2)]">
+                      <Lock className="w-3.5 h-3.5 text-white flex-shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-[9px] font-black text-white/30 uppercase tracking-wider">Locker</p>
+                        <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Locker</p>
                         <p className="text-xs font-black text-white truncate">₹{lockerBalance.toLocaleString('en-IN')}</p>
                       </div>
                     </div>
