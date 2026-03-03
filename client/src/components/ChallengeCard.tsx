@@ -99,7 +99,7 @@ export default function ChallengeCard({
               onClick={!!isCompleted ? undefined : onAction}
               className={`w-full rounded-2xl h-14 font-black uppercase tracking-widest text-[10px] transition-all duration-300 border-none ${
                 isCompleted 
-                ? "bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15" 
+                ? "bg-green-500 text-white hover:bg-green-600" 
                 : "bg-purple-600 text-white hover:bg-purple-500 hover:scale-[1.02] active:scale-95 click-scale !shadow-none"
               }`}
               disabled={!!isCompleted}

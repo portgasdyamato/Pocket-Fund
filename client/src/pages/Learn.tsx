@@ -438,27 +438,44 @@ export default function LearnPage() {
             <p className="text-white/40 text-lg mt-3 max-w-xl font-medium leading-relaxed">Master money through deep-dive articles and comprehensive knowledge checks. <span className="text-primary/60">Level up your financial IQ.</span></p>
           </div>
           {/* Progress overview */}
-          <div className="flex gap-4 shrink-0">
-            {[{label: "Done", val: completedCount, icon: CheckCircle2, color: "text-green-400"},
-              {label: "Catalogue", val: literacyQuests.length, icon: BookOpen, color: "text-primary"},
-              {label: "Progress", val: `${masteryPercentage}%`, icon: BarChart3, color: "text-yellow-400"},
-            ].map(({label, val, icon: Icon, color}) => (
-              <div key={label} className="p-4 glass-morphism border-white/5 rounded-2xl text-center min-w-[90px]">
-                <Icon className={`w-5 h-5 ${color} mx-auto mb-2`} />
-                <p className={`text-2xl font-black ${color}`}>{val}</p>
-                <p className="text-[9px] text-white/30 uppercase tracking-widest mt-0.5">{label}</p>
+          <div className="flex gap-4 shrink-0 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+            {[
+              { label: "Done", val: completedCount, icon: CheckCircle2, color: "from-emerald-500/20 to-emerald-500/5", iconColor: "text-emerald-400", borderColor: "border-emerald-500/20" },
+              { label: "Catalogue", val: literacyQuests.length, icon: BookOpen, color: "from-primary/20 to-primary/5", iconColor: "text-primary", borderColor: "border-primary/20" },
+              { label: "Progress", val: `${masteryPercentage}%`, icon: BarChart3, color: "from-amber-500/20 to-amber-500/5", iconColor: "text-amber-400", borderColor: "border-amber-500/20" },
+            ].map(({ label, val, icon: Icon, color, iconColor, borderColor }) => (
+              <div key={label} className={`p-6 rounded-[32px] bg-gradient-to-b ${color} border ${borderColor} text-center min-w-[120px] backdrop-blur-md shadow-xl shadow-black/20 group hover:scale-105 transition-transform duration-300`}>
+                <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform`}>
+                  <Icon className={`w-6 h-6 ${iconColor}`} />
+                </div>
+                <p className={`text-3xl font-black italic tracking-tighter ${iconColor}`}>{val}</p>
+                <p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em] mt-1">{label}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Overall progress bar */}
-        <div className="p-6 glass-morphism border-white/5 rounded-2xl">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-black text-white/60">Overall Mastery</span>
-            <span className="text-sm font-black text-primary">{masteryPercentage}% Complete</span>
+        <div className="relative p-8 rounded-[32px] bg-white/[0.02] border border-white/5 overflow-hidden shadow-2xl">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary/40" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 className="text-xl font-black italic uppercase tracking-tight">Your Mastery <span className="text-primary">Journey</span></h3>
+              <p className="text-white/30 text-xs font-bold uppercase tracking-widest mt-1">Keep learning to unlock advanced investing modules</p>
+            </div>
+            <div className="flex items-end gap-2">
+              <span className="text-4xl font-black italic tracking-tighter text-primary">{masteryPercentage}%</span>
+              <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Complete</span>
+            </div>
           </div>
-          <Progress value={masteryPercentage} className="h-3 bg-white/5" />
+          <div className="relative h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${masteryPercentage}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+            />
+          </div>
         </div>
 
         {/* Course cards */}
