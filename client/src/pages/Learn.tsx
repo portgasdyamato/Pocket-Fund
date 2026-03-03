@@ -269,8 +269,12 @@ export default function LearnPage() {
                       </div>
                     </div>
                     {/* Slide body */}
-                    <div className="p-8 space-y-6">
-                      <p className="text-lg leading-relaxed text-white/70 font-medium">{currentSlide.text}</p>
+                    <div className="p-8 space-y-8">
+                      <div className="text-lg leading-relaxed text-white/70 font-medium space-y-4">
+                        {currentSlide.text.split('\n\n').map((paragraph: string, i: number) => (
+                          <p key={i} className="whitespace-pre-wrap">{paragraph}</p>
+                        ))}
+                      </div>
                       {currentSlide.keyTakeaway && (
                         <div className="flex items-start gap-4 p-5 rounded-2xl bg-yellow-500/5 border border-yellow-500/20">
                           <Lightbulb className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
