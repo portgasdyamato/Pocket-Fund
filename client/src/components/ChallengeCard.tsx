@@ -97,22 +97,20 @@ export default function ChallengeCard({
           <div className="mt-auto">
             <Button
               onClick={!!isCompleted ? undefined : onAction}
-              className={`w-full rounded-xl h-12 font-bold transition-all duration-300 ${
+              className={`w-full rounded-2xl h-14 font-black uppercase tracking-widest text-[10px] transition-all duration-300 border-none ${
                 isCompleted 
                 ? "bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15" 
-                : isActive 
-                ? "bg-primary text-white premium-shadow hover:scale-[1.03]" 
-                : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+                : "bg-purple-600 text-white hover:bg-purple-500 hover:scale-[1.02] active:scale-95 click-scale shadow-none"
               }`}
               disabled={!!isCompleted}
             >
               {isCompleted ? (
-                <span className="flex items-center gap-2">Mission Accomplished</span>
+                <span className="flex items-center justify-center gap-2 tracking-widest uppercase">Mission Accomplished</span>
               ) : (
-                <span className="flex items-center gap-2">
-                  {isActive ? 'Resume Mission' : 'Commence Attack'}
+                <div className="flex items-center justify-center gap-2">
+                  <span>{isActive ? 'Resume Mission' : 'Commence Attack'}</span>
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
+                </div>
               )}
             </Button>
           </div>
