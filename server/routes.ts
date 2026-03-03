@@ -157,7 +157,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // 1. Create a "withdraw" transaction in the locker that DOESN'T return to wallet
-      // We'll use a specific type "claim" so it subtracts from total stashed but we don't increase wallet
       await storage.createStashTransaction({
         userId,
         amount: goal.targetAmount,
@@ -166,7 +165,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: 'completed'
       });
       
-      // 2. Mark goal as completed
+      // 2. Add to transaction history as an expense with a tag
+      await storage.createTransaction({
+        userId,
+        description: `Goal Claim: ${goal.name}`,
+        amount: goal.targetAmount,
+        category: 'Savings',
+        tag: 'Goal Claim',
+        date: new Date()
+      });
+      
+      // 3. Mark goal as completed
       await storage.completeGoal(id);
       
       res.json({ success: true });
@@ -421,11 +430,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const stash = await storage.createStashTransaction(stashData);
       
-      // Update wallet balance (Stash = deduct, Withdraw = add)
-      await storage.updateWalletBalance(userId, isStash ? -amount : amount);
-
+      // Update wallet balance: Stash = deduct from wallet, Withdraw = add to wallet, Claim = no wallet change
       if (stashData.type === 'stash') {
+        await storage.updateWalletBalance(userId, -amount);
         await storage.updateStreak(userId, 'save');
+      } else if (stashData.type === 'withdraw') {
+        await storage.updateWalletBalance(userId, amount);
+      } else if (stashData.type === 'claim') {
+        // Log to expense history if it's a claim from this endpoint too
+        const goal = stashData.goalId ? (await storage.getGoals(userId)).find(g => g.id === stashData.goalId) : null;
+        await storage.createTransaction({
+          userId,
+          description: goal ? `Goal Claim: ${goal.name}` : `Vault Claim`,
+          amount: stashData.amount,
+          category: 'Savings',
+          tag: 'Goal Claim',
+          date: new Date()
+        });
       }
       
       let goalCompleted = false;

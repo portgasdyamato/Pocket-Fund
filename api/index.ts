@@ -309,6 +309,7 @@ app.post(['/api/goals/:id/claim', '/goals/:id/claim'], isAuthenticated, async (r
   if (parseFloat((goal as any).currentAmount) < parseFloat((goal as any).targetAmount)) return res.status(400).json({ message: "Goal not reached" });
   if ((goal as any).completed) return res.status(400).json({ message: "Already claimed" });
 
+  // 1. Vault Transaction (Subtract from locker)
   await db.insert(stashTransactionsTable).values({
     userId: req.user.id,
     amount: (goal as any).targetAmount,
@@ -317,7 +318,19 @@ app.post(['/api/goals/:id/claim', '/goals/:id/claim'], isAuthenticated, async (r
     status: 'completed'
   });
 
+  // 2. Expense History (Add to transaction history with tag)
+  await db.insert(transactionsTable).values({
+    userId: req.user.id,
+    description: `Claimed Goal: ${goal.name}`,
+    amount: (goal as any).targetAmount,
+    category: 'Savings',
+    tag: 'Goal Claim',
+    date: new Date()
+  });
+
+  // 3. Mark goal as completed
   await db.update(goalsTable).set({ completed: true } as any).where(eq(goalsTable.id, goal.id));
+  
   res.json({ success: true });
 });
 
@@ -438,12 +451,33 @@ app.post(['/api/stash', '/stash'], isAuthenticated, async (req: any, res) => {
   const balance = parseFloat(req.user.walletBalance);
   if (isStash && balance < amount) return res.status(400).json({ message: "Insufficient balance" });
   
+  const isWithdraw = req.body.type === 'withdraw';
+  const isClaim = req.body.type === 'claim';
+
   const [txn] = await db.insert(stashTransactionsTable).values({
     userId: req.user.id, amount: amount.toFixed(2), type: req.body.type, goalId: req.body.goalId, status: 'completed'
   }).returning();
   
-  await db.update(usersTable).set({ walletBalance: (isStash ? balance - amount : balance + amount).toFixed(2) }).where(eq(usersTable.id, req.user.id));
+  // Update wallet balance: Stash = deduct, Withdraw = add, Claim = do nothing to wallet
+  let newWalletBalance = balance;
+  if (isStash) newWalletBalance -= amount;
+  else if (isWithdraw) newWalletBalance += amount;
   
+  await db.update(usersTable).set({ walletBalance: newWalletBalance.toFixed(2) }).where(eq(usersTable.id, req.user.id));
+  
+  if (isClaim) {
+     // Log to expense history if it's a claim from this endpoint
+     const [goal] = req.body.goalId ? await db.select().from(goalsTable).where(eq(goalsTable.id, req.body.goalId)) : [null];
+     await db.insert(transactionsTable).values({
+       userId: req.user.id,
+       description: goal ? `Goal Claim: ${goal.name}` : `Vault Claim`,
+       amount: amount.toFixed(2),
+       category: 'Savings',
+       tag: 'Goal Claim',
+       date: new Date()
+     });
+  }
+
   if (req.body.goalId) {
     const [goal] = await db.select().from(goalsTable).where(eq(goalsTable.id, req.body.goalId));
     if (goal) {
@@ -467,15 +501,20 @@ app.get(['/api/stash', '/stash'], isAuthenticated, async (req: any, res) => {
 
 app.get(['/api/stash/total', '/stash/total'], isAuthenticated, async (req: any, res) => {
   const db = getDb();
-  const rows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
-  res.json({ total: parseFloat(rows[0]?.total || "0") });
+  const txs = await db.select().from(stashTransactionsTable).where(eq(stashTransactionsTable.userId, req.user.id));
+  const totalVal = txs.reduce((acc: number, t: any) => acc + (t.type === 'stash' ? parseFloat(t.amount) : -parseFloat(t.amount)), 0);
+  res.json({ total: totalVal });
 });
 
 app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) => {
   const db = getDb();
   
   // Get Stash Stats
-  const stashRows = await db.select({ total: drizzleSql`sum(amount)` }).from(stashTransactionsTable).where(and(eq(stashTransactionsTable.userId, req.user.id), eq(stashTransactionsTable.type, 'stash')));
+  const txs = await db.select().from(stashTransactionsTable).where(eq(stashTransactionsTable.userId, req.user.id));
+  const totalStashed = txs.reduce((acc: number, t: any) => {
+    const val = parseFloat(t.amount);
+    return t.type === 'stash' ? acc + val : acc - val;
+  }, 0);
   const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
   
   // Get Recent Icks
@@ -484,7 +523,6 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) =>
     eq(transactionsTable.tag, 'Ick')
   ));
 
-  const totalStashed = parseFloat((stashRows[0]?.total as string) || "0");
   const totalIcks = parseFloat((ickRows[0]?.total as string) || "0");
   const saveStreak = streak?.saveStreak || 0;
   const userName = req.user.firstName || "User";
