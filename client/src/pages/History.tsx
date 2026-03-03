@@ -263,61 +263,65 @@ export default function ExpenseLog() {
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative rounded-[48px] overflow-hidden group/card shadow-2xl"
+                    className="relative rounded-[56px] overflow-hidden group/card shadow-[0_40px_100px_rgba(0,0,0,0.8)]"
                   >
-                    <Card className="h-full bg-zinc-900 border border-white/[0.08] rounded-[47px] p-8 flex flex-col gap-8 relative overflow-hidden">
-                      {/* Premium Top Light */}
-                      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
+                    <Card className="h-full bg-zinc-900 border-2 border-white/[0.05] rounded-[55px] p-8 flex flex-col gap-8 relative overflow-hidden">
+                      {/* Premium Top Reflection */}
+                      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
                       
                       {/* Header Area */}
                       <div className="flex items-center justify-between relative z-10">
-                         <div className={`w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-lg ${getCategoryColor(t.category)}`}>
-                           {getCategoryIcon(t.category)}
+                         <div className={`w-14 h-14 rounded-3xl bg-white/[0.07] border border-white/[0.1] flex items-center justify-center shadow-xl ${getCategoryColor(t.category)} scale-105`}>
+                           {/* Enlarged and Brightened Icon */}
+                           <div className="scale-125 opacity-100 brightness-125">
+                            {getCategoryIcon(t.category)}
+                           </div>
                          </div>
-                         <div className="px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08]">
-                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">SEQ-{t.id.slice(-4)}</span>
+                         <div className="px-4 py-2 rounded-full bg-white/[0.07] border border-white/[0.1] shadow-inner">
+                            <span className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em]">SEQ {t.id.slice(-4)}</span>
                          </div>
                       </div>
 
                       {/* Content Area */}
-                      <div className="space-y-4 relative z-10 text-center flex-1 py-4">
-                         <div className="space-y-1">
-                           <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${getCategoryColor(t.category)} opacity-80`}>{t.category}</span>
-                           <div className="h-px w-6 mx-auto bg-white/10" />
+                      <div className="space-y-4 relative z-10 text-center flex-1 py-2">
+                         <div className="inline-flex flex-col items-center">
+                           <span className={`text-[11px] font-black uppercase tracking-[0.5em] ${getCategoryColor(t.category)} brightness-125 block mb-1`}>{t.category}</span>
+                           <div className="h-[2px] w-12 bg-white/20 rounded-full" />
                          </div>
                          
-                         <h4 className="text-xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase">
+                         <h4 className="text-2xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase drop-shadow-lg">
                            {t.description}
                          </h4>
 
-                         <div className="flex flex-col items-center">
-                           <div className="flex items-baseline gap-2">
-                             <span className="text-lg font-black text-white/10 italic">INR</span>
-                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-xl">
+                         <div className="flex flex-col items-center pt-2">
+                           <div className="flex items-baseline gap-3">
+                             <span className="text-xl font-black text-orange-400 drop-shadow-sm">INR</span>
+                             <span className="text-6xl font-black tabular-nums tracking-tighter text-white [text-shadow:_0_4px_12px_rgb(0_0_0_/_50%)]">
                                {parseFloat(t.amount).toLocaleString('en-IN')}
                              </span>
                            </div>
                          </div>
                       </div>
 
-                      {/* Actions Area - Solid & High Visibility */}
-                      <div className="grid grid-cols-3 gap-3 relative z-10">
+                      {/* Actions Area - High-Contrast Precision Tiles */}
+                      <div className="grid grid-cols-3 gap-4 relative z-10">
                         {[
-                          { label: 'Need', id: 'Need', color: 'blue', icon: ShieldCheck },
-                          { label: 'Want', id: 'Want', color: 'primary', icon: Star },
-                          { label: 'Ick', id: 'Ick', color: 'destructive', icon: TrendingDown }
+                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400' },
+                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary' },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive' }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileHover={{ scale: 1.05, y: -4 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-5 rounded-[24px] border transition-all duration-300 group/btn
-                               bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.08] hover:border-white/20
-                               ${btn.color === 'blue' ? 'text-blue-400' : btn.color === 'primary' ? 'text-primary' : 'text-destructive'}`}
+                            className={`flex flex-col items-center justify-center py-6 rounded-[32px] border-2 transition-all duration-300 group/btn
+                               bg-zinc-800 border-white/[0.05] hover:bg-zinc-700 hover:border-white/20 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)]
+                               ${btn.accent}`}
                           >
-                            <btn.icon className="w-5 h-5 mb-2 opacity-60 group-hover/btn:opacity-100 transition-all" />
-                            <span className="text-[10px] font-black uppercase tracking-widest leading-none text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
+                            {/* Brighter Icons */}
+                            <btn.icon className="w-6 h-6 mb-3 opacity-90 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all brightness-125" />
+                            <span className="text-[12px] font-black uppercase tracking-[0.15em] leading-none text-white/60 group-hover/btn:text-white transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
