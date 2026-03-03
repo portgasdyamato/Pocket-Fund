@@ -190,36 +190,50 @@ const seedData = async () => {
   if (!db) return;
   try {
     const currentQuests = await db.select().from(questsTable);
-    if (currentQuests.length < 5) { // If missing or obviously stale
+    if (currentQuests.length < 10) { 
       console.log("Seeding quests...");
       await db.delete(userQuestsTable);
       await db.delete(questsTable);
       
-      await db.insert(questsTable).values([
+      const CHALLENGES = [
         { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target", category: "challenge" },
         { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield", category: "challenge" },
         { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee", category: "challenge" },
         { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap", category: "challenge" },
         { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag", category: "challenge" },
-        
+      ];
+
+      for (const c of CHALLENGES) {
+        await db.insert(questsTable).values(c);
+      }
+
+      const COURSES = [
         {
           title: "The Zero-to-One of Money",
-          description: "Learn why money exists, how it flows, and the psychological traps that keep people broke.",
-          difficulty: "Easy", points: 150, icon: "star", category: "literacy",
+          description: "Learn why money exists and how it flows. The first step for any beginner.",
+          difficulty: "Easy", points: 100, icon: "star", category: "literacy",
           content: JSON.stringify({
+            duration: 10,
             slides: [
-              { icon: "star", title: "Money: The Great Human Invention", text: "Money is the most successful shared fiction ever created by the human race. At its absolute core, a ₹500 note has zero intrinsic value—it is just a piece of high-quality paper with security threads. It only works because of a universal, unspoken agreement among billions of people: you trust that if you hand this paper to a shopkeeper, they will give you bread. And the shopkeeper trusts that they can hand that same paper to someone else for fuel.\n\nBefore money, humanity used the 'Barter System.' If you were a wheat farmer and needed a cow, you had to find a cattle owner who specifically wanted wheat right at that moment. This is known as the 'double coincidence of wants.' Barter was incredibly inefficient and impossible to scale for a growing civilization. Money solved this by becoming a universal medium of exchange. It allowed us to decouple the acquisition of what we want from the production of what we specialize in.\n\nThink of money as a 'Social Ledger.' When you work at your job today, you are giving your time and energy to society. Society, in return, gives you a 'Certificate of Appreciation' in the form of currency. This certificate (money) is essentially stored time. In the modern digital age, money has evolved further. More than 90% of the world's money exists only as bits and bytes on banking servers. When you check your bank balance on your phone, you're looking at digits that represent your claim on a portion of the world's resources. Mastery of finance begins here: understanding that money is an abstract tool for measuring, storing, and moving human energy across time and space.", keyTakeaway: "Money is a social agreement that stores your time and energy. Its value comes from trust.", example: "If you were stranded on a deserted island with ₹100 crore in cash, you would be 'poor' because there is no social agreement to recognize that value." },
-              { icon: "trending-up", title: "The Value Equation: Why Some Earn Millions", text: "If money is a measurement of value, how do you actually get more of it? The answer is simple: You are paid in direct proportion to the difficulty of the problem you solve for other people. Most legacy education systems teach us to trade 'time' for money, leading to a linear growth trap. Consider the difference between a general physician and a heart surgeon. Both might work the same hours, but the surgeon is paid exponentially more. Why? Because the problem they solve is rarer, training is more intense, and stakes are higher.\n\nTo escape the trap of low income, you must stop focusing on 'effort' and start focusing on 'scarcity' and 'scale.' Effort is a commodity; everyone can work hard. But not everyone can manage a team of 50 people, or design a bridge, or write code that secures billions. Your income is not a reward for your sweat; it is a reflection of how difficult you are to replace. If anyone can do your job with one week of training, you will always be paid the minimum. To earn more, you must acquire 'Specific Knowledge'—skills that feel like play to you but look like work to others.", keyTakeaway: "The market doesn't pay for effort; it pays for the scale and scarcity of the value you contribute.", example: "A delivery driver works incredibly hard but is easily replaced. A Logistics Network Architect who designs the system used by 10,000 drivers is solving a much harder, rarer problem at scale." },
-              { icon: "brain", title: "The Psychology of Want: The Dopamine Trap", text: "Most financial failures are caused by a lack of emotional self-regulation. We are wired for 'Instant Gratification,' which leads to financial ruin in a consumerist society. When you see a flashy new smartphone, your brain releases dopamine—the neurotransmitter associated with pleasure. Crucially, dopamine is released during the *anticipation* of the purchase, not the long-term ownership. This is why excitement fades into 'Buyer's Remorse' just a few days later.\n\nModern advertising is a multi-billion dollar machine designed to exploit these biological triggers. They don't sell you a watch; they sell you the feeling of being a successful, respected person. When you buy luxury items on a loan you can't afford, you aren't buying a product—you're buying the *perception* of status. True financial freedom is the things you *don't* see: the emergency fund that lets you quit a toxic job, the investments that provide for your family, and the time you own for yourself. Discipline is the ability to ignore the short-term dopamine of spending in favor of the long-term freedom of owning.", keyTakeaway: "Spend to maintain your life, not your ego. Discipline is choosing what you want *most* over what you want *now*.", example: "A person with a ₹12 lakh car loan who earns ₹50,000/month is 'status rich' but 'freedom poor'." },
-              { icon: "zap", title: "Inflation: The Silent, Ongoing Robbery", text: "Inflation is the single greatest threat to your long-term financial health. Imagine you have ₹10,000 in a safe today. You leave it there for 20 years. In 2046, it is still ₹10,000, but the milk that cost ₹50 today now costs ₹150. Your ₹10,000 is still physically there, but its 'Economic Weight' has been crushed. In India, historical inflation is roughly 6-7% per year, meaning the 'purchasing power' of your cash drops by half every decade.\n\nIf your bank savings account only gives you 3% interest, you are actually *becoming poorer* every single day. This is a negative real return. Inflation is essentially a hidden tax on everyone who holds cash and a hidden gift to everyone who owns productive assets. To survive, you must stop 'saving' and start 'investing.' You need your money to grow at a rate *higher* than inflation. Productive assets—like shares in profitable companies, land, or gold—tend to appreciate over time as the value of currency falls. Holding large amounts of cash for decades is a guaranteed way to lose your life's work to the invisible thief of inflation.", keyTakeaway: "Inflation is the decrease in what your money can buy. Keeping cash for long periods is a guaranteed loss.", example: "In 1990, a cinema ticket was ₹10. Today it's ₹300. That's a 30x increase. If your grandfather saved ₹1000 in 1990, it bought 100 tickets. Today, it buys 3." },
-              { icon: "target", title: "The Magic of Compounding and Time", text: "Einstein described Compound Interest as the '8th Wonder of the World' because it allows a person with a small regular income to become a multi-millionaire, provided they have one thing: TIME. Compounding is the process where your investment earns a return, and in the next period, that return *also* earns a return. It is an exponential explosion that humans struggle to visualize because we think linearly.\n\nIf you invest ₹1 lakh at a 15% return, in the first year you earn ₹15,000. By Year 20, it is ₹16 lakh. By Year 30, it is ₹66 lakh! The secret isn't the ₹1 lakh; it's the 30 years. The 'Heavy Lifting' happens at the very end of the curve. This is why Warren Buffett earned over 99% of his fortune after his 50th birthday. Time is your greatest asset, far more important than the amount of money you start with. A 20-year-old who invests just ₹1,000 per month will likely end up with much more wealth than a 40-year-old who starts investing ₹10,000 per month. You cannot buy more time, but you can start using it today.", keyTakeaway: "Compounding turns small, consistent habits into massive late-stage wealth. Focus on time in the market, not timing the market.", example: "Person A invests from age 25 to 35 and stops. Person B invests from 35 to 65. Person A often ends up with more because their money had a 10-year head start to compound." }
+              { icon: "star", title: "Money: The Great Invention", text: "Money is a social agreement that stores your time and energy. Its value comes from trust.", keyTakeaway: "Value comes from trust.", example: "Stranded with cash vs bread." },
+              { icon: "trending-up", title: "The Value Equation", text: "You are paid in proportion to the difficulty of the problem you solve.", keyTakeaway: "Specific knowledge = higher pay.", example: "Surgeon vs Doctor." }
             ],
             quizzes: [
-              { question: "Money is a 'Social Ledger' because:", options: ["Government made it", "It records stored work society honors later", "It tracks success", "It's a physical asset"], answer: 1 },
-              { question: "How do you double income without more hours?", options: ["Work harder", "Increase Leverage/Scale", "Ask for raises", "Save more"], answer: 1 },
-              { question: "Why 'Buyer's Remorse'?", options: ["Broken product", "Dopamine fades after purchase", "Inflation", "Rude shopkeeper"], answer: 1 },
-              { question: "If interest is 4% but inflation is 6%:", options: ["Growing 4%", "Staying same", "Losing 2% power annually", "Growing 10%"], answer: 2 },
-              { question: "Most critical factor in compounding?", options: ["Starting amount", "Daily news", "Time allowed for growth", "Bank prestige"], answer: 2 }
+              { question: "Money is a 'Social Ledger' because:", options: ["Govt made it", "It records stored work", "It's physical", "It's rare"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "Credit Score Architecture",
+          description: "Understand the math behind your credit score and how it saves you money.",
+          difficulty: "Easy", points: 120, icon: "shield", category: "literacy",
+          content: JSON.stringify({
+            duration: 10,
+            slides: [
+              { icon: "shield", title: "The Financial Resume", text: "Your credit score is your financial resume.", keyTakeaway: "Higher score = lower interest.", example: "Save lakhs on loans." }
+            ],
+            quizzes: [
+              { question: "What is a good CIBIL score?", options: ["300", "500", "750+", "900"], answer: 2 }
             ]
           })
         },
@@ -228,19 +242,12 @@ const seedData = async () => {
           description: "The most robust budgeting framework for maximum freedom.",
           difficulty: "Medium", points: 200, icon: "calculator", category: "literacy",
           content: JSON.stringify({
+            duration: 15,
             slides: [
-              { icon: "calculator", title: "The Philosophy of Proportion", text: "Most people fail at budgeting because they think it's about restriction. They try to track every single rupee, which leads to exhaustion. The 50/30/20 rule takes a different approach: it's about **Structure**. It focuses on the high-level proportions of your income rather than the micro-details of spending.\n\nFinancial freedom isn't about saying 'NO' to every coffee; it's about saying 'YES' to the things that matter most while ensuring your future is secure. A budget is actually a 'Permission Slip' to spend money on things you value. By dividing your take-home pay into three distinct buckets—Needs, Wants, and Savings—you ensure that you can survive today, enjoy today, and build wealth for tomorrow. If you have money left in your 'Wants' bucket for the month, the expense is already accounted for.", keyTakeaway: "Budgeting is about intentionality, not deprivation. Use proportions to maintain balance.", example: "Think of your income as a pie. Instead of worrying about every crumb, just make sure the three main slices stay the right size." },
-              { icon: "home", title: "The 50% Needs: Protecting Your Foundation", text: "The first slice is the 50% allocated to your 'Needs.' These are non-negotiable expenses you *must* pay to maintain health, safety, and your basic ability to earn. In India, this includes rent/EMI, groceries, utilities, essential commuting, and minimum loan repayments. The most common mistake is 'Needs Inflation'—confusing a basic need with an upgraded desire.\n\nHousing is a fundmental need, but paying for a 4BHK when you are single is a 'Want' masquerading as a 'Need.' If your core needs exceed 50% of your take-home pay, you are 'House Poor' or 'Loan Poor.' You have zero breathing room, and any emergency will force you into debt. To fix this, you must either find a way to increase income or make the difficult decision to downsize fixed costs until survival fits within 50%.", keyTakeaway: "Needs are about survival and earning capacity. If they exceed 50%, your financial house is at risk.", example: "If take-home is ₹60k but rent/EMI alone is ₹40k, you have already failed the 50% rule before buying groceries." },
-              { icon: "shopping-bag", title: "The 30% Wants: The Joy Bucket", text: "This is where most financial advice goes wrong. Traditional gurus suggest cutting out all joy—the 30% 'Wants'—to save money. This lead to a 'spending binge' later. The 50/30/20 rule recognizes that you have a right to enjoy your hard-earned money. This bucket is for dining out, Netflix, travel, and hobbies.\n\nThis 30% is a **Cap**, not a floor. When financial situations get tough, this bucket acts as your primary shock absorber. It can be cut to zero without affecting survival. Value-based spending means identifying the 2-3 things that genuinely make you happy and ruthlessly cutting rest. As long as the total remains under 30%, you are doing perfectly. This allows you to live a rich life today while respecting your future.", keyTakeaway: "Wants keep you motivated. Treat this bucket as a flexible variable to dial up or down.", example: "To buy a ₹15k gadget, you decide which other 'wants' (like dinners) to give up this month to stay under 30%." },
-              { icon: "shield", title: "The 20% Savings: Paying Your Future Self", text: "This final 20% is for building long-term wealth: your Emergency Fund, aggressive debt repayment, and investments like Mutual Funds or PPF. The problem is that people save 'what is left' at the end of the month. According to Parkinson’s Law, expenses naturally expand to fill available money. There is almost *never* anything left.\n\nTo break this, practice the golden rule: **Pay Yourself First**. As soon as your salary hits, move that 20% to a separate account. Treat your savings like a mandatory bill you owe to your 'Future Self'—the person who will eventually be too old to work and rely on these savings. If 20% is hard, start with 5% and increase by 1% every few months. The 'Habit' is more important than the amount. Automating this is the single most effective action for wealth.", keyTakeaway: "Savings are a debt to your future. Automate the 20% on salary day so you never see it as spendable.", example: "A person earning ₹40k who saves ₹8k is 'wealthier' than a person earning ₹1.2 lakh who saves ₹0." },
-              { icon: "target", title: "Reverse Lifestyle Creep", text: "The 50/30/20 rule is a destination, not a rigid law. If rent in a city like Mumbai is high, you might start at 60/20/20. The important thing is the **Direction** of your behavior. As your income grows, aim for 'Reverse Lifestyle Creep.'\n\nMost people use a raise to buy a bigger car, which keeps their savings rate at 0%. Instead, if you get a ₹20k raise, keep your lifestyle exactly where it is and move that extra amount into your savings bucket. Suddenly, your rate might jump to 30% or 40%. This 'Gap' is where your freedom lives. It’s what allows you to take risks, start a business, or retire early. Start today by looking at bank statements for the last 90 days. Categorize honestly, be ruthless, and remember: you are building a life.", keyTakeaway: "The 'Gap' between earning and spending is where your freedom lives.", example: "If you get a bonus, don't spend it. Put it in savings to boost your rate without changing your daily life at all." }
+              { icon: "calculator", title: "Philosophy of Proportion", text: "50% Needs, 30% Wants, 20% Savings.", keyTakeaway: "Budgeting is intentionality.", example: "The Pie analogy." }
             ],
             quizzes: [
-              { question: "What is a 'Need'?", options: ["Regular spend", "Health/Survival/Earning essentials", "What friends pay", "Status items"], answer: 1 },
-              { question: "Benefit of 'Pay Yourself First'?", options: ["More for wants", "Ensures automatic wealth building", "Kills debt", "VIP status"], answer: 1 },
-              { question: "If Needs are 75% of income:", options: ["Stop saving", "Ignore budget", "Downsize fixed costs", "Spend more"], answer: 2 },
-              { question: "With ₹1 lakh salary, 'Wants' cap is?", options: ["₹50k", "₹20k", "₹30k", "₹10k"], answer: 2 },
-              { question: "Shock absorber bucket?", options: ["50% Needs", "30% Wants", "20% Savings", "Bank fund"], answer: 1 }
+              { question: "What is a 'Need'?", options: ["Fun spend", "Survival essentials", "Latest fashion", "Dining out"], answer: 1 }
             ]
           })
         },
@@ -249,23 +256,76 @@ const seedData = async () => {
           description: "Build a safety net to sleep peacefully regardless of the economy.",
           difficulty: "Medium", points: 200, icon: "shield", category: "literacy",
           content: JSON.stringify({
+            duration: 20,
             slides: [
-              { icon: "shield", title: "The 'Sleep Well At Night' (SWAN) Fund", text: "An emergency fund is insurance, not an investment. Its purpose isn't to make money, but to prevent losing everything when life goes wrong. Most live 1-2 paychecks from collapse. A sudden medical crisis or layoff should not be a tragedy forced upon you.\n\nAn emergency fund breaks this cycle of fragility. It's a dedicated chunk of cash sitting in a safe, boring place. People with funds navigate global crises with a sense of calm. When you have six months of essential cash in the bank, your boss loses the power to bully you, and you gain the 'mental bandwidth' to make smart decisions instead of panic-driven ones. Security must always come before growth.", keyTakeaway: "It's your financial immune system. It buys you peace of mind and time to think clearly during a crisis.", example: "During economic shocks, those with 6-month funds stay calm while those without are forced into ruin within weeks." },
-              { icon: "calculator", title: "How Much is Enough? Scaling Your Safety Net", text: "Target 3-6 months of ESSENTIAL expenses. The real answer depends on your personal 'Fragility'—how likely is your income to stop? We calculate based on **Expenses** (cost to survive), not income.\n\n**3 Months:** Young, single, low expenses, stable job.\n**6-12 Months:** Children, aging parents, or freelancers/business owners in volatile industries like Tech. To find your 'Survival Number,' add up Rent/EMI, Food, Utilities, Transport, and Insurance. Multiply this by your target months. When you hit this, you have effectively bought months of freedom from the need to earn.", keyTakeaway: "Target 3-6 months of survival expenses. Go higher if you have dependents or irregular pay.", example: "If earnings are ₹80k but essentials are ₹30k, your 6-month goal is ₹1.8 Lakh, not ₹4.8 Lakh." },
-              { icon: "lock", title: "Safe and Liquid: Where to Park Your Protection", text: "Your fund has two rules: Safe and Liquid. SAFE means the principle amount never fluctuates—so no stock market. Imagine the market crashes 30% exactly when companies start firing people. LIQUID means you get the money within 24 hours. A property is not an emergency fund because you can't sell a kitchen sink to pay a hospital bill.\n\nStrategy: Keep 10% as cash or in your main account for instant access. Keep 90% in a separate High-Interest Savings Account with a *different* bank, or a 'Sweep-in' Fixed Deposit. Separation is psychological—it prevents 'accidental' spending on sales.", keyTakeaway: "Zero risk and instant access are the priorities. Avoid the stock market for this fund.", example: "Sweep-in FDs earn high interest but the bank breaks them instantly if you swipe your card at a pharmacy." },
-              { icon: "target", title: "Dealing with Debt and the Starter Fund", text: "If you have high-interest debt like credit cards (15-40%), that debt *is* an emergency. But you should first build a **'Starter Fund'** of ₹25k-50k. Life doesn't stop for your debt plan. If your phone breaks and you have ₹0, you'll be forced back into debt.\n\nThe Starter Fund is a shield that prevents 'relapsing.' Once you have it, stop all saving and attack high-interest debt with everything. Once the debt is dead, finish the full 6-month fund. 1. Starter Fund -> 2. Kill High-Interest Debt -> 3. Full 6-Month Fund -> 4. Long-term Investing.", keyTakeaway: "Small starter fund stops you from relapsing into more debt while you tackle old ones.", example: "₹25k savings with debt is more secure than ₹0 savings with debt. One can handle a leaking pipe; other goes deeper into debt." },
-              { icon: "zap", title: "The Discipline: Rules of Use and Refill", text: "Define emergencies strictly. Is it unexpected? Necessary for survival or earning? Urgent? If the answer to all is not 'Yes,' it is a 'Want' that should come from your 30% bucket. Car service is NOT an emergency; it's a planned expense.\n\nThe moment you withdraw from your fund, enter 'Code Red.' Pause all discretionary spending and cancel SIP investments until the fund is restored to 100%. Treat it like the oxygen supply in a submarine; if it's low, nothing else matters except refilling it.", keyTakeaway: "Define emergencies strictly. Refilling the fund is your #1 financial priority if touched.", example: "Establish a 'Holy Sh*t' rule. If it isn't a situation that makes you say that aloud, keep the vault closed." }
+              { icon: "shield", title: "The SWAN Fund", text: "Sleep Well At Night fund. 3-6 months essentials.", keyTakeaway: "Insurance for life.", example: "Job loss protection." }
             ],
             quizzes: [
-              { question: "Purpose of an Emergency Fund?", options: ["Max returns", "Mental bandwidth and calm", "Bank VIP", "Sales/Liquidation"], answer: 1 },
-              { question: "How to calculate goal?", options: ["6mo salary", "3-6mo essentials", "Fixed ₹5L", "Credit limit"], answer: 1 },
-              { question: "Poorest place to keep it?", options: ["Savings acct", "Sweep-in FD", "Stock market", "Liquid fund"], answer: 2 },
-              { question: "When build ₹25k Starter Fund?", options: ["After debt-free", "Before killing high-interest debt", "After buying house", "Never"], answer: 1 },
-              { question: "After using the fund?", options: ["Continue usual", "Refill as #1 priority", "Take replacement loan", "Forget it"], answer: 1 }
+              { question: "How much is enough?", options: ["1mo salary", "3-6mo essentials", "1yr salary", "Whatever bank says"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "The Mutual Fund Revolution",
+          description: "Learn professional managers grow your wealth through diversification.",
+          difficulty: "Medium", points: 300, icon: "trending-up", category: "literacy",
+          content: JSON.stringify({
+            duration: 30,
+            slides: [
+              { icon: "users", title: "The Power of Pooling", text: "Mutual funds allow diversification for small amounts.", keyTakeaway: "Pool money to hire experts.", example: "₹500 vs ₹10 Lakhs." }
+            ],
+            quizzes: [
+              { question: "Main benefit of Mutual Funds?", options: ["Guaranteed returns", "Diversification", "No taxes", "Free money"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "The Debt Trap Escape",
+          description: "Strategies to destroy high-interest debt and reclaim freedom.",
+          difficulty: "Medium", points: 350, icon: "zap", category: "literacy",
+          content: JSON.stringify({
+            duration: 45,
+            slides: [
+              { icon: "zap", title: "Math of Slavery", text: "Destructive debt (36% interest) is a medical emergency.", keyTakeaway: "Kill 36% before 8% growth.", example: "Credit cards." }
+            ],
+            quizzes: [
+              { question: "Snowball method is about:", options: ["Math", "Psychology of small wins", "Cold weather", "Waiting"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "Equity Intelligence: Mastering Stocks",
+          description: "Go deep into the engine of global business. Valuation and psychology.",
+          difficulty: "Hard", points: 500, icon: "trending-up", category: "literacy",
+          content: JSON.stringify({
+            duration: 60,
+            slides: [
+              { icon: "building-2", title: "Ownership Architecture", text: "A stock is a legal claim on future profits.", keyTakeaway: "Be an owner, not a consumer.", example: "Buy Apple, not iPhone." }
+            ],
+            quizzes: [
+              { question: "Volatility vs Risk?", options: ["Same", "Risk is total loss; Volatility is temp price move", "Volatility is worse", "None"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "Advanced Retirement Engineering",
+          description: "Build a wealth machine. FI number and the 4% rule.",
+          difficulty: "Hard", points: 600, icon: "target", category: "literacy",
+          content: JSON.stringify({
+            duration: 90,
+            slides: [
+              { icon: "target", title: "The 4% Rule", text: "Financial Independence = Annual Expenses x 25.", keyTakeaway: "Math-based retirement.", example: "₹50k/mo -> ₹1.5 Cr." }
+            ],
+            quizzes: [
+              { question: "Your FI Number is?", options: ["Age x 2", "Expenses x 25", "Income x 10", "10 Crore"], answer: 1 }
             ]
           })
         }
-      ]);
+      ];
+
+      for (const course of COURSES) {
+        await db.insert(questsTable).values(course);
+      }
     }
 
     const currentBadges = await db.select().from(badgesTable);
@@ -279,6 +339,7 @@ const seedData = async () => {
     console.error("[Seed] Error:", err);
   }
 };
+
 
 app.post('/api/admin/seed-courses', async (req: any, res: any) => {
   try {
