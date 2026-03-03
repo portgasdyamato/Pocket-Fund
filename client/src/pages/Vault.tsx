@@ -67,8 +67,8 @@ export default function GlowUp() {
       setGoalName("");
       setGoalAmount("");
       toast({
-        title: "Mission Initialized",
-        description: `Quest "${goalName}" has been added to your backlog.`,
+        title: "Goal Created",
+        description: `"${goalName}" has been added to your goals.`,
       });
     },
   });
@@ -101,14 +101,14 @@ export default function GlowUp() {
       
       setSelectedGoalId("");
       toast({
-        title: "Protocol Success",
-        description: `₹${stashAmount} successfully transferred to secure storage.`,
+        title: "Savings Secured",
+        description: `₹${stashAmount} successfully moved to your vault.`,
       });
     },
     onError: (error: any) => {
        toast({
         title: "Transfer Failed",
-        description: error.message || "Insufficient energy (balance). Refill required.",
+        description: error.message || "Insufficient wallet balance.",
         variant: "destructive",
       });
     }
@@ -135,42 +135,42 @@ export default function GlowUp() {
               <div className="bg-primary/20 text-primary p-2 rounded-lg">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-primary/80">Command Center</span>
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-primary/80">Savings Overview</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter">The Glow Up</h1>
-            <p className="text-white/40 font-medium mt-2">Manage your locker and monitor your evolution.</p>
+            <h1 className="text-5xl md:text-6xl font-black tracking-tighter">The Vault</h1>
+            <p className="text-white/40 font-medium mt-2">Manage your savings and track your goals.</p>
           </div>
           
           <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
             <DialogTrigger asChild>
               <Button className="bg-primary hover:bg-primary/90 text-white rounded-2xl h-16 px-10 text-xl font-bold premium-shadow click-scale group">
                 <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                Stash Cash
+                Secure Savings
               </Button>
             </DialogTrigger>
             <DialogContent className="glass-morphism border-white/10 text-white p-8">
               <DialogHeader>
-                <DialogTitle className="text-3xl font-black tracking-tight">Financial Protocol</DialogTitle>
+                <DialogTitle className="text-3xl font-black tracking-tight">Save to Vault</DialogTitle>
               </DialogHeader>
               <div className="space-y-6 pt-6">
                 <div className="space-y-3">
-                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount to Stash (₹)</Label>
-                  <Input
-                    className="bg-white/5 border-white/10 h-16 text-2xl font-black focus:border-primary transition-all"
+                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount to Save (₹)</Label>
+                  <input
+                    className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none"
                     placeholder="0.00"
                     value={stashAmount}
                     onChange={(e) => setStashAmount(e.target.value)}
                   />
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Mission</Label>
+                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Goal</Label>
                   <div className="relative">
                     <select
                       className="w-full h-14 rounded-xl border border-white/10 bg-white/5 px-4 text-white appearance-none focus:outline-none focus:border-primary font-bold"
                       value={selectedGoalId}
                       onChange={(e) => setSelectedGoalId(e.target.value)}
                     >
-                      <option value="" className="bg-[#0a0a0a]">General Storage</option>
+                      <option value="" className="bg-[#0a0a0a]">General Vault</option>
                       {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
                         <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
                           {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
@@ -182,7 +182,7 @@ export default function GlowUp() {
                 <div className="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/10">
                    <div className="flex items-center gap-2">
                      <Lock className="w-4 h-4 text-primary" />
-                     <span className="text-xs font-bold text-white/60">Current Wallet Energy</span>
+                     <span className="text-xs font-bold text-white/60">Available Balance</span>
                    </div>
                    <span className="text-sm font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
                 </div>
@@ -191,7 +191,7 @@ export default function GlowUp() {
                   disabled={stashMutation.isPending || !stashAmount}
                   className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-2xl premium-shadow"
                 >
-                  Initiate Stash Sequence
+                  Confirm Savings
                 </Button>
               </div>
             </DialogContent>
@@ -216,7 +216,7 @@ export default function GlowUp() {
               </h2>
               <div className="flex items-center justify-center gap-8 mt-8">
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Growth Engine</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Earning Interest</span>
                   <span className="text-primary font-bold">Liquid Mutual Fund</span>
                 </div>
                 <div className="w-[1px] h-8 bg-white/10" />
@@ -238,7 +238,7 @@ export default function GlowUp() {
           >
             <div className="flex items-center gap-3">
               <div className="w-2 h-8 bg-primary rounded-full" />
-              <h2 className="text-3xl font-bold tracking-tight">Active Missions</h2>
+              <h2 className="text-3xl font-bold tracking-tight">Active Goals</h2>
             </div>
             <Button 
               variant="outline" 
@@ -246,7 +246,7 @@ export default function GlowUp() {
               className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl h-12 px-6 font-bold"
             >
               <Plus className="w-4 h-4 mr-2" />
-              New Goal
+              Create Goal
             </Button>
           </motion.div>
 
@@ -301,20 +301,20 @@ export default function GlowUp() {
             <Dialog open={isNewGoalOpen} onOpenChange={setIsNewGoalOpen}>
                <DialogContent className="glass-morphism border-white/10 text-white p-8">
                  <DialogHeader>
-                   <DialogTitle className="text-3xl font-black">Design New Mission</DialogTitle>
+                   <DialogTitle className="text-3xl font-black">Create Savings Goal</DialogTitle>
                  </DialogHeader>
                  <div className="space-y-6 pt-6">
                    <div className="space-y-2">
-                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Mission Name</Label>
+                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Goal Name</Label>
                      <Input
                        className="bg-white/5 border-white/10 h-14 text-lg font-bold focus:border-primary"
-                       placeholder="e.g. World Domination"
+                       placeholder="e.g. New Laptop"
                        value={goalName}
                        onChange={(e) => setGoalName(e.target.value)}
                      />
                    </div>
                    <div className="space-y-2">
-                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Target Capital (₹)</Label>
+                     <Label className="text-xs font-black uppercase tracking-widest text-white/40">Target Amount (₹)</Label>
                      <Input
                        className="bg-white/5 border-white/10 h-14 text-lg font-bold focus:border-primary"
                        type="number"
@@ -328,7 +328,7 @@ export default function GlowUp() {
                      disabled={createGoalMutation.isPending || !goalName || !goalAmount}
                      className="w-full h-16 text-lg font-black bg-primary premium-shadow"
                    >
-                     Launch Mission
+                     Confirm Goal
                    </Button>
                  </div>
                </DialogContent>
@@ -342,14 +342,14 @@ export default function GlowUp() {
            <div className="lg:col-span-4 flex flex-col gap-6">
               <h3 className="text-xl font-bold flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-accent" />
-                Hall of Fame
+                Completed Goals
               </h3>
               <div className="space-y-4">
                  {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => (
                    <div key={goal.id} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group">
                       <div>
                         <div className="text-sm font-bold line-through text-white/30">{goal.name}</div>
-                        <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Conquered</div>
+                        <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Accomplished</div>
                       </div>
                       <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
                          <Trophy className="w-5 h-5 text-green-500" />
@@ -358,7 +358,7 @@ export default function GlowUp() {
                  ))}
                  {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length === 0 && (
                    <div className="p-10 text-center border border-white/5 border-dashed rounded-3xl opacity-30">
-                      <p className="text-sm font-bold">No conquered missions yet.</p>
+                      <p className="text-sm font-bold">No completed goals yet.</p>
                    </div>
                  )}
               </div>
@@ -367,9 +367,9 @@ export default function GlowUp() {
            {/* Transaction Log */}
            <div className="lg:col-span-8 flex flex-col gap-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold">Recent Protocols</h3>
+                <h3 className="text-xl font-bold">Savings History</h3>
                 <Button variant="ghost" className="text-primary hover:bg-primary/5 text-xs font-black tracking-widest uppercase">
-                  Export Log
+                  Export
                 </Button>
               </div>
               <div className="glass-morphism border-white/5 rounded-3xl overflow-hidden">
@@ -388,7 +388,7 @@ export default function GlowUp() {
                             </div>
                             <div>
                               <p className="font-bold text-white group-hover:text-primary transition-colors">
-                                {t.type === 'stash' ? 'Funds Stashed' : 'Energy Withdrawal'}
+                                {t.type === 'stash' ? 'Deposited' : 'Withdrawn'}
                               </p>
                               <p className="text-xs font-bold text-white/30 uppercase tracking-widest mt-1">
                                 {new Date(t.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -405,7 +405,7 @@ export default function GlowUp() {
                     </div>
                  ) : (
                     <div className="p-20 text-center text-white/20 italic">
-                      Zero activity detected in the sectors.
+                      No activity found.
                     </div>
                  )}
               </div>

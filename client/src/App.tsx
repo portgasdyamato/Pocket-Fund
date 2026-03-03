@@ -8,15 +8,15 @@ import { NavigationBar } from "@/components/NavigationBar";
 import Dashboard from "@/pages/Dashboard";
 import BudgetPage from "@/pages/BudgetPage";
 import ChallengesPage from "@/pages/ChallengesPage";
-import AskCoach from "@/pages/AskCoach";
-import ExpenseLog from "@/pages/ExpenseLog";
+import Assistant from "@/pages/Assistant";
+import History from "@/pages/History";
 import Profile from "@/pages/Profile";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/not-found";
-import Fight from "@/pages/Fight";
-import GlowUp from "@/pages/GlowUp";
-import LevelUp from "@/pages/LevelUp";
-import TrophyCase from "@/pages/TrophyCase";
+import Vault from "@/pages/Vault";
+import Learn from "@/pages/Learn";
+import Achievements from "@/pages/Achievements";
+import Analytics from "@/pages/Analytics";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -53,24 +53,24 @@ function Router() {
           <Dashboard />
         </ProtectedRoute>
       )} />
-      <Route path="/fight" component={() => (
+      <Route path="/analytics" component={() => (
         <ProtectedRoute>
-          <Fight />
+          <Analytics />
         </ProtectedRoute>
       )} />
-      <Route path="/glow-up" component={() => (
+      <Route path="/vault" component={() => (
         <ProtectedRoute>
-          <GlowUp />
+          <Vault />
         </ProtectedRoute>
       )} />
-      <Route path="/level-up" component={() => (
+      <Route path="/learn" component={() => (
         <ProtectedRoute>
-          <LevelUp />
+          <Learn />
         </ProtectedRoute>
       )} />
-      <Route path="/trophy-case" component={() => (
+      <Route path="/achievements" component={() => (
         <ProtectedRoute>
-          <TrophyCase />
+          <Achievements />
         </ProtectedRoute>
       )} />
       <Route path="/budget" component={() => (
@@ -83,14 +83,14 @@ function Router() {
           <ChallengesPage />
         </ProtectedRoute>
       )} />
-      <Route path="/coach" component={() => (
+      <Route path="/assistant" component={() => (
         <ProtectedRoute>
-          <AskCoach />
+          <Assistant />
         </ProtectedRoute>
       )} />
-      <Route path="/expenses" component={() => (
+      <Route path="/history" component={() => (
         <ProtectedRoute>
-          <ExpenseLog />
+          <History />
         </ProtectedRoute>
       )} />
       <Route path="/profile" component={() => (

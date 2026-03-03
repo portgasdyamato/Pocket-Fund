@@ -119,7 +119,7 @@ export default function ChallengesPage() {
             </Link>
             <div className="h-8 w-px bg-white/10 hidden md:block" />
             <h1 className="text-xl font-black tracking-tight flex items-center gap-2 uppercase tracking-widest">
-              Engagement <span className="text-primary italic">Matrix</span>
+              Available <span className="text-primary italic">Challenges</span>
             </h1>
           </div>
           <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export default function ChallengesPage() {
                       </div>
                    </div>
                    <p className="text-4xl font-black font-mono tracking-tighter text-primary">2,450</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Neural Credits Earned</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Reward Points Earned</p>
                  </div>
                  <div className="space-y-2">
                    <div className="flex justify-center mb-4">
@@ -162,7 +162,7 @@ export default function ChallengesPage() {
                       </div>
                    </div>
                    <p className="text-4xl font-black font-mono tracking-tighter text-secondary">08</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Operations Completed</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Challenges Completed</p>
                  </div>
                  <div className="space-y-2">
                    <div className="flex justify-center mb-4">
@@ -171,7 +171,7 @@ export default function ChallengesPage() {
                       </div>
                    </div>
                    <p className="text-4xl font-black font-mono tracking-tighter text-accent">02</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active Missions</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active Challenges</p>
                  </div>
                </div>
             </div>
@@ -186,11 +186,11 @@ export default function ChallengesPage() {
                 </TabsTrigger>
                 <TabsTrigger value="available" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full">
                   <Star className="w-4 h-4 mr-2" />
-                  Deployment Ready
+                  Available
                 </TabsTrigger>
                 <TabsTrigger value="completed" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full">
                   <Trophy className="w-4 h-4 mr-2" />
-                  Archived Wins
+                  Completed
                 </TabsTrigger>
               </TabsList>
             </div>

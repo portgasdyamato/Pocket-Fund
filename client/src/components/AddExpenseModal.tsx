@@ -38,8 +38,8 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
       queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       toast({
-        title: "Expense Added",
-        description: "Your expense has been logged successfully",
+        title: "Transaction Added",
+        description: "Your transaction has been recorded",
       });
       setAmount("");
       setCategory("");
@@ -72,7 +72,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md backdrop-blur-2xl bg-card/80 border-primary/30 shadow-[0_0_40px_rgba(139,92,246,0.3)]" data-testid="modal-add-expense">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Log Expense</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Add Transaction</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -124,7 +124,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
             </Label>
             <Input
               id="description"
-              placeholder="What did you buy?"
+              placeholder="What was this for?"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               data-testid="input-description"
@@ -134,11 +134,11 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
 
           <Button
             type="submit"
-            className="w-full h-12 text-base font-bold"
+            className="w-full h-12 text-base font-bold bg-primary hover:bg-primary/90 text-white rounded-xl"
             disabled={!amount || !category || createExpenseMutation.isPending}
             data-testid="button-submit-expense"
           >
-            {createExpenseMutation.isPending ? "Adding..." : "Add Expense"}
+            {createExpenseMutation.isPending ? "Confirming..." : "Confirm Entry"}
           </Button>
         </form>
       </DialogContent>

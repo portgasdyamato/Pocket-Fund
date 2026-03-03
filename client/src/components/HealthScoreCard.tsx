@@ -58,7 +58,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
         {/* Header Area */}
         <div className="w-full flex justify-between items-start mb-2">
           <div className="flex flex-col">
-            <span className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase">System Status</span>
+            <span className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase">Member Status</span>
             <div className={`flex items-center gap-2 mt-1 ${info.color}`}>
               <StatusIcon className="w-4 h-4" />
               <span className="text-xs font-bold tracking-widest">{info.label}</span>
@@ -178,9 +178,9 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               transition={{ delay: 0.8, type: "spring", damping: 15 }}
               className="flex flex-col items-center justify-center gap-1"
             >
-              <div className="flex items-center gap-1.5 mb-[-4px]">
+              <div className="flex items-center gap-1.5">
                 <Activity className={`w-3.5 h-3.5 ${info.color} opacity-80`} />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Vitality</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Health</span>
               </div>
               
               <div className="relative flex items-center justify-center">
@@ -190,8 +190,8 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
                 <div className={`absolute inset-0 blur-3xl ${info.color} opacity-20 scale-150 rounded-full`} />
               </div>
 
-              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mt-[-4px]">
-                Score Matrix
+              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mt-1">
+                Financial Score
               </span>
             </motion.div>
           </div>
@@ -199,7 +199,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
 
         {/* Footer Text Area */}
         <div className="text-center w-full mt-auto">
-          <h3 className="text-xl font-black text-white tracking-tight mb-3">Financial Vitality</h3>
+          <h3 className="text-xl font-black text-white tracking-tight mb-3">Financial Health</h3>
           <div className="relative p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm">
             <p className="text-sm text-white/50 leading-relaxed font-medium">
               {message}

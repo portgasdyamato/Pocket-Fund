@@ -24,7 +24,7 @@ export default function AskCoach() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      message: "Initialization complete. I am your Digital Wealth Strategist. Ready to optimize your financial protocols. What is our objective today?"
+      message: "Hello! I am your Financial Assistant. I'm here to help you manage your money and achieve your goals. How can I help you today?"
     }
   ]);
 
@@ -69,8 +69,8 @@ export default function AskCoach() {
     } catch (error) {
       console.error("Speech recognition error:", error);
       toast({
-        title: "Datalink Error",
-        description: "Sensor array malfunctioning. Check microphone permissions.",
+        title: "Microphone Error",
+        description: "Could not access microphone. Please check your permissions.",
         variant: "destructive"
       });
     }
@@ -113,7 +113,7 @@ export default function AskCoach() {
     mutationFn: async (message: string) => {
       const response = await apiRequest("/api/ai/chat", "POST", { message });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Uplink failure");
+      if (!response.ok) throw new Error(data.message || "Communication error");
       return data;
     },
     onSuccess: (data: any) => {
@@ -127,8 +127,8 @@ export default function AskCoach() {
     },
     onError: (error: any) => {
       toast({
-        title: "Uplink Error",
-        description: error.message || "Failed to establish neural link with the coach.",
+        title: "Assistant Error",
+        description: error.message || "Failed to connect with the assistant.",
         variant: "destructive",
       });
     },
@@ -160,7 +160,7 @@ export default function AskCoach() {
       <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
       <div className="absolute top-1/4 -right-24 w-64 h-64 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
       
-      {/* High-Tech Header */}
+      {/* Header */}
       <div className="z-40 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -172,11 +172,11 @@ export default function AskCoach() {
             </div>
             <div>
               <h1 className="text-xl font-black tracking-tight flex items-center gap-2">
-                Neural <span className="text-primary italic">Strategist</span>
+                Pocket <span className="text-primary italic">Assistant</span>
               </h1>
               <div className="flex items-center gap-2 mt-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">System Online</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Online</span>
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function AskCoach() {
               className={`border-white/10 bg-white/5 rounded-xl px-4 font-bold transition-all ${isSpeaking ? "border-primary text-primary" : "text-white/60"}`}
             >
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-              <span className="ml-2 hidden md:inline">{isMuted ? "Muted" : (isSpeaking ? "Analyzing..." : "Voice Ready")}</span>
+              <span className="ml-2 hidden md:inline">{isMuted ? "Muted" : (isSpeaking ? "Speaking..." : "Voice Ready")}</span>
             </Button>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function AskCoach() {
                   ? 'bg-secondary/10 border-secondary/20 text-secondary' 
                   : 'bg-primary/10 border-primary/20 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]'
                 }`}>
-                  {msg.role === 'user' ? <User className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
+                  {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                 </div>
 
                 <div className={`max-w-[85%] md:max-w-[75%] p-6 rounded-2xl glass-morphism border-white/5 relative group ${
@@ -220,7 +220,7 @@ export default function AskCoach() {
                 }`}>
                   {msg.role === 'assistant' && (
                     <div className="absolute -top-3 left-4 bg-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-md border border-primary/30">
-                      Response Matrix
+                      Response
                     </div>
                   )}
                   
@@ -238,7 +238,7 @@ export default function AskCoach() {
 
                   {msg.role === 'assistant' && (
                     <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                       <span>Processed via Gemini 2.5 Flash</span>
+                       <span>Powered by AI</span>
                        <div className="flex items-center gap-3">
                           <button 
                             onClick={() => speak(msg.message, index)}
@@ -310,7 +310,7 @@ export default function AskCoach() {
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={listening ? "Listening for vocal commands..." : "Enter protocol or ask for advice..."}
+                placeholder={listening ? "Listening..." : "Ask for financial advice..."}
                 className="h-14 bg-white/5 border-white/10 rounded-2xl px-6 font-bold focus:border-primary/50 text-white placeholder:text-white/20"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -327,6 +327,7 @@ export default function AskCoach() {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

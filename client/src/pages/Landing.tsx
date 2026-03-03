@@ -162,7 +162,7 @@ export default function Landing() {
                 onClick={handleLogin}
                 className="bg-gradient-to-r from-primary to-accent text-white rounded-full px-10 py-7 text-lg hover:scale-105 transition-transform duration-300 premium-shadow group"
               >
-                Join the Mission
+                Start Your Journey
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
@@ -220,26 +220,26 @@ export default function Landing() {
               },
               {
                 icon: Zap,
-                title: "The Fighting Spirit",
-                desc: "Identify 'Needs', 'Wants', and eliminate 'Icks' with active spending battles.",
+                title: "Smart Categorization",
+                desc: "Identify 'Needs', 'Wants', and eliminate 'Icks' with active spending tracking.",
                 color: "accent"
               },
               {
                 icon: Lock,
-                title: "Digital Locker",
+                title: "Vault Savings",
                 desc: "Secure your savings in a digital vault. Watch your future grow one tap at a time.",
                 color: "secondary"
               },
               {
                 icon: MessageCircle,
-                title: "AI Glow-Up Coach",
-                desc: "Get 24/7 personalized guidance from our advanced Gemini 2.5 Flash engine.",
+                title: "AI Assistant",
+                desc: "Get 24/7 personalized guidance from our advanced Gemini AI engine.",
                 color: "primary"
               },
               {
                 icon: Trophy,
-                title: "Mission Matrix",
-                desc: "Detailed breakdowns of your challenges, streaks, and gamified progress.",
+                title: "Challenge Hub",
+                desc: "Detailed breakdowns of your challenges, streaks, and financial progress.",
                 color: "accent"
               },
               {
@@ -250,20 +250,20 @@ export default function Landing() {
               },
               {
                 icon: Shield,
-                title: "Neural Literacy Links",
-                desc: "Master financial concepts through immersive, interactive quests designed to level up your wealth IQ.",
+                title: "Financial Education",
+                desc: "Master financial concepts through immersive, interactive lessons designed to boost your wealth IQ.",
                 color: "primary"
               },
               {
                 icon: Mic,
-                title: "Vocal Command Sync",
-                desc: "Interact with your AI strategist using natural voice commands for hands-free financial management.",
+                title: "Voice Controls",
+                desc: "Interact with your AI assistant using natural voice commands for hands-free management.",
                 color: "accent"
               },
               {
                 icon: Star,
-                title: "Commendation Hall",
-                desc: "Earn permanent badges and rewards for every strategic victory in your financial saving journey.",
+                title: "Achievements",
+                desc: "Earn permanent badges and rewards for every milestone in your financial journey.",
                 color: "secondary"
               }
             ].map((feature, i) => (
@@ -382,14 +382,14 @@ export default function Landing() {
               <h2 className="text-5xl md:text-7xl font-bold mb-12 tracking-tight">
                 Ready to take 
                 <br />
-                the <span className="text-gradient">Throne?</span>
+                your <span className="text-gradient">Future?</span>
               </h2>
               <Button 
                 size="lg"
                 onClick={handleLogin}
                 className="bg-white text-black hover:bg-white/90 rounded-full px-12 py-8 text-xl font-bold click-scale premium-shadow"
               >
-                Launch Your Dashboard
+                Open Your Dashboard
               </Button>
             </motion.div>
           </div>

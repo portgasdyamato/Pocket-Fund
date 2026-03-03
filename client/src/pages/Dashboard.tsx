@@ -105,8 +105,8 @@ export default function Dashboard() {
       setIsTopUpOpen(false);
       setTopUpAmount("");
       toast({
-        title: "Success",
-        description: `Added ₹${topUpAmount} to your wallet`,
+        title: "Funds Added",
+        description: `₹${topUpAmount} successfully added to your wallet`,
       });
     }
   });
@@ -203,7 +203,7 @@ export default function Dashboard() {
     // Add real logic for health score here based on user data
     if (userQuests.length > 0) score += 10;
     
-    return { healthScore: Math.min(100, score), totalXP: xp, message: "Your financial health is stable. Keep pushing!" };
+    return { healthScore: Math.min(100, score), totalXP: xp, message: "Your financial health is stable. Keep it up!" };
   }, [userQuests, allQuests]);
 
   const recentAchievements = useMemo(() => {
@@ -215,7 +215,7 @@ export default function Dashboard() {
     userQuests.forEach(uq => {
       if (uq.completed) {
         const quest = allQuests.find(q => q.id === uq.questId);
-        if (quest) wins.push({ id: uq.id, title: quest.title, description: uq.completionNote || "Challenge crushed!", points: quest.points, type: 'challenge', date: uq.completedAt });
+        if (quest) wins.push({ id: uq.id, title: quest.title, description: uq.completionNote || "Challenge completed!", points: quest.points, type: 'challenge', date: uq.completedAt });
       }
     });
     return wins.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3).map(w => ({
@@ -252,17 +252,17 @@ export default function Dashboard() {
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Soldier'}!</h2>
+              <h2 className="text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Member'}!</h2>
               <div className="flex items-center gap-2 text-white/40 mt-1">
                 <ShieldCheck className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium">Verified Financial Status</span>
+                <span className="text-sm font-medium">Active Member Status</span>
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             <div className="flex flex-col items-end mr-4">
-              <div className="text-xs font-bold text-white/30 tracking-widest uppercase mb-1">Total Experience</div>
+              <div className="text-xs font-bold text-white/30 tracking-widest uppercase mb-1">Reward Points</div>
               <div className="flex items-center gap-2">
                 <div className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-black flex items-center gap-1 border border-primary/30">
                   <Star className="w-3.5 h-3.5 fill-primary" />
@@ -276,7 +276,7 @@ export default function Dashboard() {
               className="bg-primary hover:bg-primary/90 text-white rounded-xl px-6 h-12 font-bold click-scale premium-shadow"
             >
               <PlusCircle className="w-5 h-5 mr-2" />
-              Log Expense
+              New Transaction
             </Button>
           </div>
         </motion.div>
@@ -303,7 +303,7 @@ export default function Dashboard() {
                     <div>
                       <div className="flex justify-between items-start mb-12">
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase">Vault Secure</span>
+                          <span className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase">Secure Wallet</span>
                           <div className="flex items-center gap-2 mt-1">
                             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                             <span className="text-[10px] font-bold text-white/60 tracking-widest uppercase">Active Balance</span>
@@ -318,7 +318,7 @@ export default function Dashboard() {
                             </DialogTrigger>
                             <DialogContent className="glass-morphism border-white/10 text-white p-8">
                               <DialogHeader>
-                                <DialogTitle className="text-3xl font-black tracking-tight">Refill Energy</DialogTitle>
+                                <DialogTitle className="text-3xl font-black tracking-tight">Add Funds</DialogTitle>
                               </DialogHeader>
                               <div className="space-y-8 pt-8">
                                 <div className="space-y-4">
@@ -339,7 +339,7 @@ export default function Dashboard() {
                                   onClick={() => topUpMutation.mutate()}
                                   disabled={topUpMutation.isPending || !topUpAmount}
                                 >
-                                  Confirm Energy Boost
+                                  Confirm Top-up
                                 </Button>
                               </div>
                             </DialogContent>
@@ -365,7 +365,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="mt-auto">
-                      <p className="text-white/30 text-[10px] font-black tracking-[0.4em] uppercase mb-2">Available Funds</p>
+                      <p className="text-white/30 text-[10px] font-black tracking-[0.4em] uppercase mb-2">Available Balance</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-2xl font-black text-white/20">₹</span>
                         <div className="text-6xl font-black tracking-tighter tabular-nums text-white">
@@ -391,10 +391,10 @@ export default function Dashboard() {
             {/* Quick Actions Grid */}
             <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Zap, label: "FIGHT PLAN", path: "/fight", color: "text-[#f59e0b]", bg: "bg-[#f59e0b]/5", border: "border-[#f59e0b]/10", glow: "shadow-[#f59e0b]/20" },
-                { icon: TrendingUp, label: "GLOW UP", path: "/glow-up", color: "text-[#8b5cf6]", bg: "bg-[#8b5cf6]/5", border: "border-[#8b5cf6]/10", glow: "shadow-[#8b5cf6]/20" },
-                { icon: MessageCircle, label: "AI COACH", path: "/coach", color: "text-[#0ea5e9]", bg: "bg-[#0ea5e9]/5", border: "border-[#0ea5e9]/10", glow: "shadow-[#0ea5e9]/20" },
-                { icon: Activity, label: "ANALYTICS", path: "/expenses", color: "text-[#10b981]", bg: "bg-[#10b981]/5", border: "border-[#10b981]/10", glow: "shadow-[#10b981]/20" }
+                { icon: Activity, label: "ANALYTICS", path: "/analytics", color: "text-[#f59e0b]", bg: "bg-[#f59e0b]/5", border: "border-[#f59e0b]/10", glow: "shadow-[#f59e0b]/20" },
+                { icon: TrendingUp, label: "VAULT", path: "/vault", color: "text-[#8b5cf6]", bg: "bg-[#8b5cf6]/5", border: "border-[#8b5cf6]/10", glow: "shadow-[#8b5cf6]/20" },
+                { icon: MessageCircle, label: "ASSISTANT", path: "/assistant", color: "text-[#0ea5e9]", bg: "bg-[#0ea5e9]/5", border: "border-[#0ea5e9]/10", glow: "shadow-[#0ea5e9]/20" },
+                { icon: Activity, label: "HISTORY", path: "/history", color: "text-[#10b981]", bg: "bg-[#10b981]/5", border: "border-[#10b981]/10", glow: "shadow-[#10b981]/20" }
               ].map((action, i) => (
                 <button 
                   key={i}
@@ -415,10 +415,10 @@ export default function Dashboard() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-8 bg-primary rounded-full" />
-                  <h3 className="text-2xl font-bold tracking-tight">Active Quests</h3>
+                  <h3 className="text-2xl font-bold tracking-tight">Available Challenges</h3>
                 </div>
-                <Button variant="ghost" className="text-white/40 hover:text-white" onClick={() => setLocation('/challenges')}>
-                  View Mission Log
+                <Button variant="ghost" className="text-white/40 hover:text-white" onClick={() => setLocation('/learn')}>
+                  View All
                 </Button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -430,13 +430,13 @@ export default function Dashboard() {
                       onAction={() => {
                         setSelectedChallenge(challenge);
                         setIsChallengeModalOpen(true);
-                      }}
+                       }}
                     />
                   ))
                 ) : (
                   <div className="col-span-2 glass-morphism border-white/5 p-12 text-center rounded-3xl">
                     <Trophy className="w-12 h-12 text-white/10 mx-auto mb-4" />
-                    <p className="text-white/40 font-medium">No active missions available.</p>
+                    <p className="text-white/40 font-medium">No challenges available.</p>
                   </div>
                 )}
               </div>
@@ -451,7 +451,7 @@ export default function Dashboard() {
               <Card className="glass-morphism border-white/5 p-6 h-full">
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-accent" />
-                  Recent Battles
+                  Achievements
                 </h3>
                 <div className="space-y-4">
                   {recentAchievements.length > 0 ? (
@@ -469,7 +469,7 @@ export default function Dashboard() {
                   ) : (
                     <div className="text-center py-10">
                       <Star className="w-10 h-10 text-white/5 mx-auto mb-4" />
-                      <p className="text-sm text-white/30">Your trophy case is empty.<br/>Win some battles!</p>
+                      <p className="text-sm text-white/30">No achievements yet.<br/>Complete some challenges!</p>
                     </div>
                   )}
                 </div>
@@ -480,9 +480,9 @@ export default function Dashboard() {
             <motion.div variants={item}>
               <Card className="glass-morphism border-white/5 p-6 min-h-[400px]">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Mission Log</h3>
-                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setLocation('/expenses')}>
-                    Analyze
+                  <h3 className="text-xl font-bold">Recent Activity</h3>
+                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setLocation('/history')}>
+                    View All
                   </Button>
                 </div>
                 <div className="space-y-3">
@@ -508,7 +508,7 @@ export default function Dashboard() {
                   ) : (
                     <div className="text-center py-10 opacity-40">
                       <Activity className="w-10 h-10 mx-auto mb-4" />
-                      <p className="text-sm">No recent activity detected.</p>
+                      <p className="text-sm">No activity recorded.</p>
                     </div>
                   )}
                 </div>

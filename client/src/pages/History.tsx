@@ -15,6 +15,13 @@ import { format } from "date-fns";
 import type { Transaction } from "@shared/schema";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -44,10 +51,15 @@ export default function ExpenseLog() {
   const { toast } = useToast();
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [filterTag, setFilterTag] = useState<string | null>(null);
 
-  const { data: transactions = [], isLoading, isError } = useQuery<Transaction[]>({
+  const { data: transactions = [], isLoading } = useQuery<Transaction[]>({
     queryKey: ["/api/transactions"],
     retry: false,
+  });
+
+  const { data: untaggedTransactions = [] } = useQuery<Transaction[]>({
+    queryKey: ["/api/transactions/untagged"],
   });
 
   const deleteMutation = useMutation({
@@ -58,19 +70,31 @@ export default function ExpenseLog() {
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
       toast({
-        title: "Protocol Success",
-        description: "Data point purged from the ledger.",
+        title: "Success",
+        description: "Transaction removed.",
       });
       setDeleteId(null);
     },
-    onError: () => {
+  });
+
+  const tagMutation = useMutation({
+    mutationFn: async ({ id, tag }: { id: string; tag: string }) => {
+      await apiRequest(`/api/transactions/${id}/tag`, "PATCH", { tag });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions/untagged"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/streak"] });
       toast({
-        title: "Datalink Failure",
-        description: "Could not execute purge sequence.",
-        variant: "destructive",
+        title: "Categorized",
+        description: "Transaction has been filed.",
       });
     },
   });
+
+  const filteredTransactions = filterTag 
+    ? transactions.filter(t => t.tag === filterTag)
+    : transactions;
 
   const getCategoryIcon = (cat: string | null) => {
     const iconClass = "w-4 h-4";
@@ -120,71 +144,147 @@ export default function ExpenseLog() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <main className="container mx-auto px-6 py-12 max-w-5xl">
+      <main className="container mx-auto px-6 py-12 max-w-5xl space-y-12">
         
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row items-end md:items-center justify-between gap-6 mb-12"
+          className="flex flex-col md:flex-row items-end md:items-center justify-between gap-6"
         >
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Activity className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Protocol v1.02</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Finance Records</span>
             </div>
-            <h1 className="text-5xl font-black tracking-tighter">Activity Log</h1>
-            <p className="text-white/40 font-medium mt-2">Every credit, every debit. Trace your financial footprint.</p>
+            <h1 className="text-5xl font-black tracking-tighter">Transaction History</h1>
+            <p className="text-white/40 font-medium mt-2">A complete track of your spending patterns.</p>
           </div>
           
           <div className="flex gap-4">
-             <Button variant="outline" className="border-white/5 bg-white/5 text-white h-14 px-6 rounded-2xl font-bold hover:bg-white/10">
-               <Filter className="w-5 h-5 mr-2" />
-               Filter Array
-             </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className={`border-white/5 h-14 px-6 rounded-2xl font-bold transition-all ${filterTag ? 'bg-primary/10 text-primary border-primary/20' : 'bg-white/5 text-white hover:bg-white/10'}`}>
+                    <Filter className="w-5 h-5 mr-2" />
+                    {filterTag ? `Only ${filterTag}` : 'Filter'}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="glass-morphism border-white/10">
+                  <DropdownMenuItem onClick={() => setFilterTag(null)} className="font-bold">All Transactions</DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-white/5" />
+                  <DropdownMenuItem onClick={() => setFilterTag('Need')} className="text-blue-400 font-bold">Needs Only</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilterTag('Want')} className="text-primary font-bold">Wants Only</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="text-destructive font-bold">Icks Only</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
              <Button 
                 onClick={() => setIsAddExpenseOpen(true)}
                 className="bg-primary hover:bg-primary/90 text-white h-14 px-8 rounded-2xl font-black premium-shadow click-scale"
              >
                 <Plus className="w-6 h-6 mr-2" />
-                Add Entry
+                New Entry
              </Button>
           </div>
         </motion.div>
 
-        {isLoading ? (
-          <div className="space-y-4">
-            {[1,2,3].map(i => (
-              <div key={i} className="h-24 bg-white/5 rounded-3xl animate-pulse" />
-            ))}
-          </div>
-        ) : transactions.length === 0 ? (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="p-20 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]"
-          >
-            <Calendar className="w-16 h-16 mx-auto mb-6 text-white/10" />
-            <h2 className="text-3xl font-black mb-2">Void Logs</h2>
-            <p className="text-white/30 font-medium mb-8 max-w-xs mx-auto">
-              No financial signatures detected in the sectors. Initialize your first entry.
-            </p>
-            <Button
-              onClick={() => setIsAddExpenseOpen(true)}
-              className="bg-primary text-white px-8 h-12 rounded-xl font-bold"
+        {/* Categorization Pending Section (Merged from Fight) */}
+        <AnimatePresence>
+          {untaggedTransactions.length > 0 && !filterTag && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-4"
             >
-              Initialize Log
-            </Button>
-          </motion.div>
-        ) : (
-          <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                 <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                 <h2 className="text-xs font-black uppercase tracking-widest text-white/40">Action Required: Categorize Spending</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {untaggedTransactions.slice(0, 3).map((t) => (
+                  <Card key={t.id} className="glass-morphism border-orange-500/20 p-5 space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className="min-w-0">
+                        <p className="font-bold truncate">{t.description}</p>
+                        <p className="text-[10px] text-white/30 uppercase tracking-tighter">₹{parseFloat(t.amount).toLocaleString('en-IN')}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                       <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1 text-[10px] h-8 font-black border-blue-500/20 text-blue-400 hover:bg-blue-500/10"
+                        onClick={() => tagMutation.mutate({ id: t.id, tag: 'Need' })}
+                       >
+                         NEED
+                       </Button>
+                       <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1 text-[10px] h-8 font-black border-primary/20 text-primary hover:bg-primary/10"
+                        onClick={() => tagMutation.mutate({ id: t.id, tag: 'Want' })}
+                       >
+                         WANT
+                       </Button>
+                       <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1 text-[10px] h-8 font-black border-destructive/20 text-destructive hover:bg-destructive/10"
+                        onClick={() => tagMutation.mutate({ id: t.id, tag: 'Ick' })}
+                       >
+                         ICK
+                       </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Transaction History List */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+             <h2 className="text-sm font-black uppercase tracking-widest text-white/30">Recent Records</h2>
+             {filterTag && (
+               <Button variant="ghost" size="sm" onClick={() => setFilterTag(null)} className="text-primary h-auto p-0 text-xs font-bold hover:bg-transparent">
+                 Clear Filter
+               </Button>
+             )}
+          </div>
+          
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1,2,3].map(i => (
+                <div key={i} className="h-24 bg-white/5 rounded-3xl animate-pulse" />
+              ))}
+            </div>
+          ) : filteredTransactions.length === 0 ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="p-20 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]"
+            >
+              <Calendar className="w-16 h-16 mx-auto mb-6 text-white/10" />
+              <h2 className="text-3xl font-black mb-2">No Records</h2>
+              <p className="text-white/30 font-medium mb-8 max-w-xs mx-auto">
+                No financial activity found. Start tracking your expenses today.
+              </p>
+              <Button
+                onClick={() => setIsAddExpenseOpen(true)}
+                className="bg-primary text-white px-8 h-12 rounded-xl font-bold"
+              >
+                Track First Expense
+              </Button>
+            </motion.div>
+          ) : (
             <motion.div 
               variants={container}
               initial="hidden"
               animate="show"
               className="space-y-3"
             >
-              {transactions.map((t) => (
+              {filteredTransactions.map((t) => (
                 <motion.div
                   key={t.id}
                   variants={item}
@@ -241,8 +341,8 @@ export default function ExpenseLog() {
                 </motion.div>
               ))}
             </motion.div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
 
       <AddExpenseModal
@@ -257,9 +357,9 @@ export default function ExpenseLog() {
             <div className="w-16 h-16 rounded-3xl bg-destructive/10 flex items-center justify-center border border-destructive/20 mb-2">
               <Trash2 className="w-8 h-8 text-destructive" />
             </div>
-            <h2 className="text-2xl font-black">Purge Entry?</h2>
+            <h2 className="text-2xl font-black">Delete Record?</h2>
             <p className="text-white/40 font-medium">
-              This action will permanently delete this data fragment from the master ledger. This cannot be undone.
+              This action will permanently delete this transaction from your history. This cannot be undone.
             </p>
           </div>
           <div className="flex gap-4 mt-8">
@@ -268,13 +368,13 @@ export default function ExpenseLog() {
                className="flex-1 h-14 border-white/10 bg-white/5 font-bold rounded-2xl" 
                onClick={() => setDeleteId(null)}
             >
-              Abort
+              Cancel
             </Button>
             <Button 
                className="flex-1 h-14 bg-destructive hover:bg-destructive/90 text-white font-black rounded-2xl premium-shadow"
                onClick={() => deleteId && deleteMutation.mutate(deleteId)}
             >
-              Confirm Purge
+              Delete Permanently
             </Button>
           </div>
         </AlertDialogContent>

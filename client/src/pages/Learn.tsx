@@ -192,13 +192,13 @@ export default function LevelUp() {
                        </div>
                     </div>
                     <div>
-                      <h2 className="text-4xl font-black tracking-tighter mb-4 uppercase italic">Neural Uplink Successful</h2>
+                      <h2 className="text-4xl font-black tracking-tighter mb-4 uppercase italic">Lesson Completed!</h2>
                       <p className="text-white/40 font-medium text-lg max-w-md mx-auto">
-                        Your cognitive matrix has been updated with <span className="text-primary font-black">{activeQuest.points} neurological credits</span>.
+                        You have successfully earned <span className="text-primary font-black">{activeQuest.points} reward points</span>.
                       </p>
                     </div>
                     <Button size="lg" className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xl premium-shadow" onClick={closeQuest}>
-                      Commit Data
+                      Finish
                     </Button>
                   </motion.div>
                 ) : step === 0 ? (
@@ -217,7 +217,7 @@ export default function LevelUp() {
                           </div>
                        </div>
                        <div className="space-y-3">
-                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Mission Briefing</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Lesson Overview</p>
                           <h2 className="text-5xl font-black tracking-tighter uppercase italic">{activeQuest.title}</h2>
                           <p className="text-xl text-white/50 font-medium leading-relaxed max-w-xl">{activeQuest.description}</p>
                        </div>
@@ -259,7 +259,7 @@ export default function LevelUp() {
                      className="space-y-8 py-4"
                   >
                     <div className="text-center space-y-4">
-                      <div className="inline-flex px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-black uppercase tracking-widest">Logic Validation</div>
+                      <div className="inline-flex px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] font-black uppercase tracking-widest">Knowledge Check</div>
                       <h2 className="text-3xl font-black tracking-tight leading-tight">{quiz.question}</h2>
                     </div>
                     <div className="space-y-4">
@@ -293,7 +293,7 @@ export default function LevelUp() {
                     </Button>
                   )}
                   <Button onClick={handleNext} className="flex-[2] h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black uppercase tracking-tighter text-sm premium-shadow-white group">
-                    {isLastStep ? "EXECUTE VALIDATION" : "PROCEED"} 
+                    {isLastStep ? "Submit Answer" : "Next Step"} 
                     <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
@@ -316,9 +316,9 @@ export default function LevelUp() {
           className="flex flex-col lg:flex-row lg:items-end justify-between gap-12"
         >
           <div className="space-y-4">
-            <h1 className="text-6xl font-black tracking-tighter italic uppercase">Level <span className="text-primary">Up</span></h1>
+            <h1 className="text-6xl font-black tracking-tighter italic uppercase">Learn <span className="text-primary">& Earn</span></h1>
             <p className="text-white/40 text-2xl font-medium max-w-2xl leading-relaxed">
-              Ascend the financial hierarchy through <span className="text-white italic">Neural Link Training Missions</span>.
+              Improve your financial literacy through <span className="text-white italic">interactive lessons</span>.
             </p>
           </div>
           
@@ -330,8 +330,8 @@ export default function LevelUp() {
                <Trophy className="w-10 h-10 text-white" />
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">Current Tier</p>
-              <p className="text-3xl font-black tracking-tight">VANGUARD ELITE</p>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">Member Status</p>
+              <p className="text-3xl font-black tracking-tight">FINANCIAL PRO</p>
               <div className="flex items-center gap-2 mt-2">
                  <div className="h-1.5 w-32 bg-white/5 rounded-full overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: '65%' }} className="h-full bg-primary" />
@@ -404,7 +404,7 @@ export default function LevelUp() {
                         isDone ? 'border-white/10 bg-transparent text-white/40 hover:bg-white/5' : 'bg-primary text-white hover:bg-primary/90 premium-shadow'
                       }`}
                     >
-                      {isDone ? "REPEAT SIMULATION" : "INITIATE TRAINING"}
+                      {isDone ? "Retake Lesson" : "Start Lesson"}
                     </Button>
                   </div>
                 </Card>
@@ -416,11 +416,12 @@ export default function LevelUp() {
         {literacyQuests.length === 0 && !isLoading && (
           <motion.div variants={item} className="p-20 text-center rounded-[60px] border-2 border-dashed border-white/5 bg-white/[0.02]">
             <Brain className="w-20 h-20 text-white/10 mx-auto mb-6 animate-pulse" />
-            <h3 className="text-3xl font-black tracking-tight mb-2">DATA TRANSMISSION PENDING</h3>
-            <p className="text-white/30 text-lg">New training modules are being synthesized by the core engine.</p>
+            <h3 className="text-3xl font-black tracking-tight mb-2">No Lessons Found</h3>
+            <p className="text-white/30 text-lg">Check back later for more educational content.</p>
           </motion.div>
         )}
       </main>
     </div>
+
   );
 }
