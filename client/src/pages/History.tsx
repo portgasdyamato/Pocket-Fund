@@ -492,30 +492,37 @@ export default function ExpenseLog() {
       />
 
       <AlertDialog open={deleteId !== null} onOpenChange={(open) => !open && setDeleteId(null)}>
-        <AlertDialogContent className="glass-morphism border-white/10 text-white p-8 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-destructive/50" />
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className="w-16 h-16 rounded-3xl bg-destructive/10 flex items-center justify-center border border-destructive/20 mb-2">
-              <Trash2 className="w-8 h-8 text-destructive" />
+        <AlertDialogContent className="border-white/10 text-white p-10 overflow-hidden rounded-[40px] bg-[#0A0A0B] shadow-[0_40px_100px_rgba(0,0,0,1)] max-w-md">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none" />
+          
+          <div className="flex flex-col items-center text-center space-y-6 relative z-10">
+            {/* Premium Icon Container */}
+            <div className="w-24 h-24 rounded-[32px] bg-purple-600/10 flex items-center justify-center border border-purple-500/20 shadow-[0_0_40px_rgba(147,51,234,0.15)] relative">
+              <div className="absolute inset-0 rounded-[32px] bg-purple-400/20 blur-xl opacity-50" />
+              <Trash2 className="w-10 h-10 text-purple-400 relative z-10" />
             </div>
-            <h2 className="text-2xl font-black">Delete Record?</h2>
-            <p className="text-white/40 font-medium">
-              This action will permanently delete this transaction from your history. This cannot be undone.
-            </p>
+            
+            <div className="space-y-3">
+              <h2 className="text-3xl font-black tracking-tighter">Delete Record?</h2>
+              <p className="text-white/40 font-medium text-sm leading-relaxed max-w-[280px] mx-auto">
+                This action will permanently remove this transaction from your financial history.
+              </p>
+            </div>
           </div>
-          <div className="flex gap-4 mt-8">
+
+          <div className="flex gap-4 mt-12 relative z-10">
             <Button 
                variant="outline" 
-               className="flex-1 h-14 border-white/10 bg-white/5 font-bold rounded-2xl" 
+               className="flex-1 h-14 border-white/10 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white font-black rounded-2xl tracking-[0.2em] uppercase text-[10px] transition-colors" 
                onClick={() => setDeleteId(null)}
             >
               Cancel
             </Button>
             <Button 
-               className="flex-1 h-14 bg-destructive hover:bg-destructive/90 text-white font-black rounded-2xl premium-shadow"
+               className="flex-1 h-14 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-2xl shadow-[0_15px_30px_rgba(147,51,234,0.25)] tracking-[0.2em] uppercase text-[10px] transition-all hover:-translate-y-1 click-scale"
                onClick={() => deleteId && deleteMutation.mutate(deleteId)}
             >
-              Delete Permanently
+              Confirm
             </Button>
           </div>
         </AlertDialogContent>
