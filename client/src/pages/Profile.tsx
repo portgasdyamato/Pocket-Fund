@@ -289,11 +289,11 @@ export default function Profile() {
                       <>
                         <Button onClick={handleSave} disabled={updateProfileMutation.isPending} className="w-full bg-green-500 hover:bg-green-600 text-white font-black h-12 rounded-2xl shadow-lg shadow-green-500/20">
                           <Check className="w-4 h-4 mr-2" />
-                          {updateProfileMutation.isPending ? "Syncing..." : "Commit Changes"}
+                          {updateProfileMutation.isPending ? "Syncing..." : "Save Changes"}
                         </Button>
                         <Button variant="outline" onClick={() => setIsEditing(false)} className="w-full border-white/10 bg-white/5 font-black h-12 rounded-2xl">
                           <XCircle className="w-4 h-4 mr-2" />
-                          Abort
+                          Cancel
                         </Button>
                       </>
                     )}

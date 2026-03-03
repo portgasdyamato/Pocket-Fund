@@ -302,7 +302,7 @@ export default function GlowUp() {
                         <Button
                           onClick={() => stashMutation.mutate('stash')}
                           disabled={stashMutation.isPending || !stashAmount}
-                          className="flex flex-col h-auto py-4 gap-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/20"
+                          className="flex flex-col h-auto py-4 gap-2 bg-primary hover:bg-primary/90 text-white border-none shadow-none"
                         >
                           <ArrowUpCircle className="w-6 h-6" />
                           <span className="font-black text-xs uppercase tracking-widest">Deposit</span>
