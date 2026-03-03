@@ -81,12 +81,12 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
         </div>
 
         <div className="relative z-10 p-6 sm:p-10 space-y-8 sm:space-y-10 max-h-[85vh] overflow-y-auto">
-          <DialogHeader className="mb-8">
+          <DialogHeader className="mb-4 sm:mb-8">
             <div className="flex justify-between items-center w-full">
-              <DialogTitle className="text-4xl font-black tracking-tighter">Add Transaction</DialogTitle>
+              <DialogTitle className="text-2xl sm:text-4xl font-black tracking-tighter">Add Entry</DialogTitle>
               <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Vault Balance</span>
-                <span className="text-xl font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
+                <span className="text-lg sm:text-xl font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
               </div>
             </div>
           </DialogHeader>
@@ -94,23 +94,25 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
           <form onSubmit={handleSubmit} className="space-y-10">
             {/* Large Amount Input Section */}
             <div className="space-y-4">
-              <div className="relative">
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-5xl font-black text-white/10 italic pr-4 border-r border-white/5">₹</span>
-                <Input
-                  id="amount"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  placeholder="0.00"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="bg-transparent border-none text-6xl sm:text-8xl font-black h-24 sm:h-32 pl-12 sm:pl-16 focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter"
-                  data-testid="input-amount"
-                  autoFocus
-                  disabled={createExpenseMutation.isPending}
-                />
+              <div className="relative flex flex-col items-center">
+                <div className="flex items-center justify-center gap-4 w-full">
+                  <span className="text-4xl sm:text-6xl font-black text-white/20 italic">₹</span>
+                  <Input
+                    id="amount"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="bg-transparent border-none text-5xl sm:text-7xl font-black h-20 sm:h-28 text-center focus-visible:ring-0 placeholder:text-white/5 font-mono tracking-tighter w-full"
+                    data-testid="input-amount"
+                    autoFocus
+                    disabled={createExpenseMutation.isPending}
+                  />
+                </div>
+                <div className="h-0.5 w-[80%] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-30 rounded-full mx-auto" />
               </div>
-              <div className="h-0.5 w-full bg-gradient-to-r from-primary/50 via-primary/5 to-transparent opacity-30 rounded-full" />
             </div>
 
             {/* Premium Category Grid */}
@@ -177,26 +179,28 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full h-16 sm:h-20 text-lg sm:text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all sticky bottom-0 z-20"
-              disabled={!amount || !category || createExpenseMutation.isPending}
-              data-testid="button-submit-expense"
-            >
-              <div className="flex items-center gap-3">
-                {createExpenseMutation.isPending ? (
-                  <>
-                    <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-                    <span>Processing Entry...</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-6 h-6 fill-white" />
-                    <span>Confirm Transaction</span>
-                  </>
-                )}
-              </div>
-            </Button>
+            <div className="pt-6 pb-4">
+              <Button
+                type="submit"
+                className="w-full h-16 sm:h-20 text-lg sm:text-xl font-black bg-primary hover:bg-primary/90 text-white rounded-[24px] premium-shadow click-scale transition-all"
+                disabled={!amount || !category || createExpenseMutation.isPending}
+                data-testid="button-submit-expense"
+              >
+                <div className="flex items-center gap-3">
+                  {createExpenseMutation.isPending ? (
+                    <>
+                      <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                      <span>Processing Entry...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-6 h-6 fill-white" />
+                      <span>Confirm Transaction</span>
+                    </>
+                  )}
+                </div>
+              </Button>
+            </div>
           </form>
         </div>
       </DialogContent>
