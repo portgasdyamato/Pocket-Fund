@@ -14,63 +14,63 @@ const LITERACY_COURSES = [
         {
           icon: "star",
           title: "Money: The Great Human Invention",
-          text: "Money is the most successful shared fiction ever created. At its core, a ₹500 note has zero intrinsic value—it's just a piece of high-quality paper. It only works because of a universal, unspoken agreement: you trust that if you hand this paper to a shopkeeper, they will give you bread. And the shopkeeper trusts that they can hand that same paper to someone else for fuel.\n\nBefore money, we had the 'Barter System.' If you had surplus wheat and wanted a cow, you had to find a cattle owner who specifically wanted wheat right at that moment. This 'coincidence of wants' made trade incredibly slow and difficult. Money acts as the 'Universal Lubricant' of society. It allows us to store our labor (time) in a portable, divisible, and durable form.\n\nIn the modern digital age, money has evolved further. More than 90% of the world's money exists only as data on servers. When you check your bank balance, you're looking at digits that represent your claim on society's resources. Understanding this abstraction is the first step to mastering finance: money isn't just 'stuff,' it's a tool for measuring and moving value.",
-          keyTakeaway: "Money is a tool for storing and transferring value. Its power comes from trust, not the physical material it's printed on.",
-          example: "Imagine being on a deserted island with ₹1 crore in cash. It's useless. But in a city, that same paper can buy a house. Value is social, situational, and based on collective agreement."
+          text: "Money is the most successful shared fiction ever created by the human race. At its absolute core, a ₹500 note has zero intrinsic value—it is just a piece of high-quality paper with security threads. It has no use in the physical world; you can't eat it, you can't wear it, and you can't build a house out of it. It only works because of a universal, unspoken agreement among billions of people: you trust that if you hand this paper to a shopkeeper, they will give you bread. And the shopkeeper trusts that they can hand that same paper to someone else for fuel, clothing, or taxes.\n\nBefore money became the standard, humanity used the 'Barter System.' If you were a wheat farmer and needed a cow, you had to find a cattle owner who specifically wanted wheat right at that moment. This is known as the 'double coincidence of wants.' If the cow owner wanted salt instead, you were stuck. Barter was incredibly inefficient, slow, and impossible to scale for a growing civilization. Money solved this by becoming a universal medium of exchange. It allowed us to decouple the acquisition of what we want from the production of what we specialize in.\n\nThink of money as a 'Social Ledger.' When you work at your job today, you are giving your time and energy to society. Society, in return, gives you a 'Certificate of Appreciation' in the form of currency. This certificate (money) is essentially stored time. You can trade that stored time 20 years from now for someone else's labor. In the modern digital age, money has evolved further. More than 90% of the world's money exists only as bits and bytes on banking servers. When you check your bank balance on your phone, you're looking at digits that represent your claim on a portion of the world's resources. Mastery of finance begins here: understanding that money is an abstract tool for measuring, storing, and moving human energy across time and space.",
+          keyTakeaway: "Money is a social agreement that stores your time and energy. Its value comes from trust, not the material.",
+          example: "If you were stranded on a deserted island with ₹100 crore in cash, you would be 'poor' because there is no social agreement to recognize that value. Money requires a community to exist."
         },
         {
           icon: "trending-up",
-          title: "The Flow of Value: How You Get Paid",
-          text: "If money is a measurement of value, how do you get more of it? The answer is simple but often misunderstood: You get paid in direct proportion to the difficulty of the problem you solve for others. This is the 'Value Equation.'\n\nA heart surgeon is paid more than a general physician because the problem they solve is rarer and higher-stakes. A software engineer at a global firm is paid more than a local freelancer because their work impacts millions of users simultaneously. Scale and Rareness are the two main drivers of high income.\n\nMany people fall into the trap of thinking they are paid for their 'time' or 'effort.' While those are inputs, they are not what the market pays for. If you spend 20 hours digging a hole and filling it back up, you've put in immense effort, but created zero value. To increase your income, you must stop focusing on 'working harder' and start focusing on 'becoming more valuable.' This means specialized skills, better decision-making, or managing others to create results at scale.",
-          keyTakeaway: "The market pays for results and value, not effort. To earn more, increase the rareness or scale of the problems you solve.",
-          example: "A baker who makes 10 loaves of bread a day has a capped income. A baker who creates a franchise model that sells 10,000 loaves across 50 cities has used 'leverage' (systems and employees) to create massive value."
+          title: "The Value Equation: Why Some Earn Millions",
+          text: "If money is a measurement of value, how do you actually get more of it? The answer is simple but often missed: You are paid in direct proportion to the difficulty of the problem you solve for other people. This is the fundamental 'Value Equation' that dictates the economy. Most legacy education systems teach us to trade 'time' for money, leading people to believe that working 16 hours instead of 8 hours is the only way to double their income. This is a linear growth trap.\n\nConsider the difference between a general physician and a heart surgeon. Both might work the same number of hours, but the surgeon is paid exponentially more. Why? Because the problem they solve is rarer, the training is more intense, and the stakes of the outcome are higher. The surgeon has higher 'Leverage' because their specialized knowledge is in high demand but low supply. In the same way, a software engineer who builds an app used by millions has astronomical leverage compared to an artisan who can only make one item per day. The app creates value while the engineer sleeps; the artisan only creates value while they are physically working.\n\nTo escape the trap of low income, you must stop focusing on 'effort' and start focusing on 'scarcity' and 'scale.' Effort is a commodity; everyone can work hard. But not everyone can manage a team of 50 people, or design a bridge, or write code that secures billions of dollars. Your income is not a reward for your sweat; it is a reflection of how difficult you are to replace. If anyone can do your job with one week of training, you will always be paid the minimum. To earn more, you must acquire 'Specific Knowledge'—skills that feel like play to you but look like work to others.",
+          keyTakeaway: "The market doesn't pay for effort; it pays for the scale and scarcity of the value you contribute. Leverage is the key to decoupling time from income.",
+          example: "A delivery driver works incredibly hard but is easily replaced. A Logistics Network Architect who designs the system used by 10,000 drivers is solving a much harder, rarer problem at scale."
         },
         {
           icon: "brain",
-          title: "Psychology of Money: Why We Spend",
-          text: "Most financial mistakes aren't caused by a lack of math skills; they are caused by a lack of emotional control. We are biological creatures designed for survival in the wild, not for managing digital assets in a 24/7 consumerist society. Our brains are wired for 'Instant Gratification.'\n\nWhen we see a 'SALE' sign or a flashy new gadget, our brain releases dopamine—the pleasure chemical. This makes us feel good *during* the act of buying, but that feeling fades almost instantly after the purchase. This is called the 'Hedonic Treadmill.' We buy things to feel a momentary spike in happiness, then return to our baseline level of satisfaction and feel the urge to buy again.\n\nModern marketing is designed to exploit these biological weaknesses. They sell you a 'lifestyle' or 'status' rather than a product. When you buy a luxury car on a loan You can't afford, you aren't buying transportation—you're buying the *perception* of success. True wealth is the things you *don't* see: the investments, the savings, and the freedom to walk away from a job you hate. Spending money to show people how much money you have is the fastest way to have less money.",
-          keyTakeaway: "Spending for status is a trap. True wealth is invisible. Discipline is the art of choosing what you want *most* over what you want *now*.",
-          example: "The 'Millionaire Next Door' study found that most actual millionaires drive second-hand cars and live in mid-range neighborhoods. They prioritized building assets over displaying status."
+          title: "The Psychology of Want: The Dopamine Trap",
+          text: "Most financial failures are not caused by a lack of IQ or math skills; they are caused by a lack of emotional self-regulation. We are biological creatures with brains evolved for survival in an environment of scarcity. Our ancestors were rewarded for eating as much as possible whenever food was available. In our modern world of abundance, this same instinct leads to obesity. Similarly, our brains are wired for 'Instant Gratification,' which leads to financial ruin in a consumerist society.\n\nWhen you see a flashy new smartphone or a '50% OFF' sale, your brain's reward center releases dopamine—the neurotransmitter associated with pleasure and motivation. Crucially, dopamine is released during the *anticipation* of the purchase, not the long-term ownership. This is why you feel a massive rush when you click 'Buy Now,' but the excitement fades into 'Buyer's Remorse' just a few days later. You are caught on the 'Hedonic Treadmill.' You buy something to get a happiness spike, your baseline happiness eventually returns to normal, and you feel the urge to buy something bigger and better to get that same spike again.\n\nModern advertising is a multi-billion dollar machine designed specifically to exploit these biological triggers. They don't sell you a watch; they sell you the feeling of being a successful, respected person. When you buy luxury items on a loan you can't afford, you aren't buying a product—you're buying the *perception* of status. True financial freedom is the things you *don't* see: the emergency fund that lets you quit a toxic job, the investments that provide for your family, and the time you own for yourself. If you spend your money to show people how much money you have, you are effectively guaranteed to never actually *be* wealthy. Discipline is the ability to ignore the short-term dopamine of spending in favor of the long-term freedom of owning.",
+          keyTakeaway: "Spend to maintain your life, not your ego. Discipline is choosing what you want *most* over what you want *now*.",
+          example: "A person with a ₹12 lakh car loan who earns ₹50,000/month is 'status rich' but 'freedom poor.' A person with a 10-year-old car and ₹12 lakhs in a mutual fund is truly wealthy."
         },
         {
           icon: "zap",
-          title: "Inflation: The Invisible Thief",
-          text: "Imagine you have ₹10,000 in your cupboard. You leave it there for 20 years. When you take it out, it's still ₹10,000. But the world has changed. What used to cost ₹1,000 now costs ₹3,000. Your money hasn't moved, but it has 'shrunk' in power. This is Inflation.\n\nInflation is the silent, ongoing rise in the prices of goods and services. In India, historical inflation averages around 6% per year. This means that every single year, your cash loses 6% of its purchasing power. If your bank account only gives you 3% interest, you are actually *losing* 3% of your wealth's value every year. You are becoming poorer while 'saving.'\n\nThis is why keeping too much cash is dangerous. To truly protect your wealth, you must invest in assets that grow faster than inflation—like equity, real estate, or gold. Inflation is a tax on those who hold cash and a gift to those who own productive assets. If you don't grow your money, the economy will slowly eat it away.",
-          keyTakeaway: "Cash is a depreciating asset over long periods. You must invest to outpace inflation and protect your purchasing power.",
-          example: "In the 1970s, you could buy a decent house in a major Indian city for ₹1-2 lakhs. Today, that same amount might not even cover a year's rent in the same area. That's the power of inflation over decades."
+          title: "Inflation: The Silent, Ongoing Robbery",
+          text: "Inflation is the single greatest threat to your long-term financial health, and it works so slowly that most people don't even notice until it's too late. Imagine you have ₹10,000 in cash tucked away in a safe today. You leave it there for 20 years. When you take it out in the year 2046, it is still ₹10,000. But the world around you has changed drastically. The milk that cost ₹50 today now costs ₹150. The rent that was ₹15,000 is now ₹50,000. Your ₹10,000 is still physically there, but its 'Economic Weight' has been crushed.\n\nIn India, the historical average inflation rate is roughly 6-7% per year. This means that every single year, the 'purchasing power' of your cash drops by 6%. If your bank savings account only gives you 3% interest, you are actually *becoming poorer* every single day. You are losing 3% of your wealth's power annually even though the number in your account is going up. This is a negative real return. Inflation is essentially a hidden tax on everyone who holds cash and a hidden gift to everyone who owns productive assets or is in debt with fixed interest rates.\n\nTo survive inflation, you must stop 'saving' and start 'investing.' You need your money to grow at a rate that is *higher* than the rate of inflation. If inflation is 7%, your money must grow at least 8% just to maintain its value. Wealth is built when your growth rate is 12%, 15%, or 20%. Productive assets—like shares in profitable companies, land, or gold—tend to appreciate over time as the value of currency falls. Holding onto large amounts of cash for decades is a guaranteed way to lose your life's work to the invisible thief of inflation.",
+          keyTakeaway: "Inflation is the decrease in what your money can buy. Keeping cash for long periods is a guaranteed loss. You must invest to protect your power.",
+          example: "In 1990, a cinema ticket was ₹10. Today it's ₹250. That's a 2500% increase. If your grandfather saved ₹1000 in 1990, it would buy 100 tickets then. Today, it buys just 4."
         },
         {
           icon: "target",
-          title: "The Power of Compounding",
-          text: "Albert Einstein reportedly called Compound Interest the '8th Wonder of the World.' It is the most powerful force in finance, yet the human brain struggles to understand it because it is exponential, not linear. We are used to things growing $1+1=2$, but compounding is $2x2=4, 4x4=16$.\n\nWhen you invest money, it earns a return. Next year, you earn a return on your original investment AND the return you earned last year. At first, the difference is tiny—it looks like a flat line. But after 10, 20, or 30 years, the line shoots up vertically. This is why the billionaire Warren Buffett earned 99% of his wealth after his 50th birthday.\n\nThe most important ingredient in compounding isn't the amount of money or even the interest rate—it's **TIME**. A person who starts investing ₹2,000 at age 20 will end up with far more than someone who starts investing ₹10,000 at age 40. Start early, even with tiny amounts, and let time do the heavy lifting for you.",
-          keyTakeaway: "Time is your greatest asset. High returns are good, but a head start is better. The best time to start was 10 years ago; the second best time is today.",
-          example: "If you save ₹1,00,000 once and get a 15% return, in 30 years it becomes ₹66 Lakhs. If you wait just 5 years to start, it only becomes ₹32 Lakhs. That 5-year delay cost you ₹34 Lakhs!"
+          title: "The Magic of Compounding and Time",
+          text: "Albert Einstein famously described Compound Interest as the '8th Wonder of the World' for a very specific reason: it allows a person with a small regular income to become a multi-millionaire, provided they have one thing—TIME. Compounding is the process where your investment earns a return, and in the next period, that return *also* earns a return. It is an exponential explosion that humans fundamentally struggle to visualize because we are wired to think linearly (1+1=2).\n\nConsider this: If you invest ₹1 lakh at a 15% return, in the first year you earn ₹15,000. Nice, but not life-changing. But by Year 10, that ₹1 lakh has grown to ₹4 lakh. By Year 20, it is ₹16 lakh. By Year 30, it is ₹66 lakh! The secret isn't the ₹1 lakh; it's the 30 years. The 'Heavy Lifting' of compounding happens at the very end of the curve. This is why the world's most famous investor, Warren Buffett, earned over 99% of his multi-billion dollar fortune after his 50th birthday. He wasn't necessarily a genius in his 50s; he had just been compounding since his teens.\n\nThe most important takeaway is that **Time is your greatest asset**, far more important than the amount of money you start with or even the interest rate you get. A 20-year-old who invests just ₹1,000 per month will likely end up with much more wealth than a 40-year-old who starts investing ₹10,000 per month. You cannot buy more time, but you can start using it today. Even a tiny amount invested consistently is better than a large amount 'saved' later. The best time to start was 10 years ago; the second best time is right now.",
+          keyTakeaway: "Compounding turns small, consistent habits into massive late-stage wealth. Focus on time in the market, not timing the market.",
+          example: "Person A invests ₹5,000/month from age 25 to 35 and then stops. Person B invests ₹5,000/month from age 35 to 65. Even though B invested for 30 years vs A's 10 years, Person A will likely have more money at age 65 because their money had a 10-year head start to compound."
         }
       ],
       quizzes: [
         {
-          question: "Why does the market pay a heart surgeon more than a grocery clerk?",
-          options: ["Because surgeons work longer hours", "Because the problem a surgeon solves is rarer and requires more specialized value", "Because surgeons are smarter on average", "There is no economic reason; it's just luck"],
+          question: "Money is described as a 'Social Ledger' because:",
+          options: ["It's made by the government", "It represents a record of your stored work that society agrees to honor in the future", "It's the only way to track who is successful", "It's a physical asset with inherent utility"],
           answer: 1
         },
         {
-          question: "What is the 'Hedonic Treadmill'?",
-          options: ["A piece of gym equipment that generates electricity", "The psychological tendency to return to a baseline level of happiness after a purchase", "A method for tracking stock market cycles", "The process of inflation eating away at savings"],
+          question: "How can someone double their income without working more hours?",
+          options: ["By working much harder at the same task", "By increasing the rarity and scale of the problem they solve (Leverage)", "By asking for a raise every month", "By saving more of their current salary"],
           answer: 1
         },
         {
-          question: "If inflation is 7% and your savings account gives 4% interest, what is your 'real' return?",
-          options: ["+11%", "+3%", "-3%", "0%"],
+          question: "Why do we feel 'Buyer's Remorse' after a major purchase?",
+          options: ["Because the product is usually broken", "Because the dopamine rush happens during anticipation, not long-term ownership", "Because we realize inflation has eaten the value", "Because the shopkeeper was rude"],
+          answer: 1
+        },
+        {
+          question: "If your savings account gives 4% interest but inflation is 6%, what is effectively happening to your money?",
+          options: ["It's growing by 4%", "It's staying exactly the same", "It's losing 2% of its real purchasing power every year", "It's growing by 10%"],
           answer: 2
         },
         {
-          question: "Which of these is the MOST important factor in the success of compounding?",
-          options: ["The amount of money you start with", "Choosing the highest risk stocks", "The amount of time the money stays invested", "Watching the news every day"],
-          answer: 2
-        },
-        {
-          question: "How much of the world's money exists only as digital data on servers?",
-          options: ["Less than 10%", "About 50%", "Over 90%", "Exactly 100%"],
+          question: "What is the most critical factor in the success of compounding interest?",
+          options: ["The starting amount of capital", "The specific news of the day", "The amount of time the investment is allowed to grow", "The prestige of the bank"],
           answer: 2
         }
       ]
@@ -78,7 +78,7 @@ const LITERACY_COURSES = [
   },
   {
     title: "Mastering the 50/30/20 Rule",
-    description: "The most famous budgeting framework in the world, explained deeply. Learn how to allocate every rupee for maximum freedom and minimum stress.",
+    description: "The most robust budgeting framework in the world, explained deeply. Learn to allocate every rupee for maximum freedom and minimum stress.",
     difficulty: "Medium",
     points: 150,
     icon: "calculator",
@@ -88,64 +88,64 @@ const LITERACY_COURSES = [
         {
           icon: "calculator",
           title: "The Philosophy of Proportion",
-          text: "Most people fail at budgeting because they try to track every single paisa. This leads to burnout and eventual abandonment. The 50/30/20 rule, popularized by Senator Elizabeth Warren, takes a different approach. It focuses on *proportions* rather than specific categories.\n\nBudgeting isn't about saying 'NO' to everything you love; it's about saying 'YES' to the things that matter most. By setting clear boundaries for your spending, you actually gain MORE freedom because you don't have to feel guilty when you spend within your limits. A budget is a permission slip to spend on the things you value.\n\nThe rule divides your after-tax income into three distinct buckets: Needs (50%), Wants (30%), and Savings/Debt (20%). This balance ensures you survive today, enjoy today, and secure tomorrow.",
-          keyTakeaway: "Budgeting is about intentionality, not deprivation. Proportions help you maintain balance without the stress of micro-tracking.",
-          example: "Instead of worrying if you spent ₹200 too much on coffee, you just look at your total 'Wants' bucket for the month. If there's money in the bucket, you can spend it guilt-free."
+          text: "Most people fail at budgeting for one simple reason: they think it's about restriction. They try to track every single rupee, every cup of tea, and every small UPI payment. This leads to information overload, exhaustion, and the eventual abandonment of the budget within 30 days. The 50/30/20 rule, popularized by bankruptcy expert Senator Elizabeth Warren, takes a radically different approach. It is about **Structure**, not tracking. It focuses on the high-level proportions of your income rather than the micro-details of your spending.\n\nFinancial freedom isn't about saying 'NO' to every coffee or dinner out; it's about saying 'YES' to the things that matter most while ensuring your future is secure. When you have a clear plan, you actually gain MORE freedom because you no longer have to feel a sense of vague guilt every time you spend money. A budget is actually a 'Permission Slip' to spend money on the things you value, within the boundaries you've set for yourself. By dividing your take-home pay into three distinct buckets—Needs, Wants, and Savings—you ensure that you can survive today, enjoy today, and build wealth for tomorrow without the stress of constant calculation.\n\nThe framework is designed to automate your decision-making. Instead of asking 'Can I afford this coffee?', you simply check if you have money left in your 'Wants' bucket for the month. If the answer is yes, the expense is already accounted for. This simplicity is why the 50/30/20 rule is used by millions of successful people worldwide to manage everything from entry-level salaries to massive corporate bonuses.",
+          keyTakeaway: "Budgeting is about intentionality, not deprivation. Use proportions to maintain balance without the burnout of micro-tracking.",
+          example: "Think of your income as a pie. Instead of worrying about every crumb, just make sure the three main slices stay the right size."
         },
         {
           icon: "home",
-          title: "The 50%: Non-Negotiable Needs",
-          text: "Fifty percent of your take-home pay should go to your 'Needs.' These are the expenses you *must* pay to maintain your health, safety, and ability to work. In an Indian context, this typically includes:\n\n• Rent or Home Loan EMI\n• Groceries and basic household supplies\n• Utilities (Electricity, Water, LPG)\n• Essential Transport (Petrol, Metro, Bus)\n• Minimum loan repayments (Credit card minimums, Personal loans)\n• Basic healthcare and insurance premiums\n\nThe trap: Many people confuse 'Needs' with 'Upgraded Needs.' For example, a house is a need, but a 3BHK when you only need a 1BHK is a want. Transport is a need, but a luxury car EMI is a want. If your needs exceed 50%, you are likely 'house poor' or 'car poor' and need to either increase your income or drastically downsize your lifestyle to find breathing room.",
-          keyTakeaway: "Needs should be strictly essential. If they cross 50%, your financial foundation is unstable.",
-          example: "If you earn ₹50,000 but your rent is ₹25,000, you have already spent your entire 50% on just one item. You have zero room left for food, bills, or transport within this bucket."
+          title: "The 50%: Protecting Your Foundation",
+          text: "The first and most critical slice of your budget is the 50% allocated to your 'Needs.' These are the non-negotiable expenses that you *must* pay to maintain your health, your safety, and your basic ability to earn an income. In the Indian context, this bucket includes your rent or home loan EMI, groceries and basic household staples, utilities like electricity, water, and LPG, essential commuting costs to reach your workplace, and minimum repayments on any existing loans. These are the bills that would cause significant trouble if left unpaid.\n\nThe most common mistake people make is 'Needs Inflation.' They confuse a basic human need with an upgraded desire. For example, housing is a fundamental need, but paying for a 4BHK apartment in a premium locality when you are single is a 'Want' masquerading as a 'Need.' Similarly, while transport is a need, the EMI for a luxury SUV is almost certainly a want. If your core needs exceed 50% of your take-home pay, you are 'House Poor' or 'Loan Poor.' You have zero breathing room, and any small emergency will force you into debt. To fix this, you must either find a way to increase your income or make the difficult decision to downsize your fixed costs—like moving to a more affordable area or selling a car with high EMIs—until your baseline survival fits within 50% of your earnings.",
+          keyTakeaway: "Needs are about survival and earning capacity. If they exceed 50%, your financial house is in danger during a crisis.",
+          example: "If you take home ₹60,000 but your rent and car EMI alone total ₹40,000, you have already failed the 50% rule before buying a single grain of rice. You are living a lifestyle your income cannot sustain."
         },
         {
           icon: "shopping-bag",
-          title: "The 30%: Guilt-Free Wants",
-          text: "This is the most misunderstood part of the rule. Thirty percent of your income is allocated to 'Wants.' These are the things that make life worth living—the experiences, the style, and the fun. Examples include:\n\n• Dining out and Zomato/Swiggy orders\n• Subscriptions (Netflix, Prime, Gym)\n• Travel and weekend getaways\n• Hobbies and entertainment\n• Upgraded gadgets and fashion\n\nMany 'financial gurus' tell you to cut out your morning tea or coffee to get rich. This is bad advice. Cutting out a ₹20 tea won't make you a millionaire, but it will make you miserable. Instead, the 50/30/20 rule says: keep the tea, but make sure the *total* of all such joys doesn't exceed 30% of your income. When money is tight, the 'Wants' bucket is the first place to look for cuts. It acts as a shock absorber for your finances.",
-          keyTakeaway: "Wants are essential for a happy life, but they must be capped. Use this bucket as a flexible variable to protect your savings.",
-          example: "If you want to buy a new ₹30,000 phone, you don't 'find' the money—it must come out of your 30% bucket. You might have to skip dining out for three months to afford it. That's conscious trade-off."
+          title: "The 30%: The Joy Bucket",
+          text: "This is where most financial advice goes wrong. Traditional gurus suggest you should cut out all joy—the 30% 'Wants'—to save money. This is functionally equivalent to an impossible crash diet; you will suffer for a week and then binge-spend in a moment of weakness. The 50/30/20 rule recognizes that you have a right to enjoy the money you work hard for. This 30% bucket is for dining out, Zomato/Swiggy orders, weekend trips, gym memberships, Netflix/Prime subscriptions, and hobbies. It is the 'Lifestyle' portion of your budget.\n\nThe key is that this 30% is a **Cap**, not a floor. When your financial situation gets tough—say, if a bill increases or you lose a side-income—this 'Wants' bucket acts as your primary shock absorber. It is the only bucket that can be cut to zero without affecting your survival. The goal isn't to live a joyless life, but to be 'Conscious' about where that joy comes from. Value-based spending means identifying the 2-3 things that genuinely make you happy and ruthlessly cutting spending on the things that don't. Maybe you love high-quality coffee but don't care about the latest fashion—keep the coffee and skip the branded clothes. As long as the total remains under 30%, you are doing perfectly. This allows you to live a rich life today while still respecting your financial future.",
+          keyTakeaway: "Wants keep you motivated and happy. Treat this bucket as a flexible variable that you can dial up or down based on your savings goals.",
+          example: "If you want to buy a ₹15,000 gadget, you don't 'find' the money. You decide which other 'wants' to give up this month—like fancy dinners—to stay under your 30% limit."
         },
         {
           icon: "shield",
           title: "The 20%: Paying Your Future Self",
-          text: "The final 20% is the most important for building long-term wealth. This money is gone before you even see it. It goes toward:\n\n• Building an Emergency Fund (3-6 months of expenses)\n• Extra debt repayments (Aggressively paying off the principal)\n• Retirement investments (EPF, NPS, PPF)\n• Long-term wealth building (Mutual Funds, Stocks)\n\nMost people save 'what is left' at the end of the month. The problem is, there is *never* anything left. Parkinson’s Law states that expenses rise to meet income. If you have ₹10,000 in your account, you will find a 'need' for ₹10,000. To fix this, you must **Pay Yourself First**. As soon as your salary hits, move that 20% to a separate account or investment. You must learn to live on the remaining 80%. If you can't save 20%, start with 5% and increase it by 1% every month. The habit of saving is more important than the amount.",
-          keyTakeaway: "Savings are a mandatory bill you owe your future self. Automate this 20% to ensure it happens every single month.",
-          example: "Wealth isn't what you earn; it's what you *keep*. A person earning ₹1 lakh and saving ₹0 is poorer than someone earning ₹30,000 and saving ₹6,000."
+          text: "The final 20% is the most important for building long-term wealth, yet it is often the first bucket people ignore. This money is for your Emergency Fund, aggressive debt repayment, and long-term investments like Mutual Funds, NPS, or PPF. The fundamental problem most people have is that they save 'what is left' at the end of the month. According to Parkinson’s Law, our expenses naturally expand to fill the money we have available. If you have ₹10,000 in your account on the 25th of the month, you will subconsciously find a 'need' to spend it. There is almost *never* anything left at the end of the month.\n\nTo break this cycle, you must practice the golden rule of wealth: **Pay Yourself First**. This means as soon as your salary hits your bank account, the first transaction you make is moving that 20% to a separate savings or investment account. You must learn to treat your savings like a mandatory bill that you owe to your 'Future Self'—someone who will eventually be too old to work and will rely entirely on the money you save today. If you can't manage 20% right away, don't give up. Start with 5% or 10% and commit to increasing it by 1% every couple of months. The 'Habit' of saving is mathematically and psychologically more important than the starting amount. Automating this 20% is the single most effective action you can take to become wealthy over time.",
+          keyTakeaway: "Savings are not an option; they are a debt to your future. Automate the 20% on salary day so you never even see it as spendable money.",
+          example: "Wealth isn't about what you earn; it's about what you *keep*. A person earning ₹1.2 lakh who saves ₹0 is 'poorer' than a person earning ₹40,000 who keeps ₹8,000 every month."
         },
         {
           icon: "target",
-          title: "Adapting the Rule to India",
-          text: "The 50/30/20 rule is a guide, not a law. In Indian cities, rent can be extremely high, or you might have large family responsibilities. You might need to adjust it to 60/20/20 or even 70/10/20 during tough times.\n\nHowever, the goal should always be to trend toward the 20% savings rate. As your income grows, you should aim for 'Reverse Lifestyle Creep.' Instead of spending more when you get a raise, keep your lifestyle the same and move the extra money into the 20% (and eventually 30% or 40%) savings bucket.\n\nFinancial freedom isn't about having a high salary; it's about having a large gap between what you earn and what you spend. That gap is where your freedom lives. Start today by looking at your last 3 months of bank statements and categorizing your spending into these three buckets. You might be surprised at what you find.",
-          keyTakeaway: "The rule is flexible but the 20% savings target is the gold standard. Focus on growing the gap between income and expenses.",
-          example: "If you get a ₹10,000 raise, don't move to a bigger house. Keep your rent the same, and now your savings rate has effectively jumped by a huge margin."
+          title: "Adapting the Rule to Your Reality",
+          text: "The 50/30/20 rule is a powerful guide, but it is not a rigid law that will land you in jail if you break it. We live in the real world where rent in cities like Mumbai or Bangalore can be astronomical, or you might have large responsibilities for aging parents. During certain life stages, you might need to adjust the proportions to 60/20/20 or even 70/10/20. The important thing isn't the exact percentage today; it's the **Direction** of your behavior over time.\n\nAs your income grows throughout your career, you should aim for 'Reverse Lifestyle Creep.' Most people use a raise to buy a bigger car or a better apartment, which keeps their savings rate at 0%. Instead, if you get a ₹20,000 raise, keep your lifestyle exactly where it is and move that entire extra amount into your savings bucket. Suddenly, your 20% savings rate might jump to 30% or 40%. This 'Gap' between your income and your expenses is the most important number in your financial life. That gap is where your freedom lives. It’s the gap that allows you to take risks, start a business, or retire early. Start today by looking at your bank statements for the last 90 days. Categorize every transaction into Need, Want, or Save. Be honest, be ruthless, and remember: you are building a life, not just a spreadsheet.",
+          keyTakeaway: "The rule is a destination. If your needs are currently high, work aggressively to grow the gap between what you earn and what you spend.",
+          example: "If you get a bonus, don't spend it. Put it in your savings bucket. You've just given your 20% a massive boost without changing your daily life at all."
         }
       ],
       quizzes: [
         {
-          question: "Which of these is considered a 'Need' in the 50/30/20 framework?",
-          options: ["A premium Netflix subscription", "Minimum electricity bill for your home", "A weekend trip to Goa", "The latest iPhone 15 Pro"],
+          question: "Which of these is the most accurate definition of a 'Need'?",
+          options: ["Anything you spend money on regularly", "Expenses you MUST pay to maintain health, safety, and your ability to work", "Anything your friends also pay for", "Items that make you feel successful"],
           answer: 1
         },
         {
-          question: "What is the primary benefit of the 'Pay Yourself First' strategy?",
-          options: ["It makes you feel rich immediately", "It ensures savings happen before you have the chance to spend the money", "It allows you to skip paying your other bills", "It increases your credit card limit"],
+          question: "What is the primary benefit of the 'Pay Yourself First' approach?",
+          options: ["It leaves you more money for 'Wants'", "It ensures wealth building happens automatically before you have the chance to spend the money", "It eliminates all your debt instantly", "It tells the bank you're a high-value customer"],
           answer: 1
         },
         {
-          question: "According to the rule, what percentage should go towards 'Wants'?",
-          options: ["50%", "20%", "30%", "10%"],
+          question: "If your 'Needs' (Rent, Bills, Food) currently take up 75% of your income, what is the best strategy?",
+          options: ["Stop saving completely until you earn more", "Ignore the budget entirely", "Look to downsize major fixed costs like rent or debt, and aim to bring needs back to 50% over time", "Spend more on 'Wants' to relieve the stress"],
           answer: 2
         },
         {
-          question: "Your monthly take-home is ₹60,000. How much should you ideally be saving/investing?",
-          options: ["₹6,000", "₹12,000", "₹18,000", "₹30,000"],
-          answer: 1
+          question: "Your take-home salary is ₹1,00,000. According to the rule, how much should you ideally spend on 'Wants' (Dining, fun, shopping)?",
+          options: ["₹50,000", "₹20,000", "₹30,000", "₹10,000"],
+          answer: 2
         },
         {
-          question: "What should you do if your 'Needs' currently take up 70% of your income?",
-          options: ["Ignore the 50/30/20 rule; it's not for you", "Stop saving entirely until your income doubles", "Look for ways to downsize big fixed costs like rent or debt, and aim to reduce needs to 50% over time", "Spend more on 'Wants' to feel better"],
-          answer: 2
+          question: "Which bucket should act as your 'Shock Absorber' when money gets tight?",
+          options: ["The 50% Needs bucket", "The 30% Wants bucket", "The 20% Savings bucket", "The emergency fund from the bank"],
+          answer: 1
         }
       ]
     })
@@ -161,64 +161,64 @@ const LITERACY_COURSES = [
       slides: [
         {
           icon: "shield",
-          title: "The 'Sleep Well At Night' Fund",
-          text: "An emergency fund is not an investment; it is an insurance policy for your life. Its purpose isn't to make you money—it's to prevent you from losing everything when life goes wrong. Most people live just 1-2 paychecks away from bankruptcy. If they lose their job or face a medical crisis, they are forced to take high-interest loans, sell their gold, or beg from relatives.\n\nAn emergency fund breaks this cycle. It is a chunk of cash sitting in a safe place, ready to be used for *only* genuine emergencies. It gives you 'unfuckwithable' confidence. When you have 6 months of cash in the bank, your boss can't bully you, a market crash doesn't scare you, and a broken car is just a minor inconvenience instead of a tragedy.\n\nThis is the very first step of all financial planning. Do not buy stocks, do not buy crypto, and do not buy a house until this fund is started.",
-          keyTakeaway: "An emergency fund is your financial foundation. It buys you peace of mind and time to think during a crisis.",
-          example: "In 2020, people with emergency funds could stay calm and plan their next move. Those without were forced into panic decisions and debt within weeks of the lockdown."
+          title: "The 'Sleep Well At Night' (SWAN) Fund",
+          text: "An emergency fund is not an investment; it is an insurance policy for your life. Its purpose isn't to make you money, earn interest, or maximize returns—it's to prevent you from losing everything when life inevitably goes wrong. Most people in the modern world live just 1 or 2 missed paychecks away from total financial collapse. If they lose their job, face a sudden medical crisis, or their business fails, they are instantly forced into a cycle of desperation: taking high-interest credit card loans, selling family jewelry at a loss, or begging for help from relatives.\n\nAn emergency fund breaks this cycle of fragility. It is a dedicated chunk of cash sitting in a safe, boring place, ready to be used for *only* genuine, unforeseen emergencies. People with emergency funds navigate global crises, market crashes, and job losses with a sense of calm that others find impossible. When you have six months of essential cash in the bank, your boss loses the power to bully you, a car breakdown becomes a minor inconvenience rather than a tragedy, and you gain the 'mental bandwidth' to make smart decisions instead of panic-driven ones. This is the absolute first step of all financial planning. Do not buy a single share of stock, do not touch crypto, and do not think about a home loan until you have laid this foundation. Security must always come before growth.",
+          keyTakeaway: "An emergency fund is your financial immune system. It buys you peace of mind and the time needed to think clearly during a crisis.",
+          example: "During the 2008 or 2020 economic shocks, those with 6-month funds could stay calm and pivot. Those without were forced into debt or ruin within weeks."
         },
         {
           icon: "calculator",
-          title: "How Much is Enough? Scaling Your Fund",
-          text: "The standard advice is '3 to 6 months of expenses.' But this varies based on your 'Fragility.'\n\n**3 Months is for:**\n• Single people with low expenses\n• Government employees with high job security\n• People with multiple sources of income\n\n**6-12 Months is for:**\n• People with children or aging parents (dependents)\n• Freelancers and business owners with variable income\n• People in volatile industries (like Startups or Aviation)\n\nTo calculate your number, add up your absolute essentials: Rent + Food + Bills + Minimum Debt + Essential Travel. Multiply that by your target months. This is your 'Freedom Number.' Don't use your *income* for this calculation, use your *expenses*. If you lose your job, you won't be spending on movies; you'll be spending on survival.",
-          keyTakeaway: "Calculate based on essential expenses, not income. Aim for 3 months if secure, 6-12 months if you have dependents or variable pay.",
-          example: "If your basic survival costs ₹25,000/month, your 6-month fund target is ₹1.5 Lakhs. This is your wall of protection."
+          title: "How Much is Enough? Scaling Your Safety Net",
+          text: "The generic advice you'll hear from most bankers is 'save 3 months of expenses.' However, the real answer depends entirely on your personal 'Fragility'—how likely is your income to stop, and how many people depend on that income? You must look at your life honestly and decide where you sit on the risk spectrum. We calculate based on your **Expenses** (the cost to survive), not your income (what you earn).\n\n**3 Months is appropriate if:** You are young, single, have low fixed expenses, and work in a very stable job (like a government position) where your skills are high in demand. \n\n**6 to 12 Months is appropriate if:** You have children, aging parents, or other dependents who rely on your salary. It is also mandatory if you are a freelancer, a business owner, or work in a volatile industry like Tech Startups or Hospitality where layoffs are common. \n\nTo find your 'Survival Number,' add up every single essential: Rent/EMI + Food + Utilities + Transport + Insurance + Mandatory Loan Payments. This is your monthly baseline. Multiply this by your target months (e.g., ₹25,000 * 6 = ₹1.5 Lakhs). This is your 'Wall of Protection.' When you hit this number, you have effectively bought 6 months of freedom from the need to earn an income. That is one of the most powerful feelings in the world.",
+          keyTakeaway: "Target 3-6 months of ESSENTIAL expenses for stability. Go for 6-12 months if you have a family or an irregular income.",
+          example: "If you earn ₹80,000 but only spend ₹30,000 on essentials, your 6-month goal is ₹1.8 Lakhs. Don't build a fund for ₹4.8 Lakhs (80k * 6) unless you actually need all that to survive."
         },
         {
           icon: "lock",
-          title: "Where to Park Your Safety Net",
-          text: "Your emergency fund has two non-negotiable rules: it must be **Safe** and it must be **Liquid**.\n\n**SAFE** means the value must not fluctuate. You cannot keep your emergency fund in the stock market. Imagine the market crashes by 40%—and that same week, your company announces layoffs. Your ₹5 Lakh fund is now ₹3 Lakh precisely when you need it most. That is a failure of planning.\n\n**LIQUID** means you can get the money out in hours, not weeks. A real estate investment is not an emergency fund because it takes months to sell a flat.\n\n**The Ideal Strategy:**\n1. Keep ₹20,000 as cash/regular bank account (Instant access)\n2. Keep the rest in a 'Sweep-in' FD or a separate Savings Account with a different bank (Accessible in 24 hours, earns decent interest, but isn't visible in your daily spending app). This separation prevents you from accidentally spending it on a 'sale.'",
-          keyTakeaway: "Safety and Liquidity are more important than returns for this specific fund. Use separate accounts to avoid temptation.",
-          example: "A 'Sweep-in' FD is perfect. It earns higher interest like an FD, but if you swipe your card for an emergency, the bank automatically breaks the FD and pays the bill."
+          title: "Where to Park Your Protection",
+          text: "Your emergency fund has two non-negotiable rules that override any desire for profit: it must be **Safe** and it must be **Liquid**. \n\n**SAFE** means the principle amount must never fluctuate. You cannot keep your emergency fund in the stock market or equity mutual funds. Imagine the stock market crashes by 30%—historical data shows this often happens exactly when the economy slows down and companies start firing people. If your ₹5 Lakh fund becomes ₹3.5 Lakh exactly when you lose your job, your plan has failed. \n\n**LIQUID** means you can get the money into your hand within hours or a maximum of one day. A property or a startup investment is not an emergency fund because you can't sell a kitchen sink to pay a hospital bill on a Sunday night. \n\n**The Ideal Strategy:** \n1. Keep 10% (around ₹20,000) as cash at home or in your main savings account for instant, minute-by-minute access.\n2. Keep the remaining 90% in a separate High-Interest Savings Account with a *different* bank, or a 'Sweep-in' Fixed Deposit. This separation is psychological—it prevents you from 'accidentally' spending your safety net because you saw a travel deal or a sale on your primary banking app. You want this fund to be 'Out of sight, out of mind' until the day you truly need it.",
+          keyTakeaway: "Zero risk and instant access are the priorities. Use high-yield savings accounts or liquid FDs. Avoid the stock market for this fund.",
+          example: "A 'Sweep-in' FD earns 7% interest like an FD, but if you swipe your card at a pharmacy, the bank instantly breaks the FD and pays the bill for you with zero manual effort."
         },
         {
           icon: "target",
-          title: "The Hierarchy of Debt and Savings",
-          text: "Should you save for an emergency when you have debt? The answer depends on the interest rate. \n\nIf you have Credit Card debt (36-42% interest), that is its own emergency. It is a 'financial hair-on-fire' situation. However, you should still build a **Starter Emergency Fund** of ₹25,000 to ₹50,000 *before* tackling the debt. Why? Because if your car breaks down while you're paying off debt, you'll just put the repair cost back on the credit card and feel defeated.\n\nOnce you have a small starter fund, stop all saving and throw every rupee at the high-interest debt. Once the credit cards are cleared, go back and finish the full 6-month fund. \n\n**The Golden Sequence:**\n1. Starter Fund (₹25,000)\n2. Pay off High-Interest Debt (>12%)\n3. Full Emergency Fund (6 months)\n4. Long-term Investing",
-          keyTakeaway: "Build a small starter fund first to break the cycle of debt. Then kill high-interest debt, then finish the full fund.",
-          example: "Think of the starter fund as a shield. It stops you from getting *more* debt while you're trying to kill the *old* debt."
+          title: "Dealing with Debt and the Starter Fund",
+          text: "A very common dilemma: 'Should I build an emergency fund when I have significant debt?' The answer depends on the type of debt you are carrying. If you have a Home Loan or an Education Loan at 8-9% interest, prioritize building your full 6-month fund while continuing your regular EMIs. \n\nHowever, if you have Credit Card debt or a Personal Loan at 15% to 40% interest, that debt *is* an emergency. But you should not put every single rupee toward the debt yet. You must first build a **'Starter Emergency Fund'** of roughly ₹25,000 to ₹50,000. Why? Because life doesn't stop just because you're paying off debt. If your phone breaks or you get a flat tire and you have ₹0 in savings, you will be forced to put that repair back on your credit card. This 'One step forward, two steps back' cycle is what kills motivation. \n\nThe Starter Fund acts as a shield that prevents you from going *further* into debt while you tackle the old ones. Once you have that small shield, stop all saving and attack the high-interest debt with everything you have. Once the debt is dead, go back and finish the full 6-month fund. \n\n1. Starter Fund (₹25k-₹50k) → 2. Kill High-Interest Debt (>12%) → 3. Full 6-Month Fund → 4. Long-term Investing.",
+          keyTakeaway: "A small starter fund stops you from relapsing into more debt. Once you have it, focus entirely on killing expensive debt before finishing the full fund.",
+          example: "A person with ₹2 Lakhs in debt and ₹25k in savings is much more secure than someone with ₹2 Lakhs in debt and ₹0 in savings. The first person can handle a leaking pipe; the second person goes into deeper debt."
         },
         {
           icon: "zap",
-          title: "Common Traps and Rules of Use",
-          text: "The hardest part of an emergency fund is defining what counts as an 'emergency.' Humans are very good at lying to themselves. \n\n**What Is an Emergency:**\n• Medical crisis (Hospitalization)\n• Job loss / Business failure\n• Essential repairs (Leaking roof, broken fridge)\n• Urgent family travel (Death/Illness)\n\n**What Is NOT an Emergency:**\n• A 'Limited Time Offer' on sneakers\n• A friend's destination wedding you 'have' to attend\n• Your favorite band coming to town\n• Improving your home's aesthetic\n\n**The replenishment rule:** If you use even one rupee from your fund, your *only* financial goal becomes refilling it. No investing, no fancy dinners, no shopping until the fund is back to 100%. Treat it like a holy vault that must never be empty.",
-          keyTakeaway: "Be ruthlessly honest about what an emergency is. Refill the fund immediately after use.",
-          example: "Create a 'Decision Tree' in your head: 'Will something terrible happen in 48 hours if I don't pay this?' If no, it's not an emergency."
+          title: "The Discipline: Rules of Use and Refill",
+          text: "The final and most difficult part of an emergency fund is maintaining the discipline to use it only for real emergencies. Most people are experts at 'Creative Justification'—they convince themselves that a once-in-a-lifetime flight sale or a broken laptop screen (that still works with a monitor) is an 'emergency.' \n\n**The 'Is It An Emergency?' Test:** \n1. Is it unexpected? (A car service is NOT unexpected, it's a planned expense). \n2. Is it absolutely necessary for survival or earning my living? \n3. Is it urgent (must be paid within 24-48 hours)? \n\nIf the answer to all three is not 'Yes,' it is a 'Want' that should come from your 30% bucket, not the fund. \n\n**The Replenishment Rule:** The moment you withdraw money from your fund, your entire financial life goes into 'Code Red' mode. You must pause all discretionary spending, cancel your SIP investments for 1-2 months, and skip the weekend trips until the fund is restored to its 100% target level. Treat your emergency fund like the oxygen supply in a submarine; if it's low, nothing else matters except refilling it. Respect the fund, and the fund will protect your life.",
+          keyTakeaway: "Define emergencies strictly. If you touch the fund, refilling it becomes your #1 financial priority over everything else.",
+          example: "Establish a 'Holy Sh*t' rule. If it isn't a situation that makes you say that out loud, keep the vault closed."
         }
       ],
       quizzes: [
         {
-          question: "Why shouldn't you keep your emergency fund in the stock market?",
-          options: ["The stock market is a scam", "The value might drop exactly when you need the money for an emergency", "It's too easy to withdraw money from stocks", "Stock returns are too high"],
+          question: "What is the primary psychological purpose of an Emergency Fund?",
+          options: ["To maximize your investment returns", "To provide 'mental bandwidth' and calm so you can make smart decisions during a crisis", "To show the bank you are a VIP customer", "To buy luxury items when they go on sale"],
           answer: 1
         },
         {
-          question: "What is the 'Golden Sequence' for financial stability?",
-          options: ["Invest → Spend → Pay Debt", "Starter Fund → Kill High-Interest Debt → Full Fund → Invest", "Buy House → Get Credit Card → Save", "Spend → Borrow → Repay"],
+          question: "How should you calculate your Emergency Fund goal?",
+          options: ["Goal = 6 months of your gross salary", "Goal = 3-6 months of your ESSENTIAL survival expenses", "Goal = Fixed ₹5 Lakhs for everyone in India", "Goal = The amount of your credit card limit"],
           answer: 1
         },
         {
-          question: "You have ₹50,000 in credit card debt and ₹0 in savings. What is your first step?",
-          options: ["Pay back the ₹50,000 immediately", "Invest in a high-growth startup", "Build a ₹25,000 starter emergency fund", "Go on a vacation to de-stress"],
+          question: "Where is the POOREST place to keep your emergency fund?",
+          options: ["A high-interest savings account", "A 'Sweep-in' Fixed Deposit", "The stock market or equity-linked funds", "A liquid mutual fund"],
           answer: 2
         },
         {
-          question: "How should you calculate your Emergency Fund target amount?",
-          options: ["Target = 12 months of your gross income", "Target = 3-6 months of your essential monthly expenses", "Target = The amount of your credit card limit", "Target = Fixed ₹10 Lakhs for everyone"],
+          question: "When should you build a 'Starter Fund' of ₹25,000?",
+          options: ["Only after you are 100% debt-free", "As your very first step, even before aggressively paying off 30% interest debt", "After buying your first house", "Never; ₹25,000 is too small to matter"],
           answer: 1
         },
         {
-          question: "A friend invites you to a wedding in Thailand. It will cost ₹60,000. Your emergency fund has ₹2 Lakhs. Should you use it?",
-          options: ["Yes, memories are more important than money", "No, a wedding is a planned event/desire, not an unexpected crisis", "Yes, but only if you take a loan for the rest", "Only if you're the best man/maid of honor"],
+          question: "After using money from your emergency fund for a medical bill, what should you do?",
+          options: ["Continue investing and spending as usual", "Refill the fund as your #1 financial priority before doing any other investing or fancy spending", "Take a loan to replace the money", "Forget about it; the money did its job"],
           answer: 1
         }
       ]
@@ -230,17 +230,17 @@ export async function seedLiteracyCourses() {
   const { db } = await import("./db");
   const { quests } = await import("@shared/schema");
   if (!db) { console.log("Database not connected. Skipping seeding."); return; }
-  console.log("🌱 Seeding mega-detailed financial literacy courses...");
+  console.log("🌱 Seeding MEGA-DETAILED financial literacy courses...");
 
   const { eq } = await import("drizzle-orm");
   
   // Wipe ALL literacy quests before re-seeding to ensure fresh content and correct quiz counts
   await db.delete(quests).where(eq(quests.category, "literacy"));
-  console.log("🗑️  Nuked all stale literacy courses from orbit.");
+  console.log("🗑️  Nuked all stale literacy courses to make room for the new content library.");
 
   for (const course of LITERACY_COURSES) {
     await db.insert(quests).values(course);
     console.log(`✅ Deployed Mega-Course: "${course.title}" (${course.points} XP)`);
   }
-  console.log(`✨ Done! ${LITERACY_COURSES.length} high-fidelity courses deployed.`);
+  console.log(`✨ Done! ${LITERACY_COURSES.length} high-fidelity, article-length courses deployed to the database.`);
 }

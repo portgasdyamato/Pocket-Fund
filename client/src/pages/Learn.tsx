@@ -399,9 +399,27 @@ export default function LearnPage() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">Financial Academy</p>
+            <div className="flex items-center gap-4 mb-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Financial Academy</p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-7 px-3 rounded-lg border-white/10 text-[8px] font-black uppercase tracking-widest bg-white/[0.02]"
+                onClick={async () => {
+                  try {
+                    await apiRequest("/api/admin/seed-courses", "POST");
+                    queryClient.invalidateQueries({ queryKey: ["/api/quests"] });
+                    toast({ title: "Content Synced", description: "The latest high-quality courses have been loaded." });
+                  } catch (e) {
+                    toast({ title: "Sync Failed", variant: "destructive" });
+                  }
+                }}
+              >
+                Refresh Course Content
+              </Button>
+            </div>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter italic uppercase">Learn <span className="text-primary">& Earn</span></h1>
-            <p className="text-white/40 text-lg mt-3 max-w-xl">Master money basics through bite-sized lessons designed for complete beginners.</p>
+            <p className="text-white/40 text-lg mt-3 max-w-xl">Master money basics through deep-dive articles and interactive knowledge checks.</p>
           </div>
           {/* Progress overview */}
           <div className="flex gap-4 shrink-0">
