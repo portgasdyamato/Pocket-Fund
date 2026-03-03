@@ -194,7 +194,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
         <div className="text-center w-full mt-auto">
           <h3 className="text-xl font-black text-white tracking-tight mb-2 opacity-90"> Financial Health Analysis</h3>
           <div className="relative p-4 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm overflow-hidden min-h-[70px] flex items-center justify-center text-center">
-             <p className="text-sm text-white/70 leading-relaxed font-semibold italic">
+             <p className="text-sm text-white/70 leading-relaxed font-medium">
                {message}
              </p>
             {/* Dynamic progress highlight at bottom of message box */}
