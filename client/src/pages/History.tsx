@@ -323,24 +323,20 @@ export default function ExpenseLog() {
                       {/* Right Interaction Zone - Vertical Segmented Console */}
                       <div className="w-[140px] flex flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-purple-600">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-white', glow: 'hover:bg-black', corners: 'rounded-t-[24px]' },
-                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-white', glow: 'hover:bg-black', corners: '' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-white', glow: 'hover:bg-black', corners: 'rounded-b-[24px]' }
+                          { label: 'NEED', id: 'Need', icon: ShieldCheck, corners: 'rounded-t-[24px]' },
+                          { label: 'WANT', id: 'Want', icon: Star, corners: '' },
+                          { label: 'ICK', id: 'Ick', icon: TrendingDown, corners: 'rounded-b-[24px]' }
                         ].map((btn, idx) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05, x: -4 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-300 group/btn relative min-h-[80px]
-                               ${btn.corners} ${btn.accent} ${btn.glow}
+                            className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-200 group/btn relative min-h-[80px] w-full text-white
+                               ${btn.corners} hover:bg-black hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
                                ${idx !== 2 ? 'border-b border-white/10' : ''}`}
                           >
-                            <btn.icon className="w-5 h-5 transition-transform group-hover/btn:scale-110" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-white transition-colors">{btn.label}</span>
-                            
-                            {/* Vertical Selection Indicator */}
-                            <div className="absolute inset-y-0 right-0 w-1 bg-current opacity-0 group-hover/btn:opacity-60 transition-opacity" />
+                            <btn.icon className="w-5 h-5 transition-transform group-hover/btn:scale-105" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
