@@ -143,7 +143,7 @@ export default function GlowUp() {
           
           <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
             <DialogTrigger asChild>
-              <Button className="border-none bg-primary hover:bg-primary/90 text-white rounded-2xl h-16 px-10 text-xl font-bold premium-shadow click-scale group">
+              <Button size="lg" className="group">
                 <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 Secure Savings
               </Button>
@@ -189,7 +189,8 @@ export default function GlowUp() {
                 <Button
                   onClick={() => stashMutation.mutate()}
                   disabled={stashMutation.isPending || !stashAmount}
-                  className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-2xl premium-shadow"
+                  className="w-full"
+                  size="lg"
                 >
                   Confirm Savings
                 </Button>
@@ -241,11 +242,10 @@ export default function GlowUp() {
               <h2 className="text-3xl font-bold tracking-tight">Active Goals</h2>
             </div>
             <Button 
-              variant="outline" 
+              variant="secondary" 
               onClick={() => setIsNewGoalOpen(true)}
-              className="border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl h-12 px-6 font-bold"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-5 h-5 mr-2" />
               Create Goal
             </Button>
           </motion.div>
@@ -326,7 +326,8 @@ export default function GlowUp() {
                    <Button
                      onClick={() => createGoalMutation.mutate()}
                      disabled={createGoalMutation.isPending || !goalName || !goalAmount}
-                     className="w-full h-16 text-lg font-black bg-primary premium-shadow"
+                     className="w-full"
+                     size="lg"
                    >
                      Confirm Goal
                    </Button>
@@ -368,7 +369,7 @@ export default function GlowUp() {
            <div className="lg:col-span-8 flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold">Savings History</h3>
-                <Button variant="ghost" className="text-primary hover:bg-primary/5 text-xs font-black tracking-widest uppercase">
+                <Button variant="ghost" size="sm">
                   Export
                 </Button>
               </div>

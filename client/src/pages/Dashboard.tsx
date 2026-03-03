@@ -307,7 +307,7 @@ export default function Dashboard() {
             <div className="h-10 w-[1px] bg-white/10" />
             <Button 
               onClick={() => setIsAddExpenseOpen(true)}
-              className="bg-primary hover:bg-primary/90 text-white rounded-xl px-6 h-12 font-bold click-scale premium-shadow"
+              size="lg"
             >
               <PlusCircle className="w-5 h-5 mr-2" />
               New Transaction
@@ -369,7 +369,8 @@ export default function Dashboard() {
                                   </div>
                                 </div>
                                 <Button 
-                                  className="w-full h-16 text-lg font-black bg-primary hover:bg-primary/90 rounded-3xl premium-shadow click-scale" 
+                                  className="w-full" 
+                                  size="lg"
                                   onClick={() => topUpMutation.mutate()}
                                   disabled={topUpMutation.isPending || !topUpAmount}
                                 >
