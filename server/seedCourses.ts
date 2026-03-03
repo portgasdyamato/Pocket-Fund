@@ -5,7 +5,7 @@ import { quests } from "@shared/schema";
 // EASY COURSES — 10 MINUTES
 // ============================================================
 
-const EASY_SHORT_COURSES = [
+export const EASY_SHORT_COURSES = [
   {
     title: "The Zero-to-One of Money",
     description: "Learn why money exists, how it flows, and the psychological traps that keep people broke. The absolute first step for any beginner.",
@@ -263,7 +263,7 @@ const EASY_SHORT_COURSES = [
 // MEDIUM COURSES — 20-30 MINUTES
 // ============================================================
 
-const MEDIUM_COURSES = [
+export const MEDIUM_COURSES = [
   {
     title: "Mastering the 50/30/20 Rule",
     description: "The most robust budgeting framework for maximum freedom and minimum stress.",
@@ -624,7 +624,7 @@ const MEDIUM_COURSES = [
 // HARD COURSES — 60-90 MINUTES
 // ============================================================
 
-const HARD_LONG_COURSES = [
+export const HARD_LONG_COURSES = [
   {
     title: "Equity Intelligence: Mastering the Stock Market",
     description: "Go deep into the engine of global business. Covers stock valuation, fundamental analysis, and psychological fortitude.",
@@ -1071,7 +1071,7 @@ const HARD_LONG_COURSES = [
 // CHALLENGE QUESTS (unchanged)
 // ============================================================
 
-const CHALLENGE_QUESTS = [
+export const CHALLENGE_QUESTS = [
   { title: "The 1% Rule", description: "Save just 1% over your target today.", difficulty: "Easy", points: 50, content: JSON.stringify({ target: 50, type: "save" }), icon: "target", category: "challenge" },
   { title: "Subscription Audit", description: "Review and cancel one unused app subscription.", difficulty: "Medium", points: 100, content: JSON.stringify({ type: "manual" }), icon: "shield", category: "challenge" },
   { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee", category: "challenge" },
