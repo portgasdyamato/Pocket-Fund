@@ -282,24 +282,35 @@ export default function ExpenseLog() {
                         <div className="text-4xl font-black tabular-nums tracking-tighter">₹{parseFloat(t.amount).toLocaleString('en-IN')}</div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2.5">
+                      <div className="grid grid-cols-3 gap-3">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival' },
-                          { label: 'WANT', id: 'Want', color: 'primary', desc: 'Lifestyle' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste' }
+                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival', icon: ShieldCheck, glow: 'shadow-blue-500/20' },
+                          { label: 'WANT', id: 'Want', color: 'primary', id2: 'want', desc: 'Lifestyle', icon: Star, glow: 'shadow-primary/20' },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste', icon: TrendingDown, glow: 'shadow-destructive/20' }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05 }}
+                            whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all 
-                              ${btn.color === 'blue' ? 'border-blue-500/10 hover:bg-blue-500/10 text-blue-400' : 
-                                btn.color === 'primary' ? 'border-primary/10 hover:bg-primary/10 text-primary' : 
-                                'border-destructive/10 hover:bg-destructive/10 text-destructive'}`}
+                            className={`flex flex-col items-center justify-center py-4 px-2 rounded-2xl border transition-all duration-300 group/btn relative overflow-hidden
+                              ${btn.color === 'blue' ? 'border-blue-500/10 hover:border-blue-500/30 text-blue-400 hover:bg-blue-500/5' : 
+                                btn.color === 'primary' ? 'border-primary/10 hover:border-primary/30 text-primary hover:bg-primary/5' : 
+                                'border-destructive/10 hover:border-destructive/30 text-destructive hover:bg-destructive/5'}`}
                           >
-                            <span className="text-[10px] font-black tracking-widest leading-none">{btn.label}</span>
-                            <span className="text-[7px] font-bold opacity-30 mt-1 uppercase tracking-tighter">{btn.desc}</span>
+                            <div className={`absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity bg-gradient-to-b from-transparent to-current/5`} />
+                            
+                            <btn.icon className="w-5 h-5 mb-2 opacity-40 group-hover/btn:opacity-100 transition-all group-hover/btn:scale-110" />
+                            
+                            <span className="text-[10px] font-black tracking-[0.2em] leading-none mb-1">{btn.label}</span>
+                            <span className="text-[7px] font-bold opacity-20 group-hover/btn:opacity-40 uppercase tracking-tighter">{btn.desc}</span>
+                            
+                            {/* Interactive Glow Point */}
+                            <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 blur-md opacity-0 group-hover/btn:opacity-100 transition-opacity ${
+                              btn.color === 'blue' ? 'bg-blue-500' : 
+                              btn.color === 'primary' ? 'bg-primary' : 
+                              'bg-destructive'
+                            }`} />
                           </motion.button>
                         ))}
                       </div>
