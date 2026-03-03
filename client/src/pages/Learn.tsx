@@ -418,7 +418,7 @@ export default function LearnPage() {
       <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
 
         {/* Compact Mastery Hub Header */}
-        <div className="relative overflow-hidden rounded-[32px] p-6 md:p-10 ">
+        <div className="relative overflow-hidden rounded-[32px] p-6 md:p-10">
            {/* Abstract Decorative Background */}
            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
            
@@ -427,14 +427,10 @@ export default function LearnPage() {
               {/* Left Column: Compact Branding & Intro */}
               <div className="flex-1 space-y-6 text-center lg:text-left">
                 <div className="flex flex-col md:flex-row items-center gap-3 lg:justify-start justify-center">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-                    <Brain className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Financial Academy</span>
-                  </div>
                   <Button 
-                    variant="ghost" 
+                    variant="default" 
                     size="sm" 
-                    className="h-7 px-3 rounded-xl border border-white/5 text-[8px] font-black uppercase tracking-[0.2em] bg-white/[0.02] hover:bg-white/10 text-white/40 hover:text-white transition-all shadow-inner"
+                    className="h-8 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white text-[9px] font-black uppercase tracking-[0.2em] transition-all shadow-lg active:scale-95"
                     onClick={async () => {
                       try {
                         await apiRequest("/api/admin/seed-courses", "POST");
