@@ -303,25 +303,29 @@ export default function ExpenseLog() {
                          </div>
                       </div>
 
-                      {/* Actions Area - High-Contrast Precision Tiles */}
-                      <div className="grid grid-cols-3 gap-4 relative z-10">
+                      {/* Actions Area - Sleek Horizontal Precision Bars */}
+                      <div className="grid grid-cols-1 gap-3 relative z-10">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400' },
-                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive' }
+                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', bg: 'hover:bg-blue-400/10' },
+                          { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary', bg: 'hover:bg-primary/10' },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive', bg: 'hover:bg-destructive/10' }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05, y: -4 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.02, x: 8 }}
+                            whileTap={{ scale: 0.98 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-6 rounded-[32px] border-2 transition-all duration-300 group/btn
-                               bg-zinc-800 border-white/[0.05] hover:bg-zinc-700 hover:border-white/20 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)]
-                               ${btn.accent}`}
+                            className={`flex flex-row items-center gap-4 px-6 py-4 rounded-[24px] border-2 transition-all duration-300 group/btn
+                               bg-zinc-800 border-white/[0.05] hover:border-white/20 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)]
+                               ${btn.bg} ${btn.accent}`}
                           >
-                            {/* Brighter Icons */}
-                            <btn.icon className="w-6 h-6 mb-3 opacity-90 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all brightness-125" />
-                            <span className="text-[12px] font-black uppercase tracking-[0.15em] leading-none text-white/60 group-hover/btn:text-white transition-colors">{btn.label}</span>
+                            <div className={`p-2 rounded-xl bg-white/[0.05] border border-white/[0.1] group-hover/btn:scale-110 transition-transform`}>
+                               <btn.icon className="w-5 h-5 opacity-90 brightness-125" />
+                            </div>
+                            <div className="flex flex-col items-start leading-none">
+                              <span className="text-[14px] font-black uppercase tracking-[0.2em] text-white group-hover/btn:text-white transition-colors">{btn.label}</span>
+                              <span className="text-[8px] font-bold opacity-30 mt-1 uppercase tracking-widest">Metadata Assignment</span>
+                            </div>
                           </motion.button>
                         ))}
                       </div>
