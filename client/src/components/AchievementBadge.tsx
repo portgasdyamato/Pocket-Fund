@@ -26,16 +26,16 @@ export default function AchievementBadge({ id, type, title, description, points 
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ x: 5 }}
-      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all group" 
+      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-accent/30 transition-all group" 
       data-testid={`badge-achievement-${id}`}
     >
       <div className="relative">
-        <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/30 group-hover:scale-110 transition-transform">
-          <div className="text-yellow-500">
+        <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/30 group-hover:scale-110 transition-transform">
+          <div className="text-white">
             {getIcon()}
           </div>
         </div>
-        <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-yellow-500 flex items-center justify-center border border-[#050505] shadow-[0_0_8px_rgba(234,179,8,0.3)]">
+        <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center border border-[#050505]">
           <Star className="w-2.5 h-2.5 text-white fill-white" />
         </div>
       </div>

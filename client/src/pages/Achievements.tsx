@@ -133,9 +133,9 @@ export default function TrophyCase() {
                   <Flame className="w-32 h-32 text-orange-400" />
                </div>
                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 border border-orange-500/30">
-                     <Flame className="w-6 h-6" />
-                  </div>
+                   <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 border border-orange-500/30">
+                      <Flame className="w-6 h-6" />
+                   </div>
                   <h3 className="text-xl font-black uppercase tracking-widest text-orange-400">Save Sequence</h3>
                </div>
                <div className="relative">
@@ -169,7 +169,7 @@ export default function TrophyCase() {
                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
                <div className="flex items-center justify-between mb-12">
                   <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-500">
+                     <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
                         <Star className="w-6 h-6 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                      </div>
                      <h3 className="text-xl font-black uppercase tracking-[0.3em]">Temporal Activity Matrix</h3>
@@ -206,7 +206,7 @@ export default function TrophyCase() {
         {/* Commendation Array */}
         <div className="space-y-12">
           <div className="flex items-center gap-4">
-             <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500 border border-yellow-500/20">
+             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Trophy className="w-5 h-5" />
              </div>
              <h2 className="text-3xl font-black tracking-tight uppercase italic">Service Decorations</h2>
