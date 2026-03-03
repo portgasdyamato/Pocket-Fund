@@ -169,8 +169,8 @@ export default function TrophyCase() {
                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
                <div className="flex items-center justify-between mb-12">
                   <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
-                        <Star className="w-6 h-6" />
+                     <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-500">
+                        <Star className="w-6 h-6 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                      </div>
                      <h3 className="text-xl font-black uppercase tracking-[0.3em]">Temporal Activity Matrix</h3>
                   </div>
@@ -206,7 +206,7 @@ export default function TrophyCase() {
         {/* Commendation Array */}
         <div className="space-y-12">
           <div className="flex items-center gap-4">
-             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+             <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500 border border-yellow-500/20">
                 <Trophy className="w-5 h-5" />
              </div>
              <h2 className="text-3xl font-black tracking-tight uppercase italic">Service Decorations</h2>
@@ -240,7 +240,7 @@ export default function TrophyCase() {
 
                   <div className="mt-10 flex items-center justify-between">
                      <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-primary fill-primary" />
+                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                         <span className="text-xs font-black uppercase tracking-widest">{achievement.points} CREDITS</span>
                      </div>
                      {achievement.unlocked ? (

@@ -484,15 +484,17 @@ export default function Dashboard() {
             <motion.div variants={item}>
               <Card className="glass-morphism border-white/5 p-6 h-full">
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-accent" />
+                  <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
+                    <Trophy className="w-4 h-4 text-yellow-500" />
+                  </div>
                   Achievements
                 </h3>
                 <div className="space-y-4">
                   {recentAchievements.length > 0 ? (
                     recentAchievements.map((win) => (
                       <div key={win.id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
-                        <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/20 group-hover:scale-110 transition-transform">
-                          <Star className="w-6 h-6 text-accent fill-accent" />
+                        <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20 group-hover:scale-110 transition-transform">
+                          <Star className="w-6 h-6 text-yellow-500 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-sm truncate">{win.title}</div>

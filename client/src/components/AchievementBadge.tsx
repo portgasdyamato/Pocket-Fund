@@ -26,27 +26,27 @@ export default function AchievementBadge({ id, type, title, description, points 
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ x: 5 }}
-      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-accent/30 transition-all group" 
+      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all group" 
       data-testid={`badge-achievement-${id}`}
     >
       <div className="relative">
-        <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/30 group-hover:scale-110 transition-transform">
-          <div className="text-accent">
+        <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/30 group-hover:scale-110 transition-transform">
+          <div className="text-yellow-500">
             {getIcon()}
           </div>
         </div>
-        <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center border border-[#050505]">
+        <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-yellow-500 flex items-center justify-center border border-[#050505] shadow-[0_0_8px_rgba(234,179,8,0.3)]">
           <Star className="w-2.5 h-2.5 text-white fill-white" />
         </div>
       </div>
       
       <div className="flex-1 min-w-0">
-        <h4 className="font-bold text-sm text-white group-hover:text-accent transition-colors" data-testid={`text-achievement-title-${id}`}>{title}</h4>
+        <h4 className="font-bold text-sm text-white group-hover:text-yellow-500 transition-colors" data-testid={`text-achievement-title-${id}`}>{title}</h4>
         <p className="text-xs text-white/40 truncate" data-testid={`text-achievement-desc-${id}`}>{description}</p>
       </div>
       
       <div className="flex flex-col items-end">
-        <span className="text-sm font-black text-accent" data-testid={`text-achievement-points-${id}`}>
+        <span className="text-sm font-black text-yellow-500" data-testid={`text-achievement-points-${id}`}>
           +{points}
         </span>
         <span className="text-[8px] font-black uppercase tracking-widest text-white/20">XP Points</span>
