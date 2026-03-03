@@ -258,51 +258,50 @@ export default function ExpenseLog() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {untaggedTransactions.slice(0, 3).map((t) => (
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative rounded-[56px] overflow-hidden group/card aspect-square"
+                    className="relative rounded-[48px] overflow-hidden group/card shadow-2xl"
                   >
-                    {/* Subtle Structural Shadow */}
-                    <Card className="h-full bg-zinc-900 border border-white/[0.08] rounded-[55px] p-10 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                    <Card className="h-full bg-zinc-900 border border-white/[0.08] rounded-[47px] p-8 flex flex-col gap-8 relative overflow-hidden">
                       {/* Premium Top Light */}
-                      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
                       
                       {/* Header Area */}
                       <div className="flex items-center justify-between relative z-10">
-                         <div className={`w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shadow-sm ${getCategoryColor(t.category)}`}>
+                         <div className={`w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-lg ${getCategoryColor(t.category)}`}>
                            {getCategoryIcon(t.category)}
                          </div>
-                         <div className="px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">SEQ-{t.id.slice(-4)}</span>
+                         <div className="px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08]">
+                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">SEQ-{t.id.slice(-4)}</span>
                          </div>
                       </div>
 
                       {/* Content Area */}
-                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6 relative z-10">
+                      <div className="space-y-4 relative z-10 text-center flex-1 py-4">
                          <div className="space-y-1">
-                           <span className={`text-[11px] font-black uppercase tracking-[0.4em] ${getCategoryColor(t.category)} opacity-80`}>{t.category}</span>
-                           <div className="h-px w-8 mx-auto bg-white/10" />
+                           <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${getCategoryColor(t.category)} opacity-80`}>{t.category}</span>
+                           <div className="h-px w-6 mx-auto bg-white/10" />
                          </div>
                          
-                         <h4 className="text-2xl font-black tracking-tight leading-tight text-white/90 group-hover/card:text-white transition-colors uppercase px-2">
+                         <h4 className="text-xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase">
                            {t.description}
                          </h4>
 
                          <div className="flex flex-col items-center">
                            <div className="flex items-baseline gap-2">
-                             <span className="text-xl font-black text-white/10 uppercase tracking-tighter">INR</span>
-                             <span className="text-6xl font-black tabular-nums tracking-tighter text-white">
+                             <span className="text-lg font-black text-white/10 italic">INR</span>
+                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-xl">
                                {parseFloat(t.amount).toLocaleString('en-IN')}
                              </span>
                            </div>
                          </div>
                       </div>
 
-                      {/* Actions Area - Solid & Visible Variants */}
-                      <div className="grid grid-cols-3 gap-4 relative z-10">
+                      {/* Actions Area - Solid & High Visibility */}
+                      <div className="grid grid-cols-3 gap-3 relative z-10">
                         {[
                           { label: 'Need', id: 'Need', color: 'blue', icon: ShieldCheck },
                           { label: 'Want', id: 'Want', color: 'primary', icon: Star },
@@ -310,15 +309,15 @@ export default function ExpenseLog() {
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.04, y: -2 }}
-                            whileTap={{ scale: 0.96 }}
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-5 rounded-[28px] border transition-all duration-300 group/btn
-                               bg-zinc-800/50 border-white/[0.06] hover:bg-zinc-800 hover:border-white/20
+                            className={`flex flex-col items-center justify-center py-5 rounded-[24px] border transition-all duration-300 group/btn
+                               bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.08] hover:border-white/20
                                ${btn.color === 'blue' ? 'text-blue-400' : btn.color === 'primary' ? 'text-primary' : 'text-destructive'}`}
                           >
-                            <btn.icon className="w-5 h-5 mb-2 opacity-70 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all" />
-                            <span className="text-[11px] font-black uppercase tracking-widest leading-none text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
+                            <btn.icon className="w-5 h-5 mb-2 opacity-60 group-hover/btn:opacity-100 transition-all" />
+                            <span className="text-[10px] font-black uppercase tracking-widest leading-none text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
