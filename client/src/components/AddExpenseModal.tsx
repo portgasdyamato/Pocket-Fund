@@ -81,10 +81,10 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
         </div>
 
         <div className="relative z-10 p-6 space-y-5">
-          <DialogHeader>
+          <DialogHeader className="pr-10">
             <div className="flex justify-between items-center w-full">
               <DialogTitle className="text-xl font-black tracking-tighter">New Entry</DialogTitle>
-              <div className="flex flex-col items-end leading-none">
+              <div className="flex flex-col items-end leading-none mr-2">
                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
                 <span className="text-base font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>
               </div>
