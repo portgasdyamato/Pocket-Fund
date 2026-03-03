@@ -231,13 +231,9 @@ app.post('/api/admin/seed-courses', async (req: any, res: any) => {
     await seedData();
     res.json({ success: true, message: "Database re-seeded with MEGA courses." });
   } catch (err: any) {
-    console.error("[Admin] Seed failed:", err);
     res.status(500).json({ message: err.message });
   }
 });
-
-// Run seed on startup
-seedData().catch(console.error);
 
 // --- ROUTES ---
 
