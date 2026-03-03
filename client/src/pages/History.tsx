@@ -258,83 +258,63 @@ export default function ExpenseLog() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {untaggedTransactions.slice(0, 3).map((t) => (
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative p-[1px] rounded-[40px] overflow-hidden group/card bg-white/5"
+                    className="relative p-[1px] rounded-[48px] overflow-hidden group/card aspect-square"
                   >
                     {/* High-Impact Glow Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-transparent to-orange-500/5 opacity-50 group-hover/card:opacity-100 transition-opacity duration-700" />
                     
-                    <Card className="h-full bg-zinc-900/90 backdrop-blur-3xl border border-white/10 rounded-[39px] p-8 space-y-8 relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <Card className="h-full bg-zinc-900/95 backdrop-blur-3xl border border-white/10 rounded-[47px] p-8 flex flex-col justify-between relative overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
                       {/* Inner Shine Effect */}
                       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                       
-                      <div className="space-y-6 relative">
-                        <div className="flex items-center justify-between">
-                           <div className="flex items-center gap-3">
-                              <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner ${getCategoryColor(t.category)}`}>
-                                {getCategoryIcon(t.category)}
-                              </div>
-                              <div>
-                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 block mb-0.5">Category</span>
-                                 <span className={`text-xs font-black uppercase tracking-widest ${getCategoryColor(t.category)}`}>{t.category}</span>
-                              </div>
-                           </div>
-                           <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5">
-                              <span className="text-[9px] font-mono text-white/40 uppercase tracking-tighter">ID-{t.id.slice(-4)}</span>
-                           </div>
-                        </div>
-
-                        <div className="space-y-3">
-                           <h4 className="text-2xl font-black tracking-tight leading-tight line-clamp-2 min-h-[4rem] text-white/90 group-hover/card:text-white transition-colors">
-                             {t.description}
-                           </h4>
-                           <div className="flex items-baseline gap-2">
-                             <span className="text-xl font-black text-orange-400">₹</span>
-                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
-                               {parseFloat(t.amount).toLocaleString('en-IN')}
-                             </span>
-                           </div>
-                        </div>
+                      {/* Header Area */}
+                      <div className="flex items-center justify-between relative z-10">
+                         <div className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center ${getCategoryColor(t.category)}`}>
+                           {getCategoryIcon(t.category)}
+                         </div>
+                         <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5">
+                            <span className="text-[9px] font-mono text-white/40 uppercase tracking-tighter">ID-{t.id.slice(-4)}</span>
+                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-3">
+                      {/* Content Area - Centered for Square Card */}
+                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 relative z-10 py-4">
+                         <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${getCategoryColor(t.category)} opacity-60`}>{t.category}</span>
+                         <h4 className="text-xl font-black tracking-tight leading-tight line-clamp-2 text-white/90 group-hover/card:text-white transition-colors uppercase">
+                           {t.description}
+                         </h4>
+                         <div className="flex items-baseline gap-1">
+                           <span className="text-lg font-black text-orange-400">₹</span>
+                           <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                             {parseFloat(t.amount).toLocaleString('en-IN')}
+                           </span>
+                         </div>
+                      </div>
+
+                      {/* Actions Area - Compact 3-Column Grid */}
+                      <div className="grid grid-cols-3 gap-3 relative z-10">
                         {[
-                          { label: 'Need', id: 'Need', color: 'blue', desc: 'Essential & Survival', icon: ShieldCheck, glow: 'from-blue-500/20 to-transparent' },
-                          { label: 'Want', id: 'Want', color: 'primary', desc: 'Lifestyle & Desires', icon: Star, glow: 'from-primary/20 to-transparent' },
-                          { label: 'Ick', id: 'Ick', color: 'destructive', desc: 'Regret & Waste', icon: TrendingDown, glow: 'from-destructive/20 to-transparent' }
+                          { label: 'Need', id: 'Need', color: 'blue', icon: ShieldCheck },
+                          { label: 'Want', id: 'Want', color: 'primary', icon: Star },
+                          { label: 'Ick', id: 'Ick', color: 'destructive', icon: TrendingDown }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.02, x: 4 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`group/btn relative flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 w-full text-left
-                              ${btn.color === 'blue' ? 'bg-blue-500/5 border-blue-500/20 hover:border-blue-400 hover:bg-blue-500/10' : 
-                                btn.color === 'primary' ? 'bg-primary/5 border-primary/20 hover:border-primary hover:bg-primary/10' : 
-                                'bg-destructive/5 border-destructive/20 hover:border-destructive hover:bg-destructive/10'}`}
+                            className={`flex flex-col items-center justify-center py-4 rounded-2xl border transition-all duration-300 group/btn
+                              ${btn.color === 'blue' ? 'bg-blue-400/5 border-blue-400/20 text-blue-400 hover:border-blue-400 hover:bg-blue-400/10' : 
+                                btn.color === 'primary' ? 'bg-primary/5 border-primary/20 text-primary hover:border-primary hover:bg-primary/10' : 
+                                'bg-destructive/5 border-destructive/20 text-destructive hover:border-destructive hover:bg-destructive/10'}`}
                           >
-                            <div className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 
-                              ${btn.color === 'blue' ? 'bg-blue-500/10 text-blue-400 group-hover/btn:bg-blue-400 group-hover/btn:text-black' : 
-                                btn.color === 'primary' ? 'bg-primary/10 text-primary group-hover/btn:bg-primary group-hover/btn:text-white' : 
-                                'bg-destructive/10 text-destructive group-hover/btn:bg-destructive group-hover/btn:text-white'}`}>
-                              <btn.icon className="w-6 h-6" />
-                            </div>
-                            
-                            <div className="flex-1">
-                              <h5 className="text-sm font-black uppercase tracking-widest text-white mb-0.5">{btn.label}</h5>
-                              <p className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">{btn.desc}</p>
-                            </div>
-
-                            <div className={`opacity-0 group-hover/btn:opacity-100 transition-opacity`}>
-                               <Plus className="w-5 h-5 text-white/20" />
-                            </div>
-                            
-                            {/* Selection Aura */}
-                            <div className={`absolute inset-0 bg-gradient-to-r ${btn.glow} opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none rounded-2xl`} />
+                            <btn.icon className="w-5 h-5 mb-1.5 opacity-60 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all" />
+                            <span className="text-[10px] font-black uppercase tracking-widest leading-none">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
