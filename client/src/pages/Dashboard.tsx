@@ -536,10 +536,11 @@ export default function Dashboard() {
                             <div className="text-[10px] font-black uppercase tracking-wider text-white/30 flex items-center gap-2">
                               {expense.date} • {expense.category}
                               {expense.tag && (
-                                <span className={`px-1.5 py-0.5 rounded-md text-[8px] border ${
-                                  expense.tag === 'Need' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                                  expense.tag === 'Want' ? 'bg-primary/10 text-primary border-primary/20' :
-                                  'bg-destructive/10 text-destructive border-destructive/20'
+                                <span className={`px-2 py-0.5 rounded-md text-[8px] font-black border transition-colors ${
+                                  expense.tag === 'Need' ? 'bg-blue-600 text-white border-blue-600' :
+                                  expense.tag === 'Want' ? 'bg-purple-600 text-white border-purple-600' :
+                                  expense.tag === 'Goal Claim' ? 'bg-green-600 text-white border-green-600' :
+                                  'bg-red-600 text-white border-red-600'
                                 }`}>
                                   {expense.tag}
                                 </span>

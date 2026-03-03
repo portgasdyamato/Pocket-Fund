@@ -145,10 +145,11 @@ export default function ExpenseLog() {
   const getTagStyle = (tag: string | null) => {
     if (!tag) return 'bg-white/5 text-white/40 border-white/5';
     switch (tag) {
-      case 'Need': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'Want': return 'bg-primary/10 text-primary border-primary/20';
-      case 'Ick': return 'bg-destructive/10 text-destructive border-destructive/20';
-      default: return 'bg-white/5 text-white/40 border-white/5';
+      case 'Need': return 'bg-blue-600 text-white border-blue-600';
+      case 'Want': return 'bg-purple-600 text-white border-purple-600';
+      case 'Ick': return 'bg-red-600 text-white border-red-600';
+      case 'Goal Claim': return 'bg-green-600 text-white border-green-600';
+      default: return 'bg-white/10 text-white border-white/20';
     }
   };
 
@@ -439,14 +440,16 @@ export default function ExpenseLog() {
                               {t.category}
                             </div>
                             {t.tag && (
-                              <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black border transition-colors ${
-                                t.tag === 'Need' ? 'border-blue-500/20 text-blue-400 bg-blue-500/5' :
-                                t.tag === 'Want' ? 'border-primary/20 text-primary bg-primary/5' :
-                                'border-destructive/20 text-destructive bg-destructive/5'
+                              <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black border transition-colors ${
+                                t.tag === 'Need' ? 'bg-blue-600 text-white border-blue-600 shadow-[0_2px_10px_rgba(37,99,235,0.3)]' :
+                                t.tag === 'Want' ? 'bg-purple-600 text-white border-purple-600 shadow-[0_2px_10px_rgba(147,51,234,0.3)]' :
+                                t.tag === 'Goal Claim' ? 'bg-green-600 text-white border-green-600 shadow-[0_2px_10px_rgba(22,163,74,0.3)]' :
+                                'bg-red-600 text-white border-red-600 shadow-[0_2px_10px_rgba(220,38,38,0.3)]'
                               }`}>
-                                {t.tag === 'Need' ? <ShieldCheck className="w-3 h-3" /> : 
-                                 t.tag === 'Want' ? <Star className="w-3 h-3" /> : 
-                                 <TrendingDown className="w-3 h-3" />}
+                                {t.tag === 'Need' && <ShieldCheck className="w-3 h-3" />}
+                                {t.tag === 'Want' && <Star className="w-3 h-3" />}
+                                {t.tag === 'Goal Claim' && <Sparkles className="w-3 h-3" />}
+                                {t.tag === 'Ick' && <TrendingDown className="w-3 h-3" />}
                                 {t.tag}
                               </div>
                             )}
