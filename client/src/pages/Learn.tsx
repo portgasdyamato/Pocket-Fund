@@ -420,7 +420,7 @@ export default function LearnPage() {
         {/* Compact Mastery Hub Header */}
         <div className="relative overflow-hidden rounded-[32px] border border-white/5 bg-white/[0.02] p-6 md:p-10 shadow-xl">
            {/* Abstract Decorative Background */}
-           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48 pointer-events-none" />
+           <div className="absolute top-0 right-0 w-[400px] h-[400px]  -mr-48 -mt-48 pointer-events-none" />
            
            <div className="relative z-10 flex flex-col lg:flex-row gap-8 items-center lg:items-center">
               
@@ -452,7 +452,7 @@ export default function LearnPage() {
 
                 <div className="space-y-3">
                   <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic uppercase leading-[0.9] text-white">
-                    Learn <span className="text-primary italic">& Earn</span>
+                    Learn <span className="text-primary italic">& Earn Points</span>
                   </h1>
                   <p className="text-white/40 text-base md:text-lg max-w-lg font-medium leading-relaxed mx-auto lg:mx-0">
                     Master your capital through deep-dive courses. Level up your <span className="text-white/60">financial IQ</span> and unlock your ultimate earning potential.
@@ -481,8 +481,8 @@ export default function LearnPage() {
                             {masteryPercentage}%
                           </span>
                           <div className="flex flex-col leading-none">
-                             <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mastery</span>
-                             <span className="text-[11px] font-black uppercase text-primary tracking-[0.2em]">Hub</span>
+                             <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mastery Hub</span>
+
                           </div>
                        </div>
 
