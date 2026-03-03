@@ -426,21 +426,21 @@ export default function Dashboard() {
             {/* Quick Actions Grid */}
             <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Activity, label: "ANALYTICS", path: "/analytics", color: "text-[#f59e0b]", bg: "bg-[#f59e0b]/5", border: "border-[#f59e0b]/10", glow: "shadow-[#f59e0b]/20" },
-                { icon: TrendingUp, label: "VAULT", path: "/vault", color: "text-[#8b5cf6]", bg: "bg-[#8b5cf6]/5", border: "border-[#8b5cf6]/10", glow: "shadow-[#8b5cf6]/20" },
-                { icon: MessageCircle, label: "ASSISTANT", path: "/assistant", color: "text-[#0ea5e9]", bg: "bg-[#0ea5e9]/5", border: "border-[#0ea5e9]/10", glow: "shadow-[#0ea5e9]/20" },
-                { icon: Activity, label: "HISTORY", path: "/history", color: "text-[#10b981]", bg: "bg-[#10b981]/5", border: "border-[#10b981]/10", glow: "shadow-[#10b981]/20" }
+                { icon: Activity, label: "ANALYTICS", path: "/analytics" },
+                { icon: TrendingUp, label: "VAULT", path: "/vault" },
+                { icon: MessageCircle, label: "ASSISTANT", path: "/assistant" },
+                { icon: Activity, label: "HISTORY", path: "/history" }
               ].map((action, i) => (
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className={`flex flex-col items-center justify-center p-8 rounded-[32px] border ${action.border} ${action.bg} hover:scale-[1.03] hover:shadow-2xl ${action.glow} transition-all duration-300 click-scale group relative overflow-hidden`}
+                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-purple-600 hover:bg-purple-500 hover:scale-[1.03] shadow-[0_15px_30px_rgba(147,51,234,0.15)] hover:shadow-[0_20px_40px_rgba(147,51,234,0.3)] transition-all duration-300 click-scale group relative overflow-hidden"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
-                  <div className={`w-14 h-14 rounded-2xl ${action.bg} border ${action.border} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500`}>
-                    <action.icon className={`w-7 h-7 ${action.color}`} />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.1] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="w-14 h-14 rounded-2xl bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <action.icon className="w-7 h-7 text-purple-600" />
                   </div>
-                  <span className="text-[10px] font-black text-white/40 tracking-[0.2em] group-hover:text-white transition-colors">{action.label}</span>
+                  <span className="text-[10px] font-black text-white tracking-[0.2em] transition-colors">{action.label}</span>
                 </button>
               ))}
             </motion.div>
