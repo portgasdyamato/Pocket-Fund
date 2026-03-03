@@ -106,26 +106,22 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               strokeLinecap="round"
             />
             
-            {/* Main Progress Circle with Unified Solid Glow */}
-            {/* Main Progress Circle - Glow synchronized via CSS property to avoid lag */}
+            {/* Main Progress Circle - Glow synchronized via motion to avoid redraw lag */}
             <motion.circle
               cx="120"
               cy="120"
               r="100"
               fill="none"
-              stroke={info.hex}
               strokeWidth="14"
               strokeLinecap="round"
               strokeDasharray="628"
-              initial={{ strokeDashoffset: 628 }}
+              initial={{ strokeDashoffset: 628, stroke: info.hex }}
               animate={{ 
                 strokeDashoffset: 628 - (score / 100) * 628,
-                stroke: info.hex 
-              }}
-              transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              style={{
+                stroke: info.hex,
                 filter: `drop-shadow(0 0 12px ${info.hex})`
               }}
+              transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             />
 
             {/* Glowing Head Point - Unified Color */}
@@ -133,11 +129,11 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               cx="120"
               cy="20"
               r="6"
-              fill={info.hex}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0, fill: info.hex }}
               animate={{ 
                 opacity: 1,
-                rotate: (score / 100) * 360 
+                rotate: (score / 100) * 360,
+                fill: info.hex
               }}
               transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               transform-origin="120 120"
@@ -179,8 +175,12 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
                 <span className={`text-6xl font-black tracking-tighter tabular-nums ${info.color} relative z-10 [text-shadow:_0_0_20px_rgba(255,255,255,0.2)]`}>
                   {score}
                 </span>
-                {/* Score Core Glow - Fully Synchronized */}
-                <div className="absolute inset-0 blur-[50px] opacity-40 scale-125 rounded-full" style={{ backgroundColor: info.hex }} />
+                {/* Score Core Glow - Fully Synchronized using motion.div */}
+                <motion.div 
+                  className="absolute inset-0 blur-[60px] opacity-40 scale-150 rounded-full" 
+                  animate={{ backgroundColor: info.hex }}
+                  transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                />
               </div>
 
               <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mt-1">
@@ -192,14 +192,11 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
 
         {/* Footer Text Area */}
         <div className="text-center w-full mt-auto">
-          <h3 className="text-xl font-black text-white tracking-tight mb-2 uppercase italic opacity-90">Health Analysis</h3>
-          <div className="relative p-4 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm overflow-hidden min-h-[80px] flex items-center justify-center">
-             <div className="space-y-1">
-               <p className="text-xs font-black text-white/40 uppercase tracking-widest">{info.label} STATUS</p>
-               <p className="text-sm text-white/70 leading-relaxed font-medium">
-                 {message}
-               </p>
-             </div>
+          <h3 className="text-xl font-black text-white tracking-tight mb-2 opacity-90"> Financial Health Analysis</h3>
+          <div className="relative p-4 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm overflow-hidden min-h-[70px] flex items-center justify-center text-center">
+             <p className="text-sm text-white/70 leading-relaxed font-semibold italic">
+               {message}
+             </p>
             {/* Dynamic progress highlight at bottom of message box */}
             <div className={`absolute bottom-0 left-0 h-[3px] w-full transition-all duration-500`} style={{ background: info.hex, boxShadow: `0 0 15px ${info.hex}` }} />
           </div>

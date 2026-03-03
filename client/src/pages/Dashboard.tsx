@@ -255,11 +255,11 @@ export default function Dashboard() {
 
     const finalScore = Math.max(0, Math.min(100, Math.round(score)));
 
-    // Range-based messaging
+    // Range-based messaging (Concise one-liners)
     let msg = "Your financial health is stable. Keep it up!";
-    if (finalScore >= 80) msg = "Excellent! You've mastered your budget and your savings are thriving.";
-    else if (finalScore >= 60) msg = "Great job! You're building solid financial habits and reaching your goals.";
-    else if (finalScore < 40) msg = "Caution: Your spending might be outpacing your savings. Time for a budget review!";
+    if (finalScore >= 85) msg = "Elite status—your budget is perfectly optimized!";
+    else if (finalScore >= 70) msg = "Solid progress—keep hitting those goals!";
+    else if (finalScore < 50) msg = "Review budget—spending is outpacing savings.";
 
     return { healthScore: finalScore, totalXP: xp, message: msg };
   }, [userQuests, allQuests, goals, stashTransactions, transactions, user?.walletBalance]);
