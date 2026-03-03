@@ -4,7 +4,6 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq, and, desc, isNull, sql as drizzleSql } from 'drizzle-orm';
 import { pgTable, varchar, text, timestamp, decimal, boolean, integer } from 'drizzle-orm/pg-core';
-import { CHALLENGE_QUESTS, EASY_SHORT_COURSES, MEDIUM_COURSES, HARD_LONG_COURSES } from '../server/seedCourses';
 
 // --- SCHEMA DEFINITION ---
 
@@ -190,7 +189,14 @@ const seedData = async () => {
   const db = getDb();
   if (!db) return;
   try {
-    const ALL_COURSES = [...EASY_SHORT_COURSES, ...MEDIUM_COURSES, ...HARD_LONG_COURSES];
+    const seed = await import('../server/seedCourses');
+    const CHALLENGE_QUESTS = seed.CHALLENGE_QUESTS;
+    const ALL_COURSES = [
+      ...seed.EASY_SHORT_COURSES, 
+      ...seed.MEDIUM_COURSES, 
+      ...seed.HARD_LONG_COURSES
+    ];
+
     const EXPECTED_TOTAL = CHALLENGE_QUESTS.length + ALL_COURSES.length;
 
     const currentQuests = await db.select().from(questsTable);
@@ -321,7 +327,6 @@ app.patch('/api/transactions/:id/tag', isAuthenticated, async (req: any, res) =>
 });
 
 app.get(['/api/badges', '/badges'], async (req, res) => {
-  await seedData();
   res.json(await getDb().select().from(badgesTable));
 });
 
@@ -330,7 +335,6 @@ app.get(['/api/user/badges', '/user/badges'], isAuthenticated, async (req: any, 
 });
 
 app.get(['/api/quests', '/quests'], async (req, res) => {
-  await seedData();
   res.json(await getDb().select().from(questsTable));
 });
 
