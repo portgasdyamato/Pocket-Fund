@@ -37,6 +37,8 @@ export interface IStorage {
   getGoals(userId: string): Promise<Goal[]>;
   getMainGoal(userId: string): Promise<Goal | undefined>;
   updateGoalProgress(id: string, amount: string): Promise<void>;
+  completeGoal(id: string): Promise<void>;
+  deleteGoal(id: string): Promise<void>;
   
   // Transaction operations
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
@@ -137,6 +139,14 @@ export class DatabaseStorage implements IStorage {
 
   async updateGoalProgress(id: string, amount: string): Promise<void> {
     await db.update(goals).set({ currentAmount: amount }).where(eq(goals.id, id));
+  }
+  
+  async completeGoal(id: string): Promise<void> {
+    await db.update(goals).set({ completed: true }).where(eq(goals.id, id));
+  }
+
+  async deleteGoal(id: string): Promise<void> {
+    await db.delete(goals).where(eq(goals.id, id));
   }
 
   // Transaction operations

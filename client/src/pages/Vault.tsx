@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock, ArrowRight } from "lucide-react";
@@ -74,16 +74,15 @@ export default function GlowUp() {
   });
 
   const stashMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (type: 'stash' | 'withdraw') => {
       return await apiRequest("/api/stash", "POST", {
         amount: stashAmount,
-        type: "stash",
+        type: type,
         goalId: selectedGoalId || null,
         status: "completed",
       });
     },
-    onSuccess: async (response) => {
-      const data = await response.json();
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stash/total"] });
       queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
@@ -92,23 +91,47 @@ export default function GlowUp() {
 
       setIsStashOpen(false);
       setStashAmount("");
-      
-      if (data.goalCompleted && selectedGoalId) {
-        const goal = goals.find(g => g.id === selectedGoalId);
-        setCompletedGoalName(goal?.name || "Goal");
-        setShowCelebration(true);
-      }
-      
       setSelectedGoalId("");
+      
       toast({
-        title: "Savings Secured",
-        description: `₹${stashAmount} successfully moved to your vault.`,
+        title: "Vault Updated",
+        description: "Transaction successfully recorded.",
       });
     },
     onError: (error: any) => {
        toast({
-        title: "Transfer Failed",
-        description: error.message || "Insufficient wallet balance.",
+        title: "Transaction Failed",
+        description: error.message || "Something went wrong.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  const claimGoalMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest(`/api/goals/${id}/claim`, "POST");
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/goals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stash/total"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stash"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      
+      const goal = goals.find(g => g.id === variables);
+      if (goal) {
+        setCompletedGoalName(goal.name);
+        setShowCelebration(true);
+      }
+      
+      toast({
+        title: "Goal Accomplished!",
+        description: "Funds have been claimed and the goal is complete.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Claim Failed",
+        description: error.message || "Failed to claim goal.",
         variant: "destructive",
       });
     }
@@ -145,16 +168,17 @@ export default function GlowUp() {
             <DialogTrigger asChild>
               <Button size="lg" className="group">
                 <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                Secure Savings
+                Secure Vault
               </Button>
             </DialogTrigger>
             <DialogContent className="glass-morphism border-white/10 text-white p-8">
               <DialogHeader>
-                <DialogTitle className="text-3xl font-black tracking-tight">Save to Vault</DialogTitle>
+                <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
+                <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
               </DialogHeader>
               <div className="space-y-6 pt-6">
                 <div className="space-y-3">
-                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount to Save (₹)</Label>
+                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount (₹)</Label>
                   <input
                     className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none"
                     placeholder="0.00"
@@ -171,7 +195,7 @@ export default function GlowUp() {
                       onChange={(e) => setSelectedGoalId(e.target.value)}
                     >
                       <option value="" className="bg-[#0a0a0a]">General Vault</option>
-                      {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
+                      {goals.filter(g => !g.completed && parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
                         <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
                           {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
                         </option>
@@ -179,21 +203,38 @@ export default function GlowUp() {
                     </select>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/10">
-                   <div className="flex items-center gap-2">
-                     <Lock className="w-4 h-4 text-primary" />
-                     <span className="text-xs font-bold text-white/60">Available Balance</span>
-                   </div>
-                   <span className="text-sm font-black text-primary">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    onClick={() => stashMutation.mutate('stash')}
+                    disabled={stashMutation.isPending || !stashAmount}
+                    className="flex flex-col h-auto py-4 gap-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/20"
+                  >
+                    <ArrowUpCircle className="w-6 h-6" />
+                    <span className="font-black text-xs uppercase tracking-widest">Deposit</span>
+                  </Button>
+                  <Button
+                    onClick={() => stashMutation.mutate('withdraw')}
+                    disabled={stashMutation.isPending || !stashAmount}
+                    variant="outline"
+                    className="flex flex-col h-auto py-4 gap-2 border-white/10 hover:bg-white/5"
+                  >
+                    <ArrowDownCircle className="w-6 h-6" />
+                    <span className="font-black text-xs uppercase tracking-widest text-white/60">Withdraw</span>
+                  </Button>
                 </div>
-                <Button
-                  onClick={() => stashMutation.mutate()}
-                  disabled={stashMutation.isPending || !stashAmount}
-                  className="w-full"
-                  size="lg"
-                >
-                  Confirm Savings
-                </Button>
+
+                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                   <div className="flex flex-col">
+                     <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Wallet Balance</span>
+                     <span className="text-sm font-black text-white">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                   </div>
+                   <div className="w-[1px] h-8 bg-white/10" />
+                   <div className="flex flex-col items-end">
+                     <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Vault Balance</span>
+                     <span className="text-sm font-black text-primary">₹{totalStashed.toLocaleString('en-IN')}</span>
+                   </div>
+                </div>
               </div>
             </DialogContent>
           </Dialog>
@@ -256,8 +297,11 @@ export default function GlowUp() {
             animate="show"
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {goals.filter(g => parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => {
-              const progress = (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100;
+            {goals.filter(g => !g.completed).map((goal) => {
+              const current = parseFloat(goal.currentAmount);
+              const target = parseFloat(goal.targetAmount);
+              const progress = (current / target) * 100;
+              const isReadyToClaim = current >= target;
               return (
                 <motion.div key={goal.id} variants={item}>
                   <Card className="group relative overflow-hidden glass-morphism border-white/5 p-8 h-full hover:scale-[1.02] transition-all duration-300">
@@ -289,10 +333,34 @@ export default function GlowUp() {
                             initial={{ width: 0 }}
                             animate={{ width: `${Math.min(progress, 100)}%` }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
-                            className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)] rounded-full"
+                            className={`absolute inset-y-0 left-0 ${isReadyToClaim ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)]'} rounded-full`}
                          />
                        </div>
                     </div>
+
+                    {isReadyToClaim && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mt-6"
+                      >
+                         <Button 
+                            className="w-full bg-green-600 hover:bg-green-500 text-white font-black uppercase tracking-widest text-xs h-12 shadow-[0_5px_15px_rgba(34,197,94,0.3)]"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              claimGoalMutation.mutate(goal.id);
+                            }}
+                            disabled={claimGoalMutation.isPending}
+                          >
+                           {claimGoalMutation.isPending ? 'Processing...' : (
+                             <div className="flex items-center gap-2">
+                               <Sparkles className="w-4 h-4" />
+                               Claim Goal Now
+                             </div>
+                           )}
+                         </Button>
+                      </motion.div>
+                    )}
                   </Card>
                 </motion.div>
               );
@@ -346,18 +414,18 @@ export default function GlowUp() {
                 Completed Goals
               </h3>
               <div className="space-y-4">
-                 {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).map((goal) => (
+                 {goals.filter(g => g.completed).map((goal) => (
                    <div key={goal.id} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group">
                       <div>
-                        <div className="text-sm font-bold line-through text-white/30">{goal.name}</div>
+                        <div className="text-sm font-bold text-white/50">{goal.name}</div>
                         <div className="text-xs font-black text-green-500 uppercase tracking-widest mt-1">Status: Accomplished</div>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
                          <Trophy className="w-5 h-5 text-green-500" />
                       </div>
                    </div>
                  ))}
-                 {goals.filter(g => parseFloat(g.currentAmount) >= parseFloat(g.targetAmount)).length === 0 && (
+                 {goals.filter(g => g.completed).length === 0 && (
                    <div className="p-10 text-center border border-white/5 border-dashed rounded-3xl opacity-30">
                       <p className="text-sm font-bold">No completed goals yet.</p>
                    </div>
@@ -383,13 +451,19 @@ export default function GlowUp() {
                         >
                           <div className="flex items-center gap-4">
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
-                              t.type === 'stash' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-destructive/10 border-destructive/20 text-destructive'
+                              t.type === 'stash' ? 'bg-primary/10 border-primary/20 text-primary' : 
+                              t.type === 'claim' ? 'bg-green-500/10 border-green-500/20 text-green-500' :
+                              'bg-destructive/10 border-destructive/20 text-destructive'
                             }`}>
-                              {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : <ArrowDownCircle className="w-6 h-6" />}
+                              {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : 
+                               t.type === 'claim' ? <Trophy className="w-6 h-6" /> :
+                               <ArrowDownCircle className="w-6 h-6" />}
                             </div>
                             <div>
                               <p className="font-bold text-white group-hover:text-primary transition-colors flex items-center gap-2">
-                                {t.type === 'stash' ? 'Deposited' : 'Withdrawn'}
+                                {t.type === 'stash' ? 'Deposited' : 
+                                 t.type === 'claim' ? 'Goal Claimed' :
+                                 'Withdrawn'}
                                 <span className="text-[10px] text-white/50 bg-white/5 px-2 py-0.5 rounded-full border border-white/10 uppercase tracking-widest">
                                   {t.goalId ? goals.find(g => g.id === t.goalId)?.name || 'General Vault' : 'General Vault'}
                                 </span>

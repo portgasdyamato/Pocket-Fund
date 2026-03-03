@@ -115,6 +115,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch goals" });
     }
   });
+  
+  app.post('/api/goals/:id/claim', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const { id } = req.params;
+      
+      const goals = await storage.getGoals(userId);
+      const goal = goals.find(g => g.id === id);
+      
+      if (!goal) {
+        return res.status(404).json({ message: "Goal not found" });
+      }
+      
+      const current = parseFloat(goal.currentAmount);
+      const target = parseFloat(goal.targetAmount);
+      
+      if (current < target) {
+        return res.status(400).json({ message: "Goal not yet reached" });
+      }
+      
+      if (goal.completed) {
+        return res.status(400).json({ message: "Goal already claimed" });
+      }
+      
+      // 1. Create a "withdraw" transaction in the locker that DOESN'T return to wallet
+      // We'll use a specific type "claim" so it subtracts from total stashed but we don't increase wallet
+      await storage.createStashTransaction({
+        userId,
+        amount: goal.targetAmount,
+        type: 'claim',
+        goalId: goal.id,
+        status: 'completed'
+      });
+      
+      // 2. Mark goal as completed
+      await storage.completeGoal(id);
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error claiming goal:", error);
+      res.status(500).json({ message: "Failed to claim goal" });
+    }
+  });
 
   app.get('/api/goals/main', isAuthenticated, async (req: any, res) => {
     try {

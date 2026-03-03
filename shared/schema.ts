@@ -38,6 +38,7 @@ export const goals = pgTable("goals", {
   currentAmount: decimal("current_amount", { precision: 10, scale: 2 }).default("0").notNull(),
   isMain: boolean("is_main").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  completed: boolean("completed").default(false).notNull(),
 });
 
 export const transactions = pgTable("transactions", {
