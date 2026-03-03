@@ -190,8 +190,10 @@ const seedData = async () => {
   if (!db) return;
   try {
     const currentQuests = await db.select().from(questsTable);
-    if (currentQuests.length < 10) { 
-      console.log("Seeding quests...");
+    const EXPECTED_TOTAL = 24; // 14 courses + 10 challenges
+
+    if (currentQuests.length < EXPECTED_TOTAL) { 
+      console.log("Seeding MEGA expanded quests and courses library...");
       await db.delete(userQuestsTable);
       await db.delete(questsTable);
       
@@ -201,6 +203,11 @@ const seedData = async () => {
         { title: "Morning Brew Stash", description: "Stash ₹100 instead of buying that coffee today.", difficulty: "Easy", points: 30, content: JSON.stringify({ target: 100, type: "save" }), icon: "coffee", category: "challenge" },
         { title: "Impulse Shield", description: "Avoided an impulse buy? Stash that money!", difficulty: "Medium", points: 75, content: JSON.stringify({ type: "manual" }), icon: "zap", category: "challenge" },
         { title: "Generic Hero", description: "Swap a brand name for a generic one and stash ₹30.", difficulty: "Easy", points: 40, content: JSON.stringify({ target: 30, type: "save" }), icon: "shopping-bag", category: "challenge" },
+        { title: "Budget Reality Check", description: "Track every expense for 7 days straight. No exceptions.", difficulty: "Medium", points: 150, content: JSON.stringify({ type: "manual" }), icon: "calculator", category: "challenge" },
+        { title: "Credit Score Scout", description: "Check your CIBIL score for free and note one thing to improve.", difficulty: "Easy", points: 60, content: JSON.stringify({ type: "manual" }), icon: "shield", category: "challenge" },
+        { title: "No Spend Day", description: "Complete a full day with zero discretionary spending.", difficulty: "Easy", points: 45, content: JSON.stringify({ type: "manual" }), icon: "lock", category: "challenge" },
+        { title: "Bill Negotiator", description: "Call one service provider (internet, insurance) and negotiate a lower rate.", difficulty: "Hard", points: 200, content: JSON.stringify({ type: "manual" }), icon: "zap", category: "challenge" },
+        { title: "SIP Starter", description: "Set up your first automated SIP — even just ₹500/month counts.", difficulty: "Medium", points: 175, content: JSON.stringify({ type: "manual" }), icon: "trending-up", category: "challenge" },
       ];
 
       for (const c of CHALLENGES) {
@@ -208,6 +215,7 @@ const seedData = async () => {
       }
 
       const COURSES = [
+        // Easy Courses
         {
           title: "The Zero-to-One of Money",
           description: "Learn why money exists and how it flows. The first step for any beginner.",
@@ -219,7 +227,8 @@ const seedData = async () => {
               { icon: "trending-up", title: "The Value Equation", text: "You are paid in proportion to the difficulty of the problem you solve.", keyTakeaway: "Specific knowledge = higher pay.", example: "Surgeon vs Doctor." }
             ],
             quizzes: [
-              { question: "Money is a 'Social Ledger' because:", options: ["Govt made it", "It records stored work", "It's physical", "It's rare"], answer: 1 }
+              { question: "Money is a 'Social Ledger' because:", options: ["Govt made it", "It records stored work", "It's physical", "It's rare"], answer: 1 },
+              { question: "Where does money's value come from?", options: ["Gold standard", "Trust and social agreement", "Printing cost", "Bank vaults"], answer: 1 }
             ]
           })
         },
@@ -228,26 +237,59 @@ const seedData = async () => {
           description: "Understand the math behind your credit score and how it saves you money.",
           difficulty: "Easy", points: 120, icon: "shield", category: "literacy",
           content: JSON.stringify({
-            duration: 10,
+            duration: 12,
             slides: [
               { icon: "shield", title: "The Financial Resume", text: "Your credit score is your financial resume.", keyTakeaway: "Higher score = lower interest.", example: "Save lakhs on loans." }
             ],
             quizzes: [
-              { question: "What is a good CIBIL score?", options: ["300", "500", "750+", "900"], answer: 2 }
+              { question: "What is a good CIBIL score?", options: ["300", "500", "750+", "900"], answer: 2 },
+              { question: "What factor impacts your score most?", options: ["Income", "Payment History", "Number of cards", "Job title"], answer: 1 }
             ]
           })
         },
+        {
+          title: "Banking 101",
+          description: "Learn to pick the right accounts, avoid hidden fees, and maximize interest.",
+          difficulty: "Easy", points: 100, icon: "building-2", category: "literacy",
+          content: JSON.stringify({
+            duration: 15,
+            slides: [
+              { icon: "building-2", title: "Smart Banking", text: "Banks earn from the interest rate spread. Be a smart consumer.", keyTakeaway: "Know every fee.", example: "3% vs 7% interest." }
+            ],
+            quizzes: [
+              { question: "Main way banks make money?", options: ["ATM fees", "Interest spread", "App charges", "Subsidies"], answer: 1 },
+              { question: "Which account is best for daily expenses?", options: ["Fixed Deposit", "Savings Account", "Current Account", "PPF"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "UPI & Financial Safety",
+          description: "Use India's UPI revolution safely. Learn to spot scams and protect your accounts.",
+          difficulty: "Easy", points: 90, icon: "zap", category: "literacy",
+          content: JSON.stringify({
+            duration: 11,
+            slides: [
+              { icon: "zap", title: "UPI Safety", text: "Your PIN is ONLY for sending money, never for receiving.", keyTakeaway: "Never enter PIN to receive money.", example: "OLX scan scam." }
+            ],
+            quizzes: [
+              { question: "When do you enter UPI PIN?", options: ["To receive", "To check balance", "To send/pay", "Always"], answer: 2 },
+              { question: "UPI transfers are:", options: ["Reversible in 24h", "Irreversible", "Only for banks", "Slow"], answer: 1 }
+            ]
+          })
+        },
+        // Medium Courses
         {
           title: "Mastering the 50/30/20 Rule",
           description: "The most robust budgeting framework for maximum freedom.",
           difficulty: "Medium", points: 200, icon: "calculator", category: "literacy",
           content: JSON.stringify({
-            duration: 15,
+            duration: 25,
             slides: [
               { icon: "calculator", title: "Philosophy of Proportion", text: "50% Needs, 30% Wants, 20% Savings.", keyTakeaway: "Budgeting is intentionality.", example: "The Pie analogy." }
             ],
             quizzes: [
-              { question: "What is a 'Need'?", options: ["Fun spend", "Survival essentials", "Latest fashion", "Dining out"], answer: 1 }
+              { question: "What is a 'Need'?", options: ["Fun spend", "Survival essentials", "Latest fashion", "Dining out"], answer: 1 },
+              { question: "What percentage goes to 'Wants'?", options: ["10%", "30%", "50%", "20%"], answer: 1 }
             ]
           })
         },
@@ -256,12 +298,13 @@ const seedData = async () => {
           description: "Build a safety net to sleep peacefully regardless of the economy.",
           difficulty: "Medium", points: 200, icon: "shield", category: "literacy",
           content: JSON.stringify({
-            duration: 20,
+            duration: 18,
             slides: [
               { icon: "shield", title: "The SWAN Fund", text: "Sleep Well At Night fund. 3-6 months essentials.", keyTakeaway: "Insurance for life.", example: "Job loss protection." }
             ],
             quizzes: [
-              { question: "How much is enough?", options: ["1mo salary", "3-6mo essentials", "1yr salary", "Whatever bank says"], answer: 1 }
+              { question: "How much is enough?", options: ["1mo salary", "3-6mo essentials", "1yr salary", "Whatever bank says"], answer: 1 },
+              { question: "Emergency fund should be:", options: ["In stocks", "In crypto", "Liquid (Cash/Savings)", "In gold"], answer: 2 }
             ]
           })
         },
@@ -270,12 +313,13 @@ const seedData = async () => {
           description: "Learn professional managers grow your wealth through diversification.",
           difficulty: "Medium", points: 300, icon: "trending-up", category: "literacy",
           content: JSON.stringify({
-            duration: 30,
+            duration: 35,
             slides: [
               { icon: "users", title: "The Power of Pooling", text: "Mutual funds allow diversification for small amounts.", keyTakeaway: "Pool money to hire experts.", example: "₹500 vs ₹10 Lakhs." }
             ],
             quizzes: [
-              { question: "Main benefit of Mutual Funds?", options: ["Guaranteed returns", "Diversification", "No taxes", "Free money"], answer: 1 }
+              { question: "Main benefit of Mutual Funds?", options: ["Guaranteed returns", "Diversification", "No taxes", "Free money"], answer: 1 },
+              { question: "What is an Expense Ratio?", options: ["Tax", "Management fee", "Growth rate", "Entry fee"], answer: 1 }
             ]
           })
         },
@@ -284,15 +328,32 @@ const seedData = async () => {
           description: "Strategies to destroy high-interest debt and reclaim freedom.",
           difficulty: "Medium", points: 350, icon: "zap", category: "literacy",
           content: JSON.stringify({
-            duration: 45,
+            duration: 32,
             slides: [
               { icon: "zap", title: "Math of Slavery", text: "Destructive debt (36% interest) is a medical emergency.", keyTakeaway: "Kill 36% before 8% growth.", example: "Credit cards." }
             ],
             quizzes: [
-              { question: "Snowball method is about:", options: ["Math", "Psychology of small wins", "Cold weather", "Waiting"], answer: 1 }
+              { question: "Snowball method is about:", options: ["Math", "Psychology of small wins", "Cold weather", "Waiting"], answer: 1 },
+              { question: "Which debt should you kill first in 'Avalanche'?", options: ["Smallest", "Oldest", "Highest Interest", "Personal"], answer: 2 }
             ]
           })
         },
+        {
+          title: "Income Tax Demystified",
+          description: "Learn how India's tax slabs work and how to legally keep more.",
+          difficulty: "Medium", points: 280, icon: "calculator", category: "literacy",
+          content: JSON.stringify({
+            duration: 30,
+            slides: [
+              { icon: "calculator", title: "Tax Slabs", text: "Tax slabs are marginal. 80C can save you lakhs.", keyTakeaway: "Tax slabs are marginal.", example: "₹1.5L in 80C." }
+            ],
+            quizzes: [
+              { question: "Max 80C deduction?", options: ["₹50k", "₹1L", "₹1.5L", "₹2L"], answer: 2 },
+              { question: "80D is for:", options: ["Investment", "Home loan", "Medical Insurance", "Education"], answer: 2 }
+            ]
+          })
+        },
+        // Hard Courses
         {
           title: "Equity Intelligence: Mastering Stocks",
           description: "Go deep into the engine of global business. Valuation and psychology.",
@@ -303,7 +364,9 @@ const seedData = async () => {
               { icon: "building-2", title: "Ownership Architecture", text: "A stock is a legal claim on future profits.", keyTakeaway: "Be an owner, not a consumer.", example: "Buy Apple, not iPhone." }
             ],
             quizzes: [
-              { question: "Volatility vs Risk?", options: ["Same", "Risk is total loss; Volatility is temp price move", "Volatility is worse", "None"], answer: 1 }
+              { question: "Volatility vs Risk?", options: ["Same", "Risk is total loss; Volatility is temp price move", "Volatility is worse", "None"], answer: 1 },
+              { question: "What is a 'Moat'?", options: ["A castle", "Competitive advantage", "Tax loophole", "Stock split"], answer: 1 },
+              { question: "P/E ratio measures:", options: ["Price vs Sales", "Profit vs Expense", "Price vs Earnings", "Power vs Energy"], answer: 2 }
             ]
           })
         },
@@ -312,12 +375,58 @@ const seedData = async () => {
           description: "Build a wealth machine. FI number and the 4% rule.",
           difficulty: "Hard", points: 600, icon: "target", category: "literacy",
           content: JSON.stringify({
-            duration: 90,
+            duration: 120,
             slides: [
               { icon: "target", title: "The 4% Rule", text: "Financial Independence = Annual Expenses x 25.", keyTakeaway: "Math-based retirement.", example: "₹50k/mo -> ₹1.5 Cr." }
             ],
             quizzes: [
-              { question: "Your FI Number is?", options: ["Age x 2", "Expenses x 25", "Income x 10", "10 Crore"], answer: 1 }
+              { question: "Your FI Number is?", options: ["Age x 2", "Expenses x 25", "Income x 10", "10 Crore"], answer: 1 },
+              { question: "Asset Allocation is:", options: ["Choosing 1 stock", "Split between Equity, Debt, Gold", "Day trading", "Hiding cash"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "Real Estate & REITs",
+          description: "Data-driven deep dive into property, rental yield, and REITs.",
+          difficulty: "Hard", points: 650, icon: "home", category: "literacy",
+          content: JSON.stringify({
+            duration: 75,
+            slides: [
+              { icon: "home", title: "Buy vs Rent", text: "Factor in total cost of ownership. REITs offer liquid entry.", keyTakeaway: "Factor in total cost.", example: "REIT dividends." }
+            ],
+            quizzes: [
+              { question: "Typical residential yield in India?", options: ["8%", "5%", "2-3%", "15%"], answer: 2 },
+              { question: "REIT stands for:", options: ["Real Estate Investment Trust", "Return on Equity", "Rental Income Trust", "Rural Estate"], answer: 0 }
+            ]
+          })
+        },
+        {
+          title: "Derivatives: The Pro Toolkit",
+          description: "Learn Futures, Options, and how institutions hedge risks.",
+          difficulty: "Hard", points: 750, icon: "zap", category: "literacy",
+          content: JSON.stringify({
+            duration: 90,
+            slides: [
+              { icon: "zap", title: "What is a Derivative?", text: "Value derived from an underlying asset.", keyTakeaway: "Use for hedging, not gambling.", example: "Nifty Options." }
+            ],
+            quizzes: [
+              { question: "Primary use of derivatives?", options: ["Gambling", "Hedging Risks", "Paying dividends", "Storing cash"], answer: 1 },
+              { question: "Worst outcome for Option Writer?", options: ["Limited gain", "Unlimited Loss", "No change", "Small profit"], answer: 1 }
+            ]
+          })
+        },
+        {
+          title: "Global Investing",
+          description: "Invest in US Stocks & International Markets from India.",
+          difficulty: "Hard", points: 700, icon: "globe", category: "literacy",
+          content: JSON.stringify({
+            duration: 80,
+            slides: [
+              { icon: "globe", title: "Why Global?", options: ["Diversify beyond India", "Currency gains", "Access Tech giants", "All"], keyTakeaway: "Own the world's best companies.", example: "Buying Apple/Amazon." }
+            ],
+            quizzes: [
+              { question: "Currency gain happens when:", options: ["INR weakens vs USD", "INR strengthens", "Same", "No impact"], answer: 0 },
+              { question: "LRS limit per year?", options: ["$100k", "$250k", "$500k", "$1M"], answer: 1 }
             ]
           })
         }
