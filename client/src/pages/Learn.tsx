@@ -34,8 +34,12 @@ export default function LearnPage() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
 
-  const { data: allQuests = [], isLoading } = useQuery<Quest[]>({ queryKey: ["/api/quests"] });
-  const { data: userQuests = [] } = useQuery<UserQuest[]>({ queryKey: ["/api/user/quests"] });
+  const { data: allQuests = [], isLoading, refetch: refetchQuests } = useQuery<Quest[]>({ 
+    queryKey: ["/api/quests"],
+    staleTime: 0, // Ensure we always check for fresh data on mount
+  });
+  const { data: userQuests = [], refetch: refetchUserQuests } = useQuery<UserQuest[]>({ queryKey: ["/api/user/quests"] });
+
 
   const literacyQuests = useMemo(() =>
     allQuests.filter(q => q.category === "literacy"), [allQuests]);
@@ -248,51 +252,54 @@ export default function LearnPage() {
 
               ) : currentSlide ? (
                 /* Slide */
-                <motion.div key={`slide-${step}`} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="space-y-6">
+                <motion.div key={`slide-${step}`} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="space-y-6 max-h-[75vh] overflow-y-auto pr-4 custom-scrollbar">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Lesson {step} of {slides.length}</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 italic">LESSON {step} OF {slides.length}</span>
                   </div>
-                  <div className="rounded-[28px] bg-white/[0.03] border border-white/10 overflow-hidden">
+                  <div className="rounded-[32px] bg-white/[0.02] border border-white/5 overflow-hidden shadow-2xl shadow-black/40">
                     {/* Slide header */}
-                    <div className="bg-gradient-to-r from-primary/10 to-transparent border-b border-white/5 p-8 pb-6">
-                      <div className="flex items-start gap-5">
-                        <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                    <div className="bg-gradient-to-r from-primary/5 via-primary/2 to-transparent border-b border-white/5 p-10 pb-8">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-[22px] bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 shadow-inner">
                           {currentSlide.icon && iconMap[currentSlide.icon]
-                            ? (() => { const I = iconMap[currentSlide.icon]; return <I className="w-7 h-7 text-primary" />; })()
-                            : <BookOpen className="w-7 h-7 text-primary" />
+                            ? (() => { const I = iconMap[currentSlide.icon]; return <I className="w-8 h-8 text-primary shadow-sm" />; })()
+                            : <BookOpen className="w-8 h-8 text-primary" />
                           }
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Key Concept</p>
-                          <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-snug">{currentSlide.title}</h2>
+                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60 mb-2">Core Curriculum</p>
+                          <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight uppercase italic">{currentSlide.title}</h2>
                         </div>
                       </div>
                     </div>
                     {/* Slide body */}
-                    <div className="p-8 space-y-8">
-                      <div className="text-lg leading-relaxed text-white/70 font-medium space-y-4">
+                    <div className="p-10 space-y-10">
+                      <div className="text-xl leading-[1.8] text-white/70 font-medium space-y-6">
                         {currentSlide.text.split('\n\n').map((paragraph: string, i: number) => (
                           <p key={i} className="whitespace-pre-wrap">{paragraph}</p>
                         ))}
                       </div>
-                      {currentSlide.keyTakeaway && (
-                        <div className="flex items-start gap-4 p-5 rounded-2xl bg-yellow-500/5 border border-yellow-500/20">
-                          <Lightbulb className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
-                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-1.5">Key Takeaway</p>
-                            <p className="text-sm font-bold text-white/80 leading-relaxed">{currentSlide.keyTakeaway}</p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
+                        {currentSlide.keyTakeaway && (
+                          <div className="flex items-start gap-4 p-6 rounded-[24px] bg-yellow-500/[0.03] border border-yellow-500/10 hover:border-yellow-500/30 transition-colors">
+                            <Lightbulb className="w-6 h-6 text-yellow-400 shrink-0 mt-1" />
+                            <div>
+                              <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400/60 mb-2">Key Strategy</p>
+                              <p className="text-sm font-bold text-white/90 leading-relaxed">{currentSlide.keyTakeaway}</p>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {currentSlide.example && (
-                        <div className="flex items-start gap-4 p-5 rounded-2xl bg-primary/5 border border-primary/20">
-                          <BarChart3 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1.5">Real Example</p>
-                            <p className="text-sm text-white/70 leading-relaxed">{currentSlide.example}</p>
+                        )}
+                        {currentSlide.example && (
+                          <div className="flex items-start gap-4 p-6 rounded-[24px] bg-primary/[0.03] border border-primary/10 hover:border-primary/30 transition-colors">
+                            <Zap className="w-6 h-6 text-primary shrink-0 mt-1" />
+                            <div>
+                              <p className="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-2">Reality Check</p>
+                              <p className="text-sm text-white/80 leading-relaxed">{currentSlide.example}</p>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -408,23 +415,24 @@ export default function LearnPage() {
                 onClick={async () => {
                   try {
                     await apiRequest("/api/admin/seed-courses", "POST");
-                    queryClient.invalidateQueries({ queryKey: ["/api/quests"] });
-                    toast({ title: "Content Synced", description: "The latest high-quality courses have been loaded." });
+                    await refetchQuests();
+                    await refetchUserQuests();
+                    toast({ title: "Database Synchronized", description: "The latest course content has been downloaded." });
                   } catch (e) {
                     toast({ title: "Sync Failed", variant: "destructive" });
                   }
                 }}
               >
-                Refresh Course Content
+                Sync Latest Content
               </Button>
             </div>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter italic uppercase">Learn <span className="text-primary">& Earn</span></h1>
-            <p className="text-white/40 text-lg mt-3 max-w-xl">Master money basics through deep-dive articles and interactive knowledge checks.</p>
+            <p className="text-white/40 text-lg mt-3 max-w-xl">Master money through deep-dive articles and comprehensive knowledge checks.</p>
           </div>
           {/* Progress overview */}
           <div className="flex gap-4 shrink-0">
-            {[{label: "Completed", val: completedCount, icon: CheckCircle2, color: "text-green-400"},
-              {label: "Total Courses", val: literacyQuests.length, icon: BookOpen, color: "text-primary"},
+            {[{label: "Done", val: completedCount, icon: CheckCircle2, color: "text-green-400"},
+              {label: "Catalogue", val: literacyQuests.length, icon: BookOpen, color: "text-primary"},
               {label: "Progress", val: `${masteryPercentage}%`, icon: BarChart3, color: "text-yellow-400"},
             ].map(({label, val, icon: Icon, color}) => (
               <div key={label} className="p-4 glass-morphism border-white/5 rounded-2xl text-center min-w-[90px]">

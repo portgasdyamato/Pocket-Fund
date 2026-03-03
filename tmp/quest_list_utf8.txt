@@ -1,0 +1,10 @@
+﻿ALL QUESTS IN DB:
+- [challenge] "The 1% Rule" (ID: 68f20bb3-db23-4b3a-bd2e-c9dcc937eb6f)
+- [challenge] "Subscription Audit" (ID: 6aad1df9-0e89-41bc-b819-c3d80576a1d8)
+- [challenge] "Morning Brew Stash" (ID: 9038d204-3c31-4264-b767-83141557c589)
+- [challenge] "Impulse Shield" (ID: f58b7d05-0899-4b66-99b6-bcd9cc1af934)
+- [challenge] "Generic Hero" (ID: ca1f3ae9-5b01-423f-ac48-7ec2cb72d449)
+- [challenge] "Commute GlowUp" (ID: 53e47d72-9434-49a3-941f-b4ec9b0d3257)
+- [literacy] "The Zero-to-One of Money" (ID: 6570c1d2-97f9-47fe-812f-eb6db49d230d)
+- [literacy] "Mastering the 50/30/20 Rule" (ID: 9c975369-10f2-4efc-a309-588e0cd71807)
+- [literacy] "The Emergency Fund Blueprint" (ID: 5f926978-5dca-4ec0-b3d2-805aef0ce52b)
