@@ -301,30 +301,36 @@ export default function ExpenseLog() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-3 gap-4">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival', icon: ShieldCheck },
-                          { label: 'WANT', id: 'Want', color: 'primary', desc: 'Lifestyle', icon: Star },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste', icon: TrendingDown }
+                          { label: 'NEED', id: 'Need', color: 'blue', desc: 'Survival', icon: ShieldCheck, accent: 'bg-blue-400' },
+                          { label: 'WANT', id: 'Want', color: 'primary', desc: 'Lifestyle', icon: Star, accent: 'bg-primary' },
+                          { label: 'ICK', id: 'Ick', color: 'destructive', desc: 'Waste', icon: TrendingDown, accent: 'bg-destructive' }
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.04, y: -4 }}
-                            whileTap={{ scale: 0.96 }}
+                            whileHover={{ scale: 1.05, y: -4 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-6 px-4 rounded-[32px] border transition-all duration-500 group/btn relative overflow-hidden backdrop-blur-md
-                              ${btn.color === 'blue' ? 'bg-blue-400/10 border-blue-400/30 text-blue-400 hover:bg-blue-400/20 hover:border-blue-400' : 
-                                btn.color === 'primary' ? 'bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary' : 
-                                'bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20 hover:border-destructive'}`}
+                            className={`group/btn relative flex flex-col items-center justify-center p-5 rounded-[32px] border-2 transition-all duration-300
+                              ${btn.color === 'blue' ? 'bg-black/60 border-blue-500/10 text-blue-400 hover:border-blue-400 hover:bg-blue-400/5' : 
+                                btn.color === 'primary' ? 'bg-black/60 border-primary/10 text-primary hover:border-primary hover:bg-primary/5' : 
+                                'bg-black/60 border-destructive/10 text-destructive hover:border-destructive hover:bg-destructive/5'}`}
                           >
-                            <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 bg-gradient-to-t from-current/10 to-transparent transition-opacity" />
-                            
-                            <div className={`p-3 rounded-2xl mb-3 bg-black/20 border border-white/5 group-hover/btn:bg-black/40 group-hover/btn:border-current/30 transition-all duration-500`}>
-                               <btn.icon className="w-6 h-6 group-hover/btn:scale-110 transition-transform duration-500" />
+                            {/* Executive Icon Chamber */}
+                            <div className={`relative p-4 rounded-2xl bg-zinc-900 border border-white/5 mb-3 group-hover/btn:border-current/40 group-hover/btn:scale-110 group-hover/btn:shadow-[0_0_20px_rgba(0,0,0,0.4)] transition-all duration-500`}>
+                               <btn.icon className="w-6 h-6 group-hover/btn:drop-shadow-[0_0_8px_currentColor]" />
+                               {/* Status Light */}
+                               <div className={`absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-zinc-900 ${btn.accent} group-hover/btn:animate-pulse`} />
                             </div>
                             
-                            <span className="text-[11px] font-black tracking-[0.2em] leading-none mb-1.5 uppercase">{btn.label}</span>
-                            <span className="text-[8px] font-black opacity-30 group-hover/btn:opacity-60 uppercase tracking-[0.1em] transition-opacity">{btn.desc}</span>
+                            <div className="text-center space-y-0.5">
+                              <span className="text-[11px] font-black tracking-[0.2em] uppercase block leading-none">{btn.label}</span>
+                              <span className="text-[7px] font-black opacity-20 group-hover/btn:opacity-50 uppercase tracking-widest">{btn.desc}</span>
+                            </div>
+
+                            {/* Hover Status Bar */}
+                            <div className={`absolute bottom-2 inset-x-6 h-1 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity ${btn.accent} shadow-[0_0_10px_currentColor]`} />
                           </motion.button>
                         ))}
                       </div>
