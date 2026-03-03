@@ -33,6 +33,9 @@ export default function GlowUp() {
   const { user } = useAuth();
   const [isNewGoalOpen, setIsNewGoalOpen] = useState(false);
   const [isStashOpen, setIsStashOpen] = useState(false);
+  const [vaultStep, setVaultStep] = useState<'action' | 'verify'>('action');
+  const [verificationCode, setVerificationCode] = useState("");
+  const [enteredCode, setEnteredCode] = useState("");
   const [goalName, setGoalName] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
   const [stashAmount, setStashAmount] = useState("");
@@ -75,6 +78,11 @@ export default function GlowUp() {
 
   const stashMutation = useMutation({
     mutationFn: async (type: 'stash' | 'withdraw') => {
+      // For withdrawals, check code first
+      if (type === 'withdraw' && enteredCode !== verificationCode) {
+        throw new Error("Invalid security code.");
+      }
+      
       return await apiRequest("/api/stash", "POST", {
         amount: stashAmount,
         type: type,
@@ -90,8 +98,10 @@ export default function GlowUp() {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
 
       setIsStashOpen(false);
+      setVaultStep('action');
       setStashAmount("");
       setSelectedGoalId("");
+      setEnteredCode("");
       
       toast({
         title: "Vault Updated",
@@ -106,6 +116,29 @@ export default function GlowUp() {
       });
     }
   });
+
+  const handleWithdrawClick = () => {
+    if (!stashAmount || parseFloat(stashAmount) <= 0) {
+      toast({ title: "Invalid Amount", variant: "destructive" });
+      return;
+    }
+    
+    // Check if enough funds in vault
+    if (parseFloat(stashAmount) > totalStashed) {
+      toast({ title: "Insufficient Funds", description: "You don't have that much in your vault.", variant: "destructive" });
+      return;
+    }
+
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    setVerificationCode(code);
+    setVaultStep('verify');
+    
+    toast({
+      title: "Security Code Sent",
+      description: `Your one-time withdrawal code is: ${code}`,
+      duration: 10000,
+    });
+  };
 
   const claimGoalMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -164,7 +197,13 @@ export default function GlowUp() {
             <p className="text-white/40 font-medium mt-2">Manage your savings and track your goals.</p>
           </div>
           
-          <Dialog open={isStashOpen} onOpenChange={setIsStashOpen}>
+          <Dialog open={isStashOpen} onOpenChange={(open) => {
+            setIsStashOpen(open);
+            if (!open) {
+              setVaultStep('action');
+              setEnteredCode("");
+            }
+          }}>
             <DialogTrigger asChild>
               <Button size="lg" className="group">
                 <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -172,70 +211,126 @@ export default function GlowUp() {
               </Button>
             </DialogTrigger>
             <DialogContent className="glass-morphism border-white/10 text-white p-8">
-              <DialogHeader>
-                <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
-                <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
-              </DialogHeader>
-              <div className="space-y-6 pt-6">
-                <div className="space-y-3">
-                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount (₹)</Label>
-                  <input
-                    className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none"
-                    placeholder="0.00"
-                    value={stashAmount}
-                    onChange={(e) => setStashAmount(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Goal</Label>
-                  <div className="relative">
-                    <select
-                      className="w-full h-14 rounded-xl border border-white/10 bg-white/5 px-4 text-white appearance-none focus:outline-none focus:border-primary font-bold"
-                      value={selectedGoalId}
-                      onChange={(e) => setSelectedGoalId(e.target.value)}
-                    >
-                      <option value="" className="bg-[#0a0a0a]">General Vault</option>
-                      {goals.filter(g => !g.completed && parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
-                        <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
-                          {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    onClick={() => stashMutation.mutate('stash')}
-                    disabled={stashMutation.isPending || !stashAmount}
-                    className="flex flex-col h-auto py-4 gap-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/20"
+               <AnimatePresence mode="wait">
+                {vaultStep === 'action' ? (
+                  <motion.div
+                    key="action"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-6"
                   >
-                    <ArrowUpCircle className="w-6 h-6" />
-                    <span className="font-black text-xs uppercase tracking-widest">Deposit</span>
-                  </Button>
-                  <Button
-                    onClick={() => stashMutation.mutate('withdraw')}
-                    disabled={stashMutation.isPending || !stashAmount}
-                    variant="outline"
-                    className="flex flex-col h-auto py-4 gap-2 border-white/10 hover:bg-white/5"
-                  >
-                    <ArrowDownCircle className="w-6 h-6" />
-                    <span className="font-black text-xs uppercase tracking-widest text-white/60">Withdraw</span>
-                  </Button>
-                </div>
+                    <DialogHeader>
+                      <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
+                      <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-6">
+                      <div className="space-y-3">
+                        <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Amount (₹)</Label>
+                        <input
+                          className="w-full bg-white/5 border border-white/10 h-16 rounded-xl px-4 text-2xl font-black focus:border-primary transition-all outline-none"
+                          placeholder="0.00"
+                          value={stashAmount}
+                          onChange={(e) => setStashAmount(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Goal</Label>
+                        <div className="relative">
+                          <select
+                            className="w-full h-14 rounded-xl border border-white/10 bg-white/5 px-4 text-white appearance-none focus:outline-none focus:border-primary font-bold"
+                            value={selectedGoalId}
+                            onChange={(e) => setSelectedGoalId(e.target.value)}
+                          >
+                            <option value="" className="bg-[#0a0a0a]">General Vault</option>
+                            {goals.filter(g => !g.completed && parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
+                              <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
+                                {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <Button
+                          onClick={() => stashMutation.mutate('stash')}
+                          disabled={stashMutation.isPending || !stashAmount}
+                          className="flex flex-col h-auto py-4 gap-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/20"
+                        >
+                          <ArrowUpCircle className="w-6 h-6" />
+                          <span className="font-black text-xs uppercase tracking-widest">Deposit</span>
+                        </Button>
+                        <Button
+                          onClick={handleWithdrawClick}
+                          disabled={stashMutation.isPending || !stashAmount}
+                          variant="outline"
+                          className="flex flex-col h-auto py-4 gap-2 border-white/10 hover:bg-white/5"
+                        >
+                          <ArrowDownCircle className="w-6 h-6" />
+                          <span className="font-black text-xs uppercase tracking-widest text-white/60">Withdraw</span>
+                        </Button>
+                      </div>
 
-                <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                   <div className="flex flex-col">
-                     <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Wallet Balance</span>
-                     <span className="text-sm font-black text-white">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
-                   </div>
-                   <div className="w-[1px] h-8 bg-white/10" />
-                   <div className="flex flex-col items-end">
-                     <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Vault Balance</span>
-                     <span className="text-sm font-black text-primary">₹{totalStashed.toLocaleString('en-IN')}</span>
-                   </div>
-                </div>
-              </div>
+                      <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                         <div className="flex flex-col">
+                           <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Wallet Balance</span>
+                           <span className="text-sm font-black text-white">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                         </div>
+                         <div className="w-[1px] h-8 bg-white/10" />
+                         <div className="flex flex-col items-end">
+                           <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Vault Balance</span>
+                           <span className="text-sm font-black text-primary">₹{totalStashed.toLocaleString('en-IN')}</span>
+                         </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="verify"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-8"
+                  >
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                        <ShieldCheck className="w-10 h-10 text-primary" />
+                      </div>
+                      <h2 className="text-3xl font-black tracking-tight">Verify Identity</h2>
+                      <p className="text-white/40 mt-2 font-medium">Please enter the 4-digit code to authorize this withdrawal.</p>
+                    </div>
+
+                    <div className="flex justify-center gap-4 py-4">
+                      <Input
+                        className="w-48 bg-white/5 border-white/10 h-16 rounded-xl text-center text-4xl font-black tracking-[0.5em] focus:border-primary transition-all outline-none"
+                        maxLength={4}
+                        placeholder="••••"
+                        value={enteredCode}
+                        onChange={(e) => setEnteredCode(e.target.value)}
+                        autoFocus
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <Button
+                        onClick={() => stashMutation.mutate('withdraw')}
+                        disabled={stashMutation.isPending || enteredCode.length < 4}
+                        className="w-full h-16 text-lg"
+                      >
+                        {stashMutation.isPending ? 'Verifying...' : 'Authorize Withdrawal'}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-white/40 hover:text-white"
+                        onClick={() => setVaultStep('action')}
+                      >
+                        Go Back
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+               </AnimatePresence>
             </DialogContent>
           </Dialog>
         </motion.div>
