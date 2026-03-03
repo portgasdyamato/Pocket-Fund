@@ -258,77 +258,76 @@ export default function ExpenseLog() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {untaggedTransactions.slice(0, 3).map((t) => (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {untaggedTransactions.slice(0, 4).map((t) => (
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative rounded-[56px] overflow-hidden group/card shadow-[0_40px_100px_rgba(0,0,0,0.8)]"
+                    className="relative rounded-[40px] overflow-hidden group/card shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
                   >
-                    <Card className="h-full bg-zinc-900 border-2 border-white/[0.05] rounded-[55px] p-8 flex flex-col gap-8 relative overflow-hidden">
-                      {/* Premium Top Reflection */}
-                      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
-                      
-                      {/* Header Area */}
-                      <div className="flex items-center justify-between relative z-10">
-                         <div className={`w-14 h-14 rounded-3xl bg-white/[0.07] border border-white/[0.1] flex items-center justify-center shadow-xl ${getCategoryColor(t.category)} scale-105`}>
-                           {/* Enlarged and Brightened Icon */}
-                           <div className="scale-125 opacity-100 brightness-125">
-                            {getCategoryIcon(t.category)}
+                    <Card className="h-full bg-zinc-900 border-2 border-white/[0.05] rounded-[39px] p-6 lg:p-8 flex flex-row gap-8 relative overflow-hidden min-h-[280px]">
+                      {/* Left Interaction Zone - Transaction Details */}
+                      <div className="flex-1 flex flex-col justify-between relative z-10">
+                        {/* Header Area */}
+                        <div className="flex items-center gap-4">
+                           <div className={`w-12 h-12 rounded-2xl bg-white/[0.07] border border-white/[0.1] flex items-center justify-center shadow-xl ${getCategoryColor(t.category)}`}>
+                             <div className="scale-110 opacity-100">
+                              {getCategoryIcon(t.category)}
+                             </div>
                            </div>
-                         </div>
-                         <div className="px-4 py-2 rounded-full bg-white/[0.07] border border-white/[0.1] shadow-inner">
-                            <span className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em]">SEQ {t.id.slice(-4)}</span>
-                         </div>
-                      </div>
+                           <div className="space-y-0.5">
+                             <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${getCategoryColor(t.category)} brightness-125`}>{t.category}</span>
+                             <div className="flex items-center gap-2">
+                               <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">SEQ {t.id.slice(-4)}</span>
+                             </div>
+                           </div>
+                        </div>
 
-                      {/* Content Area */}
-                      <div className="space-y-4 relative z-10 text-center flex-1 py-2">
-                         <div className="inline-flex flex-col items-center">
-                           <span className={`text-[11px] font-black uppercase tracking-[0.5em] ${getCategoryColor(t.category)} brightness-125 block mb-1`}>{t.category}</span>
-                           <div className="h-[2px] w-12 bg-white/20 rounded-full" />
-                         </div>
-                         
-                         <h4 className="text-2xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase drop-shadow-lg">
-                           {t.description}
-                         </h4>
+                        {/* Description & Amount */}
+                        <div className="py-6 space-y-4">
+                           <h4 className="text-xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase">
+                             {t.description}
+                           </h4>
 
-                         <div className="flex flex-col items-center pt-2">
                            <div className="flex items-baseline gap-3">
-                             <span className="text-xl font-black text-orange-400 drop-shadow-sm">INR</span>
-                             <span className="text-6xl font-black tabular-nums tracking-tighter text-white [text-shadow:_0_4px_12px_rgb(0_0_0_/_50%)]">
+                             <span className="text-lg font-black text-orange-400 drop-shadow-sm">INR</span>
+                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white [text-shadow:_0_4px_12px_rgb(0_0_0_/_50%)]">
                                {parseFloat(t.amount).toLocaleString('en-IN')}
                              </span>
                            </div>
-                         </div>
+                        </div>
+
+                        {/* Subtle Status Line */}
+                        <div className="h-1 w-12 bg-white/10 rounded-full" />
                       </div>
 
-                      {/* Actions Area - Unified Selection Console */}
-                      <div className="grid grid-cols-3 relative z-10 rounded-[28px] overflow-hidden border border-white/[0.05] bg-[#0C0C0C] shadow-2xl">
+                      {/* Right Interaction Zone - Vertical Segmented Console */}
+                      <div className="w-[140px] flex flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-[#0C0C0C]">
                         {[
-                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', glow: 'hover:bg-blue-400/10', corners: 'rounded-l-[28px]' },
+                          { label: 'NEED', id: 'Need', color: 'blue', icon: ShieldCheck, accent: 'text-blue-400', glow: 'hover:bg-blue-400/10', corners: 'rounded-t-[24px]' },
                           { label: 'WANT', id: 'Want', color: 'primary', icon: Star, accent: 'text-primary', glow: 'hover:bg-primary/10', corners: '' },
-                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive', glow: 'hover:bg-destructive/10', corners: 'rounded-r-[28px]' }
+                          { label: 'ICK', id: 'Ick', color: 'destructive', icon: TrendingDown, accent: 'text-destructive', glow: 'hover:bg-destructive/10', corners: 'rounded-b-[24px]' }
                         ].map((btn, idx) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.05, x: -4 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center gap-2 py-6 transition-all duration-300 group/btn relative
+                            className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-300 group/btn relative min-h-[80px]
                                ${btn.corners} ${btn.accent} ${btn.glow}
-                               ${idx !== 2 ? 'border-r border-white/5' : ''}`}
+                               ${idx !== 2 ? 'border-b border-white/5' : ''}`}
                           >
-                            <div className="flex-shrink-0 transition-transform duration-500 group-hover/btn:scale-110">
-                               <btn.icon className="w-5 h-5 opacity-80" />
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
+                            <btn.icon className="w-5 h-5 opacity-80 transition-transform group-hover/btn:scale-110" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
                             
-                            {/* Interactive Selection Indicator */}
-                            <div className="absolute inset-x-0 bottom-0 h-1 bg-current opacity-0 group-hover/btn:opacity-50 transition-opacity" />
+                            {/* Vertical Selection Indicator */}
+                            <div className="absolute inset-y-0 right-0 w-1 bg-current opacity-0 group-hover/btn:opacity-60 transition-opacity" />
                           </motion.button>
                         ))}
                       </div>
+
+                      {/* Global Card Background Effects */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                     </Card>
                   </motion.div>
                 ))}
