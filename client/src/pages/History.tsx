@@ -212,6 +212,10 @@ export default function ExpenseLog() {
                        <TrendingDown className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                        Icks Only
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterTag('Goal Claim')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                       <Sparkles className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                       Goals Only
+                    </DropdownMenuItem>
                  </DropdownMenuContent>
                </DropdownMenu>
  
