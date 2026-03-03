@@ -126,11 +126,12 @@ export default function GlowUp() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      setVaultStep('action');
+      // Transition to verify step so they can immediately authorize
+      setVaultStep('verify');
       setNewPin("");
       toast({
         title: "Security PIN Set",
-        description: "Your vault is now protected with your custom PIN.",
+        description: "Your PIN is now active. Please enter it below to authorize your withdrawal.",
       });
     },
     onError: (error: any) => {
