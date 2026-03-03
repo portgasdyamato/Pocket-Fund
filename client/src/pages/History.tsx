@@ -258,46 +258,51 @@ export default function ExpenseLog() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {untaggedTransactions.slice(0, 3).map((t) => (
                   <motion.div
                     key={t.id}
                     layoutId={t.id}
-                    className="relative p-[1px] rounded-[48px] overflow-hidden group/card aspect-square"
+                    className="relative rounded-[56px] overflow-hidden group/card aspect-square"
                   >
-                    {/* High-Impact Glow Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-transparent to-orange-500/5 opacity-50 group-hover/card:opacity-100 transition-opacity duration-700" />
-                    
-                    <Card className="h-full bg-zinc-900/95 backdrop-blur-3xl border border-white/10 rounded-[47px] p-8 flex flex-col justify-between relative overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
-                      {/* Inner Shine Effect */}
-                      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    {/* Subtle Structural Shadow */}
+                    <Card className="h-full bg-zinc-900 border border-white/[0.08] rounded-[55px] p-10 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                      {/* Premium Top Light */}
+                      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
                       
                       {/* Header Area */}
                       <div className="flex items-center justify-between relative z-10">
-                         <div className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center ${getCategoryColor(t.category)}`}>
+                         <div className={`w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shadow-sm ${getCategoryColor(t.category)}`}>
                            {getCategoryIcon(t.category)}
                          </div>
-                         <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5">
-                            <span className="text-[9px] font-mono text-white/40 uppercase tracking-tighter">ID-{t.id.slice(-4)}</span>
+                         <div className="px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">SEQ-{t.id.slice(-4)}</span>
                          </div>
                       </div>
 
-                      {/* Content Area - Centered for Square Card */}
-                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 relative z-10 py-4">
-                         <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${getCategoryColor(t.category)} opacity-60`}>{t.category}</span>
-                         <h4 className="text-xl font-black tracking-tight leading-tight line-clamp-2 text-white/90 group-hover/card:text-white transition-colors uppercase">
+                      {/* Content Area */}
+                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6 relative z-10">
+                         <div className="space-y-1">
+                           <span className={`text-[11px] font-black uppercase tracking-[0.4em] ${getCategoryColor(t.category)} opacity-80`}>{t.category}</span>
+                           <div className="h-px w-8 mx-auto bg-white/10" />
+                         </div>
+                         
+                         <h4 className="text-2xl font-black tracking-tight leading-tight text-white/90 group-hover/card:text-white transition-colors uppercase px-2">
                            {t.description}
                          </h4>
-                         <div className="flex items-baseline gap-1">
-                           <span className="text-lg font-black text-orange-400">₹</span>
-                           <span className="text-5xl font-black tabular-nums tracking-tighter text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
-                             {parseFloat(t.amount).toLocaleString('en-IN')}
-                           </span>
+
+                         <div className="flex flex-col items-center">
+                           <div className="flex items-baseline gap-2">
+                             <span className="text-xl font-black text-white/10 uppercase tracking-tighter">INR</span>
+                             <span className="text-6xl font-black tabular-nums tracking-tighter text-white">
+                               {parseFloat(t.amount).toLocaleString('en-IN')}
+                             </span>
+                           </div>
                          </div>
                       </div>
 
-                      {/* Actions Area - Compact 3-Column Grid */}
-                      <div className="grid grid-cols-3 gap-3 relative z-10">
+                      {/* Actions Area - Solid & Visible Variants */}
+                      <div className="grid grid-cols-3 gap-4 relative z-10">
                         {[
                           { label: 'Need', id: 'Need', color: 'blue', icon: ShieldCheck },
                           { label: 'Want', id: 'Want', color: 'primary', icon: Star },
@@ -305,16 +310,15 @@ export default function ExpenseLog() {
                         ].map((btn) => (
                           <motion.button
                             key={btn.id}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.04, y: -2 }}
+                            whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center py-4 rounded-2xl border transition-all duration-300 group/btn
-                              ${btn.color === 'blue' ? 'bg-blue-400/5 border-blue-400/20 text-blue-400 hover:border-blue-400 hover:bg-blue-400/10' : 
-                                btn.color === 'primary' ? 'bg-primary/5 border-primary/20 text-primary hover:border-primary hover:bg-primary/10' : 
-                                'bg-destructive/5 border-destructive/20 text-destructive hover:border-destructive hover:bg-destructive/10'}`}
+                            className={`flex flex-col items-center justify-center py-5 rounded-[28px] border transition-all duration-300 group/btn
+                               bg-zinc-800/50 border-white/[0.06] hover:bg-zinc-800 hover:border-white/20
+                               ${btn.color === 'blue' ? 'text-blue-400' : btn.color === 'primary' ? 'text-primary' : 'text-destructive'}`}
                           >
-                            <btn.icon className="w-5 h-5 mb-1.5 opacity-60 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all" />
-                            <span className="text-[10px] font-black uppercase tracking-widest leading-none">{btn.label}</span>
+                            <btn.icon className="w-5 h-5 mb-2 opacity-70 group-hover/btn:opacity-100 group-hover/btn:scale-110 transition-all" />
+                            <span className="text-[11px] font-black uppercase tracking-widest leading-none text-white/40 group-hover/btn:text-white transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
