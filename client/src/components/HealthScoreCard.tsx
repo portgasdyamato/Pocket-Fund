@@ -176,21 +176,21 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.8, type: "spring", damping: 15 }}
-              className="flex flex-col items-center justify-center gap-1"
+              className="flex flex-col items-center justify-center -space-y-1"
             >
-              <div className="flex items-center gap-1.5">
-                <Activity className={`w-3.5 h-3.5 ${info.color} opacity-80`} />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Health</span>
+              <div className="flex items-center gap-1.5 mb-1">
+                <Activity className={`w-3 h-3 ${info.color} opacity-80`} />
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40">Health</span>
               </div>
               
               <div className="relative flex items-center justify-center">
-                <span className={`text-7xl font-black tracking-tighter tabular-nums ${info.color} relative z-10 drop-shadow-2xl`}>
+                <span className={`text-6xl font-black tracking-tighter tabular-nums ${info.color} relative z-10 drop-shadow-2xl`}>
                   {score}
                 </span>
-                <div className={`absolute inset-0 blur-3xl ${info.color} opacity-20 scale-150 rounded-full`} />
+                <div className={`absolute inset-0 blur-3xl ${info.color} opacity-20 scale-125 rounded-full`} />
               </div>
 
-              <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mt-1">
+              <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mt-1">
                 Financial Score
               </span>
             </motion.div>
