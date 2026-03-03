@@ -87,14 +87,6 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
           </div>
 
           <svg className="w-full h-full transform -rotate-90 relative z-10 overflow-visible" viewBox="-40 -40 320 320">
-            <defs>
-              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={info.hex} stopOpacity="0.4" />
-                <stop offset="70%" stopColor={info.hex} stopOpacity="1" />
-                <stop offset="100%" stopColor="white" />
-              </linearGradient>
-            </defs>
-            
             {/* Background Track */}
             <circle
               cx="120"
@@ -106,13 +98,13 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               strokeLinecap="round"
             />
             
-            {/* Main Progress Circle with High-Intensity Dynamic Glow */}
+            {/* Main Progress Circle with Unified Solid Glow */}
             <motion.circle
               cx="120"
               cy="120"
               r="100"
               fill="none"
-              stroke={`url(#${gradientId})`}
+              stroke={info.hex}
               strokeWidth="14"
               strokeLinecap="round"
               strokeDasharray="628"
@@ -120,16 +112,16 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               animate={{ strokeDashoffset: 628 - (score / 100) * 628 }}
               transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{
-                filter: `drop-shadow(0 0 20px ${info.hex})`
+                filter: `drop-shadow(0 0 16px ${info.hex})`
               }}
             />
 
-            {/* Glowing Head Point - Matches Score Color Precisely */}
+            {/* Glowing Head Point - Unified Color */}
             <motion.circle
               cx="120"
               cy="20"
               r="6"
-              fill="white"
+              fill={info.hex}
               initial={{ opacity: 0 }}
               animate={{ 
                 opacity: 1,
@@ -137,7 +129,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
               }}
               transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               transform-origin="120 120"
-              style={{ filter: `drop-shadow(0 0 12px ${info.hex}) drop-shadow(0 0 6px white)` }}
+              style={{ filter: `drop-shadow(0 0 10px ${info.hex})` }}
             />
             
             {/* Precision Tick Marks */}
