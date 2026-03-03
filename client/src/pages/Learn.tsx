@@ -266,17 +266,17 @@ export default function LearnPage() {
                   </div>
                   <div className="rounded-[32px] bg-white/[0.02] border border-white/5 overflow-hidden shadow-2xl shadow-black/40">
                     {/* Slide header */}
-                    <div className="bg-gradient-to-r from-primary/5 via-primary/2 to-transparent border-b border-white/5 p-10 pb-8">
+                    <div className="bg-primary p-10 pb-8">
                       <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-[22px] bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 shadow-inner">
+                        <div className="w-16 h-16 rounded-[22px] bg-white/10 border border-white/20 flex items-center justify-center shrink-0 shadow-inner">
                           {currentSlide.icon && iconMap[currentSlide.icon]
-                            ? (() => { const I = iconMap[currentSlide.icon]; return <I className="w-8 h-8 text-primary shadow-sm" />; })()
-                            : <BookOpen className="w-8 h-8 text-primary" />
+                            ? (() => { const I = iconMap[currentSlide.icon]; return <I className="w-8 h-8 text-white shadow-sm" />; })()
+                            : <BookOpen className="w-8 h-8 text-white" />
                           }
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60 mb-2">Core Curriculum</p>
-                          <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight uppercase italic">{currentSlide.title}</h2>
+                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70 mb-2">Core Curriculum</p>
+                          <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight uppercase italic text-white">{currentSlide.title}</h2>
                         </div>
                       </div>
                     </div>
