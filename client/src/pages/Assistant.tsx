@@ -19,10 +19,38 @@ interface ChatMessage {
 }
 
 const QUICK_PROMPTS = [
-  { q: "How do I start investing?", label: "Investing", icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20 hover:border-emerald-500/50" },
-  { q: "Explain the 50/30/20 rule", label: "Budgeting", icon: Zap, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20 hover:border-blue-500/50" },
-  { q: "How to build an emergency fund?", label: "Safety Net", icon: ShieldCheck, color: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20 hover:border-violet-500/50" },
-  { q: "Help me fight my Spending Icks", label: "Habits", icon: Brain, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20 hover:border-rose-500/50" },
+  {
+    q: "How do I start investing?",
+    label: "Investing",
+    icon: TrendingUp,
+    gradient: "from-emerald-600 to-teal-700",
+    glow: "shadow-emerald-900/60",
+    hoverGlow: "hover:shadow-emerald-600/30"
+  },
+  {
+    q: "Explain the 50/30/20 rule",
+    label: "Budgeting",
+    icon: Zap,
+    gradient: "from-blue-600 to-indigo-700",
+    glow: "shadow-blue-900/60",
+    hoverGlow: "hover:shadow-blue-600/30"
+  },
+  {
+    q: "Build an emergency fund",
+    label: "Safety Net",
+    icon: ShieldCheck,
+    gradient: "from-violet-600 to-purple-700",
+    glow: "shadow-violet-900/60",
+    hoverGlow: "hover:shadow-violet-600/30"
+  },
+  {
+    q: "Help me fight Spending Icks",
+    label: "Habits",
+    icon: Brain,
+    gradient: "from-rose-600 to-pink-700",
+    glow: "shadow-rose-900/60",
+    hoverGlow: "hover:shadow-rose-600/30"
+  },
 ];
 
 export default function AskCoach() {
@@ -170,28 +198,33 @@ export default function AskCoach() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
-                className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 pb-1"
+                className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2 pb-1"
               >
                 {QUICK_PROMPTS.map((p, i) => {
                   const Icon = p.icon;
                   return (
                     <motion.button
                       key={i}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.06 }}
-                      onClick={() => { setChatMessage(p.q); inputRef.current?.focus(); }}
-                      className={`group relative p-4 rounded-2xl bg-white/[0.02] border ${p.border} transition-all duration-300 text-left overflow-hidden`}
+                      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 20 }}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => { setChatMessage(p.q); handleSend(); }}
+                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} shadow-xl ${p.glow} ${p.hoverGlow} hover:shadow-2xl transition-all duration-300 text-left overflow-hidden border border-white/10`}
                     >
-                      {/* glow on hover */}
-                      <div className={`absolute inset-0 ${p.bg} opacity-0 group-hover:opacity-60 transition-opacity rounded-2xl`} />
+                      {/* Shine overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                      {/* Top-right glow orb */}
+                      <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all" />
+
                       <div className="relative">
-                        <div className={`w-8 h-8 rounded-xl ${p.bg} flex items-center justify-center mb-3 ${p.color}`}>
-                          <Icon className="w-4 h-4" />
+                        <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 shadow-inner">
+                          <Icon className="w-4.5 h-4.5 text-white" />
                         </div>
-                        <p className={`text-[9px] font-black uppercase tracking-widest mb-1 ${p.color} opacity-80`}>{p.label}</p>
-                        <p className="text-xs font-semibold text-white/60 group-hover:text-white/80 transition-colors leading-snug">{p.q}</p>
-                        <ArrowRight className={`w-3 h-3 mt-2 ${p.color} opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1`} />
+                        <p className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 text-white/70">{p.label}</p>
+                        <p className="text-xs font-bold text-white leading-snug">{p.q}</p>
+                        <ArrowRight className="w-3.5 h-3.5 mt-2 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
                       </div>
                     </motion.button>
                   );
