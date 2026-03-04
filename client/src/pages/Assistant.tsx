@@ -155,40 +155,45 @@ export default function AskCoach() {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-72px)] lg:h-[calc(100vh-80px)] bg-[#050505] text-white relative overflow-hidden font-sans selection:bg-primary/30">
-      {/* Designer Atmospheric Depth */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/10 rounded-full blur-[140px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay" />
+    <div className="flex flex-col h-[calc(100vh-72px)] lg:h-[calc(100vh-80px)] bg-[#030303] text-white relative overflow-hidden font-sans selection:bg-primary/40">
+      {/* World-Class Canvas */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-15%] left-[-15%] w-[70%] h-[70%] bg-primary/10 rounded-full blur-[160px] opacity-60" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/10 rounded-full blur-[140px] opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.02),transparent)]" />
       </div>
       
-      {/* Refined Header */}
-      <div className="shrink-0 z-40 border-b border-white/[0.05] bg-black/40 backdrop-blur-3xl px-6 py-4">
+      {/* Signature Header */}
+      <div className="shrink-0 z-40 border-b border-white/[0.04] bg-black/30 backdrop-blur-3xl px-8 py-5">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <div className="relative">
-              <div className="absolute inset-0 bg-primary/30 blur-xl animate-pulse" />
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.08] to-transparent flex items-center justify-center border border-white/10 backdrop-blur-md">
-                <Sparkles className="w-5 h-5 text-primary" />
+              <div className="absolute inset-0 bg-primary/40 blur-2xl animate-pulse" />
+              <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center border border-white/10 shadow-2xl backdrop-blur-xl group-hover:scale-105 transition-transform">
+                <Sparkles className="w-5 h-5 text-primary drop-shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-[#050505]" />
+              <div className="absolute -bottom-1 -right-1 flex items-center">
+                <div className="w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-[#030303] shadow-[0_0_10px_rgba(34,197,94,0.4)]" />
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-black tracking-tight flex items-center gap-1.5 uppercase">
-                Pocket <span className="text-primary italic">Coach</span>
+            <div className="space-y-0.5">
+              <h1 className="text-xl font-black tracking-tight flex items-center gap-1.5 uppercase">
+                POCKET <span className="text-primary italic">COACH</span>
               </h1>
-              <p className="text-[9px] font-bold tracking-[0.2em] text-white/30 uppercase">Intelligent Financial OS</p>
+              <div className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-green-500" />
+                <p className="text-[9px] font-black tracking-[0.4em] text-white/20 uppercase">Tactical AI Assistant</p>
+              </div>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleMute}
-            className={`rounded-xl px-4 h-9 font-bold text-[10px] tracking-widest border transition-all duration-300 ${isSpeaking ? "bg-primary/10 border-primary/50 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]" : "bg-white/5 border-white/10 text-white/50"}`}
+            className={`rounded-xl px-5 h-10 border transition-all duration-500 group ${isSpeaking ? "bg-primary/20 border-primary/40 text-primary shadow-[0_0_20px_rgba(139,92,246,0.2)]" : "bg-white/5 border-white/10 text-white/50 hover:text-white"}`}
           >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? "animate-pulse" : ""}`} />}
-            <span className="ml-2 hidden sm:inline">{isMuted ? "MUTED" : (isSpeaking ? "SPEAKING" : "VOICE")}</span>
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 opacity-50" /> : <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? "animate-pulse" : ""}`} />}
+            <span className="ml-2 text-[10px] font-black tracking-widest hidden sm:inline">{isMuted ? "MUTED" : (isSpeaking ? "COACH SPEAKING" : "VOICE ON")}</span>
           </Button>
         </div>
       </div>
@@ -206,22 +211,22 @@ export default function AskCoach() {
                 layout
                 className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start`}
               >
-                <div className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-300 ${
+                <div className={`shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center border transition-all duration-500 group ${
                   msg.role === 'user' 
-                  ? 'bg-secondary/10 border-secondary/20 text-secondary' 
-                  : 'bg-primary/10 border-primary/20 text-primary'
+                  ? 'bg-secondary/5 border-secondary/20 text-secondary' 
+                  : 'bg-primary/5 border-primary/20 text-primary shadow-[0_0_15px_rgba(139,92,246,0.1)]'
                 }`}>
-                  {msg.role === 'user' ? <User className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+                  {msg.role === 'user' ? <User className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
                 </div>
 
-                <div className={`relative max-w-[85%] md:max-w-[75%] rounded-2xl p-5 md:p-7 border transition-all duration-300 ${
+                <div className={`relative max-w-[85%] md:max-w-[70%] rounded-[28px] p-6 md:p-8 border transition-all duration-500 shadow-xl ${
                   msg.role === 'user' 
-                  ? 'bg-white/[0.03] border-white/10 rounded-tr-none' 
-                  : 'bg-primary/[0.06] backdrop-blur-2xl border-primary/10 rounded-tl-none'
+                  ? 'bg-white/[0.04] border-white/10 rounded-tr-lg' 
+                  : 'bg-primary/[0.03] backdrop-blur-3xl border-primary/20 rounded-tl-lg'
                 }`}>
-                  <div className={`text-sm md:text-base leading-relaxed tracking-tight ${msg.role === 'assistant' ? 'text-white/90 font-medium' : 'text-white font-bold'}`}>
+                  <div className={`text-base md:text-lg leading-relaxed tracking-tight ${msg.role === 'assistant' ? 'text-white/95 font-medium' : 'text-white font-black italic'}`}>
                     {msg.role === 'assistant' ? (
-                      <div className="prose prose-invert prose-p:leading-relaxed prose-p:mb-4 last:prose-p:mb-0 max-w-none">
+                      <div className="prose prose-invert prose-p:leading-relaxed prose-p:mb-5 last:prose-p:mb-0 max-w-none prose-headings:font-black prose-headings:tracking-tighter prose-strong:text-primary">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                           {msg.message}
                         </ReactMarkdown>
@@ -232,14 +237,17 @@ export default function AskCoach() {
                   </div>
 
                   {msg.role === 'assistant' && (
-                    <div className="mt-6 pt-4 border-t border-white/[0.05] flex items-center justify-between">
-                       <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/20">Coach Insights v1.0</span>
+                    <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between">
+                       <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Coach Tactical Intel</span>
+                       </div>
                        <button 
                          onClick={() => speak(msg.message, index)}
-                         className="p-2 rounded-lg text-white/20 hover:text-primary hover:bg-primary/10 transition-all flex items-center gap-2 group"
+                         className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-primary/5 text-white/20 hover:text-primary transition-all group"
                        >
-                         <Volume2 className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-                         <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">Replay</span>
+                         <Volume2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                         <span className="text-[9px] font-black tracking-widest hidden sm:inline uppercase">Replay Audio</span>
                        </button>
                     </div>
                   )}
@@ -249,14 +257,14 @@ export default function AskCoach() {
           </AnimatePresence>
             
             {chatMutation.isPending && (
-              <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex gap-4 items-center">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                  <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex gap-5 items-center">
+                <div className="w-10 h-10 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Sparkles className="w-5 h-5 text-primary animate-pulse" />
                 </div>
-                <div className="flex gap-1.5 p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md">
-                  <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" />
+                <div className="flex gap-2 p-5 rounded-[28px] bg-white/[0.03] border border-white/5 backdrop-blur-xl">
+                  <span className="w-2.5 h-2.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-2.5 h-2.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-2.5 h-2.5 bg-primary/60 rounded-full animate-bounce" />
                 </div>
               </motion.div>
             )}
@@ -265,70 +273,74 @@ export default function AskCoach() {
         </div>
       </div>
 
-      {/* Sticky Interaction Area */}
-      <div className="shrink-0 border-t border-white/[0.05] bg-black/40 backdrop-blur-3xl px-6 py-6 lg:py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+      {/* Signature Interaction Dock */}
+      <div className="shrink-0 border-t border-white/[0.04] bg-black/40 backdrop-blur-4xl px-8 py-8 lg:py-10">
+        <div className="max-w-4xl mx-auto space-y-10">
           {chatHistory.length === 1 && (
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
             >
               {[
-                { q: "Level up savings?", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-400" },
-                { q: "50/30/20 vibe?", icon: <Zap className="w-4 h-4" />, color: "text-blue-400" },
-                { q: "Spending Icks?", icon: <Bot className="w-4 h-4" />, color: "text-red-400" },
-                { q: "Rainy Day Stash?", icon: <ShieldCheck className="w-4 h-4" />, color: "text-purple-400" }
+                { q: "Level up savings?", desc: "Growth", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-400" },
+                { q: "50/30/20 vibe?", desc: "Balance", icon: <Zap className="w-4 h-4" />, color: "text-blue-400" },
+                { q: "Spending Icks?", desc: "Safety", icon: <Bot className="w-4 h-4" />, color: "text-red-400" },
+                { q: "Rainy Day Stash?", desc: "Vault", icon: <ShieldCheck className="w-4 h-4" />, color: "text-purple-400" }
               ].map((item, i) => (
                 <button
                   key={i}
                   onClick={() => setChatMessage(item.q)}
-                  className="p-3 lg:p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-primary/50 hover:bg-primary/5 transition-all flex items-center gap-3 backdrop-blur-sm group active:scale-95"
+                  className="p-5 rounded-3xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-primary/5 transition-all duration-500 group relative overflow-hidden active:scale-95"
                 >
-                  <div className={`shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
-                    {item.icon}
+                  <div className="flex items-center gap-4">
+                    <div className={`shrink-0 w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
+                      {item.icon}
+                    </div>
+                    <div className="text-left">
+                       <p className="text-[10px] font-black tracking-widest text-white/20 uppercase mb-0.5">{item.desc}</p>
+                       <p className="text-sm font-bold text-white group-hover:text-primary transition-colors leading-tight">{item.q}</p>
+                    </div>
                   </div>
-                  <span className="text-[10px] lg:text-xs font-black uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
-                    {item.q}
-                  </span>
                 </button>
               ))}
             </motion.div>
           )}
 
-          <div className="relative group">
-            <div className="absolute inset-0 bg-primary/10 blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity rounded-[24px]" />
-            <div className="relative flex items-center gap-3 bg-white/[0.02] border border-white/[0.08] focus-within:border-primary/40 focus-within:bg-white/[0.04] p-2 rounded-[22px] backdrop-blur-4xl transition-all duration-500">
+          <div className="relative">
+            <div className="absolute inset-0 bg-primary/10 blur-3xl opacity-0 hover:opacity-100 transition-opacity rounded-[32px]" />
+            <div className="relative flex items-center gap-5 bg-white/[0.02] border border-white/[0.06] focus-within:border-primary/40 focus-within:bg-white/[0.05] p-3 rounded-[32px] backdrop-blur-3xl shadow-3xl transition-all duration-700">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleListening}
-                className={`w-12 h-12 rounded-xl transition-all duration-300 ${listening ? "bg-red-500/10 text-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)] animate-pulse" : "text-white/20 hover:text-white hover:bg-white/5"}`}
+                className={`w-14 h-14 rounded-2xl transition-all duration-500 ${listening ? "bg-red-500/20 text-red-500 shadow-[0_0_25px_rgba(239,68,68,0.3)] animate-pulse" : "bg-white/5 text-white/30 hover:text-white"}`}
               >
-                {listening ? <MicOff className="w-5 h-5 " /> : <Mic className="w-5 h-5" />}
+                {listening ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
               </Button>
               
               <Input
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={listening ? "Coach is listening..." : "Direct a money move..."}
-                className="flex-1 bg-transparent border-none focus-visible:ring-0 text-base md:text-lg placeholder:text-white/10 placeholder:font-black placeholder:uppercase placeholder:tracking-[0.2em]"
+                placeholder={listening ? "Tactical Audio Engaged..." : "Deploy a movement to your Coach..."}
+                className="flex-1 bg-transparent border-none focus-visible:ring-0 text-lg font-medium placeholder:text-white/10 placeholder:font-black placeholder:uppercase placeholder:tracking-[0.4em] px-2"
               />
 
               <Button
                 onClick={handleSendMessage}
                 disabled={!chatMessage.trim() || chatMutation.isPending}
                 size="icon"
-                className="shrink-0 w-12 h-12 rounded-xl bg-primary hover:bg-primary/80 text-white transition-all shadow-xl shadow-primary/20 group active:scale-95"
+                className="shrink-0 w-14 h-14 rounded-2xl bg-primary hover:bg-primary/80 text-white transition-all shadow-2xl shadow-primary/40 group active:scale-95"
               >
-                <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <Send className="w-6 h-6 group-hover:scale-110 transition-transform" />
               </Button>
             </div>
           </div>
           
-          <div className="flex justify-center pb-2">
-             <div className="w-12 h-1 rounded-full bg-white/[0.05]" />
+          <div className="flex flex-col items-center gap-4">
+             <div className="w-1.5 h-1.5 rounded-full bg-primary/20 animate-pulse" />
+             <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5">Glow-Up Intelligence OS • Beta 2.1.0</p>
           </div>
         </div>
       </div>
