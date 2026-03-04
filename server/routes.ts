@@ -508,17 +508,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .filter(t => t.tag === 'Ick')
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
       
-      const response = await chatWithFinancialAssistant(message, {
-        userName: user?.firstName || undefined,
-        totalStashed,
-        saveStreak: streak?.saveStreak || 0,
-        ickAmount,
-      });
+      let response: string;
+      try {
+        response = await chatWithFinancialAssistant(message, {
+          userName: user?.firstName || undefined,
+          totalStashed,
+          saveStreak: streak?.saveStreak || 0,
+          ickAmount,
+        });
+      } catch (aiError) {
+        console.error("AI service error (non-fatal):", aiError);
+        response = "Hey! I'm your Pocket Coach 🚀 I'm having a tiny glitch right now, but I'll be back in full force soon! In the meantime: **Track one spending habit today** and we'll level up your money game together. 💸";
+      }
+      
+      // Safety net: never send empty or undefined responses
+      if (!response || response.trim().length === 0) {
+        response = "Hey! 👋 I'm your Pocket Coach. Ask me anything about budgeting, saving, or fighting your Spending Icks! 🚀";
+      }
       
       res.json({ response });
     } catch (error) {
       console.error("Error in AI chat:", error);
-      res.status(500).json({ message: "Failed to get AI response" });
+      res.status(200).json({ response: "I'm your Pocket Coach and I'm here to help! 💪 Try asking me: 'How can I save more money this month?' or 'What are Spending Icks?'" });
     }
   });
 
