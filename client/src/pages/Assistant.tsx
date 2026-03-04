@@ -181,8 +181,8 @@ export default function AskCoach() {
                 POCKET <span className="text-primary italic">COACH</span>
               </h1>
               <div className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-green-500" />
-                <p className="text-[9px] font-black tracking-[0.4em] text-white/20 uppercase">Tactical AI Assistant</p>
+                <span className="w-1 h-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                <p className="text-[9px] font-black tracking-[0.4em] text-white/20 uppercase">Elite Glow-Up Strategist</p>
               </div>
             </div>
           </div>
@@ -239,8 +239,8 @@ export default function AskCoach() {
                   {msg.role === 'assistant' && (
                     <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between">
                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-                          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Coach Tactical Intel</span>
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary/40 shadow-[0_0_8px_rgba(139,92,246,0.3)]" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Elite Glow-Up Intel</span>
                        </div>
                        <button 
                          onClick={() => speak(msg.message, index)}
@@ -323,7 +323,7 @@ export default function AskCoach() {
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={listening ? "Tactical Audio Engaged..." : "Deploy a movement to your Coach..."}
+                placeholder={listening ? "Ready for your next move..." : "Draft a new money move..."}
                 className="flex-1 bg-transparent border-none focus-visible:ring-0 text-lg font-medium placeholder:text-white/10 placeholder:font-black placeholder:uppercase placeholder:tracking-[0.4em] px-2"
               />
 
@@ -339,8 +339,8 @@ export default function AskCoach() {
           </div>
           
           <div className="flex flex-col items-center gap-4">
-             <div className="w-1.5 h-1.5 rounded-full bg-primary/20 animate-pulse" />
-             <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5">Glow-Up Intelligence OS • Beta 2.1.0</p>
+             <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+             <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5">Pocket Coach • Financial Glow-Up OS</p>
           </div>
         </div>
       </div>
