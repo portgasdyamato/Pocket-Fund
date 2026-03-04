@@ -155,53 +155,49 @@ export default function AskCoach() {
   ];
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-[#010101] text-white flex flex-col relative overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-72px)] lg:h-[calc(100vh-80px)] bg-[#010101] text-white relative overflow-hidden">
       {/* Premium Glow Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[100%] h-[40%] bg-primary/10 rounded-full blur-[160px]" />
-        <div className="absolute top-[-20%] -left-[10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-20%] -right-[10%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[140px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,rgba(139,92,246,0.15),transparent_70%)]" />
+        <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[140px]" />
       </div>
       
       {/* Header */}
-      <div className="z-40 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+      <div className="shrink-0 z-40 border-b border-white/5 bg-black/60 backdrop-blur-xl px-6 py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative group">
-              <div className="absolute inset-0 bg-primary/40 blur-2xl group-hover:bg-primary/60 transition-all rounded-full animate-pulse" />
-              <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-foreground/20 flex items-center justify-center border border-white/20 shadow-2xl">
-                <Sparkles className="w-6 h-6 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+              <div className="absolute inset-0 bg-primary/40 blur-xl group-hover:bg-primary/60 transition-all rounded-full animate-pulse" />
+              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-foreground/20 flex items-center justify-center border border-white/20 shadow-2xl">
+                <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-black" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">
+              <h1 className="text-lg font-bold tracking-tight">
                 Pocket <span className="text-primary italic">Coach</span>
               </h1>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[10px] font-medium text-white/40 uppercase tracking-widest">Always Active • Level Up Ready</span>
-              </div>
+              <span className="text-[10px] font-medium text-green-500/80 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                Coach Active
+              </span>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleMute}
-              className={`rounded-xl px-4 h-9 font-semibold text-[11px] uppercase tracking-wider backdrop-blur-md transition-all duration-300 ${isSpeaking ? "border-primary bg-primary/10 text-primary shadow-[0_0_15px_rgba(139,92,246,0.3)]" : "bg-white/5 border-white/10 text-white/60"}`}
-            >
-              {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? "animate-pulse" : ""}`} />}
-              <span className="ml-2 hidden sm:inline">{isMuted ? "Muted" : (isSpeaking ? "Speaking" : "Voice On")}</span>
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleMute}
+            className={`rounded-xl px-3 h-8 bg-white/5 border border-white/10 text-xs font-semibold ${isSpeaking ? "text-primary border-primary/50" : "text-white/40"}`}
+          >
+            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+          </Button>
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-10">
-        <div className="max-w-3xl mx-auto space-y-10">
-          <AnimatePresence mode="popLayout">
+      <div className="flex-1 overflow-y-auto scrollbar-hide py-10 px-4">
+        <div className="max-w-3xl mx-auto flex flex-col justify-end min-h-full">
+          <div className="space-y-8 pb-4">
+            <AnimatePresence mode="popLayout">
             {chatHistory.map((msg, index) => (
               <motion.div
                 key={index}
@@ -250,35 +246,28 @@ export default function AskCoach() {
               </motion.div>
             ))}
           </AnimatePresence>
-
-          {chatMutation.isPending && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex gap-4 items-center"
-            >
-              <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center animate-pulse">
-                <Sparkles className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex gap-1.5 items-center px-4 py-3 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <span className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" />
-              </div>
-            </motion.div>
-          )}
-          <div ref={scrollRef} />
+            
+            {chatMutation.isPending && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4 items-center">
+                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+                </div>
+                <div className="h-4 w-12 bg-white/5 rounded-full animate-pulse" />
+              </motion.div>
+            )}
+            <div ref={scrollRef} />
+          </div>
         </div>
       </div>
 
-      {/* Footer Input Section */}
-      <div className="border-t border-white/5 bg-black/40 backdrop-blur-3xl p-6">
-        <div className="max-w-4xl mx-auto">
+      {/* Footer Section */}
+      <div className="shrink-0 bg-gradient-to-t from-black via-black/95 to-transparent pt-10 pb-8 px-6">
+        <div className="max-w-3xl mx-auto space-y-6">
           {chatHistory.length === 1 && (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
               {[
                 { q: "How do I level up my savings?", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-400" },
@@ -289,12 +278,12 @@ export default function AskCoach() {
                 <button
                   key={i}
                   onClick={() => setChatMessage(item.q)}
-                  className="p-5 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 group flex items-center gap-4 backdrop-blur-md active:scale-95"
+                  className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all flex items-center gap-3 text-left group"
                 >
-                  <div className={`w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
+                  <div className={`shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
                     {item.icon}
                   </div>
-                  <span className="text-sm font-semibold text-white/60 group-hover:text-white transition-colors">
+                  <span className="text-xs font-medium text-white/50 group-hover:text-white transition-colors line-clamp-1">
                     {item.q}
                   </span>
                 </button>
@@ -302,35 +291,39 @@ export default function AskCoach() {
             </motion.div>
           )}
 
-          <div className="flex gap-4 items-center">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={toggleListening}
-              className={`w-14 h-14 rounded-2xl border-white/10 bg-white/5 transition-all ${listening ? "border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] animate-pulse" : "hover:border-primary hover:text-primary"}`}
-            >
-              {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-            </Button>
-            
-            <div className="flex-1 relative flex items-center">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-primary/10 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity rounded-2xl" />
+            <div className="relative flex items-center gap-3 bg-white/[0.03] border border-white/10 focus-within:border-primary/50 p-2 rounded-2xl backdrop-blur-xl transition-all">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleListening}
+                className={`w-10 h-10 rounded-xl transition-all ${listening ? "bg-red-500/20 text-red-500" : "text-white/40 hover:text-white"}`}
+              >
+                {listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
+              
               <Input
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={listening ? "Listening closely..." : "Ask your Coach about money moves..."}
-                className="h-14 bg-white/[0.05] border-white/10 rounded-2xl pl-6 pr-14 text-base focus-visible:ring-primary/20 focus-visible:border-primary/50 transition-all placeholder:text-white/20"
+                placeholder={listening ? "Listening closely..." : "Ask your Coach..."}
+                className="flex-1 bg-transparent border-none focus-visible:ring-0 text-base placeholder:text-white/20 px-0 h-10"
               />
-              <div className="absolute right-2 px-1">
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!chatMessage.trim() || chatMutation.isPending}
-                  size="icon"
-                  className="w-10 h-10 rounded-xl bg-primary hover:bg-primary/80 transition-all"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
+
+              <Button
+                onClick={handleSendMessage}
+                disabled={!chatMessage.trim() || chatMutation.isPending}
+                size="icon"
+                className="shrink-0 w-10 h-10 rounded-xl bg-primary hover:bg-primary/80 text-white transition-all shadow-lg shadow-primary/20"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
             </div>
+          </div>
+          
+          <div className="mt-4 flex justify-center">
+             <div className="w-24 h-1 rounded-full bg-white/5" />
           </div>
         </div>
       </div>
