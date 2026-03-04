@@ -24,32 +24,24 @@ const QUICK_PROMPTS = [
     label: "Investing",
     icon: TrendingUp,
     gradient: "from-emerald-600 to-teal-700",
-    glow: "shadow-emerald-900/60",
-    hoverGlow: "hover:shadow-emerald-600/30"
   },
   {
     q: "Explain the 50/30/20 rule",
     label: "Budgeting",
     icon: Zap,
     gradient: "from-blue-600 to-indigo-700",
-    glow: "shadow-blue-900/60",
-    hoverGlow: "hover:shadow-blue-600/30"
   },
   {
     q: "Build an emergency fund",
     label: "Safety Net",
     icon: ShieldCheck,
     gradient: "from-violet-600 to-purple-700",
-    glow: "shadow-violet-900/60",
-    hoverGlow: "hover:shadow-violet-600/30"
   },
   {
     q: "Help me fight Spending Icks",
     label: "Habits",
     icon: Brain,
     gradient: "from-rose-600 to-pink-700",
-    glow: "shadow-rose-900/60",
-    hoverGlow: "hover:shadow-rose-600/30"
   },
 ];
 
@@ -211,7 +203,7 @@ export default function AskCoach() {
                       whileHover={{ scale: 1.03, y: -2 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => { setChatMessage(p.q); handleSend(); }}
-                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} shadow-xl ${p.glow} ${p.hoverGlow} hover:shadow-2xl transition-all duration-300 text-left overflow-hidden border border-white/10`}
+                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10`}
                     >
                       {/* Shine overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
