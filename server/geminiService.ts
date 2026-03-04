@@ -1,34 +1,37 @@
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 
-if (!GEMINI_API_KEY) {
+if (!OPENROUTER_API_KEY) {
   console.warn(
-    "GEMINI_API_KEY is not set. AI chat will fall back to a non-AI helper message instead of calling Gemini.",
+    "OPENROUTER_API_KEY is not set. AI chat will fall back to a non-AI helper message.",
   );
 }
 
-// Use the public Gemini REST endpoint with Gemini 2.5 Flash.
-// Docs: https://ai.google.dev/api/rest/v1beta/models/generateContent
-const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-async function callGemini(requestBody: any): Promise<any | null> {
+async function callAI(messages: any[]): Promise<any | null> {
   try {
-    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
+    const res = await fetch(OPENROUTER_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "http://localhost:5000",
+        "X-Title": "Pocket Fund"
       },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+        messages: messages
+      }),
     });
 
     if (!res.ok) {
-      console.error("Gemini HTTP error:", res.status, await res.text());
+      console.error("OpenRouter HTTP error:", res.status, await res.text());
       return null;
     }
 
     return await res.json();
   } catch (err) {
-    console.error("Gemini network/error calling API:", err);
+    console.error("Error calling OpenRouter API:", err);
     return null;
   }
 }
@@ -68,95 +71,62 @@ Remember:
 - Use rupee (₹) for all currency.
 ${context ? `\nUser Context:\n- Name: ${context.userName || "User"}\n- Total Stashed: ₹${context.totalStashed || 0}\n- Save Streak: ${context.saveStreak || 0} days\n- Recent Spending Icks: ₹${context.ickAmount || 0}` : ""}`;
 
-  // If the API key is missing, return a friendly fallback instead of calling Gemini.
-  if (!GEMINI_API_KEY) {
+  // If the API key is missing, return a friendly fallback.
+  if (!OPENROUTER_API_KEY) {
     return (
       "I'm your Financial Glow-Up coach, but my AI brain isn't connected yet.\n\n" +
-      "Ask your developer to add a valid GEMINI_API_KEY to the server environment so I can give you fully personalized guidance. " +
+      "Ask your developer to add a valid OPENROUTER_API_KEY to the server environment so I can give you fully personalized guidance. " +
       "For now, try starting with: **Track your daily spending for the next 7 days**, then we’ll spot quick wins to cut your ‘Icks’ and boost your stash."
     );
   }
 
   console.log(
-    "Starting chat with AI Assistant... API Key Status:",
-    GEMINI_API_KEY ? `Present (Length: ${GEMINI_API_KEY.length})` : "Missing/Empty",
+    "Starting chat with AI Assistant... OpenRouter Key Status:",
+    OPENROUTER_API_KEY ? `Present (Length: ${OPENROUTER_API_KEY.length})` : "Missing/Empty",
   );
 
-  const response = await callGemini({
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: `${systemPrompt}\n\nUser question: ${message}` }],
-      },
-    ],
-  });
+  const response = await callAI([
+    {
+      role: "user",
+      content: `${systemPrompt}\n\nUser question: ${message}`
+    },
+  ]);
 
-  const text =
-    response?.candidates?.[0]?.content?.parts
-      ?.map((p: any) => (typeof p.text === "string" ? p.text : ""))
-      .join("") ||
-    response?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    response?.text ||
-    null;
-
-  if (text) {
-    return text;
-  }
-
-  // If Gemini fails or returns nothing, respond with a friendly fallback instead of erroring.
-  return (
-    "I'm having trouble reaching my AI brain right now, so I can't give a fully smart answer.\n\n" +
-    "Quick starter tip: **Pick one small money habit to improve this week** – for example, cap food delivery to 2x a week or move ₹200/day to a stash account. " +
-    "Once the AI connection is stable, I can help you plan deeper strategies based on your real numbers."
-  );
+  return response?.choices?.[0]?.message?.content || "I'm having a bit of trouble thinking right now. But remember: every ₹100 you save today is a step towards your freedom! What else can I help you with?";
 }
 
-export async function categorizePurchase(description: string, amount: number): Promise<{
-  suggestedCategory: 'Need' | 'Want' | 'Ick';
-  reasoning: string;
-}> {
-  try {
-    const prompt = `Categorize this purchase:
-Description: ${description}
-Amount: ₹${amount}
-
-Categories:
-- Need: Essential expenses (rent, groceries, bills, transportation, medicine)
-- Want: Non-essential but reasonable (dining out, entertainment, hobbies)
-- Ick: Impulse buys, wasteful spending, unnecessary subscriptions
-
-Respond with JSON only.`;
-
-    const response = await callGemini({
-      generationConfig: {
-        response_mime_type: "application/json",
-        response_schema: {
-          type: "object",
-          properties: {
-            suggestedCategory: { type: "string", enum: ["Need", "Want", "Ick"] },
-            reasoning: { type: "string" },
-          },
-          required: ["suggestedCategory", "reasoning"],
-        },
-      },
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
-    });
-
-    const rawJson =
-      response?.candidates?.[0]?.content?.parts?.[0]?.text || response?.text;
-    if (rawJson) {
-      return JSON.parse(rawJson);
-    }
-    throw new Error("Empty response from model");
-  } catch (error) {
+export async function categorizePurchase(
+  description: string,
+  amount: number,
+): Promise<{ category: string; tag: "Need" | "Want" | "Ick"; rationale: string }> {
+  if (!OPENROUTER_API_KEY) {
     return {
-      suggestedCategory: "Want",
-      reasoning: "Unable to categorize automatically. Please review.",
+      category: "Uncategorized",
+      tag: "Want",
+      rationale: "AI Categorization disabled (No API Key)",
+    };
+  }
+
+  const prompt = `Categorize this purchase: "${description}" for ₹${amount}. 
+  Context: Indian youth lifestyle (e.g., Zomato, Zepto, Cinema, Rent, SIP).
+  Return JSON only: {"category": "string", "tag": "Need" | "Want" | "Ick", "rationale": "short sentence"}`;
+
+  const response = await callAI([
+    {
+      role: "user",
+      content: prompt,
+    },
+  ]);
+
+  try {
+    const text = response?.choices?.[0]?.message?.content || "";
+    const cleanText = text.replace(/```json|```/g, "").trim();
+    return JSON.parse(cleanText);
+  } catch (err) {
+    return {
+      category: "Shopping",
+      tag: "Want",
+      rationale: "Quick guess based on spending pattern.",
     };
   }
 }
@@ -167,6 +137,13 @@ export async function generateFinancialInsight(
   wantSpent: number,
   needSpent: number
 ): Promise<string> {
+  if (!OPENROUTER_API_KEY) {
+    return (
+      "I'm currently offline, but here's a quick insight: " +
+      "Every rupee saved from an 'Ick' is a rupee earned for your 'Glow-Up' fund! Keep tracking those expenses."
+    );
+  }
+
   const prompt = `Generate a short, motivational financial insight for a user with these stats:
 - Total spent: ₹${totalSpent}
 - Needs: ₹${needSpent}
@@ -175,22 +152,14 @@ export async function generateFinancialInsight(
 
 Provide a 2-3 sentence insight that's encouraging and actionable.`;
 
-  const response = await callGemini({
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: prompt }],
-      },
-    ],
-  });
+  const response = await callAI([
+    {
+      role: "user",
+      content: prompt,
+    },
+  ]);
 
-  const text =
-    response?.candidates?.[0]?.content?.parts
-      ?.map((p: any) => (typeof p.text === "string" ? p.text : ""))
-      .join("") ||
-    response?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    response?.text ||
-    null;
+  const text = response?.choices?.[0]?.message?.content || null;
 
   return (
     text ||
