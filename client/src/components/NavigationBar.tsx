@@ -91,7 +91,7 @@ const menuItems = [
     border: "border-[#10b981]/20",
   },
   {
-    title: "Assistant",
+    title: "Coach",
     url: "/assistant",
     icon: MessageCircle,
     testId: "nav-link-assistant",

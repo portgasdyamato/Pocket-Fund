@@ -490,7 +490,7 @@ export default function Dashboard() {
               {[
                 { icon: Activity, label: "ANALYTICS", path: "/analytics" },
                 { icon: TrendingUp, label: "VAULT", path: "/vault" },
-                { icon: MessageCircle, label: "ASSISTANT", path: "/assistant" },
+                { icon: MessageCircle, label: "COACH", path: "/assistant" },
                 { icon: Activity, label: "HISTORY", path: "/history" }
               ].map((action, i) => (
                 <button 
