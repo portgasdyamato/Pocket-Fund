@@ -337,7 +337,7 @@ export default function ExpenseLog() {
                             whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
                             className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-200 group/btn relative min-h-[80px] w-full text-white
-                               ${btn.corners} hover:bg-purple-600 hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
+                               ${btn.corners} hover:bg-purple-500 hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
                                ${idx !== 2 ? 'border-b border-white/10' : ''}`}
                           >
                             <btn.icon className="w-5 h-5 transition-transform group-hover/btn:scale-105" />

@@ -9,6 +9,17 @@ import { seedLiteracyCourses } from "./seedCourses";
 export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
 
+  // Debug endpoint - check AI configuration
+  app.get('/api/debug/ai-config', (req, res) => {
+    res.json({
+      hasOpenRouterKey: !!process.env.OPENROUTER_API_KEY,
+      hasGeminiKey: !!process.env.GEMINI_API_KEY,
+      openRouterKeyLength: process.env.OPENROUTER_API_KEY?.length || 0,
+      service: process.env.OPENROUTER_API_KEY ? "OpenRouter" : "None",
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.id;
