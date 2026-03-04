@@ -156,7 +156,7 @@ export default function AskCoach() {
                   <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
                   Financial AI Coach 
                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <div className="w-1.5 h-1.1 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-[8px] sm:text-[10px] font-black text-green-400">LIVE</span>
                   </div>
                 </h1>
