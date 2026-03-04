@@ -153,13 +153,13 @@ export default function AskCoach() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
-                  Financial AI Coach 
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
-                    <div className="w-1.5 h-1.1 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[8px] sm:text-[10px] font-black text-green-400">LIVE</span>
-                  </div>
-                </h1>
+                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-3">
+                    Financial AI Coach
+                    <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 backdrop-blur-sm h-fit self-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
+                      <span className="text-[9px] sm:text-[10px] font-black text-green-400 tracking-wider leading-none">LIVE</span>
+                    </div>
+                  </h1>
                 </div>
                 <p className="text-[10px] text-white/30 font-medium mt-0.5">Financial Glow-Up AI · Powered by OpenRouter</p>
               </div>
