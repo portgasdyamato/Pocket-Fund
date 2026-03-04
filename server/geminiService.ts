@@ -8,32 +8,46 @@ if (!OPENROUTER_API_KEY) {
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
+// Ordered list of free models - tries each in sequence if rate-limited
+const FREE_MODELS = [
+  "google/gemma-3-27b-it:free",
+  "google/gemma-3-12b-it:free",
+  "mistralai/mistral-small-3.1-24b-instruct:free",
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "qwen/qwen3-4b:free",
+];
+
 async function callAI(messages: any[]): Promise<any | null> {
-  try {
-    const res = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "http://localhost:5000",
-        "X-Title": "Pocket Fund"
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.0-flash-lite-preview-02-05:free",
-        messages: messages
-      }),
-    });
+  for (const model of FREE_MODELS) {
+    try {
+      const res = await fetch(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "http://localhost:5000",
+          "X-Title": "Pocket Fund"
+        },
+        body: JSON.stringify({ model, messages }),
+      });
 
-    if (!res.ok) {
-      console.error("OpenRouter HTTP error:", res.status, await res.text());
-      return null;
+      const data = await res.json();
+
+      if (!res.ok || data?.error) {
+        console.warn(`OpenRouter model ${model} failed:`, data?.error?.message?.substring(0, 100));
+        continue; // Try next model
+      }
+
+      if (data?.choices?.[0]?.message?.content) {
+        console.log(`OpenRouter: Success with model ${model}`);
+        return data;
+      }
+    } catch (err) {
+      console.error(`Error calling model ${model}:`, err);
     }
-
-    return await res.json();
-  } catch (err) {
-    console.error("Error calling OpenRouter API:", err);
-    return null;
   }
+  console.error("All OpenRouter models failed.");
+  return null;
 }
 
 export async function chatWithFinancialAssistant(
