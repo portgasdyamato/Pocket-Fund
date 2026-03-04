@@ -100,7 +100,7 @@ export default function ChallengesPage() {
               </Button>
             </Link>
             <div className="h-8 w-px bg-white/10 hidden md:block" />
-            <h1 className="text-xl font-black tracking-tight flex items-center gap-2 uppercase tracking-widest">
+            <h1 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2 uppercase tracking-widest">
               Financial <span className="text-primary italic">Missions</span>
             </h1>
           </div>
@@ -125,33 +125,33 @@ export default function ChallengesPage() {
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10">
-                 <div className="space-y-2">
-                   <div className="flex justify-center mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                        <Zap className="w-6 h-6" />
-                      </div>
-                   </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-primary">{stats.totalPoints}</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Mission Rewards (XP)</p>
-                 </div>
-                 <div className="space-y-2">
-                   <div className="flex justify-center mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
-                        <CheckCircle2 className="w-6 h-6" />
-                      </div>
-                   </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-green-500">{stats.completedCount}</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Missions Completed</p>
-                 </div>
-                 <div className="space-y-2">
-                   <div className="flex justify-center mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
-                        <Target className="w-6 h-6" />
-                      </div>
-                   </div>
-                   <p className="text-4xl font-black font-mono tracking-tighter text-accent">{stats.activeCount}</p>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active Operations</p>
-                 </div>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                         <Zap className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-primary">{stats.totalPoints}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Rewards (XP)</p>
+                  </div>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
+                         <CheckCircle2 className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-green-500">{stats.completedCount}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Completed</p>
+                  </div>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
+                         <Target className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-accent">{stats.activeCount}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active</p>
+                  </div>
                </div>
             </div>
           </motion.div>

@@ -177,67 +177,67 @@ export default function ExpenseLog() {
                 <Sparkles className="w-3.5 h-3.5 text-primary fill-primary" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Intelligence Hub</span>
               </div>
-              <h1 className="text-6xl font-black tracking-tighter">History</h1>
-              <p className="text-white/40 font-medium max-w-md">Precision tracking and AI-powered categorization for your global financial footprint.</p>
+                <h1 className="text-4xl sm:text-6xl font-black tracking-tighter">History</h1>
+                <p className="text-white/40 font-medium max-w-md text-sm sm:text-base">Precision tracking and AI-powered categorization for your financial footprint.</p>
             </div>
-                       <div className="flex items-center gap-4">
-               <DropdownMenu>
-                 <DropdownMenuTrigger asChild>
-                   <motion.button
-                     whileHover={{ scale: 1.02, y: -2 }}
-                     whileTap={{ scale: 0.98 }}
-                     className={`h-14 px-8 rounded-2xl font-black transition-all flex items-center shadow-[0_20px_40px_rgba(147,51,234,0.15)] group/trigger relative overflow-hidden
-                       ${filterTag ? 'bg-purple-600 text-white' : 'bg-purple-600 text-white'}`}
-                   >
-                     <Filter className="w-4 h-4 mr-3" />
-                     <span className="text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter Ledger'}</span>
-                     <ChevronDown className="w-4 h-4 ml-3 opacity-40 group-hover/trigger:translate-y-0.5 transition-transform" />
-                   </motion.button>
-                 </DropdownMenuTrigger>
-                 <DropdownMenuContent className="w-64 p-2 rounded-[24px] bg-black border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)]">
-                    <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
-                       <LayoutGrid className="w-4 h-4 opacity-40 group-focus:opacity-100" />
-                       All History
-                    </DropdownMenuItem>
-                    <div className="h-px bg-white/5 my-1 mx-2" />
-                    <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
-                       <ShieldCheck className="w-4 h-4 opacity-40 group-focus:opacity-100" />
-                       Needs Only
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
-                       <Star className="w-4 h-4 opacity-40 group-focus:opacity-100" />
-                       Wants Only
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
-                       <TrendingDown className="w-4 h-4 opacity-40 group-focus:opacity-100" />
-                       Icks Only
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setFilterTag('Goal Claim')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
-                       <Sparkles className="w-4 h-4 opacity-40 group-focus:opacity-100" />
-                       Goals Only
-                    </DropdownMenuItem>
-                 </DropdownMenuContent>
-               </DropdownMenu>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`h-12 sm:h-14 px-4 sm:px-8 rounded-2xl font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(147,51,234,0.15)] group/trigger relative overflow-hidden
+                        ${filterTag ? 'bg-purple-600 text-white' : 'bg-purple-600 text-white'}`}
+                    >
+                      <Filter className="w-4 h-4 mr-2 sm:mr-3" />
+                      <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter'}</span>
+                      <ChevronDown className="w-4 h-4 ml-2 sm:ml-3 opacity-40 group-hover/trigger:translate-y-0.5 transition-transform" />
+                    </motion.button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-64 p-2 rounded-[24px] bg-black border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)]">
+                     <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                        <LayoutGrid className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                        All History
+                     </DropdownMenuItem>
+                     <div className="h-px bg-white/5 my-1 mx-2" />
+                     <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                        <ShieldCheck className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                        Needs Only
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                        <Star className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                        Wants Only
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                        <TrendingDown className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                        Icks Only
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => setFilterTag('Goal Claim')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                        <Sparkles className="w-4 h-4 opacity-40 group-focus:opacity-100" />
+                        Goals Only
+                     </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
  
-               <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setIsAddExpenseOpen(true)}
-                  className="bg-white text-black h-14 px-8 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center shadow-[0_20px_40px_rgba(255,255,255,0.1)] group/btn relative overflow-hidden border border-white/20"
-               >
-                  <Plus className="w-4 h-4 mr-3 text-purple-600" />
-                  New Entry
-               </motion.button>
+                <motion.button
+                   whileHover={{ scale: 1.02, y: -2 }}
+                   whileTap={{ scale: 0.98 }}
+                   onClick={() => setIsAddExpenseOpen(true)}
+                   className="bg-white text-black h-12 sm:h-14 px-6 sm:px-8 rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center shadow-[0_20px_40px_rgba(255,255,255,0.1)] group/btn relative overflow-hidden border border-white/20 flex-1 sm:flex-none"
+                >
+                   <Plus className="w-4 h-4 mr-2 sm:mr-3 text-purple-600" />
+                   New Entry
+                </motion.button>
             </div>
           </div>
 
           {/* High-Level Stats Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="glass-morphism border-white/5 p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
+            <Card className="glass-morphism border-white/5 p-6 sm:p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Monthly Volume</p>
-              <h3 className="text-4xl font-black tabular-nums tracking-tighter">₹{stats.total.toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-green-400">
+              <h3 className="text-3xl sm:text-4xl font-black tabular-nums tracking-tighter">₹{stats.total.toLocaleString('en-IN')}</h3>
+              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-green-400">
                 <TrendingUp className="w-4 h-4" />
                 <span>Global Spending Active</span>
               </div>
@@ -289,33 +289,33 @@ export default function ExpenseLog() {
                     layoutId={t.id}
                     className="relative rounded-[40px] overflow-hidden group/card shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
                   >
-                    <Card className="h-full bg-zinc-900 border-2 border-white/[0.05] rounded-[39px] p-6 lg:p-8 flex flex-row gap-8 relative overflow-hidden min-h-[280px]">
+                    <Card className="h-full bg-zinc-900 border-2 border-white/[0.05] rounded-[39px] p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-8 relative overflow-hidden min-h-[280px]">
                       {/* Left Interaction Zone - Transaction Details */}
                       <div className="flex-1 flex flex-col justify-between relative z-10">
                         {/* Header Area */}
                         <div className="flex items-center gap-4">
-                           <div className={`w-12 h-12 rounded-2xl bg-white/[0.07] border border-white/[0.1] flex items-center justify-center shadow-xl ${getCategoryColor(t.category)}`}>
-                             <div className="scale-110 opacity-100">
+                           <div className={`w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-white/[0.07] border border-white/[0.1] flex items-center justify-center shadow-xl ${getCategoryColor(t.category)}`}>
+                             <div className="scale-90 sm:scale-110 opacity-100">
                               {getCategoryIcon(t.category)}
                              </div>
                            </div>
                            <div className="space-y-0.5">
-                             <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${getCategoryColor(t.category)} brightness-125`}>{t.category}</span>
+                             <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] ${getCategoryColor(t.category)} brightness-125`}>{t.category}</span>
                              <div className="flex items-center gap-2">
-                               <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">SEQ {t.id.slice(-4)}</span>
+                               <span className="text-[8px] sm:text-[9px] font-black text-white/30 uppercase tracking-widest">SEQ {t.id.slice(-4)}</span>
                              </div>
                            </div>
                         </div>
 
                         {/* Description & Amount */}
-                        <div className="py-6 space-y-4">
-                           <h4 className="text-xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase">
+                        <div className="py-4 sm:py-6 space-y-3 sm:space-y-4">
+                           <h4 className="text-lg sm:text-xl font-black tracking-tight leading-tight text-white line-clamp-2 uppercase">
                              {t.description}
                            </h4>
 
-                           <div className="flex items-baseline gap-3">
-                             <span className="text-lg font-black text-orange-400 drop-shadow-sm">INR</span>
-                             <span className="text-5xl font-black tabular-nums tracking-tighter text-white [text-shadow:_0_4px_12px_rgb(0_0_0_/_50%)]">
+                           <div className="flex items-baseline gap-2 sm:gap-3">
+                             <span className="text-sm sm:text-lg font-black text-orange-400 drop-shadow-sm">INR</span>
+                             <span className="text-3xl sm:text-5xl font-black tabular-nums tracking-tighter text-white [text-shadow:_0_4px_12px_rgb(0_0_0_/_50%)]">
                                {parseFloat(t.amount).toLocaleString('en-IN')}
                              </span>
                            </div>
@@ -325,23 +325,23 @@ export default function ExpenseLog() {
                         <div className="h-1 w-12 bg-white/10 rounded-full" />
                       </div>
 
-                      {/* Right Interaction Zone - Vertical Segmented Console */}
-                      <div className="w-[140px] flex flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-purple-600">
+                      {/* Right Interaction Zone - Console */}
+                      <div className="w-full sm:w-[140px] flex flex-row sm:flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-purple-600">
                         {[
-                          { label: 'NEED', id: 'Need', icon: ShieldCheck, corners: 'rounded-t-[24px]' },
+                          { label: 'NEED', id: 'Need', icon: ShieldCheck, corners: 'rounded-l-[24px] sm:rounded-t-[24px] sm:rounded-bl-none' },
                           { label: 'WANT', id: 'Want', icon: Star, corners: '' },
-                          { label: 'ICK', id: 'Ick', icon: TrendingDown, corners: 'rounded-b-[24px]' }
+                          { label: 'ICK', id: 'Ick', icon: TrendingDown, corners: 'rounded-r-[24px] sm:rounded-b-[24px] sm:rounded-tr-none' }
                         ].map((btn, idx) => (
                           <motion.button
                             key={btn.id}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
-                            className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-200 group/btn relative min-h-[80px] w-full text-white
+                            className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-200 group/btn relative min-h-[70px] sm:min-h-[80px] w-full text-white
                                ${btn.corners} hover:bg-purple-500 hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
-                               ${idx !== 2 ? 'border-b border-white/10' : ''}`}
+                               ${idx !== 2 ? 'border-r sm:border-r-0 sm:border-b border-white/10' : ''}`}
                           >
-                            <btn.icon className="w-5 h-5 transition-transform group-hover/btn:scale-105" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] transition-colors">{btn.label}</span>
+                            <btn.icon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/btn:scale-105" />
+                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] transition-colors">{btn.label}</span>
                           </motion.button>
                         ))}
                       </div>
@@ -459,10 +459,9 @@ export default function ExpenseLog() {
                             )}
                           </div>
                         </div>
-                        
-                        <div className="flex items-center gap-8 relative">
+                                                <div className="flex items-center gap-4 sm:gap-8 relative">
                           <div className="text-right">
-                            <p className="font-black text-3xl text-white tracking-tighter tabular-nums drop-shadow-2xl">
+                            <p className="font-black text-xl sm:text-3xl text-white tracking-tighter tabular-nums drop-shadow-2xl">
                               ₹{parseFloat(t.amount).toLocaleString('en-IN')}
                             </p>
                           </div>
@@ -470,13 +469,13 @@ export default function ExpenseLog() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive hover:text-white w-12 h-12 rounded-2xl border border-transparent hover:border-destructive/20"
+                            className="opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive hover:text-white w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border border-white/5 sm:border-transparent hover:border-destructive/20"
                             onClick={(e) => {
                               e.stopPropagation();
                               setDeleteId(t.id);
                             }}
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                           </Button>
                         </div>
                       </motion.div>

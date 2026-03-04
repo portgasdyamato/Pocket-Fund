@@ -337,42 +337,43 @@ export default function Dashboard() {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-6"
+          className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent p-[2px] premium-shadow">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent p-[2px] premium-shadow shrink-0">
               <div className="w-full h-full rounded-[14px] bg-[#050505] flex items-center justify-center overflow-hidden">
                 <img src={user?.profileImageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}`} alt="Profile" className="w-full h-full object-cover" />
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Member'}!</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Member'}!</h2>
               <div className="flex items-center gap-2 mt-1">
-                <ShieldCheck className={`w-4 h-4 ${healthLabel.color}`} />
-                <span className={`text-sm font-black uppercase tracking-widest ${healthLabel.color}`}>
+                <ShieldCheck className={`w-3.5 h-3.5 ${healthLabel.color}`} />
+                <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${healthLabel.color}`}>
                   {healthLabel.label} MEMBER STATUS
                 </span>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="flex flex-col items-end mr-4">
-              <div className="text-xs font-bold text-white/30 tracking-widest uppercase mb-1">Reward Points</div>
+          <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-3">
+            <div className="flex flex-col items-start md:items-end mr-0 md:mr-4">
+              <div className="text-[10px] font-bold text-white/30 tracking-widest uppercase mb-1">Reward Points</div>
               <div className="flex items-center gap-2">
-                <div className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-black flex items-center gap-1 border border-primary/30">
-                  <Star className="w-3.5 h-3.5 fill-primary" />
+                <div className="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 border border-primary/30">
+                  <Star className="w-3 h-3 fill-primary" />
                   {totalXP} XP
                 </div>
               </div>
             </div>
-            <div className="h-10 w-[1px] bg-white/10" />
+            <div className="hidden md:block h-10 w-[1px] bg-white/10" />
             <Button 
               onClick={() => setIsAddExpenseOpen(true)}
+              className="flex-1 md:flex-none h-12 md:h-14"
               size="lg"
             >
               <PlusCircle className="w-5 h-5 mr-2" />
-              New Transaction
+              <span className="text-sm">Entry</span>
             </Button>
           </div>
         </motion.div>
@@ -390,7 +391,7 @@ export default function Dashboard() {
             {/* Wallet & Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div variants={item}>
-                <Card className="glass-morphism border-white/5 p-8 h-full relative overflow-hidden group min-h-[420px] flex flex-col justify-between">
+                <Card className="glass-morphism border-white/5 p-6 sm:p-8 h-full relative overflow-hidden group min-h-[400px] sm:min-h-[420px] flex flex-col justify-between">
                   {/* Premium Background Effects */}
                   <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -mr-32 -mt-32" />
                   <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 blur-[100px] rounded-full -ml-24 -mb-24" />
@@ -464,8 +465,8 @@ export default function Dashboard() {
                     <div className="mt-auto">
                       <p className="text-white/30 text-[10px] font-black tracking-[0.4em] uppercase mb-2">Available Balance</p>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-white/20">₹</span>
-                        <div className="text-6xl font-black tracking-tighter tabular-nums text-white">
+                        <span className="text-xl sm:text-2xl font-black text-white/20">₹</span>
+                        <div className="text-4xl sm:text-6xl font-black tracking-tighter tabular-nums text-white leading-none">
                           {parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}
                         </div>
                       </div>

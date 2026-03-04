@@ -119,8 +119,8 @@ export default function TrophyCase() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <h1 className="text-6xl font-black tracking-tighter italic uppercase">Hall of <span className="text-primary">Commendations</span></h1>
-          <p className="text-white/40 text-2xl font-medium max-w-2xl leading-relaxed">
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tighter italic uppercase">Hall of <span className="text-primary">Commendations</span></h1>
+          <p className="text-white/40 text-lg sm:text-2xl font-medium max-w-2xl leading-relaxed">
             A permanent record of your <span className="text-white italic">strategic victories</span> in the financial theater.
           </p>
         </motion.div>
@@ -128,38 +128,38 @@ export default function TrophyCase() {
         {/* Tactical Streaks */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <motion.div variants={item} initial="hidden" animate="show" className="lg:col-span-4 space-y-8">
-            <Card className="p-8 rounded-[40px] glass-morphism border-orange-500/20 bg-orange-500/[0.03] group hover:bg-orange-500/[0.06] transition-all relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-8 opacity-5">
-                  <Flame className="w-32 h-32 text-orange-400" />
+            <Card className="p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] glass-morphism border-orange-500/20 bg-orange-500/[0.03] group hover:bg-orange-500/[0.06] transition-all relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
+                  <Flame className="w-24 sm:w-32 h-24 sm:h-32 text-orange-400" />
                </div>
-               <div className="flex items-center gap-4 mb-8">
-                   <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 border border-orange-500/30">
-                      <Flame className="w-6 h-6" />
+               <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                   <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 border border-orange-500/30">
+                      <Flame className="w-5 sm:w-6 h-5 sm:h-6" />
                    </div>
-                  <h3 className="text-xl font-black uppercase tracking-widest text-orange-400">Save Sequence</h3>
+                  <h3 className="text-lg sm:text-xl font-black uppercase tracking-widest text-orange-400">Save Sequence</h3>
                </div>
                <div className="relative">
-                  <span className="text-8xl font-black tracking-tighter font-mono italic">{streak?.saveStreak || 0}</span>
-                  <span className="text-xs font-black uppercase tracking-widest text-white/30 ml-4">CYCLES</span>
+                  <span className="text-6xl sm:text-8xl font-black tracking-tighter font-mono italic">{streak?.saveStreak || 0}</span>
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-white/30 ml-2 sm:ml-4">CYCLES</span>
                </div>
-               <p className="mt-6 text-sm font-bold text-white/40 leading-relaxed italic">"Consistency is the ultimate weapon."</p>
+               <p className="mt-4 sm:mt-6 text-xs sm:text-sm font-bold text-white/40 leading-relaxed italic">"Consistency is the ultimate weapon."</p>
             </Card>
 
-            <Card className="p-8 rounded-[40px] glass-morphism border-primary/20 bg-primary/[0.03] group hover:bg-primary/[0.06] transition-all relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-8 opacity-5">
-                  <Calendar className="w-32 h-32 text-primary" />
+            <Card className="p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] glass-morphism border-primary/20 bg-primary/[0.03] group hover:bg-primary/[0.06] transition-all relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
+                  <Calendar className="w-24 sm:w-32 h-24 sm:h-32 text-primary" />
                </div>
-               <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
-                     <Calendar className="w-6 h-6" />
+               <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                  <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
+                     <Calendar className="w-5 sm:w-6 h-5 sm:h-6" />
                   </div>
-                  <h3 className="text-xl font-black uppercase tracking-widest text-primary">Fight Protocol</h3>
+                  <h3 className="text-lg sm:text-xl font-black uppercase tracking-widest text-primary">Fight Protocol</h3>
                </div>
                <div className="relative">
-                  <span className="text-8xl font-black tracking-tighter font-mono italic">{streak?.fightStreak || 0}</span>
-                  <span className="text-xs font-black uppercase tracking-widest text-white/30 ml-4">CYCLES</span>
+                  <span className="text-6xl sm:text-8xl font-black tracking-tighter font-mono italic">{streak?.fightStreak || 0}</span>
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-white/30 ml-2 sm:ml-4">CYCLES</span>
                </div>
-               <p className="mt-6 text-sm font-bold text-white/40 leading-relaxed italic">"Analysis leads to absolute dominance."</p>
+               <p className="mt-4 sm:mt-6 text-xs sm:text-sm font-bold text-white/40 leading-relaxed italic">"Analysis leads to absolute dominance."</p>
             </Card>
           </motion.div>
 
@@ -167,12 +167,12 @@ export default function TrophyCase() {
           <motion.div variants={item} initial="hidden" animate="show" className="lg:col-span-8">
             <Card className="h-full p-10 rounded-[50px] glass-morphism border-white/5 relative overflow-hidden">
                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-               <div className="flex items-center justify-between mb-12">
+               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 sm:mb-12">
                   <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
-                        <Star className="w-6 h-6 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
+                     <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
+                        <Star className="w-5 sm:w-6 h-5 sm:h-6 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                      </div>
-                     <h3 className="text-xl font-black uppercase tracking-[0.3em]">Temporal Activity Matrix</h3>
+                     <h3 className="text-lg sm:text-xl font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Temporal Activity Matrix</h3>
                   </div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-white/20">Last 30 Cycles</div>
                </div>

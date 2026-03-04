@@ -79,18 +79,18 @@ export default function BudgetPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
                 <div className="lg:col-span-7 space-y-8">
                   <div>
-                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-4">Tactical Overview</p>
-                     <h2 className="text-4xl font-black tracking-tighter mb-2">Total Resource Expenditure</h2>
+                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-2 sm:mb-4">Tactical Overview</p>
+                     <h2 className="text-2xl sm:text-4xl font-black tracking-tighter mb-2">Total Resource Expenditure</h2>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-8">
+                  <div className="grid grid-cols-2 gap-4 sm:gap-8">
                     <div className="space-y-1">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Consumed</p>
-                      <p className="text-5xl font-black font-mono tracking-tighter">${totalSpent.toLocaleString()}</p>
+                      <p className="text-3xl sm:text-5xl font-black font-mono tracking-tighter text-white">₹{totalSpent.toLocaleString()}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Allocation</p>
-                      <p className="text-2xl font-black font-mono text-white/20 mt-3">${totalBudget.toLocaleString()}</p>
+                      <p className="text-xl sm:text-2xl font-black font-mono text-white/20 mt-1 sm:mt-3">₹{totalBudget.toLocaleString()}</p>
                     </div>
                   </div>
 
@@ -118,7 +118,7 @@ export default function BudgetPage() {
                       </div>
                       <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Available Capital</p>
-                        <p className="text-2xl font-black text-green-400 font-mono">${(totalBudget - totalSpent).toLocaleString()}</p>
+                        <p className="text-xl sm:text-2xl font-black text-green-400 font-mono">₹{(totalBudget - totalSpent).toLocaleString()}</p>
                       </div>
                     </div>
                     <div className="h-px bg-white/5" />

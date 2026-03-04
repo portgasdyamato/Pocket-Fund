@@ -108,8 +108,8 @@ export default function Analytics() {
             <PieChartIcon className="w-5 h-5 text-primary" />
             <span className="text-xs font-black uppercase tracking-[0.3em] text-white/30">Spending Insights</span>
           </div>
-          <h1 className="text-5xl font-black tracking-tighter">Financial Analytics</h1>
-          <p className="text-white/40 font-medium">Visualizing your spending habits and savings progress.</p>
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter">Financial Analytics</h1>
+          <p className="text-white/40 font-medium text-sm sm:text-base">Visualizing your spending habits and savings progress.</p>
         </motion.div>
 
         {/* Top Stats Row */}
@@ -120,12 +120,12 @@ export default function Analytics() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-6 h-full relative overflow-hidden group">
+            <Card className="glass-morphism border-white/5 p-5 sm:p-6 h-full relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Expenses</p>
               <div className="flex items-end justify-between">
-                <h3 className="text-4xl font-black">₹{totalSpent.toLocaleString('en-IN')}</h3>
-                <div className="flex items-center gap-1 text-red-400 text-xs font-bold mb-1">
+                <h3 className="text-3xl sm:text-4xl font-black">₹{totalSpent.toLocaleString('en-IN')}</h3>
+                <div className="flex items-center gap-1 text-red-400 text-[10px] sm:text-xs font-bold mb-1">
                   <ArrowUpRight className="w-3.5 h-3.5" />
                   <span>+4.2%</span>
                 </div>
@@ -177,30 +177,30 @@ export default function Analytics() {
                   <Target className="w-5 h-5 text-primary" />
                 </div>
               </div>
-              <div className="flex-1 min-h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={tagData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={80}
-                      outerRadius={120}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {tagData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} stroke="rgba(0,0,0,0.2)" />
-                      ))}
-                    </Pie>
-                    <RechartsTooltip 
-                      contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#fff' }}
-                    />
-                    <Legend iconType="circle" />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+                <div className="h-[250px] sm:h-[300px] w-full mt-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={tagData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={window.innerWidth < 640 ? 50 : 60}
+                        outerRadius={window.innerWidth < 640 ? 70 : 80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {tagData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
+                        itemStyle={{ color: '#fff' }}
+                      />
+                      <Legend verticalAlign={window.innerWidth < 640 ? "bottom" : "middle"} align={window.innerWidth < 640 ? "center" : "right"} layout={window.innerWidth < 640 ? "horizontal" : "vertical"} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
             </Card>
           </motion.div>
 
@@ -245,25 +245,39 @@ export default function Analytics() {
                   <Activity className="w-5 h-5 text-green-400" />
                 </div>
               </div>
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={barData}>
-                    <defs>
-                      <linearGradient id="colorAmt" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis hide />
-                    <RechartsTooltip 
-                      contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#fff' }}
-                    />
-                    <Area type="monotone" dataKey="amount" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorAmt)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
+                <div className="h-[250px] sm:h-[300px] w-full mt-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={barData}>
+                      <defs>
+                        <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                      <XAxis 
+                        dataKey="name" 
+                        stroke="#ffffff40" 
+                        fontSize={10} 
+                        tickLine={false} 
+                        axisLine={false} 
+                      />
+                      <YAxis 
+                        stroke="#ffffff40" 
+                        fontSize={10} 
+                        tickLine={false} 
+                        axisLine={false}
+                        tickFormatter={(value) => `₹${value}`}
+                        hide={window.innerWidth < 640}
+                      />
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
+                        itemStyle={{ color: '#fff' }}
+                      />
+                      <Area type="monotone" dataKey="amount" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorAmount)" strokeWidth={3} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
             </Card>
           </motion.div>
 

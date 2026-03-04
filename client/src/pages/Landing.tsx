@@ -136,7 +136,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.1]"
+              className="text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-6 md:mb-8 leading-[1.1]"
             >
               Level Up Your 
               <br />
@@ -147,7 +147,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-xl md:text-2xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed"
+              className="text-base sm:text-xl md:text-2xl text-white/60 mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed"
             >
               The first gamified financial ecosystem designed to help you track spending, build savings, and master money management with AI-powered coaching.
             </motion.p>
@@ -180,7 +180,7 @@ export default function Landing() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="mt-16 flex items-center justify-center gap-8 text-sm text-white/40"
+              className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-white/40"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-primary" />

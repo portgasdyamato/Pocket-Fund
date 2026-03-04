@@ -227,8 +227,8 @@ export default function GlowUp() {
               </div>
               <span className="text-xs font-black uppercase tracking-[0.3em] text-primary/80">Savings Overview</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter">The Vault</h1>
-            <p className="text-white/40 font-medium mt-2">Manage your savings and track your goals.</p>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter">The Vault</h1>
+            <p className="text-white/40 font-medium mt-2 text-sm sm:text-base">Manage your savings and track your goals.</p>
           </div>
           
           <Dialog open={isStashOpen} onOpenChange={(open) => {
@@ -438,25 +438,25 @@ export default function GlowUp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="group relative overflow-hidden glass-morphism border-white/5 p-12 text-center">
+          <Card className="group relative overflow-hidden glass-morphism border-white/5 p-8 sm:p-12 text-center">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-50 pointer-events-none" />
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-4 sm:mb-6">
                 <ShieldCheck className="w-4 h-4 text-primary" />
-                <span className="text-xs font-black uppercase tracking-widest text-white/60">Total Vault Value</span>
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-white/60">Total Vault Value</span>
               </div>
-              <h2 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent group-hover:scale-[1.02] transition-transform duration-700">
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent group-hover:scale-[1.02] transition-transform duration-700">
                 ₹{totalStashed.toLocaleString('en-IN')}
               </h2>
-              <div className="flex items-center justify-center gap-8 mt-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-6 sm:mt-8">
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Earning Interest</span>
-                  <span className="text-primary font-bold">Liquid Mutual Fund</span>
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Earning Interest</span>
+                  <span className="text-primary font-bold text-xs sm:text-sm">Liquid Mutual Fund</span>
                 </div>
-                <div className="w-[1px] h-8 bg-white/10" />
+                <div className="hidden sm:block w-[1px] h-8 bg-white/10" />
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Status</span>
-                  <span className="text-green-400 font-bold uppercase tracking-wider text-xs">Active & Secure</span>
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Status</span>
+                  <span className="text-green-400 font-bold uppercase tracking-wider text-[10px] sm:text-xs">Active & Secure</span>
                 </div>
               </div>
             </div>

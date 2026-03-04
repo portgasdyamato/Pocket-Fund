@@ -153,11 +153,13 @@ export default function AskCoach() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-sm font-black tracking-tight">Pocket Coach</h1>
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Live</span>
-                  </span>
+                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
+                  Financial AI Coach 
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[8px] sm:text-[10px] font-black text-green-400">LIVE</span>
+                  </div>
+                </h1>
                 </div>
                 <p className="text-[10px] text-white/30 font-medium mt-0.5">Financial Glow-Up AI · Powered by OpenRouter</p>
               </div>
@@ -190,7 +192,7 @@ export default function AskCoach() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
-                className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2 pb-1"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 pb-1"
               >
                 {QUICK_PROMPTS.map((p, i) => {
                   const Icon = p.icon;
