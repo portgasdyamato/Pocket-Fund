@@ -167,12 +167,19 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 // Ordered list of free models - tries each in sequence if rate-limited
+// Last verified working: 2026-03-04
 const FREE_MODELS = [
+  "google/gemma-3n-e4b-it:free",
+  "google/gemma-3n-e2b-it:free",
+  "openai/gpt-oss-20b:free",
+  "qwen/qwen3-8b:free",
+  "qwen/qwen3-14b:free",
+  "qwen/qwen3-4b:free",
+  "deepseek/deepseek-r1-0528:free",
+  "mistralai/mistral-small-3.1-24b-instruct:free",
   "google/gemma-3-27b-it:free",
   "google/gemma-3-12b-it:free",
-  "mistralai/mistral-small-3.1-24b-instruct:free",
   "meta-llama/llama-3.3-70b-instruct:free",
-  "qwen/qwen3-4b:free",
 ];
 
 async function callAI(messages: any[]): Promise<string | null> {
@@ -584,9 +591,9 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res: an
 5. **Never be vague.** Always give specific, real-world, actionable advice.
 6. **Use ${userName}'s name** occasionally to keep it personal.`;
 
+  // Embed system prompt in user message for maximum model compatibility
   const aiResponse = await callAI([
-    { role: "system", content: systemPrompt },
-    { role: "user", content: req.body.message }
+    { role: "user", content: `${systemPrompt}\n\n---\nUser message: ${req.body.message}` }
   ]);
 
   const responseText = aiResponse || 
