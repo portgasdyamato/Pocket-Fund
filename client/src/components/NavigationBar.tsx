@@ -192,7 +192,7 @@ export function NavigationBar() {
               <div className="hidden lg:flex items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-2 bg-purple-600 px-3 py-1.5 rounded-full border border-purple-500/30 cursor-pointer hover:bg-purple-500 transition-all click-scale group shadow-[0_5px_15px_rgba(147,51,234,0.3)]">
+                    <div className="flex items-center gap-2 bg-purple-600 px-3 py-1.5 rounded-full border border-purple-500/30 cursor-pointer hover:bg-purple-500 transition-all click-scale group">
                       <Wallet className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-bold text-white">
                         ₹{walletBalance.toLocaleString('en-IN')}
@@ -206,7 +206,7 @@ export function NavigationBar() {
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-2 bg-green-600 px-3 py-1.5 rounded-full border border-green-500/30 cursor-pointer hover:bg-green-500 transition-all click-scale group shadow-[0_5px_15px_rgba(34,197,94,0.3)]">
+                    <div className="flex items-center gap-2 bg-green-600 px-3 py-1.5 rounded-full border border-green-500/30 cursor-pointer hover:bg-green-500 transition-all click-scale group">
                       <Lock className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-bold text-white">
                         ₹{lockerBalance.toLocaleString('en-IN')}
@@ -283,7 +283,7 @@ export function NavigationBar() {
             </Link>
             
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 bg-purple-600 px-2.5 py-1.5 rounded-full border border-purple-500/25 shadow-[0_4px_10px_rgba(147,51,234,0.3)]">
+              <div className="flex items-center gap-1.5 bg-purple-600 px-2.5 py-1.5 rounded-full border border-purple-500/25">
                 <Wallet className="w-3 h-3 text-white" />
                 <span className="text-xs font-bold text-white">
                   ₹{walletBalance.toLocaleString('en-IN')}
@@ -421,14 +421,14 @@ export function NavigationBar() {
 
                   {/* Balance chips */}
                   <div className="flex gap-2 mt-2">
-                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-purple-600 border border-purple-500/20 shadow-[0_8px_16px_rgba(147,51,234,0.2)]">
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-purple-600 border border-purple-500/20">
                       <Wallet className="w-3.5 h-3.5 text-white flex-shrink-0" />
                       <div className="min-w-0">
                         <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Wallet</p>
                         <p className="text-xs font-black text-white truncate">₹{walletBalance.toLocaleString('en-IN')}</p>
                       </div>
                     </div>
-                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-green-600 border border-green-500/20 shadow-[0_8px_16px_rgba(34,197,94,0.2)]">
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-green-600 border border-green-500/20">
                       <Lock className="w-3.5 h-3.5 text-white flex-shrink-0" />
                       <div className="min-w-0">
                         <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Locker</p>
