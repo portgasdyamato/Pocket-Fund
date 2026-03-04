@@ -162,29 +162,49 @@ const isAuthenticated = async (req: any, res: any, next: any) => {
   }
 };
 
-// --- AI SERVICE ---
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+// --- AI SERVICE (OpenRouter) ---
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-async function callGemini(requestBody: any): Promise<any | null> {
-  if (!GEMINI_API_KEY) {
-    console.error("GEMINI_API_KEY is missing from environment");
-    return { error: { message: "GEMINI_API_KEY is not configured in Vercel environment variables." } };
+// Ordered list of free models - tries each in sequence if rate-limited
+const FREE_MODELS = [
+  "google/gemma-3-27b-it:free",
+  "google/gemma-3-12b-it:free",
+  "mistralai/mistral-small-3.1-24b-instruct:free",
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "qwen/qwen3-4b:free",
+];
+
+async function callAI(messages: any[]): Promise<string | null> {
+  if (!OPENROUTER_API_KEY) {
+    console.error("[AI] OPENROUTER_API_KEY is missing from environment");
+    return null;
   }
-  try {
-    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
-    
-    const data = await res.json();
-    // Return data regardless of status so we can parse the error message
-    return data;
-  } catch (err: any) { 
-    console.error("Gemini Network Error:", err);
-    return { error: { message: err.message || "Network error while connecting to Gemini API" } }; 
+  for (const model of FREE_MODELS) {
+    try {
+      const res = await fetch(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://pocket-fund-theta.vercel.app",
+          "X-Title": "Pocket Fund"
+        },
+        body: JSON.stringify({ model, messages }),
+      });
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content;
+      if (content) {
+        console.log(`[AI] Success with model: ${model}`);
+        return content;
+      }
+      console.warn(`[AI] Model ${model} failed:`, data?.error?.message?.substring(0, 100));
+    } catch (err: any) {
+      console.error(`[AI] Error with model ${model}:`, err?.message);
+    }
   }
+  console.error("[AI] All models failed.");
+  return null;
 }
 
 // --- SEEDING LOGIC ---
@@ -240,13 +260,23 @@ app.post('/api/admin/seed-courses', async (req: any, res: any) => {
     const db = getDb();
     if (!db) return res.status(500).json({ message: "DB not available" });
     console.log("[Admin] Forced library re-sync requested...");
-    // We clear quests only inside seedData now with better logic
     await seedData();
     res.json({ success: true, message: "Database synchronized successfully." });
   } catch (err: any) {
     console.error("[Admin] Sync failed:", err);
     res.status(500).json({ message: err.message || "Internal sync error" });
   }
+});
+
+// Debug endpoint
+app.get('/api/debug/ai-config', (req: any, res: any) => {
+  res.json({
+    hasOpenRouterKey: !!OPENROUTER_API_KEY,
+    openRouterKeyLength: OPENROUTER_API_KEY?.length || 0,
+    service: OPENROUTER_API_KEY ? "OpenRouter" : "None (No Key)",
+    primaryModel: FREE_MODELS[0],
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // --- ROUTES ---
@@ -506,18 +536,15 @@ app.get(['/api/stash/total', '/stash/total'], isAuthenticated, async (req: any, 
   res.json({ total: totalVal });
 });
 
-app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) => {
+app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res: any) => {
   const db = getDb();
   
-  // Get Stash Stats
   const txs = await db.select().from(stashTransactionsTable).where(eq(stashTransactionsTable.userId, req.user.id));
   const totalStashed = txs.reduce((acc: number, t: any) => {
     const val = parseFloat(t.amount);
     return t.type === 'stash' ? acc + val : acc - val;
   }, 0);
   const [streak] = await db.select().from(streaksTable).where(eq(streaksTable.userId, req.user.id));
-  
-  // Get Recent Icks
   const ickRows = await db.select({ total: drizzleSql`sum(amount)` }).from(transactionsTable).where(and(
     eq(transactionsTable.userId, req.user.id),
     eq(transactionsTable.tag, 'Ick')
@@ -527,51 +554,39 @@ app.post(['/api/ai/chat', '/ai/chat'], isAuthenticated, async (req: any, res) =>
   const saveStreak = streak?.saveStreak || 0;
   const userName = req.user.firstName || "User";
 
-  const systemPrompt = `You are "Pocket Fund Coach", a friendly, motivational high-level financial expert for young adults in India. 
-Tone: Encouraging, non-judgmental, straightforward, and slightly "Gen-Z" friendly but professional.
-Currency: Always use Rupee (₹).
+  const systemPrompt = `You are the "Financial Glow-Up Coach" for the Pocket Fund app. Your mission is to help young adults in India level up their money game.
+
+Your tone:
+- Encouraging, high-energy, and relatable (like a cool older sibling or mentor).
+- Non-judgmental but firm about fighting "Spending Icks".
+- Uses "Project-speak": Stash, Glow-Up, Icks, Wins.
+
+Your Vocabulary:
+- Use "Spending Icks" instead of "impulse buying" or "wasteful spending".
+- Use "Glow-Up" or "Leveling up" instead of "improving financial health".
+- Use "Safety Vibe" or "Rainy Day Stash" instead of "emergency fund".
+- Use "Money Moves" instead of "financial transactions" or "advice".
+
 User Context:
 - Name: ${userName}
-- Total Saved: ₹${totalStashed}
-- Saving Streak: ${saveStreak} days
-- Recent "Icks" (unnecessary spending): ₹${totalIcks}
-
-Your Role:
-1. Help ${userName} understand their spending habits and how to save more.
-2. Provide actionable financial tips (e.g., the 50/30/20 rule, emergency funds).
-3. Celebrate their saving wins and motivate them to keep their streak alive.
-4. Help them identify and fight "Icks" (impulse buys).
-5. Explain financial terms simply.
+- Total Stashed: ₹${totalStashed}
+- Save Streak: ${saveStreak} days
+- Recent Spending Icks: ₹${totalIcks}
 
 Guidelines:
 - Keep responses concise (3-5 sentences).
 - Use ${userName}'s name occasionally.
 - Be positive and supportive.
-- If they ask about their stats, use the context provided.`;
+- Use rupee (₹) for all currency.
+- Use emojis to keep it fun.`;
 
-  const ai = await callGemini({
-    contents: [{ 
-      role: "user", 
-      parts: [{ text: `${systemPrompt}\n\nUser Question: ${req.body.message}` }] 
-    }]
-  });
-  
-  let responseText = ai?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const aiResponse = await callAI([
+    { role: "user", content: `${systemPrompt}\n\nUser question: ${req.body.message}` }
+  ]);
 
-  if (!responseText && ai?.candidates?.[0]?.finishReason === "SAFETY") {
-    responseText = "My tactical algorithms flagged this query as a safety risk. Protocol mismatch. Please rephrase your request.";
-  }
-
-  if (!responseText) {
-    if (!GEMINI_API_KEY) {
-      responseText = "I'm your Pocket Fund Coach, but my AI brain isn't connected yet! Ask your developer to add a valid GEMINI_API_KEY to the environment variables so I can help you reach your goals.";
-    } else {
-      // If we got an error object from callGemini but no text
-      const errorMsg = ai?.error?.message || "Internal Neural Link Interruption";
-      responseText = `I'm having a bit of trouble thinking right now (Error: ${errorMsg}). But remember: every ₹100 you save today is a step towards your freedom! What else can I help you with?`;
-    }
-  }
-                      
+  const responseText = aiResponse || 
+    `Hey ${userName}! 👋 I'm having a quick brain break, but I'll be back! In the meantime: **Track one spending habit today** and we'll level up your money game together. 💸`;
+              
   res.json({ response: responseText });
 });
 
