@@ -251,13 +251,13 @@ export function NavigationBar() {
                   <DropdownMenuSeparator className="bg-white/10" />
                   <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-lg mx-1 my-1">
                     <Link href="/profile" className="flex items-center gap-3 py-2">
-                      <User className="w-4 h-4 text-primary" />
+                      <User className="w-4 h-4 text-white/70" />
                       <span className="text-sm font-medium">My Profile</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-lg mx-1 my-1">
                     <Link href="/profile" className="flex items-center gap-3 py-2">
-                      <Settings className="w-4 h-4 text-accent" />
+                      <Settings className="w-4 h-4 text-white/70" />
                       <span className="text-sm font-medium">Settings</span>
                     </Link>
                   </DropdownMenuItem>
