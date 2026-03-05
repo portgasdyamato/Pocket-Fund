@@ -255,26 +255,58 @@ export class DatabaseStorage implements IStorage {
 
   async updateStreak(userId: string, type: 'save' | 'fight'): Promise<void> {
     const existingStreak = await this.getStreak(userId);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
     if (!existingStreak) {
       await db.insert(streaks).values({
         userId,
         saveStreak: type === 'save' ? 1 : 0,
         fightStreak: type === 'fight' ? 1 : 0,
-        lastSaveDate: type === 'save' ? new Date() : null,
-        lastFightDate: type === 'fight' ? new Date() : null,
+        lastSaveDate: type === 'save' ? now : null,
+        lastFightDate: type === 'fight' ? now : null,
       });
-    } else {
-      const updates: any = {};
-      if (type === 'save') {
-        updates.saveStreak = existingStreak.saveStreak + 1;
-        updates.lastSaveDate = new Date();
-      } else {
-        updates.fightStreak = existingStreak.fightStreak + 1;
-        updates.lastFightDate = new Date();
-      }
-      await db.update(streaks).set(updates).where(eq(streaks.userId, userId));
+      return;
     }
+
+    const lastDate = type === 'save' ? existingStreak.lastSaveDate : existingStreak.lastFightDate;
+    const updates: any = {};
+
+    if (lastDate) {
+      const lastSave = new Date(lastDate);
+      const lastDay = new Date(lastSave.getFullYear(), lastSave.getMonth(), lastSave.getDate());
+      const diffDays = Math.floor((today.getTime() - lastDay.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) return; // Already updated today
+      
+      if (diffDays === 1) {
+        if (type === 'save') {
+          updates.saveStreak = existingStreak.saveStreak + 1;
+          updates.lastSaveDate = now;
+        } else {
+          updates.fightStreak = existingStreak.fightStreak + 1;
+          updates.lastFightDate = now;
+        }
+      } else {
+        if (type === 'save') {
+          updates.saveStreak = 1;
+          updates.lastSaveDate = now;
+        } else {
+          updates.fightStreak = 1;
+          updates.lastFightDate = now;
+        }
+      }
+    } else {
+      if (type === 'save') {
+        updates.saveStreak = 1;
+        updates.lastSaveDate = now;
+      } else {
+        updates.fightStreak = 1;
+        updates.lastFightDate = now;
+      }
+    }
+
+    await db.update(streaks).set(updates).where(eq(streaks.userId, userId));
   }
 
   // Stash operations
