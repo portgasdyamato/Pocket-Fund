@@ -233,7 +233,16 @@ export function NavigationBar() {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64 glass-morphism border-white/10 mt-2" align="end">
+                <DropdownMenuContent 
+                  className="w-64 border-white/10 mt-2 p-1" 
+                  align="end"
+                  style={{
+                    background: "rgba(10, 10, 15, 0.98)",
+                    backdropFilter: "blur(24px)",
+                    WebkitBackdropFilter: "blur(24px)",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)"
+                  }}
+                >
                   <div className="p-4 flex items-center gap-3">
                     <Avatar className="h-12 w-12 border-2 border-primary/30">
                       <AvatarImage src={user?.profileImageUrl || undefined} />
@@ -332,7 +341,7 @@ export function NavigationBar() {
               <div
                 className="mx-3 mb-3 rounded-3xl overflow-hidden border border-white/10"
                 style={{
-                  background: "rgba(10, 10, 15, 0.97)",
+                  background: "rgba(10, 10, 15, 0.98)",
                   backdropFilter: "blur(24px)",
                   WebkitBackdropFilter: "blur(24px)",
                   boxShadow: "0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)"
