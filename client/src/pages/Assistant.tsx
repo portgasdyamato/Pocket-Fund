@@ -59,6 +59,7 @@ export default function AskCoach() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null);
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
   useEffect(() => {
@@ -68,6 +69,16 @@ export default function AskCoach() {
   useEffect(() => {
     if (transcript) setChatMessage(transcript);
   }, [transcript]);
+
+  // Load available TTS voices (Chrome fires 'voiceschanged' asynchronously)
+  useEffect(() => {
+    const loadVoices = () => {
+      voicesRef.current = window.speechSynthesis?.getVoices() ?? [];
+    };
+    loadVoices();
+    window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+    return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
+  }, []);
 
   const toggleListening = () => {
     try {
@@ -86,6 +97,20 @@ export default function AskCoach() {
     if (isMuted || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text.replace(/[*#_`]/g, ''));
+
+    // Pick a female voice — prefer en-IN, then any English, then any female
+    const voices = voicesRef.current;
+    const femaleVoice =
+      voices.find(v => /female|zira|susan|hazel|samantha|victoria|karen|moira|fiona|tessa|alex/i.test(v.name) && /en[-_]IN/i.test(v.lang)) ||
+      voices.find(v => /female|zira|susan|hazel|samantha|victoria|karen|moira|fiona|tessa/i.test(v.name) && /^en/i.test(v.lang)) ||
+      voices.find(v => /female|zira|susan|hazel|samantha|victoria|karen|moira|fiona|tessa/i.test(v.name)) ||
+      voices.find(v => v.name.toLowerCase().includes('female') && /^en/i.test(v.lang)) ||
+      null;
+
+    if (femaleVoice) utterance.voice = femaleVoice;
+    utterance.pitch = 1.1;   // slightly higher pitch for femininity on voices without a label
+    utterance.rate  = 1.0;
+
     utterance.onstart = () => { if (index !== undefined) setCurrentlyPlaying(index); };
     utterance.onend = () => setCurrentlyPlaying(null);
     utterance.onerror = () => setCurrentlyPlaying(null);
