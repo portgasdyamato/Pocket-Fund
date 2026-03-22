@@ -98,7 +98,8 @@
   }
 
   .hover-lift {
-    @apply hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1);
+    @apply hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)];
+    transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .premium-gradient {
