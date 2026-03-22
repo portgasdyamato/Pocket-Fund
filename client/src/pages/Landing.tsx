@@ -86,6 +86,17 @@ export default function Landing() {
           ease: "power2.out"
         });
       };
+      
+      // Scroll Hint Animation
+      gsap.to(".scroll-hint", {
+        y: 15,
+        opacity: 0.4,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut"
+      });
+
       window.addEventListener("mousemove", handleMouseMove);
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }, containerRef);
@@ -130,80 +141,112 @@ export default function Landing() {
         </div>
       )}
 
-      <main className="page-main relative z-10">
+      <main className="page-main relative z-10 w-full">
         {/* Dynamic Hero Interface */}
-        <section className="section-container pt-32 pb-32 text-center relative overflow-hidden">
-          <div className="max-w-7xl mx-auto" ref={heroRef}>
+        <section className="min-h-screen flex flex-col items-center justify-center text-center relative px-8 py-20">
+          {/* Hero Kinetic Backdrop */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+             <div className="absolute top-1/4 left-1/4 w-[120%] h-[120%] bg-blue-600/[0.03] rounded-full blur-[200px] animate-spin-slow -translate-x-1/2 -translate-y-1/2" />
+             <div className="absolute top-1/2 right-1/4 w-[100%] h-[100%] bg-blue-500/[0.04] rounded-full blur-[180px] -translate-y-1/2" />
+          </div>
+
+          <div className="max-w-[1400px] w-full mx-auto relative z-10" ref={heroRef}>
              <motion.div 
                initial={{ opacity: 0, scale: 0.9 }}
                animate={{ opacity: 1, scale: 1 }}
-               className="inline-flex items-center gap-4 px-8 py-3.5 rounded-full border border-blue-500/20 bg-blue-600/10 backdrop-blur-3xl mb-20 shadow-2xl"
+               className="inline-flex items-center gap-4 px-8 py-3.5 rounded-full border border-blue-500/20 bg-blue-600/10 backdrop-blur-3xl mb-8 shadow-2xl"
              >
-                <Sparkles className="w-6 h-6 text-blue-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-blue-400">Elite Financial Operating System v4.0</span>
+                <Sparkles className="w-5 h-5 text-blue-500" />
+                <span className="text-[9px] font-black uppercase tracking-[0.5em] text-blue-400">Elite Financial Operating System 4.0</span>
              </motion.div>
 
-             <h1 className="hero-title text-9xl md:text-[200px] font-black tracking-[-0.06em] leading-[0.75] mb-20 flex flex-col items-center">
-                <span className="hero-title-text inline-block text-white">ORCHESTRATE</span>
+             <h1 className="hero-title text-4xl sm:text-6xl md:text-[clamp(1.5rem,10vw,11rem)] font-black tracking-[-0.06em] leading-[0.85] mb-12 flex flex-col items-center select-none text-white uppercase mt-4">
+                <span className="hero-title-text inline-block">ORCHESTRATE</span>
                 <span className="hero-title-text text-gradient-blue inline-block italic">ASCENSION.</span>
              </h1>
 
-             <p className="hero-sub text-2xl md:text-4xl text-white/40 mb-24 max-w-5xl mx-auto leading-tight font-medium tracking-tight italic">
+             <p className="hero-sub text-lg sm:text-2xl md:text-3xl text-white/40 mb-16 max-w-4xl mx-auto leading-relaxed font-medium tracking-tight italic px-4">
                 Architected for the top 1%. Cinematic analytics meets 
                 autonomous wealth preservation in a high-fidelity frost interface.
              </p>
 
-             <div className="hero-cta flex flex-col sm:flex-row items-center justify-center gap-12">
+             <div className="hero-cta flex flex-col sm:flex-row items-center justify-center gap-12 sm:gap-20">
                 <Button 
                    size="lg"
                    onClick={handleLogin}
-                   className="h-32 rounded-[48px] px-24 bg-blue-600 hover:bg-blue-500 text-white font-black text-3xl tracking-tighter click-scale shadow-[0_40px_80px_-20px_rgba(37,99,235,0.6)] border-none group relative overflow-hidden"
+                   className="h-28 rounded-[40px] px-20 bg-blue-600 hover:bg-blue-500 text-white font-black text-2xl tracking-tighter click-scale shadow-[0_40px_80px_-20px_rgba(37,99,235,0.6)] border-none group relative overflow-hidden"
                 >
                    <span className="relative z-10 flex items-center">
-                     Access Terminal
-                     <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-4 transition-transform duration-500" />
+                      Launch Interface
+                      <ArrowRight className="w-8 h-8 ml-6 group-hover:translate-x-3 transition-transform duration-500" />
                    </span>
                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </Button>
-                <div className="flex items-center gap-12">
-                   <div className="flex -space-x-6">
+                <div className="flex items-center gap-10">
+                   <div className="flex -space-x-5">
                       {[1,2,3,4].map(i => (
-                        <div key={i} className="w-20 h-20 rounded-full border-4 border-[#020205] bg-white/5 glass-frost shadow-2xl relative overflow-hidden group-hover:translate-x-2 transition-transform">
-                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} className="w-full h-full object-cover p-2" alt="Avatar" />
+                        <div key={i} className="w-16 h-16 rounded-full border-4 border-[#020205] bg-white/5 glass-frost shadow-2xl relative overflow-hidden">
+                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} className="w-full h-full object-cover p-1.5" alt="Operator" />
                         </div>
                       ))}
                    </div>
-                   <div className="text-left border-l-2 border-white/5 pl-12">
-                      <p className="text-4xl font-black tracking-tighter text-white">12,403</p>
-                      <p className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em]">Operators Online</p>
+                   <div className="text-left border-l border-white/10 pl-10">
+                      <p className="text-3xl font-black tracking-tighter text-white tabular-nums">12,403</p>
+                      <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Operators Online</p>
                    </div>
                 </div>
              </div>
           </div>
 
-          {/* High-Fidelity Terminal Preview */}
-          <div className="mt-80 lg:mt-96 relative max-w-[1500px] mx-auto group">
-             <div className="absolute inset-0 bg-blue-600/10 blur-[250px] rounded-full scale-125 opacity-40 animate-pulse pointer-events-none" />
-             <div className="relative rounded-[80px] border border-white/10 bg-[#050508]/60 p-10 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.95)] overflow-hidden glass-frost hover:border-blue-500/20 transition-all duration-1000">
-                <div className="rounded-[60px] bg-[#0A0A0F] border border-white/5 aspect-[16/9] overflow-hidden flex flex-col p-20 shadow-inner">
-                   <div className="flex justify-between items-center mb-24">
-                      <div className="space-y-8">
-                         <div className="w-80 h-4 bg-white/10 rounded-full" />
-                         <div className="w-[500px] h-24 bg-white/20 rounded-[40px] shadow-2xl" />
+          {/* Cinematic Scroll Indicator */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
+            className="absolute bottom-12 flex flex-col items-center gap-4 cursor-pointer group"
+            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+          >
+             <p className="text-[9px] font-black uppercase tracking-[1em] text-white/20 group-hover:text-blue-500/60 transition-colors ml-[1em]">Scroll to Descend</p>
+             <div className="scroll-hint w-6 h-10 rounded-full border-2 border-white/10 flex items-start justify-center p-2">
+                <div className="w-1 h-2 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
+             </div>
+          </motion.div>
+        </section>
+
+        {/* High-Fidelity Terminal Preview */}
+        <section className="section-container py-40">
+          <div className="relative max-w-[1400px] mx-auto group">
+             <div className="absolute inset-0 bg-blue-600/5 blur-[200px] rounded-full scale-125 opacity-40 animate-pulse pointer-events-none" />
+             <div className="relative rounded-[72px] border border-white/10 bg-[#050508]/60 p-6 md:p-8 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.95)] glass-frost hover:border-blue-500/20 transition-all duration-1000">
+                <div className="rounded-[52px] bg-[#0A0A0F] border border-white/5 aspect-[16/9] overflow-hidden flex flex-col p-10 md:p-16 shadow-inner relative">
+                   {/* Terminal UI Mockup - Refined */}
+                   <div className="flex justify-between items-center mb-16">
+                      <div className="flex gap-4">
+                         <div className="w-4 h-4 rounded-full bg-rose-500/20 border border-rose-500/40" />
+                         <div className="w-4 h-4 rounded-full bg-amber-500/20 border border-amber-500/40" />
+                         <div className="w-4 h-4 rounded-full bg-emerald-500/20 border border-emerald-500/40" />
                       </div>
-                      <div className="w-28 h-28 rounded-[40px] bg-blue-600/10 border border-blue-500/20 flex items-center justify-center shadow-2xl ring-4 ring-blue-500/5">
-                         <Zap className="w-14 h-14 text-blue-500/40" />
+                      <div className="w-24 h-24 rounded-3xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center shadow-2xl ring-4 ring-blue-500/5">
+                         <Zap className="w-10 h-10 text-blue-500/40" />
                       </div>
                    </div>
-                   <div className="grid grid-cols-4 gap-16 flex-1">
-                      <div className="col-span-2 bg-gradient-to-br from-white/[0.04] to-transparent rounded-[56px] border border-white/5 p-12 relative overflow-hidden">
-                         <div className="w-full h-full bg-blue-600/5 rounded-[40px] border border-blue-500/10 animate-flicker shadow-inner" />
-                         <div className="absolute inset-0 bg-shimmer opacity-20" />
+                   <div className="flex-1 border-t border-white/5 pt-12">
+                      <div className="grid grid-cols-3 gap-10 h-full">
+                         <div className="col-span-2 space-y-8">
+                            <div className="h-40 bg-white/[0.02] border border-white/5 rounded-[40px] p-8">
+                               <div className="w-40 h-3 bg-white/10 rounded-full mb-6" />
+                               <div className="w-full h-12 bg-blue-600/10 rounded-2xl flex items-center px-6">
+                                  <div className="w-1/2 h-2 bg-blue-500/40 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.3)]" />
+                               </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-8">
+                               <div className="h-32 bg-white/[0.01] border border-white/5 rounded-[32px]" />
+                               <div className="h-32 bg-blue-500/5 border border-blue-500/10 rounded-[32px]" />
+                            </div>
+                         </div>
+                         <div className="bg-white/[0.01] border border-white/5 rounded-[48px]" />
                       </div>
-                      <div className="bg-white/[0.02] rounded-[56px] border border-white/5 shadow-2xl" />
-                      <div className="bg-white/[0.02] rounded-[56px] border border-white/5 shadow-2xl" />
                    </div>
-                </div>
                 
                 {/* Tactical Micro-Metrics */}
                 <div className="absolute top-32 -right-24 w-[450px] glass-frost p-12 rounded-[56px] float-card hidden xl:block shadow-[0_60px_120px_-30px_rgba(0,0,0,0.8)] border-white/10 z-20">
@@ -237,6 +280,7 @@ export default function Landing() {
                       ))}
                    </div>
                 </div>
+                </div>
              </div>
           </div>
         </section>
@@ -246,9 +290,11 @@ export default function Landing() {
            <div className="absolute inset-0 spectral-glow opacity-30 pointer-events-none" />
            <div className="section-container relative z-10">
               <div className="text-center mb-40 reveal-grid">
-                 <div className="inline-flex items-center gap-4 mb-12">
-                   <div className="w-2 h-10 bg-blue-600 rounded-full" />
-                   <h2 className="text-7xl md:text-[140px] font-black tracking-[-0.05em] reveal-item uppercase italic text-white flex gap-6 mt-4">PRO-GRADE <span className="text-gradient-blue italic">SYSTEM.</span></h2>
+                 <div className="inline-flex flex-col items-center gap-6 mb-12">
+                    <div className="w-1.5 h-12 bg-blue-600/40 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.3)]" />
+                    <h2 className="text-4xl sm:text-6xl md:text-[clamp(2.5rem,8vw,9rem)] font-black tracking-[-0.05em] reveal-item uppercase italic text-white leading-none">
+                       PRO-GRADE <span className="text-gradient-blue italic">SYSTEM.</span>
+                    </h2>
                  </div>
                  <p className="text-2xl md:text-3xl text-white/30 max-w-4xl mx-auto font-medium tracking-tight reveal-item italic">
                     Architected for high-velocity capital management and sub-millisecond data visualization of your financial future.
@@ -290,7 +336,7 @@ export default function Landing() {
                           <Zap className="w-7 h-7 text-blue-500 animate-pulse" />
                           <span className="text-[11px] font-black uppercase tracking-[0.5em] text-blue-500">OPERATIONAL SUPERIORITY</span>
                        </div>
-                       <h2 className="text-8xl md:text-[160px] font-black tracking-tighter mb-16 leading-[0.85] text-white uppercase italic">
+                       <h2 className="text-5xl sm:text-7xl md:text-[clamp(3.5rem,9vw,10rem)] font-black tracking-tighter mb-12 leading-[0.8] text-white uppercase italic">
                           Designed for <br /><span className="text-gradient-blue italic">Impact.</span>
                        </h2>
                        <p className="text-3xl text-white/30 mb-24 font-medium tracking-tight leading-relaxed max-w-2xl italic">
@@ -338,10 +384,10 @@ export default function Landing() {
            <div className="section-container text-center">
               <motion.div initial={{ opacity: 0, y: 100 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1.2 }}>
                  <p className="text-blue-500 font-black tracking-[1.5em] uppercase mb-20 text-sm italic">Terminal Deployment Phase 04</p>
-                 <h2 className="text-[120px] md:text-[300px] font-black tracking-[-0.1em] leading-[0.65] mb-32 text-white hover:tracking-[-0.08em] transition-all duration-1000 cursor-default uppercase italic select-none">
-                    EXPERIENCE <br />
-                    <span className="text-gradient-blue italic">ASCENSION.</span>
-                 </h2>
+                  <h2 className="text-[clamp(2.5rem,12vw,12rem)] font-black tracking-[-0.1em] leading-[0.75] mb-24 text-white hover:tracking-[-0.08em] transition-all duration-1000 cursor-default uppercase italic select-none">
+                     EXPERIENCE <br />
+                     <span className="text-gradient-blue italic">ASCENSION.</span>
+                  </h2>
                  <Button 
                    size="lg"
                    onClick={handleLogin}
