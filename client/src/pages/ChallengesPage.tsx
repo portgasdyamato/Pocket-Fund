@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChallengeCard from "@/components/ChallengeCard";
-import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star, Brain, Shield, BarChart3, Fingerprint, Activity, ShieldCheck, ZapIcon, Globe, TargetIcon, MousePointer2 } from "lucide-react";
+import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star, Brain, Shield, BarChart3, Fingerprint, Activity, ShieldCheck, Globe, MousePointer2 } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

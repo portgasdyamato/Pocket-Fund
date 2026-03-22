@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { Button } from "@/components/ui/button";
 import {
   Send, Sparkles, User, Mic, MicOff, Volume2, VolumeX,
-  TrendingUp, Zap, ShieldCheck, Brain, ArrowRight, Shield, BarChart3, Fingerprint, Activity, ShieldCheck as ShieldCheckIcon, ZapIcon, Globe, TargetIcon, MousePointer2
+  TrendingUp, Zap, ShieldCheck, Brain, ArrowRight, Shield, BarChart3, Fingerprint, Activity, ShieldCheck as ShieldCheckIcon, Globe, MousePointer2
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";

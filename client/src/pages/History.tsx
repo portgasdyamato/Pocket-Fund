@@ -17,16 +17,26 @@ import {
 } from "lucide-react";
 import type { Transaction } from "@shared/schema";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import AddExpenseModal from "@/components/AddExpenseModal";
+import { PlusCircle, TrendingDown, Clock, Activity, Target } from "lucide-react";
 
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } };
 
 export default function History() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const { data: transactions = [], isLoading } = useQuery<Transaction[]>({
     queryKey: ["/api/transactions"],
   });
+
+  const spendingMetrics = useMemo(() => {
+    const total = transactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
+    const icks = transactions.filter(t => t.tag === 'Ick').length;
+    const targets = transactions.filter(t => t.tag === 'Need').length;
+    return { total, icks, targets };
+  }, [transactions]);
 
   const filteredTransactions = transactions
     .filter(t => 
@@ -69,6 +79,9 @@ export default function History() {
           </div>
           
           <div className="flex gap-4 w-full md:w-auto">
+             <Button onClick={() => setIsAddExpenseOpen(true)} className="h-16 rounded-[24px] px-10 bg-white text-black font-black hover:bg-white/90 flex items-center gap-4 text-xs uppercase tracking-widest click-scale">
+               <PlusCircle className="w-5 h-5" /> Execute Entry
+             </Button>
              <Button variant="outline" className="h-16 rounded-[24px] px-10 border-white/10 text-white font-black hover:bg-white/5 flex items-center gap-4 text-xs uppercase tracking-widest click-scale">
                <Download className="w-5 h-5" /> Export DB
              </Button>
@@ -88,6 +101,37 @@ export default function History() {
               </Button>
            </div>
         </motion.div>
+
+        {/* Tactical Metrics Review */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+           <Card className="glass-frost p-8 rounded-[40px] border-white/5 flex items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                 <Activity className="w-6 h-6 text-blue-500" />
+              </div>
+              <div>
+                 <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">CUMULATIVE FLUX</p>
+                 <p className="text-2xl font-black text-white tabular-nums">₹{spendingMetrics.total.toLocaleString('en-IN')}</p>
+              </div>
+           </Card>
+           <Card className="glass-frost p-8 rounded-[40px] border-white/5 flex items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
+                 <TrendingDown className="w-6 h-6 text-rose-500" />
+              </div>
+              <div>
+                 <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">ICK ANOMALIES</p>
+                 <p className="text-2xl font-black text-white">{spendingMetrics.icks} Signals</p>
+              </div>
+           </Card>
+           <Card className="glass-frost p-8 rounded-[40px] border-white/5 flex items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                 <Target className="w-6 h-6 text-emerald-500" />
+              </div>
+              <div>
+                 <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">CORE NECESSITIES</p>
+                 <p className="text-2xl font-black text-white">{spendingMetrics.targets} Targets</p>
+              </div>
+           </Card>
+        </div>
 
         {/* Global Registry Feed */}
         <section className="space-y-6">
@@ -153,6 +197,7 @@ export default function History() {
            </AnimatePresence>
         </section>
       </div>
+      <AddExpenseModal open={isAddExpenseOpen} onOpenChange={setIsAddExpenseOpen} />
     </div>
   );
 }

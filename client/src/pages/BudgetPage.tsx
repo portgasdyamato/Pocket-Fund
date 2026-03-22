@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import BudgetCategoryCard from "@/components/BudgetCategoryCard";
-import { Coffee, Car, ShoppingBag, Ticket, FileText, ArrowLeft, Target, Shield, Gauge, Zap, BarChart3, Fingerprint, Activity, ShieldCheck, ZapIcon, Globe, Brain, TargetIcon, MousePointer2 } from "lucide-react";
+import { Coffee, Car, ShoppingBag, Ticket, FileText, ArrowLeft, Target, Shield, Gauge, Zap, BarChart3, Fingerprint, Activity, ShieldCheck, Globe, Brain, MousePointer2 } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";

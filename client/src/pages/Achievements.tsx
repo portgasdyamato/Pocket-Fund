@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
-import { Trophy, Flame, Calendar, Star, Shield, Zap, Target, Award, Sparkles, TrendingUp, Heart, CheckCircle2, Search, ArrowUpRight, BarChart3, Fingerprint, Activity, ShieldCheck, ZapIcon, Globe, Brain, TargetIcon, MousePointer2 } from "lucide-react";
+import { Trophy, Flame, Calendar, Star, Shield, Zap, Target, Award, Sparkles, TrendingUp, Heart, CheckCircle2, Search, ArrowUpRight, BarChart3, Fingerprint, Activity, ShieldCheck, Globe, Brain, MousePointer2, ArrowLeft, Lock as LockIcon } from "lucide-react";
 import type { Streak, UserQuest, Quest, StashTransaction, Goal, Transaction, Badge, UserBadge } from "@shared/schema";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -279,7 +279,7 @@ export default function AchievementsPage() {
                              </div>
                           ) : (
                              <div className="w-12 h-12 rounded-full border border-white/5 flex items-center justify-center opacity-40">
-                                <Lock className="w-5 h-5 text-white/10" />
+                                <LockIcon className="w-5 h-5 text-white/10" />
                              </div>
                           )}
                        </div>

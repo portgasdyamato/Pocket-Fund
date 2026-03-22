@@ -7,11 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock, ArrowRight, Zap, TargetIcon, MousePointer2, ChevronRight } from "lucide-react";
+import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock as LockIcon, ArrowRight, Zap, MousePointer2, ChevronRight } from "lucide-react";
 import type { Goal, StashTransaction } from "@shared/schema";
 import GoalCelebration from "@/components/GoalCelebration";
 import { useAuth } from "@/hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
@@ -278,7 +283,7 @@ export default function GlowUp() {
                   <motion.div key="setup" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="space-y-12 py-10">
                     <div className="text-center">
                       <div className="inline-flex items-center justify-center w-24 h-24 rounded-[32px] bg-blue-500/10 border border-blue-500/20 mb-10 shadow-2xl">
-                        <Lock className="w-10 h-10 text-blue-500" />
+                        <LockIcon className="w-10 h-10 text-blue-500" />
                       </div>
                       <h2 className="text-4xl font-black uppercase tracking-tight text-white mb-4">{user?.vaultPin ? 'Re-Encrypt Key' : 'Establish Key'}</h2>
                       <p className="text-white/30 font-medium text-lg leading-relaxed">Initialize a 4-digit biometric PIN to authorize extraction vectors.</p>
@@ -471,9 +476,9 @@ export default function GlowUp() {
                                  <div className="flex items-center gap-4 mt-2">
                                    <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">{new Date(t.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                    <span className="w-1 h-1 rounded-full bg-white/10" />
-                                   <span className="text-[9px] text-white/30 bg-white/[0.02] px-4 py-1.5 rounded-full border border-white/10 uppercase font-black tracking-widest">
-                                     {t.goalId ? goals.find(g => g.id === t.goalId)?.name || 'General Reserves' : 'General Reserves'}
-                                   </span>
+                                    <span className="text-[9px] text-white/30 bg-white/[0.02] px-4 py-1.5 rounded-full border border-white/10 uppercase font-black tracking-widest">
+                                      {t.goalId ? goals.find(g => g.id === t.goalId)?.name || 'General Reserves' : 'General Reserves'}
+                                    </span>
                                  </div>
                                </div>
                             </div>

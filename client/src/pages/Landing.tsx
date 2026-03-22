@@ -18,10 +18,8 @@ import {
   BarChart3,
   ChevronRight,
   ShieldCheck,
-  ZapIcon,
   Globe,
   Brain,
-  TargetIcon,
   MousePointer2,
   Activity
 } from "lucide-react";
