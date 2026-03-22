@@ -21,13 +21,15 @@ import Analytics from "@/pages/Analytics";
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
 
-  // Show loader during initial fetch AND during retries (post-OAuth session check)
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
-          <p className="text-white/40 text-sm font-medium tracking-widest uppercase">Authenticating...</p>
+      <div className="min-h-screen bg-stellar flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative">
+            <div className="w-16 h-16 rounded-2xl border-4 border-blue-500/10 border-t-blue-500 animate-spin" />
+            <div className="absolute inset-0 bg-blue-500/10 blur-xl opacity-50" />
+          </div>
+          <p className="text-blue-400 font-black text-[10px] tracking-[0.5em] uppercase">Initializing Engine...</p>
         </div>
       </div>
     );
@@ -38,10 +40,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="bg-stellar min-h-screen">
       <NavigationBar />
-      {children}
-    </>
+      <main className="page-main relative z-10">
+        {children}
+      </main>
+    </div>
   );
 }
 
