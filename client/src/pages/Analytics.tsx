@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend, AreaChart, Area
 } from "recharts";
-import { Activity, TrendingUp, TrendingDown, Target, Wallet, PieChart as PieChartIcon, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Activity, TrendingUp, Target, Wallet, PieChart as PieChartIcon, ArrowUpRight, Shield, Zap, BarChart3 } from "lucide-react";
 import type { Transaction, StashTransaction } from "@shared/schema";
-import { motion } from "framer-motion";
-
-const COLORS = ['#8b5cf6', '#3b82f6', '#f43f5e', '#10b981', '#f59e0b'];
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Analytics() {
   const { data: transactions = [], isLoading: isLoadingTransactions } = useQuery<Transaction[]>({
@@ -19,19 +17,19 @@ export default function Analytics() {
     queryKey: ["/api/stash"],
   });
 
-  // Calculate Tag Breakdown (Needs vs Wants vs Icks)
-  const tagBreakdown = transactions.reduce((acc: any, t) => {
+  // Calculate Tag Breakdown
+  const tagBreakdown = transactions.reduce((acc: Record<string, number>, t) => {
     const tag = t.tag || 'Uncategorized';
-    acc[tag] = (acc[tag] || 0) + parseFloat(t.amount);
+    acc[tag] = (acc[tag] || 0) + Number(t.amount || 0);
     return acc;
   }, {});
 
   const TAG_COLORS: Record<string, string> = {
-    'Need': '#2563eb',       // Blue-600
-    'Want': '#9333ea',       // Purple-600 (Primary)
-    'Ick': '#dc2626',        // Red-600
-    'Goal Claim': '#16a34a',  // Green-600
-    'Uncategorized': '#3f3f46' // Zinc-600
+    'Need': '#3b82f6',       // Blue-500
+    'Want': '#06b6d4',       // Cyan-500
+    'Ick': '#f43f5e',        // Rose-500
+    'Goal Claim': '#10b981',  // Emerald-500
+    'Uncategorized': '#27272a' // Zinc-800
   };
 
   const tagData = Object.keys(tagBreakdown).map(name => ({
@@ -41,9 +39,9 @@ export default function Analytics() {
   }));
 
   // Calculate Category Breakdown
-  const categoryBreakdown = transactions.reduce((acc: any, t) => {
+  const categoryBreakdown = transactions.reduce((acc: Record<string, number>, t) => {
     const cat = t.category || 'Other';
-    acc[cat] = (acc[cat] || 0) + parseFloat(t.amount);
+    acc[cat] = (acc[cat] || 0) + Number(t.amount || 0);
     return acc;
   }, {});
 
@@ -52,10 +50,10 @@ export default function Analytics() {
     value: categoryBreakdown[name]
   }));
 
-  // Calculate Monthly Spending (last 6 months - simulated for now by date)
-  const monthlySpending = transactions.reduce((acc: any, t) => {
+  // Calculate Monthly Trend
+  const monthlySpending = transactions.reduce((acc: Record<string, number>, t) => {
     const month = new Date(t.date).toLocaleString('default', { month: 'short' });
-    acc[month] = (acc[month] || 0) + parseFloat(t.amount);
+    acc[month] = (acc[month] || 0) + Number(t.amount || 0);
     return acc;
   }, {});
 
@@ -64,225 +62,199 @@ export default function Analytics() {
     amount: monthlySpending[name]
   }));
 
-  const totalSpent = transactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
+  const totalSpent = transactions.reduce((sum, t) => sum + Number(t.amount || 0), 0);
   const totalSaved = stashTransactions.reduce((sum, t) => {
-    const amount = parseFloat(t.amount || "0");
+    const amount = Number(t.amount || 0);
     return t.type === 'stash' ? sum + amount : sum - amount;
   }, 0);
   const savingsRate = (totalSpent + totalSaved) > 0 ? (Math.max(0, totalSaved) / (totalSpent + Math.max(0, totalSaved))) * 100 : 0;
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
+  const hasData = transactions.length > 0;
 
   if (isLoadingTransactions || isLoadingStash) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="w-12 h-12 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+      <div className="min-h-screen bg-[#020205] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+           <div className="w-12 h-12 rounded-full border-2 border-blue-500/20 border-t-blue-500 animate-spin" />
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-500 animate-pulse">Synchronizing Data</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
-      <main className="container mx-auto px-6 py-12 max-w-7xl space-y-12">
+    <div className="min-h-screen bg-[#020205] text-white selection:bg-blue-500/30 overflow-hidden relative">
+      <div className="fixed inset-0 z-0 bg-mesh opacity-20 pointer-events-none" />
+
+      <main className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-20 space-y-24">
         
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col gap-2"
-        >
-          <div className="flex items-center gap-2">
-            <PieChartIcon className="w-5 h-5 text-primary" />
-            <span className="text-xs font-black uppercase tracking-[0.3em] text-white/30">Spending Insights</span>
+        {/* Terminal Header */}
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
+          <div className="flex items-center gap-4 mb-8">
+             <div className="w-12 h-12 rounded-[20px] bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-lg shadow-blue-500/5">
+                <PieChartIcon className="w-6 h-6 text-blue-400" />
+             </div>
+             <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-blue-500/60">INTELLIGENCE TERMINAL</span>
+                <h1 className="text-4xl md:text-7xl font-black tracking-tighter mt-1">Operational Analytics</h1>
+             </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter">Financial Analytics</h1>
-          <p className="text-white/40 font-medium text-sm sm:text-base">Visualizing your spending habits and savings progress.</p>
+          <p className="text-white/30 font-medium text-lg md:text-xl tracking-tight max-w-3xl leading-relaxed">
+             Real-time high-fidelity projection of resource vectors, capital preservation metrics, and systemic efficiency gradients.
+          </p>
         </motion.div>
 
-        {/* Top Stats Row */}
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-5 sm:p-6 h-full relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Expenses</p>
-              <div className="flex items-end justify-between">
-                <h3 className="text-3xl sm:text-4xl font-black">₹{totalSpent.toLocaleString('en-IN')}</h3>
-                <div className="flex items-center gap-1 text-red-400 text-[10px] sm:text-xs font-bold mb-1">
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                  <span>+4.2%</span>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
+        {/* Core Matrix Indicators */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           {[
+             { label: "OPERATIONAL OUTFLOW", value: `₹${totalSpent.toLocaleString('en-IN')}`, trend: "+4.2% VOD", icon: Zap, color: "text-blue-400", glow: "rgba(37,99,235,0.08)" },
+             { label: "CAPITAL PRESERVATION", value: `₹${totalSaved.toLocaleString('en-IN')}`, trend: "+12.8% VOD", icon: Shield, color: "text-cyan-400", glow: "rgba(6,182,212,0.08)" },
+             { label: "EFFICIENCY QUOTIENT", value: `${savingsRate.toFixed(1)}%`, trend: "STABLE", icon: Activity, color: "text-blue-500", glow: "rgba(59,130,246,0.08)" }
+           ].map((stat, i) => (
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1 }}>
+                 <Card className="glass-card p-10 h-full relative overflow-hidden group border-white/5 hover:border-blue-500/20 transition-all">
+                    <div className="absolute top-0 right-0 w-48 h-48 blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: stat.glow }} />
+                    <div className="flex justify-between items-start mb-12">
+                       <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">{stat.label}</p>
+                       <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center">
+                          <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                       </div>
+                    </div>
+                    <div className="flex items-end justify-between relative z-10">
+                       <h3 className="text-4xl md:text-5xl font-black tracking-tight tabular-nums">{stat.value}</h3>
+                       <div className="flex flex-col items-end">
+                          <span className={`text-[9px] font-black ${stat.color} tracking-widest uppercase`}>{stat.trend}</span>
+                          <div className="h-0.5 w-8 bg-blue-500/40 mt-2" />
+                       </div>
+                    </div>
+                 </Card>
+              </motion.div>
+           ))}
+        </div>
 
-          <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-6 h-full relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Savings</p>
-              <div className="flex items-end justify-between">
-                <h3 className="text-4xl font-black">₹{totalSaved.toLocaleString('en-IN')}</h3>
-                <div className="flex items-center gap-1 text-green-400 text-xs font-bold mb-1">
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  <span>+12.8%</span>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-6 h-full relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Savings Rate</p>
-              <div className="flex items-end justify-between">
-                <h3 className="text-4xl font-black">{savingsRate.toFixed(1)}%</h3>
-                <div className="flex items-center gap-1 text-blue-400 text-xs font-bold mb-1">
-                  <Activity className="w-3.5 h-3.5" />
-                  <span>HEALTHY</span>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-        </motion.div>
-
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Visual Matrix Console */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* Spending Intent Breakdown (Needs/Wants/Icks) */}
-          <motion.div variants={item} initial="hidden" animate="show" transition={{ delay: 0.3 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full flex flex-col">
-              <div className="flex items-center justify-between mb-8">
+          <Card className="glass-card p-12 h-full border-white/5 relative overflow-hidden">
+             <div className="flex items-center justify-between mb-16 relative z-10">
                 <div>
-                  <h3 className="text-xl font-bold">Spending Intent</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Needs vs Wants vs Icks</p>
+                   <h3 className="text-2xl font-black uppercase tracking-tight">Intent Distribution</h3>
+                   <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mt-2">Allocation Matrix Profile</p>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Target className="w-5 h-5 text-primary" />
+                <div className="w-14 h-14 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-center justify-center">
+                   <Target className="w-7 h-7 text-blue-400" />
                 </div>
-              </div>
-                <div className="h-[250px] sm:h-[300px] w-full mt-4">
+             </div>
+             
+             {hasData ? (
+               <div className="h-[400px] w-full mt-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={tagData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={window.innerWidth < 640 ? 50 : 60}
-                        outerRadius={window.innerWidth < 640 ? 70 : 80}
-                        paddingAngle={5}
-                        dataKey="value"
-                      >
-                        {tagData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.fill} />
-                        ))}
-                      </Pie>
-                      <RechartsTooltip 
-                        contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
-                        itemStyle={{ color: '#fff' }}
-                      />
-                      <Legend verticalAlign={window.innerWidth < 640 ? "bottom" : "middle"} align={window.innerWidth < 640 ? "center" : "right"} layout={window.innerWidth < 640 ? "horizontal" : "vertical"} />
-                    </PieChart>
+                     <PieChart>
+                        <Pie
+                           data={tagData}
+                           cx="50%"
+                           cy="50%"
+                           innerRadius={90}
+                           outerRadius={130}
+                           paddingAngle={10}
+                           dataKey="value"
+                           strokeWidth={0}
+                        >
+                           {tagData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.fill} style={{ filter: `drop-shadow(0 0 15px ${entry.fill}33)` }} />
+                           ))}
+                        </Pie>
+                        <RechartsTooltip 
+                           contentStyle={{ backgroundColor: 'rgba(10,10,15,0.8)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', backdropFilter: 'blur(12px)', color: '#fff' }}
+                           itemStyle={{ color: '#fff', fontSize: '11px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em' }}
+                        />
+                        <Legend verticalAlign="bottom" align="center" iconType="circle" />
+                     </PieChart>
                   </ResponsiveContainer>
-                </div>
-            </Card>
-          </motion.div>
+               </div>
+             ) : <NoDataPlaceholder />}
+          </Card>
 
-          {/* Category Distribution */}
-          <motion.div variants={item} initial="hidden" animate="show" transition={{ delay: 0.4 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full flex flex-col">
-              <div className="flex items-center justify-between mb-8">
+          <Card className="glass-card p-12 h-full border-white/5">
+             <div className="flex items-center justify-between mb-16">
                 <div>
-                  <h3 className="text-xl font-bold">Category Distribution</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Where your money flows</p>
+                   <h3 className="text-2xl font-black uppercase tracking-tight">Sector Segments</h3>
+                   <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mt-2">Granular Expenditure Flow</p>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Wallet className="w-5 h-5 text-accent" />
+                <div className="w-14 h-14 rounded-2xl bg-cyan-500/5 border border-cyan-500/10 flex items-center justify-center">
+                   <Wallet className="w-7 h-7 text-cyan-400" />
                 </div>
-              </div>
-              <div className="flex-1 min-h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryData}>
-                    <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis hide />
-                    <RechartsTooltip 
-                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                      contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#fff' }}
-                    />
-                    <Bar dataKey="value" fill="#8b5cf6" radius={[6, 6, 0, 0]} barSize={40} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-          </motion.div>
-
-          {/* Spending Over Time */}
-          <motion.div variants={item} className="lg:col-span-2" initial="hidden" animate="show" transition={{ delay: 0.5 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-bold">Monthly Spending Trend</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Expenditure over the last 6 months</p>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-green-400" />
-                </div>
-              </div>
-                <div className="h-[250px] sm:h-[300px] w-full mt-4">
+             </div>
+             
+             {hasData ? (
+               <div className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={barData}>
-                      <defs>
-                        <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="#ffffff40" 
-                        fontSize={10} 
-                        tickLine={false} 
-                        axisLine={false} 
-                      />
-                      <YAxis 
-                        stroke="#ffffff40" 
-                        fontSize={10} 
-                        tickLine={false} 
-                        axisLine={false}
-                        tickFormatter={(value) => `₹${value}`}
-                        hide={window.innerWidth < 640}
-                      />
-                      <RechartsTooltip 
-                        contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
-                        itemStyle={{ color: '#fff' }}
-                      />
-                      <Area type="monotone" dataKey="amount" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorAmount)" strokeWidth={3} />
-                    </AreaChart>
+                     <BarChart data={categoryData}>
+                        <XAxis dataKey="name" stroke="rgba(255,255,255,0.15)" fontSize={10} fontWeight={900} tickLine={false} axisLine={false} />
+                        <YAxis hide />
+                        <RechartsTooltip 
+                           cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                           contentStyle={{ backgroundColor: 'rgba(10,10,15,0.8)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', backdropFilter: 'blur(12px)' }}
+                        />
+                        <Bar dataKey="value" fill="#3b82f6" radius={[12, 12, 0, 0]} barSize={56} style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.3))' }} />
+                     </BarChart>
                   </ResponsiveContainer>
+               </div>
+             ) : <NoDataPlaceholder />}
+          </Card>
+
+          <div className="lg:col-span-2">
+             <Card className="glass-card p-12 h-full border-white/5 overflow-hidden">
+                <div className="flex items-center justify-between mb-16">
+                   <div>
+                      <h3 className="text-3xl font-black uppercase tracking-tight">Expenditure Velocity</h3>
+                      <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mt-2">6-Month Temporal Progression</p>
+                   </div>
+                   <div className="w-16 h-16 rounded-[24px] bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center shadow-xl">
+                      <TrendingUp className="w-8 h-8 text-emerald-400" />
+                   </div>
                 </div>
-            </Card>
-          </motion.div>
+                
+                {hasData ? (
+                  <div className="h-[500px] w-full mt-4">
+                     <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={barData}>
+                           <defs>
+                              <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                                 <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25}/>
+                                 <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                              </linearGradient>
+                           </defs>
+                           <CartesianGrid strokeDasharray="4 4" stroke="rgba(255,255,255,0.02)" vertical={false} />
+                           <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={10} fontWeight={900} tickLine={false} axisLine={false} tickMargin={20} />
+                           <YAxis 
+                              stroke="rgba(255,255,255,0.2)" fontSize={10} fontWeight={900} tickLine={false} axisLine={false}
+                              tickFormatter={(value) => `₹${value.toLocaleString()}`}
+                           />
+                           <RechartsTooltip 
+                              contentStyle={{ backgroundColor: 'rgba(10,10,15,0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', backdropFilter: 'blur(20px)' }}
+                           />
+                           <Area type="monotone" dataKey="amount" stroke="#3b82f6" fillOpacity={1} fill="url(#colorAmount)" strokeWidth={5} style={{ filter: 'drop-shadow(0 0 25px rgba(59,130,246,0.3))' }} />
+                        </AreaChart>
+                     </ResponsiveContainer>
+                  </div>
+                ) : <NoDataPlaceholder />}
+             </Card>
+          </div>
 
         </div>
       </main>
     </div>
   );
 }
+
+function NoDataPlaceholder() {
+  return (
+    <div className="h-[350px] flex flex-col items-center justify-center opacity-20 group">
+       <BarChart3 className="w-16 h-16 mb-6 group-hover:scale-110 transition-transform" />
+       <p className="text-[10px] font-black uppercase tracking-[0.5em]">System Idle: Awaiting Parameters</p>
+    </div>
+  );
+}
+
+
