@@ -55,11 +55,11 @@ const BentoCard = ({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.6, ease: PREMIUM_EASE }}
       className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/10 shadow-2xl transition-all duration-500 hover:bg-[#0F0F0F] hover:border-white/20 ${className}`}
-      style={{ overflow: 'visible' }}
+      style={{ overflow: 'visible' }} // Essential for shadows/glows
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[40px] pointer-events-none" />
       
-      <div className="relative z-10 p-12 h-full flex flex-col justify-between">
+      <div className="relative z-10 p-12 h-full flex flex-col justify-between" style={{ overflow: 'visible' }}>
         <div className="space-y-8">
           <div className="w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/40">
             <Icon className="w-6 h-6 text-[#64CEFB]" />
@@ -70,7 +70,7 @@ const BentoCard = ({
           </div>
         </div>
         
-        <div className="mt-12 flex-1 flex flex-col justify-end min-h-[160px]">
+        <div className="mt-12 flex-1 flex flex-col justify-end min-h-[180px] relative" style={{ overflow: 'visible' }}>
           {visual}
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function Landing() {
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
       {/* 
-          --- HERO SECTION (Ensuring No Cutoff) --- 
+          --- HERO SECTION --- 
       */}
       <section className="relative min-h-[100vh] w-full bg-black overflow-hidden flex flex-col justify-start">
         <video
@@ -125,7 +125,7 @@ export default function Landing() {
             >
               <div className="space-y-6">
                 <span className="text-[#64CEFB] text-[11px] font-black uppercase tracking-[1em] block opacity-60">STILL UNDER CONSTRUCTION</span>
-                <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-[0.8] uppercase">
+                <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[8rem] font-black tracking-tighter leading-[0.8] uppercase">
                   <div className="text-white/95">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
@@ -151,7 +151,7 @@ export default function Landing() {
       </section>
 
       {/* 
-          --- FEATURES SECTION: WORLD-CLASS REDESIGN --- 
+          --- FEATURES SECTION --- 
       */}
       <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5">
         <div className="container mx-auto px-6 max-w-[1600px]">
@@ -187,47 +187,50 @@ export default function Landing() {
               }
             />
 
-            {/* 2. Secure Vault (OVERHAULED VISUAL) */}
+            {/* 2. Secure Vault (NO CUTOFF) */}
             <BentoCard
               title="Secure Stash Vault"
               desc="Tier-1 capital protection. Lock your long-term wealth behind a customized PIN-secure storage layer."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-48 w-full flex items-center justify-center pt-8">
-                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.08)_0%,transparent_75%)]" />
-                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/40 transition-all duration-700">
+                <div className="relative h-48 w-full flex items-center justify-center overflow-visible">
+                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.12)_0%,transparent_70%)] blur-2xl" />
+                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_60px_rgba(100,206,251,0.1)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/50 transition-all duration-700 z-10">
                       <div className="grid grid-cols-3 gap-3">
                          {[1,2,3,4,5,6,7,8,9].map(i => (
                            <motion.div 
                              key={i} 
-                             whileHover={{ scale: 1.5, color: "#64CEFB" }}
+                             whileHover={{ scale: 1.5, backgroundColor: "#64CEFB" }}
                              className="w-1.5 h-1.5 rounded-full bg-white/10 transition-colors"
                            />
                          ))}
                       </div>
                       <div className="flex items-center gap-1.5">
                          <Lock className="w-3.5 h-3.5 text-[#64CEFB]" />
-                         <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">ENCRYPTED</span>
+                         <span className="text-[8px] font-black text-white/20 uppercase tracking-widest leading-none">ENCRYPTED</span>
                       </div>
                    </div>
                 </div>
               }
             />
 
-            {/* 3. Daily Milestones */}
+            {/* 3. Daily Milestones (GLOWING ICONS) */}
             <BentoCard
               title="Growth Rewards"
               desc="Collect premium tokens and verified badges for your financial discipline and consistency."
               icon={Coins}
               visual={
-                <div className="flex gap-5 pt-8 px-6">
+                <div className="flex gap-5 pt-8 px-6 overflow-visible">
                    {[1, 2, 3].map(i => (
                      <motion.div 
                        key={i}
                        whileHover={{ y: -10, rotate: i === 3 ? 15 : -15 }}
-                       className={`w-16 h-16 rounded-[24px] flex items-center justify-center border-2 transition-all cursor-pointer ${i === 3 ? 'bg-[#64CEFB]/10 border-[#64CEFB]/30 text-[#64CEFB] shadow-[0_0_30px_rgba(100,206,251,0.15)]' : 'bg-white/5 border-white/10 text-white/10 grayscale'}`}
+                       className={`w-16 h-16 rounded-[24px] flex items-center justify-center border transition-all cursor-pointer relative ${i === 3 ? 'bg-[#64CEFB]/15 border-[#64CEFB]/40 text-[#64CEFB] shadow-[0_0_30px_rgba(100,206,251,0.25)]' : 'bg-white/5 border-white/10 text-white/20'}`}
                      >
-                        {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
+                        <div className={`absolute inset-0 rounded-[24px] blur-md transition-opacity duration-500 ${i === 3 ? 'bg-[#64CEFB]/10 opacity-100' : 'bg-white/5 opacity-0 group-hover:opacity-100'}`} />
+                        <div className="relative z-10">
+                          {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
+                        </div>
                      </motion.div>
                    ))}
                 </div>
@@ -282,13 +285,13 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FRIENDLY CHAT: AS IT WAS BEFORE */}
+      {/* FRIENDLY CHAT (AS IT WAS BEFORE) */}
       <section className="py-32 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="flex flex-col lg:flex-row items-center gap-32">
              <div className="flex-1 space-y-12 relative z-10">
-               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase">
+               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase font-display">
                  Your AI <br />
                  Savings Buddy.
                </h2>
@@ -321,7 +324,7 @@ export default function Landing() {
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
                     <div className="text-[11px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
-                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default ${
+                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default font-sans ${
                       chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_20px_60px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
@@ -336,10 +339,10 @@ export default function Landing() {
       {/* FOOTER */}
       <footer className="container mx-auto px-10 py-32 relative z-10 text-center space-y-20">
          <div className="flex items-center justify-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-1000">
-            <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full border-2 border-white/40 flex items-center justify-center">
                <div className="w-3 h-3 bg-white rounded-full" />
             </div>
-            <span className="text-3xl font-black tracking-tighter text-white uppercase">Pocket Fund</span>
+            <span className="text-3xl font-black tracking-tighter text-white uppercase font-display">Pocket Fund</span>
          </div>
          <div className="flex flex-wrap items-center justify-center gap-20">
             {['Privacy Protocol', 'Security Standard', 'Mastery Network', 'Support Authority'].map(item => (
