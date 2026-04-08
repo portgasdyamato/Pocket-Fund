@@ -225,28 +225,3 @@
 .layout-reset {
   @apply m-0 p-0 box-border;
 }
-
-/* High-end Motion Utilities */
-.parallax-light {
-  transform: translateZ(20px);
-}
-
-.nav-blur {
-  background: rgba(2, 2, 2, 0.4);
-  backdrop-filter: blur(24px) saturate(180%);
-}
-
-.animate-gradient-text {
-  background: linear-gradient(-45deg, #fff, #6366f1, #0ea5e9, #fff);
-  background-size: 300% 300%;
-  animation: gradient-shift 10s ease infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
