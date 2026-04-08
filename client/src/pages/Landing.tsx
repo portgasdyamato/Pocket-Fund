@@ -215,7 +215,7 @@ export default function Landing() {
               }
             />
 
-            {/* 3. Daily Milestones (GLOW ONLY ON HOVER) */}
+            {/* 3. Daily Milestones */}
             <BentoCard
               title="Growth Rewards"
               desc="Collect premium tokens and verified badges for your financial discipline and consistency."
@@ -286,47 +286,43 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FRIENDLY CHAT (NO CHANGES) */}
-      <section className="py-32 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
+      {/* 
+          --- REFINED FRIENDLY CHAT SECTION --- 
+      */}
+      <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-[1600px]">
-          <div className="flex flex-col lg:flex-row items-center gap-32">
-             <div className="flex-1 space-y-12 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-24">
+             <div className="flex-1 space-y-10 relative z-10">
                <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase font-display">
                  Your AI <br />
                  Savings Buddy.
                </h2>
-               <p className="text-xl text-white/30 leading-relaxed font-medium max-w-xl">
-                 High-performance guidance that learns your habits and helps you stay on the path to master-level saving.
+               <p className="text-xl text-white/30 leading-relaxed font-medium max-w-lg">
+                 Friendly, judgment-free advice that helps you save more without changing your lifestyle.
                </p>
-               <div className="flex gap-6 pt-6 uppercase tracking-widest font-black text-[11px] text-white/20">
-                  <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#64CEFB] rounded-full" />
-                    24/7 ADVISORY
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
-                    PRIVACY SECURED
-                  </div>
+               <div className="flex gap-4 pt-4">
+                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">24/7 ADVICE</div>
+                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">PRIVACY SECURED</div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-6 relative z-10">
+             <div className="flex-1 w-full space-y-4 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
-                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "Client" },
+                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
                   { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "Coach" }
                 ].map((chat, i) => (
                   <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, x: chat.pos === 'left' ? -30 : 30 }}
+                    initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.15 }}
+                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.1 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[11px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
-                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default font-sans ${
-                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_20px_60px_rgba(100,206,251,0.2)]'
+                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2 px-6">{chat.sender}</div>
+                    <div className={`px-8 py-6 rounded-[2.5rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.02] cursor-default ${
+                      chat.pos === 'left' ? 'bg-white/5 border-white/10 text-white/80' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_15px_40px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
                     </div>
@@ -339,53 +335,56 @@ export default function Landing() {
 
       {/* WORLD-CLASS PREMIUM FOOTER */}
       <footer className="bg-black relative z-10 border-t border-white/5 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-[#64CEFB]/5 blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-[#64CEFB]/[0.02] blur-[120px] pointer-events-none" />
         
-        <div className="container mx-auto px-6 max-w-[1600px] pt-32 pb-20">
-           <div className="grid grid-cols-1 lg:grid-cols-4 gap-24 mb-32">
-              <div className="lg:col-span-1 space-y-10">
+        <div className="container mx-auto px-6 max-w-[1600px] pt-24 pb-12">
+           <div className="grid grid-cols-1 lg:grid-cols-4 gap-20 mb-20">
+              
+              {/* Brand Section */}
+              <div className="lg:col-span-1 space-y-8">
                  <div className="flex items-center gap-4 group cursor-pointer">
-                    <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-500">
-                       <div className="w-3.5 h-3.5 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
+                    <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-500">
+                       <div className="w-3 h-3 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
                     </div>
-                    <span className="text-3xl font-black tracking-tighter text-white uppercase group-hover:opacity-80 transition-opacity">Pocket Fund</span>
+                    <span className="text-2xl font-black tracking-tighter text-white uppercase group-hover:opacity-80 transition-opacity font-display">Pocket Fund</span>
                  </div>
-                 <p className="text-white/30 text-base leading-relaxed font-medium max-w-xs transition-colors hover:text-white/50">
-                    High-performance financial governance for the modern capital architect. Built for precision.
+                 <p className="text-white/20 text-sm leading-relaxed font-medium max-w-[240px]">
+                    High-performance financial governance for the modern capital architect.
                  </p>
-                 <div className="flex items-center gap-6">
+                 <div className="flex items-center gap-5">
                     {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
                       <motion.a 
                         key={i}
-                        whileHover={{ y: -5, scale: 1.1 }}
+                        whileHover={{ y: -3, scale: 1.1 }}
                         href="#" 
-                        className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/20 hover:text-[#64CEFB] hover:border-[#64CEFB]/30 transition-all"
+                        className="w-9 h-9 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-white/10 hover:text-[#64CEFB] hover:border-[#64CEFB]/30 transition-all"
                       >
-                         <Icon className="w-4 h-4" />
+                         <Icon className="w-3.5 h-3.5" />
                       </motion.a>
                     ))}
                  </div>
               </div>
 
-              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-4">
+              {/* Navigation Links */}
+              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-8">
                  {[
                    { title: 'Platform', links: ['Dashboard', 'Vault Cache', 'Insights', 'Coach Hub'] },
                    { title: 'Governance', links: ['Privacy Protocol', 'Security Layer', 'Terms', 'Licenses'] },
                    { title: 'Network', links: ['Status', 'Uptime', 'API Alpha', 'Changelog'] },
                    { title: 'Collective', links: ['Advisory', 'Patrons', 'Design Port', 'Legacy'] }
                  ].map((col, i) => (
-                   <div key={i} className="space-y-8">
-                      <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#64CEFB]/60">{col.title}</h4>
-                      <ul className="space-y-4">
+                   <div key={i} className="space-y-6">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#64CEFB]/40">{col.title}</h4>
+                      <ul className="space-y-3">
                         {col.links.map(link => (
                           <li key={link}>
                             <motion.a 
-                              whileHover={{ x: 5 }}
+                              whileHover={{ x: 3 }}
                               href="#" 
-                              className="text-white/20 hover:text-white text-[13px] font-bold transition-all flex items-center gap-2 group"
+                              className="text-white/10 hover:text-white text-[12px] font-bold transition-all flex items-center gap-2 group"
                             >
                                {link}
-                               <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-1 transition-all" />
+                               <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-0.5 transition-all" />
                             </motion.a>
                           </li>
                         ))}
@@ -395,35 +394,34 @@ export default function Landing() {
               </div>
            </div>
 
-           <div className="relative border-t border-white/5 pt-20">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-                 <div className="space-y-4">
+           <div className="relative border-t border-white/5 pt-12">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                 <div className="w-full relative overflow-hidden">
                     <motion.h2 
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      className="text-[12vw] font-black tracking-tighter leading-none text-white/[0.03] uppercase whitespace-nowrap pointer-events-none select-none"
+                      initial={{ y: "100%", opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 1.2, ease: PREMIUM_EASE }}
+                      className="text-[12vw] font-black tracking-tighter leading-none text-white/[0.08] uppercase whitespace-nowrap pointer-events-none select-none font-display"
                     >
                        Pocket Fund System
                     </motion.h2>
-                    <div className="flex items-center gap-8 pl-4">
-                       <p className="text-[10px] font-black uppercase tracking-[0.8em] text-white/10">EST. 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
-                       <div className="h-px flex-1 bg-white/5 hidden md:block" />
-                       <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/10">
-                          <span>SYSTEM OK</span>
-                          <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                    <div className="flex items-center gap-6 mt-4">
+                       <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">EST. 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
+                       <div className="h-px flex-1 bg-white/[0.03] hidden md:block" />
+                       <div className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-white/5">
+                          <span>SYSTEM ONLINE</span>
+                          <div className="w-1 h-1 bg-emerald-500/30 rounded-full" />
                        </div>
                     </div>
                  </div>
                  
-                 <div className="flex flex-col items-center md:items-end gap-6">
+                 <div className="flex flex-col items-center md:items-end gap-4 shrink-0">
                     <button 
                       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className="group flex flex-col items-center md:items-end gap-4"
+                      className="group flex items-center gap-4 px-6 py-3 rounded-full bg-white/[0.02] border border-white/5 hover:border-[#64CEFB]/30 transition-all"
                     >
-                       <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20 group-hover:text-white transition-colors">Return Top</span>
-                       <div className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 group-hover:scale-110 transition-all duration-500">
-                          <ArrowRightCircle className="w-6 h-6 text-white/20 group-hover:text-[#64CEFB] -rotate-90" />
-                       </div>
+                       <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-white transition-colors">Return Top</span>
+                       <ArrowRightCircle className="w-4 h-4 text-white/20 group-hover:text-[#64CEFB] -rotate-90 transition-all" />
                     </button>
                  </div>
               </div>
