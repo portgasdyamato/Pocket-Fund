@@ -4,7 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Wallet, Lock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +32,10 @@ import {
   Receipt,
   MessageCircle,
   ChevronRight,
-  PieChart as PieChartIcon
+  PieChart as PieChartIcon,
+  ArrowUpRight,
+  Wallet,
+  Lock
 } from "lucide-react";
 
 const menuItems = [
@@ -62,18 +64,19 @@ export function NavigationBar() {
 
   if (!isAuthenticated) {
     return (
-      <nav className="fixed top-0 left-0 w-full z-[100] border-b border-white/[0.03] backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 w-full z-[100] border-b border-white/[0.05] backdrop-blur-md">
         <div className="container mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group cursor-pointer transition-all">
-            <div className="w-8 h-8 rounded-lg bg-white overflow-hidden flex items-center justify-center group-hover:rotate-12 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-lg font-black tracking-tight uppercase font-['Space_Grotesk'] text-white">Pocket Fund</span>
+            <span className="text-xl font-bold tracking-tight font-['Space_Grotesk'] text-white">Pocket Fund</span>
           </Link>
           <div className="flex items-center gap-6">
-             <button onClick={handleLogin} className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">Sign In</button>
-             <button onClick={handleLogin} className="bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] px-6 h-10 rounded-full hover:bg-white/90 transition-all click-scale font-display">
+             <button onClick={handleLogin} className="text-sm font-medium text-white/60 hover:text-white transition-colors hidden sm:block">Log in</button>
+             <button onClick={handleLogin} className="bg-white text-black text-sm font-bold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2">
                Get Started
+               <ArrowUpRight className="w-4 h-4" />
              </button>
           </div>
         </div>
@@ -83,18 +86,16 @@ export function NavigationBar() {
 
   return (
     <div className="sticky top-0 z-[100]">
-      <nav className="bg-[#050505]/80 backdrop-blur-2xl border-b border-white/[0.03]">
+      <nav className="bg-[#020202]/80 backdrop-blur-2xl border-b border-white/[0.05]">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-all shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-white overflow-hidden flex items-center justify-center border border-white/10 group-hover:rotate-6 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
               <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-lg font-black tracking-tighter uppercase font-display hidden sm:block">Pocket Fund</span>
+            <span className="text-lg font-bold tracking-tighter uppercase font-['Space_Grotesk'] hidden sm:block">Pocket Fund</span>
           </Link>
           
-          {/* Main Links (Desktop) */}
-          <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.06]">
+          <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.05]">
             {menuItems.map((item) => {
               const isActive = location === item.url;
               return (
@@ -114,17 +115,15 @@ export function NavigationBar() {
             })}
           </div>
 
-          {/* Controls Section */}
           <div className="flex items-center gap-4">
-            {/* Balances (Desktop) */}
             <div className="hidden xl:flex items-center gap-2 bg-white/[0.02] p-1 rounded-2xl border border-white/[0.05]">
                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
                   <Wallet className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-black font-display tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
+                  <span className="text-xs font-bold font-['Space_Grotesk'] tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
                </div>
                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
                   <Lock className="w-3.5 h-3.5 text-accent" />
-                  <span className="text-xs font-black font-display tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
+                  <span className="text-xs font-bold font-['Space_Grotesk'] tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
                </div>
             </div>
 
@@ -135,41 +134,40 @@ export function NavigationBar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative h-10 w-10 flex-shrink-0 focus:outline-none group">
-                     <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                     <Avatar className="h-10 w-10 border border-white/10 p-0.5 bg-white/[0.05]">
                       <AvatarImage src={user?.profileImageUrl || undefined} className="rounded-full object-cover" />
-                      <AvatarFallback className="bg-white/5 text-white text-[10px] font-black">
+                      <AvatarFallback className="bg-white/5 text-white text-[10px] font-bold">
                         {user?.firstName?.[0] || user?.email?.[0] || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
-                  className="w-72 border-white/[0.03] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl" 
+                  className="w-72 border-white/[0.05] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl" 
                   align="end"
                 >
                   <div className="p-6 flex items-center gap-4 bg-white/[0.02] rounded-2xl border border-white/[0.05] mb-2">
                     <Avatar className="h-14 w-14 border border-white/10">
                       <AvatarImage src={user?.profileImageUrl || undefined} className="object-cover" />
-                      <AvatarFallback className="bg-white/5 text-white font-black text-xl">
+                      <AvatarFallback className="bg-white/5 text-white font-bold text-xl">
                         {user?.firstName?.[0] || user?.email?.[0] || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
-                      <p className="font-black font-display text-white text-lg tracking-tight truncate w-32">{user?.firstName || 'User'}</p>
-                      <p className="text-[10px] font-black uppercase text-white/30 tracking-widest">{user?.email?.split('@')[0]}</p>
+                      <p className="font-bold text-white text-lg tracking-tight truncate w-32">{user?.firstName || 'User'}</p>
+                      <p className="text-[10px] font-bold uppercase text-white/30 tracking-widest">{user?.email?.split('@')[0]}</p>
                     </div>
                   </div>
                   <div className="space-y-1">
                     {[
-                      { icon: User, label: "Identity Profile", url: "/profile" },
-                      { icon: Trophy, label: "Achievement Log", url: "/achievements" },
-                      { icon: Settings, label: "System Config", url: "/settings" }
+                      { icon: User, label: "My Profile", url: "/profile" },
+                      { icon: Trophy, label: "Achievements", url: "/achievements" },
+                      { icon: Settings, label: "Settings", url: "/settings" }
                     ].map((item, i) => (
                       <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.05] cursor-pointer rounded-xl p-3 focus:bg-white/[0.1] transition-all">
                         <Link href={item.url} className="flex items-center gap-3">
                           <item.icon className="w-4 h-4 text-white/40" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/70">{item.label}</span>
+                          <span className="text-xs font-bold text-white/70">{item.label}</span>
                         </Link>
                       </DropdownMenuItem>
                     ))}
@@ -178,13 +176,12 @@ export function NavigationBar() {
                   <DropdownMenuItem onClick={handleLogout} className="hover:bg-red-500/10 cursor-pointer rounded-xl p-3 focus:bg-red-500/20 text-red-500 transition-all">
                     <div className="flex items-center gap-3">
                       <LogOut className="w-4 h-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Terminate Session</span>
+                      <span className="text-xs font-bold">Sign Out</span>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Mobile Burger */}
               <button
                 className={`lg:hidden w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
                   isMobileMenuOpen ? 'bg-white text-black' : 'bg-white/[0.03] text-white/60 hover:text-white'
@@ -197,29 +194,26 @@ export function NavigationBar() {
           </div>
         </div>
 
-        {/* Mobile Navigation Panel */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/[0.03] bg-black overflow-hidden"
+              className="lg:hidden border-t border-white/[0.05] bg-[#020202] overflow-hidden"
             >
               <div className="p-6 space-y-6">
-                 {/* Quick Balances (Mobile) */}
                  <div className="grid grid-cols-2 gap-3">
                     <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.05]">
-                       <p className="text-[8px] font-black uppercase text-white/20 tracking-widest mb-1">Wallet</p>
-                       <p className="text-sm font-black font-display tracking-tight text-white">₹{walletBalance.toLocaleString('en-IN')}</p>
+                       <p className="text-[8px] font-bold uppercase text-white/20 tracking-widest mb-1">Wallet</p>
+                       <p className="text-sm font-bold text-white">₹{walletBalance.toLocaleString('en-IN')}</p>
                     </div>
                     <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.05]">
-                       <p className="text-[8px] font-black uppercase text-white/20 tracking-widest mb-1">Locker</p>
-                       <p className="text-sm font-black font-display tracking-tight text-white">₹{lockerBalance.toLocaleString('en-IN')}</p>
+                       <p className="text-[8px] font-bold uppercase text-white/20 tracking-widest mb-1">Locker</p>
+                       <p className="text-sm font-bold text-white">₹{lockerBalance.toLocaleString('en-IN')}</p>
                     </div>
                  </div>
 
-                 {/* Links */}
                  <div className="space-y-2">
                     {menuItems.map((item, i) => (
                       <Link 
@@ -232,7 +226,7 @@ export function NavigationBar() {
                       >
                          <div className="flex items-center gap-4">
                             <item.icon className="w-4 h-4" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.title}</span>
+                            <span className="text-xs font-bold">{item.title}</span>
                          </div>
                          <ChevronRight className="w-4 h-4 opacity-40" />
                       </Link>
