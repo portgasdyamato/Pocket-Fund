@@ -2,14 +2,18 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { 
   ArrowRight, 
-  Menu, 
   Wallet, 
   Zap, 
   Trophy, 
   MessageCircle, 
   TrendingUp, 
   Shield, 
-  Heart
+  Heart,
+  ChevronRight,
+  Sparkles,
+  PieChart as PieChartIcon,
+  Activity,
+  Target
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
 
@@ -21,9 +25,8 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION (High-Fidelity) --- */}
       <section className="relative h-screen w-full bg-black overflow-hidden group/hero">
-        {/* Background Video */}
         <video
           autoPlay
           loop
@@ -37,10 +40,7 @@ export default function Landing() {
           />
         </video>
 
-        {/* Content Overlay */}
         <div className="relative z-10 w-full h-full flex flex-col items-center">
-          
-          {/* Navigation Bar */}
           <nav className="w-full max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full border border-white/40 flex items-center justify-center">
@@ -48,16 +48,12 @@ export default function Landing() {
               </div>
               <span className="text-white font-bold text-lg tracking-tight font-display">Pocket Fund</span>
             </div>
-
-            <div className="flex items-center gap-6">
-              <button onClick={handleLogin} className="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
-                Sign in
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <button onClick={handleLogin} className="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all group">
+              Sign in
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </button>
           </nav>
 
-          {/* Main Hero Content - Scaled Down for Elegance */}
           <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -66,17 +62,9 @@ export default function Landing() {
               className="max-w-5xl space-y-10"
             >
               <div className="space-y-4">
-                <motion.span 
-                  className="text-[#64CEFB] text-[10px] md:text-xs font-black uppercase tracking-[0.6em] block opacity-80"
-                >
-                  REIMAGINE YOUR WEALTH
-                </motion.span>
-                
+                <span className="text-[#64CEFB] text-[10px] md:text-xs font-black uppercase tracking-[0.6em] block opacity-80">REIMAGINE YOUR WEALTH</span>
                 <motion.h1 
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] uppercase"
+                   className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] uppercase"
                 >
                   <div className="text-white">Take Control Of</div>
                   <ShinyText text="Your Financial Future" />
@@ -84,160 +72,227 @@ export default function Landing() {
               </div>
 
               <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 pt-4">
-                <p className="text-white/40 text-[10px] md:text-sm max-w-[240px] leading-relaxed font-medium">
-                  Your money should work as hard as you do. Build wealth without the stress.
-                </p>
+                <p className="text-white/40 text-[10px] md:text-sm max-w-[240px] leading-relaxed font-medium">Your money should work as hard as you do. Build wealth without the stress.</p>
                 <div className="hidden md:block w-px h-10 bg-white/10" />
                 <div className="space-y-1">
-                  <p className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest">
-                    50,000+ Savers & Investors
-                  </p>
+                  <p className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest">50,000+ Savers & Investors</p>
                   <p className="text-[#64CEFB] text-[9px] font-bold uppercase tracking-widest opacity-60">Verified Community</p>
                 </div>
               </div>
 
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="pt-6"
-              >
+              <div className="pt-6">
                 <Button 
-                  onClick={handleLogin}
-                  className="bg-white text-black hover:bg-white/90 rounded-full px-12 py-7 text-sm font-black uppercase tracking-widest group transition-all active:scale-95 shadow-[0_15px_30px_rgba(255,255,255,0.15)]"
+                   onClick={handleLogin}
+                   className="bg-white text-black hover:bg-white/90 rounded-full px-12 py-7 text-sm font-black uppercase tracking-widest transition-all active:scale-95 shadow-[0_15px_30px_rgba(255,255,255,0.15)]"
                 >
-                  Initialize Journey
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  Start Now
                 </Button>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* --- REMAINDER OF PAGE (Synced Scale) --- */}
+      {/* --- REIMAGINED EXHIBIT: CORE FEATURES --- */}
+      <section className="py-20 sm:py-40 relative z-10 border-t border-white/5">
+        <div className="container mx-auto px-6">
+          <div className="mb-24 space-y-4 max-w-2xl">
+             <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 01: Core Systems</span>
+             <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase font-display leading-[0.85]">
+               Engineered <br />For Mastery.
+             </h2>
+          </div>
 
-      {/* Feature Split Section */}
-      <section className="container mx-auto px-6 py-40 relative">
-         <motion.div
-           initial={{ opacity: 0, y: 40 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="relative max-w-6xl mx-auto"
-         >
-            <div className="absolute inset-0 bg-[#64CEFB]/5 blur-[200px] -z-10" />
-            <div className="rounded-[48px] border border-white/5 bg-[#080808] overflow-hidden shadow-2xl p-8 md:p-20">
-               <div className="grid lg:grid-cols-2 gap-20 items-center">
-                  <div className="space-y-12">
-                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#64CEFB]/5 border border-[#64CEFB]/10">
-                        <Heart className="w-3.5 h-3.5 text-[#64CEFB]" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#64CEFB]">Financial Clarity</span>
-                     </div>
-                     <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-none uppercase">One Interface. <br /> Absolute Mastery.</h3>
-                     <p className="text-lg text-white/30 font-medium leading-relaxed max-w-md">Ditch the legacy spreadsheets. Experience a fluid, real-time ledger that respects your time and intelligence.</p>
-                     
-                     <div className="space-y-8">
-                        {[
-                          { icon: Zap, label: "Instant Ledger Entry", desc: "Log activity in 2 seconds" },
-                          { icon: Shield, label: "Vault Protection", desc: "Automated wealth isolation" },
-                          { icon: Trophy, label: "Growth Milestones", desc: "Unlock tier-based rewards" }
-                        ].map((item, i) => (
-                          <div key={i} className="flex items-start gap-5 group cursor-pointer transition-all">
-                             <div className={`w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/20`}>
-                                <item.icon className="w-5 h-5 text-white/40 group-hover:text-[#64CEFB]" />
-                             </div>
-                             <div>
-                                <h4 className="text-[11px] font-black uppercase tracking-widest text-white/80">{item.label}</h4>
-                                <p className="text-[10px] text-white/30 mt-1 uppercase font-bold tracking-tight">{item.desc}</p>
-                             </div>
-                          </div>
-                        ))}
-                     </div>
+          <div className="grid lg:grid-cols-12 gap-px bg-white/5 border border-white/5 overflow-hidden rounded-[2rem]">
+            <div className="lg:col-span-7 bg-[#050505] p-12 sm:p-20 flex flex-col justify-between group">
+               <div className="space-y-8">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/20 transition-all">
+                     <Activity className="w-6 h-6 text-[#64CEFB]" />
                   </div>
-                  
-                  <div className="relative group/card">
-                     <div className="aspect-[4/5] bg-gradient-to-br from-white/[0.02] to-transparent border border-white/10 rounded-[64px] p-12 flex flex-col justify-between shadow-2xl transition-transform group-hover/card:scale-[1.02] duration-700">
-                        <div className="flex justify-between items-start">
-                           <div className="space-y-1">
-                              <p className="text-[9px] font-black text-white/10 uppercase tracking-[0.5em]">Global Reserve</p>
-                              <p className="text-5xl font-black tracking-tighter tabular-nums drop-shadow-lg">₹4,52,000</p>
-                           </div>
-                           <div className="w-16 h-16 rounded-3xl bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
-                              <TrendingUp className="w-8 h-8 text-[#64CEFB]" />
-                           </div>
-                        </div>
-                        <div className="h-56 w-full bg-[#64CEFB]/[0.02] rounded-[40px] border border-white/5 flex items-end p-8 overflow-hidden relative">
-                           <div className="w-full flex justify-between items-end h-full gap-2.5">
-                              {[30, 45, 60, 40, 80, 55, 90, 70, 100].map((h, i) => (
-                                <motion.div 
-                                  key={i} 
-                                  initial={{ height: 0 }}
-                                  whileInView={{ height: `${h}%` }}
-                                  transition={{ duration: 1, delay: i * 0.05, ease: "circOut" }}
-                                  className="flex-1 bg-gradient-to-t from-[#64CEFB]/20 to-[#64CEFB]/80 rounded-t-sm" 
-                                />
-                              ))}
-                           </div>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px] font-black text-white/5 uppercase tracking-[0.6em] px-4">
-                           <span>Q1</span>
-                           <span>Q2</span>
-                           <span>Q3</span>
-                           <span>Q4</span>
-                        </div>
-                     </div>
+                  <h3 className="text-3xl font-black uppercase tracking-tight">Active Ledger Intelligence</h3>
+                  <p className="text-lg text-white/40 font-medium leading-relaxed max-w-md">No more delayed syncing. Your finances update in real-time with automatic category resolution and behavioral insights.</p>
+               </div>
+               <div className="mt-12 pt-12 border-t border-white/5 flex gap-8">
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-2">Process Speed</h4>
+                    <p className="text-xl font-black">2.4s Average</p>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-2">Sync Accuracy</h4>
+                    <p className="text-xl font-black">99.9%</p>
                   </div>
                </div>
             </div>
-         </motion.div>
-      </section>
-
-      {/* Simplified Triple Pillar */}
-      <section className="py-20 sm:py-32 container mx-auto px-6 border-y border-white/5 bg-[#020202]">
-        <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-           {[
-             {
-               icon: Zap,
-               title: "High-Freq Entry",
-               desc: "Engineered for speed. Log transactions at the speed of thought."
-             },
-             {
-               icon: Trophy,
-               title: "Loyalty Tiers",
-               desc: "Earn XP for every discipline action and unlock premium badges."
-             },
-             {
-               icon: MessageCircle,
-               title: "Neural Assist",
-               desc: "AI-driven heuristics to prevent spending leaks and optimize growth."
-             }
-           ].map((item, i) => (
-             <div key={i} className="space-y-8 p-6 group">
-               <div className="w-14 h-14 rounded-2xl bg-[#64CEFB]/5 border border-[#64CEFB]/10 flex items-center justify-center group-hover:scale-110 transition-all">
-                  <item.icon className="w-7 h-7 text-[#64CEFB] opacity-60 group-hover:opacity-100" />
+            
+            <div className="lg:col-span-5 grid grid-rows-2">
+               <div className="bg-[#080808] p-12 border-b border-white/5 group">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all">
+                     <Target className="w-5 h-5 text-primary" />
+                  </div>
+                  <h4 className="text-xl font-black uppercase mb-4">Goal Architect</h4>
+                  <p className="text-sm text-white/30 font-medium tracking-tight uppercase leading-relaxed">Precision goal tracking with automated vault allocation based on your spending patterns.</p>
                </div>
-               <h3 className="text-xl font-black tracking-tight uppercase">{item.title}</h3>
-               <p className="text-white/30 leading-relaxed font-medium text-sm">{item.desc}</p>
-             </div>
-           ))}
+               <div className="bg-[#0A0A0A] p-12 group">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-all">
+                     <Shield className="w-5 h-5 text-accent" />
+                  </div>
+                  <h4 className="text-xl font-black uppercase mb-4">Vault CONSENSUS</h4>
+                  <p className="text-sm text-white/30 font-medium tracking-tight uppercase leading-relaxed">Tier-1 security encryption for all movement between your active ledger and protected vault.</p>
+               </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Minimal Footer */}
-      <footer className="container mx-auto px-6 py-32 relative z-10 text-center space-y-12">
-         <div className="flex items-center justify-center gap-3">
-            <div className="w-7 h-7 rounded-sm border-2 border-white/20 flex items-center justify-center">
-               <div className="w-2 h-2 bg-white rounded-full" />
+      {/* --- REIMAGINED EXHIBIT: THE VAULT --- */}
+      <section className="py-40 relative bg-white/[0.01] border-y border-white/5 overflow-hidden">
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
+            <div className="relative">
+                <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[150px] -z-10" />
+                <div className="aspect-square bg-white/[0.02] border border-white/5 rounded-[4rem] p-4 group">
+                    <div className="w-full h-full rounded-[3.5rem] bg-[#050505] border border-white/5 p-12 flex flex-col justify-between overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#64CEFB]/5 blur-3xl" />
+                        <div className="flex justify-between items-start">
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Vault Portfolio</p>
+                              <p className="text-6xl font-black tracking-tighter">₹4,52,000</p>
+                           </div>
+                           <TrendingUp className="w-10 h-10 text-[#64CEFB]" />
+                        </div>
+                        <div className="h-40 w-full flex items-end gap-2.5">
+                           {[20, 35, 25, 50, 45, 75, 60, 90, 80, 100].map((h, i) => (
+                              <motion.div 
+                                key={i} 
+                                initial={{ height: 0 }}
+                                whileInView={{ height: `${h}%` }}
+                                transition={{ duration: 1, delay: i * 0.05 }}
+                                className="flex-1 bg-gradient-to-t from-white/5 to-[#64CEFB]/40 rounded-t-sm" 
+                              />
+                           ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <span className="text-lg font-bold tracking-tight text-white uppercase font-display">Pocket Fund</span>
+            <div className="space-y-12">
+               <div className="space-y-4">
+                  <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 02: Liquidity Protection</span>
+                  <h3 className="text-5xl font-black tracking-tighter leading-none uppercase">The Vault <br /> Reserves.</h3>
+               </div>
+               <p className="text-xl text-white/40 leading-relaxed font-medium">Automatically isolate your savings into high-performance reserves. Out of sight, but constantly growing with behavioral triggers that save while you spend.</p>
+               <div className="grid grid-cols-2 gap-8 pt-8">
+                  <div className="space-y-2">
+                     <p className="text-3xl font-black text-white">12.5%</p>
+                     <p className="text-[10px] font-black uppercase text-white/20 tracking-widest">Avg. Monthly Yield</p>
+                  </div>
+                  <div className="space-y-2">
+                     <p className="text-3xl font-black text-white">Secure</p>
+                     <p className="text-[10px] font-black uppercase text-white/20 tracking-widest">Isolation Layer</p>
+                  </div>
+               </div>
+            </div>
+        </div>
+      </section>
+
+      {/* --- REIMAGINED CHAT: THE AI ADVISOR --- */}
+      <section className="py-40 relative z-10 overflow-hidden">
+        <div className="container mx-auto px-6 text-center mb-24 space-y-4">
+           <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 03: Decision Intelligence</span>
+           <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase font-display leading-[0.85]">
+             Your Personal <br /> Neural Coach.
+           </h2>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 relative">
+          <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[200px] -z-10" />
+          <div className="space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="flex items-start gap-4"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                <MessageCircle className="w-6 h-6 text-[#64CEFB]" />
+              </div>
+              <div className="bg-[#0A0A0A] border border-white/5 p-6 rounded-[2rem] rounded-tl-none max-w-md shadow-xl">
+                 <p className="text-base font-medium text-white/80 leading-relaxed">
+                    Analyzing your weekend behavior... I noticed ₹3,400 in impulse spending at Global Mall. If we cut this by 20% next month, you'll hit your "MacBook" goal 3 weeks early. Shall we set a trigger?
+                 </p>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="flex items-start gap-4 flex-row-reverse"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-[#64CEFB] flex items-center justify-center shrink-0">
+                <User className="w-6 h-6 text-black" />
+              </div>
+              <div className="bg-[#64CEFB] p-6 rounded-[2rem] rounded-tr-none max-w-md shadow-2xl shadow-[#64CEFB]/20">
+                 <p className="text-base font-black text-black leading-relaxed">
+                    Yes, definitely! Let's set a ₹1,500 limit for shopping next weekend.
+                 </p>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="flex items-start gap-4"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                 <Sparkles className="w-6 h-6 text-[#64CEFB]" />
+              </div>
+              <div className="bg-[#0A0A0A] border border-white/5 p-6 rounded-[2rem] rounded-tl-none max-w-md shadow-xl">
+                 <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[#64CEFB]">Limit Optimized</span>
+                 </div>
+                 <p className="text-base font-medium text-white/80 leading-relaxed">
+                    Trigger set. I'll alert you if you approach ₹1,200 on Saturday. Efficiency increased by 14%. Great move!
+                 </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- MINIMAL FOOTER --- */}
+      <footer className="container mx-auto px-6 py-32 mt-20 border-t border-white/5 text-center space-y-12 relative overflow-hidden">
+         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-[#64CEFB]/5 blur-[120px] -z-10" />
+         <div className="flex items-center justify-center gap-3">
+            <div className="w-8 h-8 rounded-sm border-2 border-white/20 flex items-center justify-center">
+               <div className="w-2.5 h-2.5 bg-white rounded-full" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white uppercase font-display">Pocket Fund</span>
          </div>
          <div className="flex flex-wrap items-center justify-center gap-12">
-            {['Privacy', 'Security', 'Compliance', 'Contact'].map(item => (
-              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-[#64CEFB] transition-all">{item}</a>
+            {['Privacy Protocol', 'Encryption Standard', 'Contact Authority', 'Legal Ledger'].map(item => (
+              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-[#64CEFB] transition-all transform hover:scale-110">{item}</a>
             ))}
          </div>
-         <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5 pt-10 border-t border-white/5">© 2026 Architectural Capital. Verified Secure.</p>
+         <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5 pt-10">© 2026 Architectural Capital Systems. High-Performance Finance.</p>
       </footer>
     </div>
   );
+}
+
+function User(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  )
 }
