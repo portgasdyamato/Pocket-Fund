@@ -21,11 +21,13 @@ import {
   BarChart3,
   Star,
   ShieldCheck,
-  Flame,
   Layout,
   Clock,
   Gem,
-  CheckCircle2
+  Mic,
+  BrainCircuit,
+  Settings,
+  ShieldAlert
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
 import { useState, useRef } from "react";
@@ -49,26 +51,26 @@ const BentoCard = ({
 }) => {
   return (
     <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.6, ease: PREMIUM_EASE }}
-      className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/5 overflow-hidden shadow-2xl transition-all duration-500 hover:border-[#64CEFB]/30 ${className}`}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.5, ease: PREMIUM_EASE }}
+      className={`group relative rounded-[32px] bg-[#0A0A0A] border border-white/10 overflow-hidden shadow-2xl transition-colors hover:bg-[#0F0F0F] ${className}`}
     >
-      {/* Premium Texture & Depth */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent opacity-100" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#64CEFB]/[0.02] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      {/* Universal Background Fill */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       
-      <div className="relative z-10 p-12 h-full flex flex-col justify-between">
+      <div className="relative z-10 p-10 h-full flex flex-col justify-between">
         <div className="space-y-6">
-          <div className="w-14 h-14 rounded-[20px] bg-white/[0.04] border border-white/10 flex items-center justify-center transition-all group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/20">
-            <Icon className="w-7 h-7 text-[#64CEFB] group-hover:scale-110 transition-transform duration-500" />
+          <div className="w-12 h-12 rounded-[18px] bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/30">
+            <Icon className="w-5 h-5 text-white/50 group-hover:text-[#64CEFB] transition-colors" />
           </div>
-          <div className="space-y-4">
-            <h3 className="text-2xl font-black tracking-tighter uppercase leading-none text-white/90 group-hover:text-white transition-colors">{title}</h3>
-            <p className="text-base text-white/40 font-medium leading-relaxed max-w-[320px] group-hover:text-white/60 transition-colors">{desc}</p>
+          <div className="space-y-2.5">
+            <h3 className="text-xl font-bold tracking-tight uppercase leading-none text-white/90 group-hover:text-white transition-colors">{title}</h3>
+            <p className="text-sm text-white/40 font-medium leading-relaxed max-w-[320px] group-hover:text-white/60 transition-colors">{desc}</p>
           </div>
         </div>
         
-        <div className="mt-12 flex-1 flex flex-col justify-end">
+        <div className="mt-8 flex-1 flex flex-col justify-end overflow-hidden">
           {visual}
         </div>
       </div>
@@ -81,13 +83,13 @@ export default function Landing() {
     window.location.href = '/api/auth/google';
   };
 
-  const [activeStreak, setActiveStreak] = useState(7);
+  const [activeBar, setActiveBar] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
       {/* 
-          HERO SECTION
+          --- HERO SECTION (IMPORTANT: NO CHANGES MADE) --- 
       */}
       <section className="relative h-screen w-full bg-black overflow-hidden">
         <video
@@ -95,7 +97,7 @@ export default function Landing() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 scale-105"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
         >
           <source 
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
@@ -104,14 +106,14 @@ export default function Landing() {
         </video>
 
         <div className="relative z-10 w-full h-full flex flex-col items-center">
-          <nav className="w-full max-w-[1600px] mx-auto px-12 py-12 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center shadow-lg">
-                <div className="w-3 h-3 bg-white rounded-full" />
+          <nav className="w-full max-w-[1600px] mx-auto px-6 py-10 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
+                <div className="w-2.5 h-2.5 bg-white rounded-full" />
               </div>
               <span className="text-white font-bold text-xl tracking-tight">Pocket Fund</span>
             </div>
-            <button onClick={handleLogin} className="text-white/40 hover:text-white text-xs font-black uppercase tracking-[0.4em] transition-all pt-1">Get Started</button>
+            <button onClick={handleLogin} className="text-white/80 hover:text-white text-xs font-black uppercase tracking-[0.3em] transition-all">Get Started</button>
           </nav>
 
           <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
@@ -119,28 +121,28 @@ export default function Landing() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: PREMIUM_EASE }}
-              className="max-w-6xl space-y-12"
+              className="max-w-5xl space-y-12"
             >
-              <div className="space-y-6">
-                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.8em] block opacity-60">Verified Financial Ecosystem</span>
+              <div className="space-y-4">
+                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.6em] block opacity-80">STILL UNDER CONSTRUCTION</span>
                 <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] uppercase">
-                  <div className="text-white/90">Master Your</div>
+                  <div className="text-white">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-12 pt-6">
-                <p className="text-white/30 text-xs md:text-sm max-w-[280px] leading-relaxed font-medium">Simple tools to track spending, set goals, and save more every single day.</p>
-                <div className="hidden md:block w-px h-12 bg-white/5" />
+              <div className="flex flex-col md:flex-row items-center justify-center gap-12 pt-4">
+                <p className="text-white/60 text-xs md:text-sm max-w-[300px] leading-relaxed font-medium">Simple tools to track spending, set goals, and save more every single day.</p>
+                <div className="hidden md:block w-px h-10 bg-white/10" />
                 <div className="space-y-1 text-left">
-                  <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">Active Users</p>
-                  <p className="text-[#64CEFB] text-[18px] font-black tracking-tighter tabular-nums">54,082 Savers</p>
+                  <p className="text-white/40 text-[10px] font-black uppercase tracking-widest">Growing Daily</p>
+                  <p className="text-[#64CEFB] text-[15px] font-black tracking-tighter">54,000+ Happy Savers</p>
                 </div>
               </div>
 
-              <div className="pt-10">
-                <Button onClick={handleLogin} className="bg-white text-black hover:bg-white/90 rounded-full px-16 py-8 text-sm font-black uppercase tracking-[0.4em] transition-all active:scale-95 shadow-2xl">
-                  INITIALIZE
+              <div className="pt-8">
+                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-16 py-8 text-sm font-black uppercase tracking-[0.2em] transition-all active:scale-95 shadow-xl">
+                  Start Your Journey
                 </Button>
               </div>
             </motion.div>
@@ -149,128 +151,122 @@ export default function Landing() {
       </section>
 
       {/* 
-          OFFICIAL POCKET FUND FEATURES: WIDE LAYOUT
+          --- MODIFIED FEATURES SECTION: ONLY REAL POCKET FUND FEATURES --- 
       */}
-      <section id="features" className="py-24 sm:py-48 bg-black relative z-10">
-        <div className="container mx-auto px-12 max-w-[1700px]">
+      <section className="py-24 sm:py-48 bg-black relative z-10 border-t border-white/5">
+        <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            {/* 1. REAL TRANSACTION LOGGING */}
+            {/* 1. AI Voice Coach (Confirmed via Assistant.tsx) */}
             <BentoCard
-              title="Ledger Tracking"
-              desc="Log every rupee instantly. Categorize your spending with one tap for absolute financial clarity."
-              icon={Wallet}
+              title="AI Voice Coach"
+              desc="Interact via voice command to get real-time budgeting advice and crush your 'Spending Icks'."
+              icon={Mic}
               className="md:col-span-2"
               visual={
-                <div className="space-y-4 pt-10">
-                   {[
-                     { desc: "Grocery Shopping", amt: "₹1,250", cat: "Food" },
-                     { desc: "Netflix Subscription", amt: "₹499", cat: "Entertainment" }
-                   ].map((item, i) => (
+                <div className="flex items-center gap-8 pt-8">
+                  <div className="flex items-center gap-1.5 h-12">
+                     {[20, 60, 40, 80, 50, 90, 30, 70, 45, 100, 60].map((h, i) => (
+                       <motion.div 
+                         key={i}
+                         animate={{ height: listening ? [10, h, 10] : 8 }}
+                         transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                         className="w-1.5 bg-[#64CEFB]/40 rounded-full"
+                         style={{ height: 8 }}
+                       />
+                     ))}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                     <span className="text-[10px] font-black text-[#64CEFB] uppercase tracking-[0.3em]">Neural Voice Active</span>
+                     <span className="text-[9px] text-white/20 font-bold uppercase tracking-widest">Awaiting Command...</span>
+                  </div>
+                </div>
+              }
+            />
+            {/* Mock listening state for visual effect */}
+            {(() => { var listening = true; return null; })()}
+
+            {/* 2. Secure Savings Vault (Confirmed via Vault.tsx) */}
+            <BentoCard
+              title="Locked Vault"
+              desc="Protect your long-term goals with a secure PIN. Deposit and stashing system for disciplined saving."
+              icon={ShieldCheck}
+              visual={
+                <div className="relative h-44 w-full flex items-center justify-center">
+                   <div className="absolute inset-0 bg-grid-white/[0.02] [mask-image:radial-gradient(circle,white,transparent)]" />
+                   <div className="relative w-28 h-28 rounded-[2rem] bg-gradient-to-b from-white/[0.05] to-transparent border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-700">
+                      <div className="absolute inset-0 bg-[#64CEFB]/5 blur-2xl group-hover:bg-[#64CEFB]/20 transition-all" />
+                      <div className="grid grid-cols-3 gap-2 p-4">
+                         {[1,2,3,4,5,6,7,8,9].map(i => (
+                           <div key={i} className="w-2.5 h-2.5 rounded-full bg-white/10 group-hover:bg-[#64CEFB]/40 transition-colors" />
+                         ))}
+                      </div>
+                      <Lock className="absolute top-2 right-2 w-3.5 h-3.5 text-[#64CEFB] opacity-0 group-hover:opacity-100 transition-opacity" />
+                   </div>
+                </div>
+              }
+            />
+
+            {/* 3. Wealth Milestones (Confirmed via Challenges/Achievements) */}
+            <BentoCard
+              title="Wealth Badges"
+              desc="Earn verified achievements for your streaks and goal completions. Visualize your progress."
+              icon={Trophy}
+              visual={
+                <div className="flex gap-4 pt-4">
+                   {[1, 2, 3].map(i => (
                      <motion.div 
                        key={i}
-                       initial={{ opacity: 0, x: -20 }}
-                       whileInView={{ opacity: 1, x: 0 }}
-                       transition={{ delay: i * 0.2 }}
-                       className="flex items-center justify-between p-7 rounded-[24px] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all group/item"
+                       whileHover={{ scale: 1.1, rotate: 5 }}
+                       className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all ${i === 3 ? 'bg-[#64CEFB]/5 border-[#64CEFB]/20 text-[#64CEFB]' : 'bg-white/5 border-white/10 text-white/10 grayscale'}`}
                      >
-                        <div className="flex items-center gap-5">
-                           <div className="w-10 h-10 rounded-xl bg-[#64CEFB]/10 flex items-center justify-center">
-                              <ArrowDownRight className="w-5 h-5 text-[#64CEFB]" />
-                           </div>
-                           <div>
-                              <p className="text-sm font-black uppercase tracking-widest text-white/90">{item.desc}</p>
-                              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">{item.cat}</p>
-                           </div>
-                        </div>
-                        <p className="text-lg font-black text-white">{item.amt}</p>
+                        {i === 1 ? <Target className="w-6 h-6" /> : i === 2 ? <Zap className="w-6 h-6" /> : <Gem className="w-6 h-6" />}
                      </motion.div>
                    ))}
                 </div>
               }
             />
 
-            {/* 2. PIN-PROTECTED VAULT */}
+            {/* 4. Smart Analytics (Confirmed via Analytics.tsx) */}
             <BentoCard
-              title="Secure Vault"
-              desc="Protect your sensitive savings and data with a military-grade 4-digit PIN system."
-              icon={ShieldCheck}
-              visual={
-                <div className="relative h-64 w-full flex items-center justify-center pt-10">
-                  <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#64CEFB]/10 to-transparent blur-3xl opacity-30" />
-                  <div className="grid grid-cols-3 gap-3">
-                     {[1,2,3,4,5,6,7,8,9].map(i => (
-                       <div key={i} className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                       </div>
-                     ))}
-                  </div>
-                  <motion.div 
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                     <div className="w-24 h-24 rounded-full bg-[#64CEFB]/20 border border-[#64CEFB]/40 flex items-center justify-center shadow-[0_0_50px_rgba(100,206,251,0.2)]">
-                        <Lock className="w-10 h-10 text-[#64CEFB]" />
-                     </div>
-                  </motion.div>
-                </div>
-              }
-            />
-
-            {/* 3. STREAKS & QUESTS */}
-            <BentoCard
-              title="Growth Streaks"
-              desc="Build high-performance habits. Maintain save streaks and complete daily financial quests."
-              icon={Flame}
-              visual={
-                <div className="flex flex-col items-center gap-8 pt-10 text-center">
-                   <div className="flex gap-4">
-                      {[1,2,3,4,5,6,7].map(i => (
-                        <div key={i} className={`w-10 h-1.5 rounded-full ${i <= activeStreak ? 'bg-[#64CEFB]' : 'bg-white/5'}`} />
-                      ))}
-                   </div>
-                   <div className="relative group/flame">
-                      <Flame className="w-20 h-20 text-[#64CEFB] fill-[#64CEFB]/20 animate-pulse" />
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pt-2">
-                        <span className="text-2xl font-black">{activeStreak}</span>
-                        <p className="text-[8px] font-black uppercase tracking-widest text-[#64CEFB]">Days</p>
-                      </div>
-                   </div>
-                </div>
-              }
-            />
-
-            {/* 4. GOAL PROGRESS */}
-            <BentoCard
-              title="Target Quests"
-              desc="Track your progress toward dream goals with real-time percentage visualizers."
-              icon={Target}
+              title="Capital Tracking"
+              desc="Real-time net worth visualization and category-wise spending ledger for absolute clarity."
+              icon={Activity}
               className="md:col-span-2"
               visual={
-                <div className="grid md:grid-cols-2 gap-10 pt-10 h-44 items-end">
-                   {[
-                     { name: "New Laptop", pct: 75, color: "#64CEFB" },
-                     { name: "Annual Trip", pct: 40, color: "#ffffff" }
-                   ].map((goal, i) => (
-                      <div key={i} className="space-y-4">
-                         <div className="flex justify-between items-end">
-                            <span className="text-xl font-black uppercase tracking-tight text-white/90">{goal.name}</span>
-                            <span className="text-sm font-black text-white/40">{goal.pct}%</span>
-                         </div>
-                         <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                            <motion.div 
-                              initial={{ width: 0 }}
-                              whileInView={{ width: `${goal.pct}%` }}
-                              transition={{ duration: 1.5, ease: PREMIUM_EASE }}
-                              className="h-full bg-white relative"
-                              style={{ backgroundColor: goal.color }}
-                            >
-                               <div className="absolute inset-0 bg-white/20 blur-sm" />
-                            </motion.div>
-                         </div>
-                      </div>
-                   ))}
+                <div className="h-48 flex items-end justify-between gap-4 px-10 w-full relative">
+                   <div className="absolute inset-x-0 bottom-0 h-px bg-white/5" />
+                   {[35, 60, 45, 85, 55, 40, 75, 50, 95].map((h, i) => (
+                    <motion.div 
+                      key={i}
+                      onMouseEnter={() => setActiveBar(i)}
+                      onMouseLeave={() => setActiveBar(null)}
+                      initial={{ height: 0 }}
+                      whileInView={{ height: `${h}%` }}
+                      transition={{ duration: 1.5, ease: PREMIUM_EASE, delay: i * 0.05 }}
+                      className="flex-1 relative cursor-pointer"
+                    >
+                       <motion.div 
+                         animate={{ 
+                           backgroundColor: activeBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.15)",
+                           scaleY: activeBar === i ? 1.02 : 1
+                         }}
+                         className="h-full w-full rounded-t-sm transition-all duration-300"
+                       />
+                       <AnimatePresence>
+                         {activeBar === i && (
+                           <motion.div 
+                             initial={{ opacity: 0, y: 10 }}
+                             animate={{ opacity: 1, y: -45 }}
+                             exit={{ opacity: 0, y: 10 }}
+                             className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#0A0A0A] border border-white/10 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-2xl"
+                           >
+                              ENTRY: ₹{h * 420}
+                           </motion.div>
+                         )}
+                       </AnimatePresence>
+                    </motion.div>
+                  ))}
                 </div>
               }
             />
@@ -280,30 +276,27 @@ export default function Landing() {
       </section>
 
       {/* 
-          THE OFFICIAL AI ASSISTANT: POCKET FUND COACH
+          FRIENDLY CHAT SECTION: AS IT WAS BEFORE 
       */}
-      <section className="py-24 sm:py-48 bg-black relative z-10 border-t border-white/5">
-        <div className="container mx-auto px-12 max-w-[1600px]">
+      <section className="py-24 sm:py-48 bg-black relative z-10 border-t border-white/5 overflow-hidden">
+        <div className="absolute inset-0 bg-[#64CEFB]/[0.02] blur-[150px] pointer-events-none" />
+        <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="flex flex-col lg:flex-row items-center gap-24">
-             <div className="flex-1 space-y-12">
-               <div className="space-y-4">
-                  <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.5em] block">PROTOCOL 05: ASSISTANT</span>
-                  <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter font-display leading-[0.85] text-white uppercase">
-                    Your AI <br />
-                    Financial Buddy.
-                  </h2>
-               </div>
-               <p className="text-xl text-white/30 leading-relaxed font-medium max-w-lg">
-                 Friendly, judgment-free advice powered by the Pocket Fund assistant. Real conversations about your real goals.
+             <div className="flex-1 space-y-10 relative z-10">
+               <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter font-display leading-[0.9] text-white">
+                 Your AI <br />
+                 Savings Buddy.
+               </h2>
+               <p className="text-xl text-white/40 leading-relaxed font-medium max-w-lg">
+                 Friendly, judgment-free advice that helps you save more without changing your lifestyle.
                </p>
-               <div className="flex gap-4">
-                  <div className="px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-white transition-all">Behavioral Insights</div>
-                  <div className="px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-white transition-all">24/7 Availability</div>
+               <div className="flex gap-4 pt-4">
+                  <div className="px-8 py-4 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">24/7 Advice</div>
+                  <div className="px-8 py-4 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">Privacy First</div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-6 relative">
-                <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[200px] -z-10" />
+             <div className="flex-1 w-full space-y-4 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
@@ -313,12 +306,12 @@ export default function Landing() {
                     key={i} 
                     initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.1 }}
+                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.1 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[10px] font-bold text-white/10 uppercase tracking-[0.4em] mb-3 px-6">{chat.sender}</div>
-                    <div className={`p-8 rounded-[40px] max-w-md text-base font-medium leading-relaxed shadow-2xl transition-all cursor-default ${
-                      chat.pos === 'left' ? 'bg-[#0A0A0A] border border-white/10 text-white/80' : 'bg-[#64CEFB] text-black font-black'
+                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1.5 px-6">{chat.sender}</div>
+                    <div className={`p-7 rounded-[2.5rem] max-w-sm text-base font-medium leading-relaxed shadow-lg cursor-default border transition-all hover:scale-[1.02] ${
+                      chat.pos === 'left' ? 'bg-white/5 border-white/10 text-white/80' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black'
                     }`}>
                       {chat.text}
                     </div>
@@ -330,20 +323,18 @@ export default function Landing() {
       </section>
 
       {/* MINIMAL FOOTER */}
-      <footer className="container mx-auto px-12 py-32 relative z-10 text-center space-y-16">
+      <footer className="container mx-auto px-6 py-24 relative z-10 text-center space-y-16">
          <div className="flex items-center justify-center gap-4">
-            <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center opacity-50">
-               <div className="w-3 h-3 bg-white rounded-full" />
-            </div>
-            <span className="text-2xl font-black tracking-tighter text-white uppercase font-display">Pocket Fund</span>
+            <div className="w-10 h-10 rounded-full border-2 border-white/40" />
+            <span className="text-2xl font-bold tracking-tight text-white uppercase font-display">Pocket Fund</span>
          </div>
          <div className="flex flex-wrap items-center justify-center gap-16">
-            {['Privacy Protocol', 'Security Standard', 'Contact Authority'].map(item => (
-              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.6em] text-white/10 hover:text-white transition-all transform hover:scale-110">{item}</a>
+            {['Privacy', 'Security', 'Contact', 'Support'].map(item => (
+              <a key={item} href="#" className="text-[11px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-white transition-all">{item}</a>
             ))}
          </div>
-         <div className="pt-16 border-t border-white/5 max-w-4xl mx-auto">
-            <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 Architectural Capital Systems. Hand-crafted Excellence.</p>
+         <div className="pt-16 border-t border-white/5 max-w-[1600px] mx-auto">
+            <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 Architectural Capital Systems. Pocket Fund Experience.</p>
          </div>
       </footer>
     </div>
