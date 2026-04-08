@@ -13,7 +13,8 @@ import {
   Sparkles,
   PieChart as PieChartIcon,
   Activity,
-  Target
+  Target,
+  ArrowUpRight
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
 
@@ -25,8 +26,10 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
-      {/* --- HERO SECTION (High-Fidelity) --- */}
-      <section className="relative h-screen w-full bg-black overflow-hidden group/hero">
+      {/* 
+          HERO SECTION (Kept as requested since user liked it)
+      */}
+      <section className="relative h-screen w-full bg-black overflow-hidden">
         <video
           autoPlay
           loop
@@ -93,206 +96,142 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* --- REIMAGINED EXHIBIT: CORE FEATURES --- */}
-      <section className="py-20 sm:py-40 relative z-10 border-t border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="mb-24 space-y-4 max-w-2xl">
-             <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 01: Core Systems</span>
-             <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase font-display leading-[0.85]">
-               Engineered <br />For Mastery.
-             </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-px bg-white/5 border border-white/5 overflow-hidden rounded-[2rem]">
-            <div className="lg:col-span-7 bg-[#050505] p-12 sm:p-20 flex flex-col justify-between group">
-               <div className="space-y-8">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/20 transition-all">
-                     <Activity className="w-6 h-6 text-[#64CEFB]" />
-                  </div>
-                  <h3 className="text-3xl font-black uppercase tracking-tight">Active Ledger Intelligence</h3>
-                  <p className="text-lg text-white/40 font-medium leading-relaxed max-w-md">No more delayed syncing. Your finances update in real-time with automatic category resolution and behavioral insights.</p>
-               </div>
-               <div className="mt-12 pt-12 border-t border-white/5 flex gap-8">
-                  <div>
-                    <h4 className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-2">Process Speed</h4>
-                    <p className="text-xl font-black">2.4s Average</p>
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-2">Sync Accuracy</h4>
-                    <p className="text-xl font-black">99.9%</p>
-                  </div>
-               </div>
+      {/* 
+          NEW BENTO GRID STYLE: CORE BENEFITS
+      */}
+      <section className="py-24 sm:py-32 container mx-auto px-6 border-t border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Main Focus */}
+          <div className="md:col-span-2 p-10 sm:p-14 rounded-[40px] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 flex flex-col justify-between group overflow-hidden relative">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#64CEFB]/5 blur-[100px] group-hover:bg-[#64CEFB]/10 transition-all" />
+            <div className="space-y-6 relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
+                <Zap className="w-6 h-6 text-[#64CEFB]" />
+              </div>
+              <h3 className="text-4xl font-black tracking-tight uppercase leading-none">High-Speed Tracking.</h3>
+              <p className="text-lg text-white/40 font-medium max-w-sm">Ditch the spreadsheets. Add expenses in seconds and see your net worth update as you live.</p>
             </div>
-            
-            <div className="lg:col-span-5 grid grid-rows-2">
-               <div className="bg-[#080808] p-12 border-b border-white/5 group">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all">
-                     <Target className="w-5 h-5 text-primary" />
-                  </div>
-                  <h4 className="text-xl font-black uppercase mb-4">Goal Architect</h4>
-                  <p className="text-sm text-white/30 font-medium tracking-tight uppercase leading-relaxed">Precision goal tracking with automated vault allocation based on your spending patterns.</p>
-               </div>
-               <div className="bg-[#0A0A0A] p-12 group">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-all">
-                     <Shield className="w-5 h-5 text-accent" />
-                  </div>
-                  <h4 className="text-xl font-black uppercase mb-4">Vault CONSENSUS</h4>
-                  <p className="text-sm text-white/30 font-medium tracking-tight uppercase leading-relaxed">Tier-1 security encryption for all movement between your active ledger and protected vault.</p>
-               </div>
+            <div className="mt-12 flex gap-4">
+              <div className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50">Instant Sync</div>
+              <div className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50">Zero Friction</div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* --- REIMAGINED EXHIBIT: THE VAULT --- */}
-      <section className="py-40 relative bg-white/[0.01] border-y border-white/5 overflow-hidden">
-        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
-            <div className="relative">
-                <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[150px] -z-10" />
-                <div className="aspect-square bg-white/[0.02] border border-white/5 rounded-[4rem] p-4 group">
-                    <div className="w-full h-full rounded-[3.5rem] bg-[#050505] border border-white/5 p-12 flex flex-col justify-between overflow-hidden relative">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#64CEFB]/5 blur-3xl" />
-                        <div className="flex justify-between items-start">
-                           <div className="space-y-1">
-                              <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Vault Portfolio</p>
-                              <p className="text-6xl font-black tracking-tighter">₹4,52,000</p>
-                           </div>
-                           <TrendingUp className="w-10 h-10 text-[#64CEFB]" />
-                        </div>
-                        <div className="h-40 w-full flex items-end gap-2.5">
-                           {[20, 35, 25, 50, 45, 75, 60, 90, 80, 100].map((h, i) => (
-                              <motion.div 
-                                key={i} 
-                                initial={{ height: 0 }}
-                                whileInView={{ height: `${h}%` }}
-                                transition={{ duration: 1, delay: i * 0.05 }}
-                                className="flex-1 bg-gradient-to-t from-white/5 to-[#64CEFB]/40 rounded-t-sm" 
-                              />
-                           ))}
-                        </div>
-                    </div>
+          {/* Card 2: Vault */}
+          <div className="p-10 rounded-[40px] bg-[#0A0A0A] border border-white/5 flex flex-col justify-between group overflow-hidden relative">
+             <div className="space-y-6">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 transition-all">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
-            </div>
-            <div className="space-y-12">
-               <div className="space-y-4">
-                  <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 02: Liquidity Protection</span>
-                  <h3 className="text-5xl font-black tracking-tighter leading-none uppercase">The Vault <br /> Reserves.</h3>
-               </div>
-               <p className="text-xl text-white/40 leading-relaxed font-medium">Automatically isolate your savings into high-performance reserves. Out of sight, but constantly growing with behavioral triggers that save while you spend.</p>
-               <div className="grid grid-cols-2 gap-8 pt-8">
-                  <div className="space-y-2">
-                     <p className="text-3xl font-black text-white">12.5%</p>
-                     <p className="text-[10px] font-black uppercase text-white/20 tracking-widest">Avg. Monthly Yield</p>
+                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">The Vault.</h3>
+                <p className="text-white/40 font-medium">Safe-guard your long-term wealth in an isolated, protected layer.</p>
+             </div>
+             <motion.div 
+               whileHover={{ scale: 1.05 }}
+               className="mt-10 aspect-video bg-[#64CEFB]/5 border border-[#64CEFB]/20 rounded-2xl flex items-center justify-center"
+             >
+                <TrendingUp className="w-10 h-10 text-[#64CEFB] opacity-40" />
+             </motion.div>
+          </div>
+
+          {/* Card 3: Gamification */}
+          <div className="p-10 rounded-[40px] bg-[#0A0A0A] border border-white/5 flex flex-col justify-between group overflow-hidden relative">
+             <div className="space-y-6">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 transition-all">
+                  <Trophy className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">Milestones.</h3>
+                <p className="text-white/40 font-medium">Earn badges and level up your financial status as you hit your savings goals.</p>
+             </div>
+             <div className="mt-8 flex flex-wrap gap-2">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-white/20" />
                   </div>
-                  <div className="space-y-2">
-                     <p className="text-3xl font-black text-white">Secure</p>
-                     <p className="text-[10px] font-black uppercase text-white/20 tracking-widest">Isolation Layer</p>
-                  </div>
-               </div>
-            </div>
-        </div>
-      </section>
+                ))}
+             </div>
+          </div>
 
-      {/* --- REIMAGINED CHAT: THE AI ADVISOR --- */}
-      <section className="py-40 relative z-10 overflow-hidden">
-        <div className="container mx-auto px-6 text-center mb-24 space-y-4">
-           <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.4em]">Protocol 03: Decision Intelligence</span>
-           <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase font-display leading-[0.85]">
-             Your Personal <br /> Neural Coach.
-           </h2>
-        </div>
-
-        <div className="max-w-4xl mx-auto px-6 relative">
-          <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[200px] -z-10" />
-          <div className="space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="flex items-start gap-4"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                <MessageCircle className="w-6 h-6 text-[#64CEFB]" />
+          {/* Card 4: Detailed Insight */}
+          <div className="md:col-span-2 p-10 sm:p-14 rounded-[40px] bg-gradient-to-tr from-[#050505] to-transparent border border-white/5 flex flex-col sm:flex-row items-center gap-12 group">
+              <div className="space-y-6 flex-1">
+                 <h3 className="text-3xl font-black tracking-tight uppercase">Analyze Everything.</h3>
+                 <p className="text-lg text-white/40 font-medium">Deep dive into your spending habits with granular analytics that reveal exactly where your leaks are.</p>
               </div>
-              <div className="bg-[#0A0A0A] border border-white/5 p-6 rounded-[2rem] rounded-tl-none max-w-md shadow-xl">
-                 <p className="text-base font-medium text-white/80 leading-relaxed">
-                    Analyzing your weekend behavior... I noticed ₹3,400 in impulse spending at Global Mall. If we cut this by 20% next month, you'll hit your "MacBook" goal 3 weeks early. Shall we set a trigger?
-                 </p>
+              <div className="flex-1 w-full flex items-end justify-between h-32 gap-3 px-4">
+                 {[40, 70, 50, 90, 60, 45, 80].map((h, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ height: 0 }}
+                      whileInView={{ height: `${h}%` }}
+                      className="flex-1 bg-[#64CEFB]/20 border-t-2 border-[#64CEFB] rounded-t-sm"
+                    />
+                 ))}
               </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="flex items-start gap-4 flex-row-reverse"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[#64CEFB] flex items-center justify-center shrink-0">
-                <User className="w-6 h-6 text-black" />
-              </div>
-              <div className="bg-[#64CEFB] p-6 rounded-[2rem] rounded-tr-none max-w-md shadow-2xl shadow-[#64CEFB]/20">
-                 <p className="text-base font-black text-black leading-relaxed">
-                    Yes, definitely! Let's set a ₹1,500 limit for shopping next weekend.
-                 </p>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="flex items-start gap-4"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                 <Sparkles className="w-6 h-6 text-[#64CEFB]" />
-              </div>
-              <div className="bg-[#0A0A0A] border border-white/5 p-6 rounded-[2rem] rounded-tl-none max-w-md shadow-xl">
-                 <div className="flex items-center gap-2 mb-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-[#64CEFB]">Limit Optimized</span>
-                 </div>
-                 <p className="text-base font-medium text-white/80 leading-relaxed">
-                    Trigger set. I'll alert you if you approach ₹1,200 on Saturday. Efficiency increased by 14%. Great move!
-                 </p>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* --- MINIMAL FOOTER --- */}
-      <footer className="container mx-auto px-6 py-32 mt-20 border-t border-white/5 text-center space-y-12 relative overflow-hidden">
-         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-[#64CEFB]/5 blur-[120px] -z-10" />
+      {/* 
+          RESTORED CHAT SECTION: AS IT WAS BEFORE (Friendlier Bubble Style)
+      */}
+      <section className="py-24 sm:py-40 bg-black relative z-10 border-t border-white/5">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col lg:flex-row items-center gap-20">
+             <div className="flex-1 space-y-8">
+               <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter font-display leading-[0.9] text-white">
+                 Your AI <br />
+                 Financial Buddy.
+               </h2>
+               <p className="text-xl text-white/40 leading-relaxed font-medium">
+                 Get 24/7 help without the judgment. From managing debt to finding better ways to save, your coach is always there to guide you toward financial freedom.
+               </p>
+               <div className="flex gap-4">
+                  <div className="px-6 py-3 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/60">No judgment</div>
+                  <div className="px-6 py-3 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/60">Always active</div>
+               </div>
+             </div>
+             
+             <div className="flex-1 w-full space-y-4">
+                {[
+                  { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
+                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
+                  { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "Coach" }
+                ].map((chat, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
+                  >
+                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1 px-4">{chat.sender}</div>
+                    <div className={`p-5 rounded-2xl max-w-sm text-sm font-medium ${
+                      chat.pos === 'left' ? 'bg-white/5 border border-white/10 text-white/80' : 'bg-[#64CEFB] text-black shadow-lg font-bold'
+                    }`}>
+                      {chat.text}
+                    </div>
+                  </motion.div>
+                ))}
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MINIMAL FOOTER */}
+      <footer className="container mx-auto px-6 py-24 relative z-10 text-center space-y-12">
          <div className="flex items-center justify-center gap-3">
-            <div className="w-8 h-8 rounded-sm border-2 border-white/20 flex items-center justify-center">
-               <div className="w-2.5 h-2.5 bg-white rounded-full" />
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+               <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white uppercase font-display">Pocket Fund</span>
+            <span className="text-xl font-bold tracking-tight text-white uppercase">Pocket Fund</span>
          </div>
-         <div className="flex flex-wrap items-center justify-center gap-12">
-            {['Privacy Protocol', 'Encryption Standard', 'Contact Authority', 'Legal Ledger'].map(item => (
-              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-[#64CEFB] transition-all transform hover:scale-110">{item}</a>
+         <div className="flex flex-wrap items-center justify-center gap-10">
+            {['Privacy', 'Security', 'Compliance', 'Contact'].map(item => (
+              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-[#64CEFB] transition-all">{item}</a>
             ))}
          </div>
-         <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5 pt-10">© 2026 Architectural Capital Systems. High-Performance Finance.</p>
+         <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5 pt-10 border-t border-white/5">© 2026 Pocket Fund. Smart Capital Systems.</p>
       </footer>
     </div>
   );
-}
-
-function User(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  )
 }
