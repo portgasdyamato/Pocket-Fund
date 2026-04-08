@@ -10,27 +10,25 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263.4 70% 50.4%;
-    --radius: 0.75rem;
+    /* Sophisticated Luxury Palette */
+    --primary: 260 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 190 80% 50%;
+    --accent-foreground: 0 0% 100%;
+    --background: 240 10% 2%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 98%;
+    --muted: 240 5% 15%;
+    --muted-foreground: 240 5% 65%;
+    --border: 240 5% 12%;
+    --radius: 1.5rem;
 
-    /* Custom Premium Colors */
-    --brand-primary: 270 100% 60%;
-    --brand-secondary: 190 100% 50%;
-    --brand-accent: 320 100% 60%;
-    --glass-bg: rgba(15, 15, 20, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    /* Architectural Elements */
+    --line-subtle: rgba(255, 255, 255, 0.03);
+    --line-strong: rgba(255, 255, 255, 0.1);
   }
 
   .dark {
@@ -105,8 +103,22 @@
     @apply active:scale-95 transition-transform duration-100;
   }
 
-  .hover-lift {
-    @apply hover:-translate-y-1 transition-transform duration-300;
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .premium-shadow-white {
+    box-shadow: 0 20px 40px -10px rgba(255, 255, 255, 0.1);
+  }
+
+  .architectural-grid {
+    background-image: linear-gradient(var(--line-subtle) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--line-subtle) 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 }
 
