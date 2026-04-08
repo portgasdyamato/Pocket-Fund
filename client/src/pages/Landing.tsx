@@ -29,10 +29,11 @@ import {
   Settings,
   ShieldAlert,
   Coins,
-  Twitter,
   Instagram,
+  Twitter,
+  Linkedin,
   Github,
-  Linkedin
+  ArrowRightCircle
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
 import { useState, useRef } from "react";
@@ -92,16 +93,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
-      {/* 
-          --- HERO SECTION (Viewport Optimized) --- 
-      */}
+      {/* HERO SECTION */}
       <section className="relative h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 shadow-[inset_0_0_200px_rgba(0,0,0,1)]"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
         >
           <source 
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
@@ -115,7 +114,7 @@ export default function Landing() {
               <div className="w-8 h-8 rounded-full border-2 border-white/10 flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white rounded-full" />
               </div>
-              <span className="text-white font-black text-xl tracking-tighter uppercase">Pocket Fund</span>
+              <span className="text-white font-black text-xl tracking-tighter uppercase transition-opacity hover:opacity-80">Pocket Fund</span>
             </div>
             <button onClick={handleLogin} className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
           </nav>
@@ -154,9 +153,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 
-          --- FEATURES SECTION --- 
-      */}
+      {/* FEATURES SECTION */}
       <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5">
         <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -197,9 +194,9 @@ export default function Landing() {
               desc="Tier-1 capital protection. Lock your long-term wealth behind a customized PIN-secure storage layer."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-48 w-full flex items-center justify-center">
-                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.12)_0%,transparent_70%)] blur-2xl" />
-                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_60px_rgba(100,206,251,0.1)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/50 transition-all duration-700 z-10">
+                <div className="relative h-48 w-full flex items-center justify-center overflow-visible">
+                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.12)_0%,transparent_70%)] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_60px_rgba(100,206,251,0.05)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/50 transition-all duration-700 z-10">
                       <div className="grid grid-cols-3 gap-3">
                          {[1,2,3,4,5,6,7,8,9].map(i => (
                            <motion.div 
@@ -218,7 +215,7 @@ export default function Landing() {
               }
             />
 
-            {/* 3. Daily Milestones (Unified Premium Glow) */}
+            {/* 3. Daily Milestones (GLOW ONLY ON HOVER) */}
             <BentoCard
               title="Growth Rewards"
               desc="Collect premium tokens and verified badges for your financial discipline and consistency."
@@ -228,10 +225,10 @@ export default function Landing() {
                    {[1, 2, 3].map(i => (
                      <motion.div 
                        key={i}
-                       className="w-16 h-16 rounded-[24px] flex items-center justify-center border border-[#64CEFB]/40 bg-[#64CEFB]/10 text-[#64CEFB] cursor-pointer relative shadow-[0_0_25px_rgba(100,206,251,0.2)]"
-                       whileHover={{ y: -8, scale: 1.05, boxShadow: "0 0 40px rgba(100,206,251,0.4)" }}
+                       whileHover={{ y: -10, rotate: i === 3 ? 15 : -15 }}
+                       className="w-16 h-16 rounded-[24px] flex items-center justify-center border border-white/10 bg-white/5 text-white/20 transition-all cursor-pointer relative hover:bg-[#64CEFB]/10 hover:border-[#64CEFB]/40 hover:text-[#64CEFB] hover:shadow-[0_0_30px_rgba(100,206,251,0.3)]"
                      >
-                        <div className="absolute inset-0 rounded-[24px] blur-md bg-[#64CEFB]/20 opacity-100" />
+                        <div className="absolute inset-0 rounded-[24px] blur-md bg-[#64CEFB]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
                         <div className="relative z-10">
                           {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
                         </div>
@@ -258,7 +255,7 @@ export default function Landing() {
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
                       transition={{ duration: 1.2, ease: PREMIUM_EASE, delay: i * 0.08 }}
-                      className="flex-1 relative"
+                      className="flex-1 relative group/bar"
                     >
                        <motion.div 
                          animate={{ 
@@ -275,7 +272,7 @@ export default function Landing() {
                              exit={{ opacity: 0, y: 15, scale: 0.8 }}
                              className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-tighter shadow-2xl whitespace-nowrap"
                            >
-                              ENTRY: ₹{h * 850}
+                              VALUE: ₹{h * 850}
                            </motion.div>
                          )}
                        </AnimatePresence>
@@ -289,31 +286,32 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FRIENDLY CHAT (AS IT WAS BEFORE) */}
-      <section className="py-32 bg-[#050505] relative z-10 border-t border-white/5 overflow-hidden">
+      {/* FRIENDLY CHAT (NO CHANGES) */}
+      <section className="py-32 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
+        <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="flex flex-col lg:flex-row items-center gap-32">
-             <div className="flex-1 space-y-12">
-               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase">
+             <div className="flex-1 space-y-12 relative z-10">
+               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase font-display">
                  Your AI <br />
                  Savings Buddy.
                </h2>
                <p className="text-xl text-white/30 leading-relaxed font-medium max-w-xl">
                  High-performance guidance that learns your habits and helps you stay on the path to master-level saving.
                </p>
-               <div className="flex gap-6 uppercase tracking-[0.5em] font-black text-[10px] text-white/20">
+               <div className="flex gap-6 pt-6 uppercase tracking-widest font-black text-[11px] text-white/20">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#64CEFB] rounded-full" />
+                    <div className="w-1.5 h-1.5 bg-[#64CEFB] rounded-full" />
                     24/7 ADVISORY
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-white/10 rounded-full" />
-                    ENCRYPTED
+                    <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
+                    PRIVACY SECURED
                   </div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-6">
+             <div className="flex-1 w-full space-y-6 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "Client" },
@@ -326,9 +324,9 @@ export default function Landing() {
                     transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.15 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
-                    <div className={`p-10 rounded-[3.5rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default ${
-                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_30px_60px_rgba(100,206,251,0.2)]'
+                    <div className="text-[11px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
+                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default font-sans ${
+                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_20px_60px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
                     </div>
@@ -339,94 +337,97 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 
-          --- WORLD-CLASS FOOTER REDESIGN --- 
-      */}
-      <footer className="bg-black relative z-10 border-t border-white/5 pt-32 pb-16 overflow-hidden">
-        {/* Subtle Ambient Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[#64CEFB]/[0.02] blur-[150px] pointer-events-none" />
+      {/* WORLD-CLASS PREMIUM FOOTER */}
+      <footer className="bg-black relative z-10 border-t border-white/5 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-[#64CEFB]/5 blur-[120px] pointer-events-none" />
         
-        <div className="container mx-auto px-10 max-w-[1600px] relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 pb-24">
-            
-            {/* Logo & Manifesto Section */}
-            <div className="lg:col-span-5 space-y-12">
-              <motion.div 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                className="flex items-center gap-4 group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-700">
-                  <motion.div 
-                    animate={{ scale: [1, 1.2, 1] }} 
-                    transition={{ duration: 4, repeat: Infinity }}
-                    className="w-3 h-3 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
-                  />
-                </div>
-                <h2 className="text-4xl font-black tracking-tighter text-white uppercase">Pocket Fund</h2>
-              </motion.div>
-              
-              <p className="text-2xl text-white/40 font-medium leading-[1.4] max-w-sm">
-                Architecting the future of personal capital through <span className="text-white/80 italic">human-centric</span> intelligence.
-              </p>
-              
-              <div className="flex items-center gap-6 pt-4">
-                {[Twitter, Instagram, Github, Linkedin].map((Icon, idx) => (
-                  <motion.a 
-                    key={idx}
-                    href="#" 
-                    whileHover={{ scale: 1.2, color: "#64CEFB", y: -5 }}
-                    className="text-white/20 transition-all duration-300"
-                  >
-                    <Icon className="w-6 h-6" />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation Grid */}
-            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-12">
-              {[
-                { title: "Network", links: ["Ecosystem", "API Access", "Nodes", "Security"] },
-                { title: "Platform", links: ["Vault", "Advisor", "Milestones", "Capital"] },
-                { title: "Legal", links: ["Privacy", "Terms", "Licensing", "Standards"] }
-              ].map((group, idx) => (
-                <div key={idx} className="space-y-8">
-                  <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.5em]">{group.title}</h4>
-                  <ul className="space-y-5">
-                    {group.links.map((link, lIdx) => (
-                      <motion.li key={lIdx}>
-                        <motion.a 
-                          href="#" 
-                          whileHover={{ x: 10, color: "#64CEFB" }}
-                          className="text-base font-bold text-white/40 hover:text-white transition-all cursor-pointer inline-block"
-                        >
-                          {link}
-                        </motion.a>
-                      </motion.li>
+        <div className="container mx-auto px-6 max-w-[1600px] pt-32 pb-20">
+           <div className="grid grid-cols-1 lg:grid-cols-4 gap-24 mb-32">
+              <div className="lg:col-span-1 space-y-10">
+                 <div className="flex items-center gap-4 group cursor-pointer">
+                    <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-500">
+                       <div className="w-3.5 h-3.5 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
+                    </div>
+                    <span className="text-3xl font-black tracking-tighter text-white uppercase group-hover:opacity-80 transition-opacity">Pocket Fund</span>
+                 </div>
+                 <p className="text-white/30 text-base leading-relaxed font-medium max-w-xs transition-colors hover:text-white/50">
+                    High-performance financial governance for the modern capital architect. Built for precision.
+                 </p>
+                 <div className="flex items-center gap-6">
+                    {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
+                      <motion.a 
+                        key={i}
+                        whileHover={{ y: -5, scale: 1.1 }}
+                        href="#" 
+                        className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/20 hover:text-[#64CEFB] hover:border-[#64CEFB]/30 transition-all"
+                      >
+                         <Icon className="w-4 h-4" />
+                      </motion.a>
                     ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
+                 </div>
+              </div>
 
-          {/* Bottom Bar */}
-          <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-[#64CEFB] rounded-full animate-pulse" />
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.6em]">SYSTEM STATUS: OPTIMAL</span>
-            </div>
-            
-            <p className="text-[10px] font-black text-white/5 uppercase tracking-[0.8em]">
-              © 2026 ARCHITECTURAL CAPITAL SYSTEMS INC.
-            </p>
-            
-            <div className="flex items-center gap-12 text-[10px] font-black text-white/10 uppercase tracking-[0.4em]">
-               <a href="#" className="hover:text-white transition-colors">EST. 2024</a>
-               <a href="#" className="hover:text-white transition-colors">V2.4.0</a>
-            </div>
-          </div>
+              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-4">
+                 {[
+                   { title: 'Platform', links: ['Dashboard', 'Vault Cache', 'Insights', 'Coach Hub'] },
+                   { title: 'Governance', links: ['Privacy Protocol', 'Security Layer', 'Terms', 'Licenses'] },
+                   { title: 'Network', links: ['Status', 'Uptime', 'API Alpha', 'Changelog'] },
+                   { title: 'Collective', links: ['Advisory', 'Patrons', 'Design Port', 'Legacy'] }
+                 ].map((col, i) => (
+                   <div key={i} className="space-y-8">
+                      <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#64CEFB]/60">{col.title}</h4>
+                      <ul className="space-y-4">
+                        {col.links.map(link => (
+                          <li key={link}>
+                            <motion.a 
+                              whileHover={{ x: 5 }}
+                              href="#" 
+                              className="text-white/20 hover:text-white text-[13px] font-bold transition-all flex items-center gap-2 group"
+                            >
+                               {link}
+                               <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-1 transition-all" />
+                            </motion.a>
+                          </li>
+                        ))}
+                      </ul>
+                   </div>
+                 ))}
+              </div>
+           </div>
+
+           <div className="relative border-t border-white/5 pt-20">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+                 <div className="space-y-4">
+                    <motion.h2 
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      className="text-[12vw] font-black tracking-tighter leading-none text-white/[0.03] uppercase whitespace-nowrap pointer-events-none select-none"
+                    >
+                       Pocket Fund System
+                    </motion.h2>
+                    <div className="flex items-center gap-8 pl-4">
+                       <p className="text-[10px] font-black uppercase tracking-[0.8em] text-white/10">EST. 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
+                       <div className="h-px flex-1 bg-white/5 hidden md:block" />
+                       <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/10">
+                          <span>SYSTEM OK</span>
+                          <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                       </div>
+                    </div>
+                 </div>
+                 
+                 <div className="flex flex-col items-center md:items-end gap-6">
+                    <button 
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className="group flex flex-col items-center md:items-end gap-4"
+                    >
+                       <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20 group-hover:text-white transition-colors">Return Top</span>
+                       <div className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 group-hover:scale-110 transition-all duration-500">
+                          <ArrowRightCircle className="w-6 h-6 text-white/20 group-hover:text-[#64CEFB] -rotate-90" />
+                       </div>
+                    </button>
+                 </div>
+              </div>
+           </div>
         </div>
       </footer>
     </div>
