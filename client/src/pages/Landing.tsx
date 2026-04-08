@@ -93,7 +93,9 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
-      {/* HERO SECTION */}
+      {/* 
+          --- HERO SECTION (WITH PLATFORM-SPECIFIC CONTENT) --- 
+      */}
       <section className="relative h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
         <video
           autoPlay
@@ -114,7 +116,7 @@ export default function Landing() {
               <div className="w-8 h-8 rounded-full border-2 border-white/10 flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white rounded-full" />
               </div>
-              <span className="text-white font-black text-xl tracking-tighter uppercase transition-opacity hover:opacity-80">Pocket Fund</span>
+              <span className="text-white font-black text-xl tracking-tighter uppercase transition-opacity hover:opacity-80 font-display">Pocket Fund</span>
             </div>
             <button onClick={handleLogin} className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
           </nav>
@@ -127,19 +129,21 @@ export default function Landing() {
               className="max-w-6xl space-y-12"
             >
               <div className="space-y-4">
-                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[1em] block opacity-60">STILL UNDER CONSTRUCTION</span>
-                <motion.h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.85] uppercase">
+                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[1em] block opacity-60">PERSONAL SAVINGS CO-PILOT</span>
+                <motion.h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.85] uppercase font-display">
                   <div className="text-white/95">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
               <div className="flex flex-col md:flex-row items-center justify-center gap-12 pt-4">
-                <p className="text-white/30 text-xs md:text-sm max-w-[340px] leading-relaxed font-medium">Professional-grade tools to track, stash, and grow your wealth with surgical precision.</p>
+                <p className="text-white/30 text-xs md:text-sm max-w-[400px] leading-relaxed font-medium">
+                  Financial empathy meets smart technology. Track your expenses effortlessly, protect your stash in the vault, and grow with your AI savings buddy.
+                </p>
                 <div className="hidden md:block w-px h-12 bg-white/10" />
                 <div className="space-y-1 text-left">
-                  <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">Active Network</p>
-                  <p className="text-[#64CEFB] text-[16px] font-black tracking-tighter uppercase">54,000 Nodes Online</p>
+                  <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">STASHED SAFELY</p>
+                  <p className="text-[#64CEFB] text-[16px] font-black tracking-tighter uppercase">₹1.2Cr+ SECURED</p>
                 </div>
               </div>
 
@@ -286,9 +290,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 
-          --- REFINED FRIENDLY CHAT SECTION --- 
-      */}
+      {/* FRIENDLY CHAT SECTION */}
       <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-[1600px]">
@@ -302,7 +304,7 @@ export default function Landing() {
                  Friendly, judgment-free advice that helps you save more without changing your lifestyle.
                </p>
                <div className="flex gap-4 pt-4">
-                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">24/7 ADVICE</div>
+                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">24/7 ADVISORY</div>
                   <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">PRIVACY SECURED</div>
                </div>
              </div>
@@ -321,7 +323,7 @@ export default function Landing() {
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
                     <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2 px-6">{chat.sender}</div>
-                    <div className={`px-8 py-6 rounded-[2.5rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.02] cursor-default ${
+                    <div className={`px-8 py-6 rounded-[2.5rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.02] cursor-default font-sans ${
                       chat.pos === 'left' ? 'bg-white/5 border-white/10 text-white/80' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_15px_40px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
@@ -333,7 +335,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* WORLD-CLASS PREMIUM FOOTER */}
+      {/* REfINED FOOTER */}
       <footer className="bg-black relative z-10 border-t border-white/5 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-[#64CEFB]/[0.02] blur-[120px] pointer-events-none" />
         
@@ -366,12 +368,11 @@ export default function Landing() {
               </div>
 
               {/* Navigation Links */}
-              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8">
                  {[
-                   { title: 'Platform', links: ['Dashboard', 'Vault Cache', 'Insights', 'Coach Hub'] },
-                   { title: 'Governance', links: ['Privacy Protocol', 'Security Layer', 'Terms', 'Licenses'] },
-                   { title: 'Network', links: ['Status', 'Uptime', 'API Alpha', 'Changelog'] },
-                   { title: 'Collective', links: ['Advisory', 'Patrons', 'Design Port', 'Legacy'] }
+                   { title: 'Platform', links: ['Dashboard', 'Savings Vault', 'Coach AI', 'Analytics'] },
+                   { title: 'Governance', links: ['Privacy Protocol', 'Security Layer', 'Terms of Service'] },
+                   { title: 'Collective', links: ['Advisory Hub', 'Status Network', 'Support'] }
                  ].map((col, i) => (
                    <div key={i} className="space-y-6">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#64CEFB]/40">{col.title}</h4>
@@ -381,7 +382,7 @@ export default function Landing() {
                             <motion.a 
                               whileHover={{ x: 3 }}
                               href="#" 
-                              className="text-white/10 hover:text-white text-[12px] font-bold transition-all flex items-center gap-2 group"
+                              className="text-white/10 hover:text-white text-[12px] font-bold transition-all flex items-center gap-2 group whitespace-nowrap"
                             >
                                {link}
                                <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-0.5 transition-all" />
@@ -394,31 +395,26 @@ export default function Landing() {
               </div>
            </div>
 
-           <div className="relative border-t border-white/5 pt-12">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                 <div className="w-full relative overflow-hidden">
+           {/* Grand Typography Footer Mark */}
+           <div className="relative border-t border-white/5 pt-12 overflow-hidden">
+              <div className="flex flex-col items-center justify-center gap-4 text-center">
+                 <div className="w-full relative overflow-visible flex justify-center">
                     <motion.h2 
-                      initial={{ y: "100%", opacity: 0 }}
+                      initial={{ y: "120%", opacity: 0 }}
                       whileInView={{ y: 0, opacity: 1 }}
                       transition={{ duration: 1.2, ease: PREMIUM_EASE }}
-                      className="text-[12vw] font-black tracking-tighter leading-none text-white/[0.08] uppercase whitespace-nowrap pointer-events-none select-none font-display"
+                      className="text-[13vw] font-black tracking-[-0.05em] leading-[0.75] text-white/[0.08] uppercase pointer-events-none select-none font-display pb-4"
                     >
-                       Pocket Fund System
+                       Pocket Fund
                     </motion.h2>
-                    <div className="flex items-center gap-6 mt-4">
-                       <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">EST. 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
-                       <div className="h-px flex-1 bg-white/[0.03] hidden md:block" />
-                       <div className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-white/5">
-                          <span>SYSTEM ONLINE</span>
-                          <div className="w-1 h-1 bg-emerald-500/30 rounded-full" />
-                       </div>
-                    </div>
                  </div>
                  
-                 <div className="flex flex-col items-center md:items-end gap-4 shrink-0">
+                 <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
+                    <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
+                    <div className="h-px w-24 bg-white/[0.03] hidden md:block" />
                     <button 
                       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className="group flex items-center gap-4 px-6 py-3 rounded-full bg-white/[0.02] border border-white/5 hover:border-[#64CEFB]/30 transition-all"
+                      className="group flex items-center gap-4 px-8 py-3 rounded-full bg-white/[0.02] border border-white/5 hover:border-[#64CEFB]/30 transition-all active:scale-95"
                     >
                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-white transition-colors">Return Top</span>
                        <ArrowRightCircle className="w-4 h-4 text-white/20 group-hover:text-[#64CEFB] -rotate-90 transition-all" />
