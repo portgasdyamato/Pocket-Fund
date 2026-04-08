@@ -186,7 +186,9 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
-}:-webkit-scrollbar {
+}
+
+::-webkit-scrollbar {
   width: 10px;
 }
 

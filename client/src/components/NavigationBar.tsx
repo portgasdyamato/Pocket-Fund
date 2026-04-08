@@ -454,4 +454,3 @@ export function NavigationBar() {
     </div>
   );
 }
-}

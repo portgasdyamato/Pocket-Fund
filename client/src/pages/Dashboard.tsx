@@ -652,12 +652,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-      <AnimatePresence>
-        {isAddExpenseOpen && <AddExpenseModal open={isAddExpenseOpen} onOpenChange={setIsAddExpenseOpen} />}
-      </AnimatePresence>
-      <ChallengeDetailsModal isOpen={isChallengeModalOpen} onClose={() => setIsChallengeModalOpen(false)} challenge={selectedChallenge} />
-      <ChallengeCelebration isOpen={!!celebratingChallenge} onClose={() => setCelebratingChallenge(null)} challengeName={celebratingChallenge?.title} points={celebratingChallenge?.points} />
-    </div>
-  );
-}
