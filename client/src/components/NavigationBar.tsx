@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Wallet, Lock, Home, PieChart as PieChartIcon, TrendingUp, BookOpen, Trophy, Receipt, MessageCircle, User, LogOut, Settings, Menu, X, ChevronRight, Zap } from "lucide-react";
+import { Wallet, Lock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,16 +17,88 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ThemeToggle from "@/components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { 
+  Home, 
+  Zap, 
+  TrendingUp, 
+  BookOpen, 
+  Trophy, 
+  User, 
+  LogOut,
+  Settings,
+  Menu,
+  X,
+  Receipt,
+  MessageCircle,
+  ChevronRight,
+  PieChart as PieChartIcon
+} from "lucide-react";
 const menuItems = [
-  { title: "Dashboard", url: "/", icon: Home },
-  { title: "Analytics", url: "/analytics", icon: PieChartIcon },
-  { title: "Vault", url: "/vault", icon: TrendingUp },
-  { title: "Learn", url: "/learn", icon: BookOpen },
-  { title: "Achievements", url: "/achievements", icon: Trophy },
-  { title: "History", url: "/history", icon: Receipt },
-  { title: "Coach", url: "/assistant", icon: MessageCircle },
+  {
+    title: "Dashboard",
+    url: "/",
+    icon: Home,
+    testId: "nav-link-dashboard",
+    color: "text-[#6366f1]",
+    bg: "bg-[#6366f1]/10",
+    border: "border-[#6366f1]/20",
+  },
+  {
+    title: "Analytics",
+    url: "/analytics",
+    icon: PieChartIcon,
+    testId: "nav-link-analytics",
+    color: "text-[#f59e0b]",
+    bg: "bg-[#f59e0b]/10",
+    border: "border-[#f59e0b]/20",
+  },
+  {
+    title: "Vault",
+    url: "/vault",
+    icon: TrendingUp,
+    testId: "nav-link-vault",
+    color: "text-[#8b5cf6]",
+    bg: "bg-[#8b5cf6]/10",
+    border: "border-[#8b5cf6]/20",
+  },
+  {
+    title: "Learn",
+    url: "/learn",
+    icon: BookOpen,
+    testId: "nav-link-learn",
+    color: "text-[#0ea5e9]",
+    bg: "bg-[#0ea5e9]/10",
+    border: "border-[#0ea5e9]/20",
+  },
+  {
+    title: "Achievements",
+    url: "/achievements",
+    icon: Trophy,
+    testId: "nav-link-achievements",
+    color: "text-[#f59e0b]",
+    bg: "bg-[#f59e0b]/10",
+    border: "border-[#f59e0b]/20",
+  },
+  {
+    title: "History",
+    url: "/history",
+    icon: Receipt,
+    testId: "nav-link-history",
+    color: "text-[#10b981]",
+    bg: "bg-[#10b981]/10",
+    border: "border-[#10b981]/20",
+  },
+  {
+    title: "Coach",
+    url: "/assistant",
+    icon: MessageCircle,
+    testId: "nav-link-assistant",
+    color: "text-[#ec4899]",
+    bg: "bg-[#ec4899]/10",
+    border: "border-[#ec4899]/20",
+  },
 ];
 
 export function NavigationBar() {
@@ -34,6 +106,7 @@ export function NavigationBar() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Fetch balances for navbar
   const { data: totalStashedData } = useQuery<{ total: number }>({
     queryKey: ["/api/stash/total"],
     enabled: isAuthenticated
@@ -42,157 +115,337 @@ export function NavigationBar() {
   const walletBalance = parseFloat(user?.walletBalance?.toString() || "0");
   const lockerBalance = parseFloat(totalStashedData?.total?.toString() || "0");
 
-  const handleLogout = () => { window.location.href = "/api/logout"; };
-  const handleLogin = () => { window.location.href = "/api/auth/google"; };
+  const handleLogout = () => {
+    window.location.href = "/api/logout";
+  };
+
+  const handleLogin = () => {
+    window.location.href = "/api/auth/google";
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <nav className="sticky top-0 z-50 glass-morphism border-b border-white/10">
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group transition-all">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300 premium-shadow">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent group-hover:from-primary group-hover:to-accent transition-all duration-300">
+              Pocket Fund
+            </h1>
+          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Button 
+              onClick={handleLogin} 
+              className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white rounded-full px-6 sm:px-8 click-scale text-sm"
+              data-testid="nav-button-login"
+            >
+              Get Started
+            </Button>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[100] h-[var(--nav-height)] transition-all">
-      <nav className="h-full border-b border-white/10 glass-frost flex items-center">
-        <div className="container mx-auto px-6 flex items-center justify-between gap-4">
-          
-          {/* Elite Brand Signature */}
-          <Link href="/" className="flex items-center gap-4 group cursor-pointer shrink-0">
-            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-700 shadow-xl shadow-blue-500/10">
-              <Wallet className="w-6 h-6" />
-            </div>
-            <span className="text-xl font-black tracking-tighter text-white uppercase hidden sm:block">FINANCE<span className="text-blue-500">GLOW</span></span>
-          </Link>
-          
-          {/* Dynamic Core Terminals */}
-          {isAuthenticated && (
-            <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1.5 rounded-3xl border border-white/5 mx-4">
+    // The nav itself is sticky and sits at the top.
+    // The mobile drawer is rendered INSIDE the nav but uses position relative/absolute within the nav stack
+    <div className="sticky top-0 z-50">
+      <nav className="glass-morphism border-b border-white/10">
+        <div className="container mx-auto px-4 sm:px-6 py-3">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group transition-all flex-shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300 premium-shadow">
+                <Wallet className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
+                Pocket Fund
+              </h1>
+            </Link>
+            
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10 overflow-x-auto mx-4">
               {menuItems.map((item) => {
                 const isActive = location === item.url;
                 return (
                   <Link
                     key={item.title}
                     href={item.url}
-                    className={`flex items-center gap-2.5 px-5 py-2.5 rounded-2xl transition-all duration-300 text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-300 text-xs font-semibold whitespace-nowrap ${
                       isActive
-                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                        : "text-white/40 hover:text-white hover:bg-white/5"
+                        ? "bg-primary text-white shadow-lg shadow-primary/20"
+                        : "text-white/60 hover:text-white hover:bg-white/10"
                     }`}
+                    data-testid={item.testId}
                   >
-                    <item.icon className={`w-3.5 h-3.5`} />
+                    <item.icon className={`w-3.5 h-3.5 flex-shrink-0`} />
                     <span>{item.title}</span>
                   </Link>
                 );
               })}
             </div>
-          )}
 
-          {/* Action Interface */}
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                <div className="hidden xl:flex items-center gap-3">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center gap-3 bg-blue-600/10 px-5 py-3 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-all click-scale cursor-pointer group">
-                        <Zap className="w-4 h-4 text-blue-400" />
-                        <span className="text-xs font-black text-white tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="glass-frost mt-2 text-[10px] font-black uppercase tracking-widest p-4">Available Capital</TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center gap-3 bg-blue-600/5 px-5 py-3 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all click-scale cursor-pointer group">
-                        <Lock className="w-4 h-4 text-white/40" />
-                        <span className="text-xs font-black text-white/60 tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="glass-frost mt-2 text-[10px] font-black uppercase tracking-widest p-4">Secured Reserves</TooltipContent>
-                  </Tooltip>
-                </div>
-
-                <div className="h-10 w-[1px] bg-white/5 hidden lg:block" />
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-12 w-12 rounded-2xl p-0 hover:bg-white/5 click-scale border border-white/5">
-                      <Avatar className="h-11 w-11 rounded-[20px]">
-                        <AvatarImage src={user?.profileImageUrl || undefined} />
-                        <AvatarFallback className="bg-blue-600 text-white text-sm font-black uppercase">
-                          {user?.firstName?.[0] || user?.email?.[0] || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-72 glass-frost border-white/10 mt-4 p-2 rounded-[32px] overflow-hidden" align="end">
-                    <div className="p-6 flex items-center gap-4">
-                      <Avatar className="h-12 w-12 rounded-2xl shadow-xl">
-                        <AvatarImage src={user?.profileImageUrl || undefined} />
-                        <AvatarFallback className="bg-blue-600 text-white font-black">{user?.firstName?.[0] || "U"}</AvatarFallback>
-                      </Avatar>
-                      <div className="truncate min-w-0">
-                        <p className="font-black text-sm text-white truncate uppercase tracking-tight">{user?.firstName || "Member"}</p>
-                        <p className="text-[10px] text-white/40 truncate tracking-widest font-bold uppercase mt-1">{user?.email}</p>
-                      </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="hidden lg:flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2 bg-purple-600 px-3 py-1.5 rounded-full border border-purple-500/30 cursor-pointer hover:bg-purple-500 transition-all click-scale group">
+                      <Wallet className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-bold text-white">
+                        ₹{walletBalance.toLocaleString('en-IN')}
+                      </span>
                     </div>
-                    <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-2xl m-1 py-4 focus:bg-white/5 group">
-                      <Link href="/profile" className="flex items-center gap-4 px-4 w-full">
-                         <User className="w-4 h-4 text-blue-500" /> 
-                         <span className="text-xs font-black uppercase tracking-widest text-white mt-0.5">Profile Terminal</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-2xl m-1 py-4 focus:bg-white/5 group">
-                      <Link href="/profile" className="flex items-center gap-4 px-4 w-full">
-                         <Settings className="w-4 h-4 text-white/40" /> 
-                         <span className="text-xs font-black uppercase tracking-widest text-white mt-0.5">Preferences</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem onClick={handleLogout} className="text-rose-400 hover:bg-rose-400/10 cursor-pointer rounded-2xl m-1 py-4 focus:bg-rose-400/10">
-                      <div className="flex items-center gap-4 px-4">
-                         <LogOut className="w-4 h-4" /> 
-                         <span className="text-xs font-black uppercase tracking-widest mt-0.5">Terminate Session</span>
-                      </div>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              <Button onClick={handleLogin} className="bg-white text-black hover:bg-white/90 rounded-2xl h-14 px-10 font-black text-[10px] tracking-[0.2em] uppercase click-scale shadow-2xl shadow-white/5 border-none">
-                Access Core
-              </Button>
-            )}
+                  </TooltipTrigger>
+                  <TooltipContent className="glass-card">
+                    <p>Wallet Balance (Available)</p>
+                  </TooltipContent>
+                </Tooltip>
 
-            <button className="lg:hidden w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all text-white/60 hover:text-white border border-white/5" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2 bg-green-600 px-3 py-1.5 rounded-full border border-green-500/30 cursor-pointer hover:bg-green-500 transition-all click-scale group">
+                      <Lock className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-bold text-white">
+                        ₹{lockerBalance.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="glass-card">
+                    <p>Locker Savings (Protected)</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <div className="w-[1px] h-8 bg-white/10" />
+              
+              <ThemeToggle />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:bg-white/10 click-scale">
+                    <Avatar className="h-9 w-9 border-2 border-primary/30">
+                      <AvatarImage src={user?.profileImageUrl || undefined} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-sm">
+                        {user?.firstName?.[0] || user?.email?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  className="w-64 border-white/10 mt-2 p-1" 
+                  align="end"
+                  style={{
+                    background: "rgba(10, 10, 15, 0.98)",
+                    backdropFilter: "blur(24px)",
+                    WebkitBackdropFilter: "blur(24px)",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)"
+                  }}
+                >
+                  <div className="p-4 flex items-center gap-3">
+                    <Avatar className="h-12 w-12 border-2 border-primary/30">
+                      <AvatarImage src={user?.profileImageUrl || undefined} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
+                        {user?.firstName?.[0] || user?.email?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col space-y-0.5 leading-none">
+                      <p className="font-bold text-white">{user?.firstName || user?.email}</p>
+                      <p className="text-xs text-white/50 truncate max-w-[140px]">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator className="bg-white/10" />
+                  <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-lg mx-1 my-1">
+                    <Link href="/profile" className="flex items-center gap-3 py-2">
+                      <User className="w-4 h-4 text-white/70" />
+                      <span className="text-sm font-medium">My Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="hover:bg-white/5 cursor-pointer rounded-lg mx-1 my-1">
+                    <Link href="/profile" className="flex items-center gap-3 py-2">
+                      <Settings className="w-4 h-4 text-white/70" />
+                      <span className="text-sm font-medium">Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-white/10" />
+                  <DropdownMenuItem onClick={handleLogout} className="hover:bg-destructive/10 cursor-pointer rounded-lg mx-1 my-1 text-destructive">
+                    <div className="flex items-center gap-3 py-2">
+                      <LogOut className="w-4 h-4" />
+                      <span className="text-sm font-medium">Sign Out</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
+          {/* Mobile Top Bar */}
+          <div className="md:hidden flex items-center justify-between h-14">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                <Wallet className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-black text-white text-base tracking-tight">Pocket Fund</span>
+            </Link>
+            
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 bg-purple-600 px-2.5 py-1.5 rounded-full border border-purple-500/25">
+                <Wallet className="w-3 h-3 text-white" />
+                <span className="text-xs font-bold text-white">
+                  ₹{walletBalance.toLocaleString('en-IN')}
+                </span>
+              </div>
+              <button
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                  isMobileMenuOpen 
+                    ? 'bg-white/10 text-white rotate-90' 
+                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                }`}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Interaction System */}
+      {/* Mobile Drawer — Slides in below the navbar, no overlap */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-[#020205]/95 backdrop-blur-xl z-[90] lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: -20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -20 }} transition={{ type: "spring", damping: 25, stiffness: 300 }} className="absolute top-24 inset-x-4 z-[100] lg:hidden">
-              <div className="glass-frost rounded-[40px] overflow-hidden border border-white/10 p-4 space-y-2">
-                 {menuItems.map((item, i) => (
-                    <motion.div key={item.title} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
-                       <Link href={item.url} className={`flex items-center gap-5 p-5 rounded-3xl transition-all ${location === item.url ? 'bg-blue-600 text-white font-black' : 'text-white/40 hover:text-white hover:bg-white/5'}`} onClick={() => setIsMobileMenuOpen(false)}>
-                          <item.icon className="w-5 h-5" />
-                          <span className="text-xs font-black uppercase tracking-widest">{item.title}</span>
-                       </Link>
-                    </motion.div>
-                 ))}
-                 <div className="h-[1px] bg-white/5 mx-4 my-6" />
-                 <div className="grid grid-cols-2 gap-4 p-2">
-                    <div className="p-6 rounded-[32px] bg-blue-600/10 border border-blue-500/20">
-                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">Available</p>
-                        <p className="text-xl font-black text-white tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</p>
+            {/* Backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 top-[73px] bg-black/60 backdrop-blur-sm z-40 md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Drawer Panel */}
+            <motion.div
+              key="drawer"
+              initial={{ opacity: 0, y: -16, scaleY: 0.95 }}
+              animate={{ opacity: 1, y: 0, scaleY: 1 }}
+              exit={{ opacity: 0, y: -16, scaleY: 0.95 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              style={{ transformOrigin: "top" }}
+              className="absolute top-full left-0 right-0 z-50 md:hidden"
+            >
+              <div
+                className="mx-3 mb-3 rounded-3xl overflow-hidden border border-white/10"
+                style={{
+                  background: "rgba(10, 10, 15, 0.98)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  boxShadow: "0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)"
+                }}
+              >
+                {/* Menu Items */}
+                <div className="p-3 space-y-1">
+                  <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] px-3 py-2">Navigation</p>
+                  {menuItems.map((item, i) => {
+                    const isActive = location === item.url;
+                    return (
+                      <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.04 }}
+                      >
+                        <Link
+                          href={item.url}
+                          className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 group ${
+                            isActive
+                              ? `${item.bg} border ${item.border}`
+                              : "hover:bg-white/[0.06]"
+                          }`}
+                          data-testid={item.testId}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                            isActive ? `${item.bg} border ${item.border}` : "bg-white/5 group-hover:bg-white/10"
+                          }`}>
+                            <item.icon className={`w-4 h-4 ${isActive ? item.color : "text-white/50 group-hover:text-white"}`} />
+                          </div>
+                          <span className={`text-sm font-bold flex-1 ${
+                            isActive ? "text-white" : "text-white/60 group-hover:text-white"
+                          }`}>{item.title}</span>
+                          {isActive && (
+                            <ChevronRight className={`w-4 h-4 ${item.color}`} />
+                          )}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Divider */}
+                <div className="h-[1px] bg-white/[0.06] mx-4" />
+
+                {/* User Section */}
+                <div className="p-3">
+                  <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 mb-3">
+                    <Avatar className="h-11 w-11 border-2 border-primary/30 flex-shrink-0">
+                      <AvatarImage src={user?.profileImageUrl || undefined} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-sm font-black">
+                        {user?.firstName?.[0] || user?.email?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-black text-white truncate">{user?.firstName || "User"}</p>
+                      <p className="text-xs text-white/40 truncate">{user?.email}</p>
                     </div>
-                    <div className="p-6 rounded-[32px] bg-white/[0.03] border border-white/10">
-                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2">Reserves</p>
-                        <p className="text-xl font-black text-white/60 tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</p>
+                    <div className="flex items-center gap-1 bg-green-500/10 px-2.5 py-1 rounded-full border border-green-500/20 flex-shrink-0">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                      <span className="text-[10px] font-black text-green-400">LIVE</span>
                     </div>
-                 </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      className="flex items-center justify-center gap-2 p-3.5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95"
+                      onClick={() => {
+                        window.location.href = "/profile";
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <User className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-bold text-white">Profile</span>
+                    </button>
+                    <button
+                      className="flex items-center justify-center gap-2 p-3.5 rounded-2xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 transition-all active:scale-95"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="w-4 h-4 text-red-400" />
+                      <span className="text-sm font-bold text-red-400">Sign Out</span>
+                    </button>
+                  </div>
+
+                  {/* Balance chips */}
+                  <div className="flex gap-2 mt-2">
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-purple-600 border border-purple-500/20">
+                      <Wallet className="w-3.5 h-3.5 text-white flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Wallet</p>
+                        <p className="text-xs font-black text-white truncate">₹{walletBalance.toLocaleString('en-IN')}</p>
+                      </div>
+                    </div>
+                    <div className="flex-1 flex items-center gap-2 p-3 rounded-2xl bg-green-600 border border-green-500/20">
+                      <Lock className="w-3.5 h-3.5 text-white flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[9px] font-black text-white/50 uppercase tracking-wider">Locker</p>
+                        <p className="text-xs font-black text-white truncate">₹{lockerBalance.toLocaleString('en-IN')}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </>
@@ -200,4 +453,5 @@ export function NavigationBar() {
       </AnimatePresence>
     </div>
   );
+}
 }

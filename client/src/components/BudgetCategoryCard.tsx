@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { LucideIcon, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -24,54 +25,45 @@ export default function BudgetCategoryCard({
 
   return (
     <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      whileHover={{ scale: 1.02, y: -5 }}
+      whileTap={{ scale: 0.98 }}
       className="h-full"
     >
-      <Card className="h-full p-8 glass-card border-white/5 hover:border-blue-500/30 transition-all duration-500 overflow-hidden relative group" data-testid={`card-budget-${id}`}>
-        <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity translate-x-2 group-hover:translate-x-0">
-          <ArrowUpRight className="w-5 h-5 text-blue-500" />
+      <Card className="h-full p-6 backdrop-blur-3xl bg-white/[0.03] border-white/5 hover:border-primary/20 transition-all duration-500 overflow-hidden relative group" data-testid={`card-budget-${id}`}>
+        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <ArrowUpRight className="w-4 h-4 text-primary" />
         </div>
         
-        <div className="flex flex-col h-full">
-          <div className="flex items-start gap-5 mb-10">
-            <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center border border-white/5 bg-white/[0.03] transition-all group-hover:scale-110 group-hover:bg-blue-500/10 group-hover:text-blue-400 group-hover:border-blue-500/20 ${color}`}>
-              <Icon className="w-7 h-7" />
+        <div className="flex flex-col h-full gap-6">
+          <div className="flex items-center gap-4">
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border border-white/5 bg-white/5 transition-all group-hover:bg-primary/10 group-hover:text-primary ${color}`}>
+              <Icon className="w-6 h-6" />
             </div>
-            <div className="flex-1 min-w-0 pt-1">
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white/30 mb-2 truncate" data-testid={`text-category-${id}`}>
-                {category} sector
+            <div className="flex-1 min-w-0">
+              <h4 className="font-black text-sm uppercase tracking-widest text-white/50 mb-0.5" data-testid={`text-category-${id}`}>
+                {category}
               </h4>
-              <div className="flex items-baseline gap-2">
-                 <span className="text-3xl font-black tracking-tighter tabular-nums">
-                   ₹{spent.toLocaleString()}
-                 </span>
-                 <span className="text-[10px] font-black text-white/10 uppercase tracking-widest">
-                   / ₹{budget.toLocaleString()}
-                 </span>
-              </div>
+              <p className="text-xl font-black tracking-tight">
+                ${spent.toLocaleString()} <span className="text-white/20 text-xs font-bold">/ ${budget.toLocaleString()}</span>
+              </p>
             </div>
           </div>
 
-          <div className="mt-auto space-y-4">
+          <div className="space-y-3">
              <div className="flex justify-between items-end">
-                <div className="flex items-center gap-2">
-                   <div className={`w-1.5 h-1.5 rounded-full ${isOverBudget ? 'bg-rose-500 animate-pulse' : 'bg-blue-500'}`} />
-                   <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${isOverBudget ? 'text-rose-500' : 'text-blue-500/60'}`}>
-                     {isOverBudget ? 'LIMIT EXCEEDED' : 'RESERVE STATUS: STABLE'}
-                   </span>
-                </div>
-                <span className="text-xs font-black font-mono tracking-tighter text-white/40">
+                <span className={`text-[10px] font-black uppercase tracking-widest ${isOverBudget ? 'text-destructive' : 'text-primary'}`}>
+                  {isOverBudget ? 'Critical Breach' : 'Target Buffer'}
+                </span>
+                <span className="text-sm font-black font-mono">
                   {percentage.toFixed(0)}%
                 </span>
              </div>
-             
-             <div className="relative h-2 w-full bg-white/[0.03] rounded-full overflow-hidden border border-white/5 p-[2px]">
+             <div className="relative h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
-                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                  className={`h-full relative rounded-full ${isOverBudget ? 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]' : 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]'}`}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  className={`h-full relative ${isOverBudget ? 'bg-destructive' : 'bg-primary'} shadow-[0_0_10px_rgba(139,92,246,0.3)]`}
                 />
              </div>
           </div>
@@ -80,4 +72,3 @@ export default function BudgetCategoryCard({
     </motion.div>
   );
 }
-

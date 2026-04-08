@@ -1,24 +1,31 @@
 import { useState, useMemo } from "react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChallengeCard from "@/components/ChallengeCard";
-import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star, Brain, Shield, BarChart3, Fingerprint, Activity, ShieldCheck, Globe, MousePointer2 } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
+import StreakCounter from "@/components/StreakCounter";
+import { ArrowLeft, Trophy, Swords, CheckCircle2, Zap, Target, Star, Brain } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Quest, UserQuest } from "@shared/schema";
-import { Card } from "@/components/ui/card";
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  hidden: { opacity: 0, scale: 0.95 },
+  show: { opacity: 1, scale: 1 }
 };
 
 export default function ChallengesPage() {
@@ -40,7 +47,7 @@ export default function ChallengesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user/quests"] });
-      toast({ title: "OPERATIONAL UPDATE", description: "Mission parameters accepted and deployed." });
+      toast({ title: "Challenge Accepted!", description: "Check your dashboard for progress." });
       setActiveTab("active");
     }
   });
@@ -82,122 +89,169 @@ export default function ChallengesPage() {
   }, [challenges, completedChallenges, activeChallenges]);
 
   return (
-    <div className="section-container py-20">
-      <div className="flex flex-col gap-12">
-        
-        {/* Cinematic Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="px-4 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] animate-pulse">
-                Operational Missions
-              </div>
-              <div className="h-[1px] w-20 bg-white/5" />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-[-0.05em] leading-[0.8] mb-4 text-white uppercase italic">
-              GLOBAL <br />
-              <span className="text-gradient-blue">SWORDS.</span>
+    <div className="min-h-screen bg-[#050505] text-white">
+      {/* Premium Header */}
+      <header className="sticky top-0 z-50 border-b border-white/5 bg-black/40 backdrop-blur-3xl px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link href="/">
+              <Button variant="ghost" size="icon" className="hover:bg-white/5 rounded-xl border border-white/5">
+                <ArrowLeft className="w-5 h-5 text-white/40" />
+              </Button>
+            </Link>
+            <div className="h-8 w-px bg-white/10 hidden md:block" />
+            <h1 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2 uppercase tracking-widest">
+              Financial <span className="text-primary italic">Missions</span>
             </h1>
-            <p className="text-white/30 text-lg font-medium tracking-tight max-w-xl">
-              Execute high-impact financial maneuvers to accelerate your capital velocity tier.
-            </p>
           </div>
-          <div className="flex gap-4 w-full md:w-auto">
-             <div className="px-8 py-4 rounded-[28px] glass-frost border-blue-500/20 flex items-center gap-4 shadow-xl">
-                <Shield className="w-6 h-6 text-blue-500" />
-                <span className="text-[10px] font-black tracking-[0.4em] text-blue-400 uppercase">Encrypted Mission Hub</span>
-             </div>
+          <div className="flex items-center gap-4">
+             <ThemeToggle />
           </div>
-        </motion.div>
+        </div>
+      </header>
 
-        {/* Elite Performance Console */}
-        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-3 gap-10">
-           {[
-             { icon: Zap, value: stats.totalPoints, label: "ACCUMULATED XP", color: "text-blue-500", bg: "bg-blue-600/10", border: "border-blue-500/20" },
-             { icon: CheckCircle2, value: stats.completedCount, label: "MISSIONS COMPLETED", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-             { icon: Target, value: stats.activeCount, label: "ACTIVE OPS", color: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-400/20" }
-           ].map((stat, i) => (
-              <Card key={i} className={`p-10 rounded-[48px] glass-frost border-white/5 relative overflow-hidden group shadow-2xl transition-all duration-700 hover-lift`}>
-                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 blur-[80px] rounded-full -mr-24 -mt-24 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="flex flex-col items-center text-center relative z-10">
-                  <div className={`w-18 h-18 rounded-[28px] ${stat.bg} ${stat.color} flex items-center justify-center border ${stat.border} mb-8 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all`}>
-                     <stat.icon className="w-9 h-9" />
+      <main className="max-w-6xl mx-auto px-6 py-12">
+        <motion.div 
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="space-y-12"
+        >
+          {/* Performance Overview */}
+          <motion.div variants={item}>
+            <div className="p-8 rounded-[40px] glass-morphism border-white/5 relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-12 opacity-[0.02]">
+                  <Trophy className="w-64 h-64 text-primary" />
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10">
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                         <Zap className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-primary">{stats.totalPoints}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Rewards (XP)</p>
                   </div>
-                  <p className={`text-6xl font-black italic tracking-tighter tabular-nums ${stat.color} mb-3 drop-shadow-2xl`}>{stat.value}</p>
-                  <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">{stat.label}</p>
-                </div>
-              </Card>
-           ))}
-        </motion.div>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
+                         <CheckCircle2 className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-green-500">{stats.completedCount}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Completed</p>
+                  </div>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-center mb-2 sm:mb-4">
+                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
+                         <Target className="w-5 sm:w-6 h-5 sm:h-6" />
+                       </div>
+                    </div>
+                    <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-accent">{stats.activeCount}</p>
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active</p>
+                  </div>
+               </div>
+            </div>
+          </motion.div>
 
-        {/* Mission Deployment Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pb-24">
-          <div className="flex justify-center mb-16">
-            <TabsList className="bg-white/[0.03] border border-white/10 p-2 h-20 rounded-[32px] w-full max-w-2xl shadow-2xl backdrop-blur-3xl">
-              {[
-                { id: "active", label: "In Progress", icon: Swords },
-                { id: "available", label: "Available", icon: Star },
-                { id: "completed", label: "Registry", icon: Trophy }
-              ].map(tab => (
-                <TabsTrigger key={tab.id} value={tab.id} className="rounded-[24px] font-black uppercase tracking-[0.3em] text-[10px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-2xl transition-all h-full flex-1 gap-3">
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex justify-center mb-10">
+              <TabsList className="bg-white/5 border border-white/10 p-1 h-14 rounded-2xl w-full max-w-lg">
+                <TabsTrigger value="active" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
+                  <Swords className="w-4 h-4 mr-2" />
+                  In Progress
                 </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
+                <TabsTrigger value="available" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
+                  <Star className="w-4 h-4 mr-2" />
+                  Available
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-white transition-all h-full flex-1">
+                  <Trophy className="w-4 h-4 mr-2" />
+                  History
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
-          <AnimatePresence mode="wait">
-            <TabsContent value="active" className="focus-visible:outline-none">
-              <motion.div key="active" variants={container} initial="hidden" animate="show" className="grid gap-10 sm:grid-cols-2">
-                {activeChallenges.map((challenge) => (
-                  <motion.div key={challenge.id} variants={item}>
-                    <ChallengeCard {...challenge} onAction={() => window.location.href = '/'} />
-                  </motion.div>
-                ))}
-                {activeChallenges.length === 0 && (
-                  <div className="col-span-full py-40 text-center border-2 border-dashed border-white/5 rounded-[56px] opacity-20">
-                    <Target className="w-20 h-20 mx-auto mb-8 text-white/10" />
-                    <p className="font-black text-white/20 uppercase tracking-[0.5em] text-lg">No active operational missions detected.</p>
-                  </div>
-                )}
-              </motion.div>
-            </TabsContent>
+            <AnimatePresence mode="wait">
+              <TabsContent value="active" className="space-y-6 focus-visible:outline-none">
+                <motion.div 
+                   key="active"
+                   variants={container}
+                   initial="hidden"
+                   animate="show"
+                   className="grid gap-6 sm:grid-cols-2"
+                >
+                  {activeChallenges.map((challenge) => (
+                    <motion.div key={challenge.id} variants={item}>
+                      <ChallengeCard
+                        {...challenge}
+                        onAction={() => window.location.href = '/'}
+                      />
+                    </motion.div>
+                  ))}
+                  {activeChallenges.length === 0 && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Target className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">No active missions. Pick one from 'Available'.</p>
+                    </div>
+                  )}
+                </motion.div>
+              </TabsContent>
 
-            <TabsContent value="available" className="focus-visible:outline-none">
-              <motion.div key="available" variants={container} initial="hidden" animate="show" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                {availableChallenges.map((challenge) => (
-                  <motion.div key={challenge.id} variants={item}>
-                    <ChallengeCard {...challenge} onAction={() => joinMutation.mutate(challenge.id)} />
-                  </motion.div>
-                ))}
-                {availableChallenges.length === 0 && !isLoadingQuests && (
-                  <div className="col-span-full py-40 text-center border-2 border-dashed border-white/5 rounded-[56px] opacity-20">
-                    <Brain className="w-20 h-20 mx-auto mb-8 text-white/10" />
-                    <p className="font-black text-white/20 uppercase tracking-[0.5em] text-lg">All missions globally accepted.</p>
-                  </div>
-                )}
-              </motion.div>
-            </TabsContent>
+              <TabsContent value="available" className="focus-visible:outline-none">
+                <motion.div 
+                   key="available"
+                   variants={container}
+                   initial="hidden"
+                   animate="show"
+                   className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  {availableChallenges.map((challenge, idx) => (
+                    <motion.div key={challenge.id} variants={item} transition={{ delay: idx * 0.05 }}>
+                      <ChallengeCard
+                        {...challenge}
+                        onAction={() => joinMutation.mutate(challenge.id)}
+                      />
+                    </motion.div>
+                  ))}
+                  {availableChallenges.length === 0 && !isLoadingQuests && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Brain className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">All missions accepted or completed!</p>
+                    </div>
+                  )}
+                </motion.div>
+              </TabsContent>
 
-            <TabsContent value="completed" className="focus-visible:outline-none">
-              <motion.div key="completed" variants={container} initial="hidden" animate="show" className="grid gap-10 sm:grid-cols-2">
-                {completedChallenges.map((challenge) => (
-                  <motion.div key={challenge.id} variants={item}>
-                    <ChallengeCard {...challenge} />
-                  </motion.div>
-                ))}
-                {completedChallenges.length === 0 && (
-                  <div className="col-span-full py-40 text-center border-2 border-dashed border-white/5 rounded-[56px] opacity-20">
-                    <Trophy className="w-20 h-20 mx-auto mb-8 text-white/10" />
-                    <p className="font-black text-white/20 uppercase tracking-[0.5em] text-lg">Mission history archive is empty.</p>
-                  </div>
-                )}
-              </motion.div>
-            </TabsContent>
-          </AnimatePresence>
-        </Tabs>
-      </div>
+              <TabsContent value="completed" className="space-y-6 focus-visible:outline-none">
+                <motion.div 
+                   key="completed"
+                   variants={container}
+                   initial="hidden"
+                   animate="show"
+                   className="grid gap-6 sm:grid-cols-2"
+                >
+                  {completedChallenges.map((challenge) => (
+                    <motion.div key={challenge.id} variants={item}>
+                      <ChallengeCard
+                        {...challenge}
+                      />
+                    </motion.div>
+                  ))}
+                  {completedChallenges.length === 0 && (
+                    <div className="col-span-full py-20 text-center opacity-40">
+                      <Trophy className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold">No missions completed yet. Time to start your journey!</p>
+                    </div>
+                  )}
+                </motion.div>
+              </TabsContent>
+            </AnimatePresence>
+          </Tabs>
+        </motion.div>
+      </main>
     </div>
   );
 }
