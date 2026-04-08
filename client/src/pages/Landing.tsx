@@ -52,27 +52,25 @@ const BentoCard = ({
 }) => {
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.5, ease: PREMIUM_EASE }}
-      className={`group relative rounded-[32px] bg-[#0A0A0A] border border-white/10 shadow-2xl transition-colors hover:bg-[#0F0F0F] ${className}`}
-      style={{ overflow: 'visible' }} // Allow shadows and glows to bleed
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.6, ease: PREMIUM_EASE }}
+      className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/10 shadow-2xl transition-all duration-500 hover:bg-[#0F0F0F] hover:border-white/20 ${className}`}
+      style={{ overflow: 'visible' }}
     >
-      {/* Background Fill - Clipped inside rounded corners */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[32px] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[32px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[40px] pointer-events-none" />
       
-      <div className="relative z-10 p-10 h-full flex flex-col justify-between">
-        <div className="space-y-6">
-          <div className="w-12 h-12 rounded-[18px] bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/30">
-            <Icon className="w-5 h-5 text-white/50 group-hover:text-[#64CEFB] transition-colors" />
+      <div className="relative z-10 p-12 h-full flex flex-col justify-between">
+        <div className="space-y-8">
+          <div className="w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/40">
+            <Icon className="w-6 h-6 text-[#64CEFB]" />
           </div>
-          <div className="space-y-2.5">
-            <h3 className="text-xl font-bold tracking-tight uppercase leading-none text-white/90 group-hover:text-white transition-colors">{title}</h3>
-            <p className="text-sm text-white/40 font-medium leading-relaxed max-w-[320px] group-hover:text-white/60 transition-colors">{desc}</p>
+          <div className="space-y-3">
+            <h3 className="text-2xl font-black tracking-tight uppercase leading-none text-white">{title}</h3>
+            <p className="text-base text-white/40 font-medium leading-relaxed max-w-[340px] group-hover:text-white/60 transition-colors">{desc}</p>
           </div>
         </div>
         
-        <div className="mt-8 flex-1 flex flex-col justify-end">
+        <div className="mt-12 flex-1 flex flex-col justify-end min-h-[160px]">
           {visual}
         </div>
       </div>
@@ -91,9 +89,9 @@ export default function Landing() {
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
       {/* 
-          --- HERO SECTION (Polished for visibility) --- 
+          --- HERO SECTION (Ensuring No Cutoff) --- 
       */}
-      <section className="relative h-screen w-full bg-black overflow-hidden flex flex-col">
+      <section className="relative min-h-[100vh] w-full bg-black overflow-hidden flex flex-col justify-start">
         <video
           autoPlay
           loop
@@ -107,43 +105,43 @@ export default function Landing() {
           />
         </video>
 
-        <div className="relative z-10 w-full h-full flex flex-col items-center">
-          <nav className="w-full max-w-[1600px] mx-auto px-6 py-10 flex items-center justify-between">
+        <div className="relative z-10 w-full flex-1 flex flex-col items-center">
+          <nav className="w-full max-w-[1600px] mx-auto px-10 py-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full border-2 border-white/10 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 bg-white rounded-full" />
+              <div className="w-9 h-9 rounded-full border-2 border-white/10 flex items-center justify-center">
+                <div className="w-3 h-3 bg-white rounded-full" />
               </div>
-              <span className="text-white font-black text-xl tracking-tight">Pocket Fund</span>
+              <span className="text-white font-black text-2xl tracking-tighter uppercase transition-opacity hover:opacity-80">Pocket Fund</span>
             </div>
-            <button onClick={handleLogin} className="text-white/60 hover:text-white text-xs font-black uppercase tracking-[0.3em] transition-all">Sign In</button>
+            <button onClick={handleLogin} className="text-white/40 hover:text-white text-[11px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
           </nav>
 
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 pb-24 sm:pb-32">
+          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20 pb-40">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: PREMIUM_EASE }}
-              className="max-w-5xl space-y-12"
+              transition={{ duration: 1.5, ease: PREMIUM_EASE }}
+              className="max-w-6xl space-y-14"
             >
-              <div className="space-y-4">
-                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.6em] block opacity-80">STILL UNDER CONSTRUCTION</span>
-                <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] uppercase">
-                  <div className="text-white">Master Your</div>
+              <div className="space-y-6">
+                <span className="text-[#64CEFB] text-[11px] font-black uppercase tracking-[1em] block opacity-60">STILL UNDER CONSTRUCTION</span>
+                <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-[0.8] uppercase">
+                  <div className="text-white/95">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-12 pt-4">
-                <p className="text-white/40 text-xs md:text-sm max-w-[300px] leading-relaxed font-medium">Simple tools to track spending, set goals, and save more every single day.</p>
-                <div className="hidden md:block w-px h-10 bg-white/10" />
-                <div className="space-y-1 text-left">
-                  <p className="text-white/20 text-[10px] font-black uppercase tracking-widest">Global Community</p>
-                  <p className="text-[#64CEFB] text-[15px] font-black tracking-tighter uppercase whitespace-nowrap">54,000+ Active Nodes</p>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-16 pt-8">
+                <p className="text-white/30 text-sm md:text-base max-w-[340px] leading-relaxed font-medium">Professional-grade tools to track, stash, and grow your wealth with surgical precision.</p>
+                <div className="hidden md:block w-px h-16 bg-white/10" />
+                <div className="space-y-1.5 text-left">
+                  <p className="text-white/20 text-[11px] font-black uppercase tracking-[0.4em]">Active Network</p>
+                  <p className="text-[#64CEFB] text-[18px] font-black tracking-tighter uppercase">54,000 Nodes Online</p>
                 </div>
               </div>
 
-              <div className="pt-8">
-                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-16 py-8 text-sm font-black uppercase tracking-[0.2em] transition-all active:scale-95 shadow-2xl">
+              <div className="pt-12">
+                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-20 py-10 text-base font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
                   Start Your Journey
                 </Button>
               </div>
@@ -153,57 +151,63 @@ export default function Landing() {
       </section>
 
       {/* 
-          --- FEATURES SECTION: AUTHENTIC & POLISHED --- 
+          --- FEATURES SECTION: WORLD-CLASS REDESIGN --- 
       */}
-      <section className="py-24 sm:py-48 bg-black relative z-10 border-t border-white/5">
+      <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5">
         <div className="container mx-auto px-6 max-w-[1600px]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             
-            {/* 1. AI Assistant */}
+            {/* 1. Assistant Coach */}
             <BentoCard
-              title="Assistant Coach"
-              desc="Real-time voice and text guidance to help you crush spending habits and master budgeting."
+              title="AI Assistant Coach"
+              desc="Deep-learning advisor that monitors your patterns and provides real-time voice feedback to optimize your saving strategy."
               icon={Mic}
               className="md:col-span-2"
               visual={
-                <div className="flex items-center gap-8 pt-8 px-4">
-                  <div className="flex items-center gap-1.5 h-12">
-                     {[20, 60, 40, 80, 50, 90, 30, 70, 45, 100, 60, 40].map((h, i) => (
+                <div className="flex items-center gap-10 pt-10 px-6">
+                  <div className="flex items-end gap-2 h-16">
+                     {[30, 70, 45, 90, 55, 100, 35, 80, 50, 100, 70, 45, 85].map((h, i) => (
                        <motion.div 
                          key={i}
-                         animate={{ height: [10, h, 10] }}
-                         transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-                         className="w-1.5 bg-[#64CEFB]/40 rounded-full"
-                         style={{ height: 8 }}
+                         animate={{ height: [12, h, 12] }}
+                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.12 }}
+                         className="w-2 bg-gradient-to-t from-[#64CEFB]/10 to-[#64CEFB]/60 rounded-full"
+                         style={{ height: 12 }}
                        />
                      ))}
                   </div>
-                  <div className="flex flex-col gap-1">
-                     <span className="text-[10px] font-black text-[#64CEFB] uppercase tracking-[0.3em]">Advisor Mode Active</span>
-                     <span className="text-[9px] text-white/20 font-bold uppercase tracking-widest">Awaiting Command...</span>
+                  <div className="flex flex-col gap-2">
+                     <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-[#64CEFB] rounded-full animate-pulse" />
+                        <span className="text-[11px] font-black text-[#64CEFB] uppercase tracking-[0.4em]">NEURAL LINK ACTIVE</span>
+                     </div>
+                     <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest pl-4">Analyzing Spending Habits...</span>
                   </div>
                 </div>
               }
             />
 
-            {/* 2. Locked Vault (REFINED VISUAL) */}
+            {/* 2. Secure Vault (OVERHAULED VISUAL) */}
             <BentoCard
-              title="Secure Vault"
-              desc="Protect your stashed funds with PIN security. A dedicated space for disciplined growth."
+              title="Secure Stash Vault"
+              desc="Tier-1 capital protection. Lock your long-term wealth behind a customized PIN-secure storage layer."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-44 w-full flex items-center justify-center p-4">
-                   {/* Centered Glow (No cutoff now) */}
-                   <div className="absolute inset-x-12 inset-y-12 bg-[#64CEFB]/10 blur-[40px] rounded-full pointer-events-none" />
-                   
-                   <div className="relative w-24 h-24 rounded-[2rem] bg-[#0A0A0A] border border-white/10 flex items-center justify-center shadow-[0_0_30px_rgba(100,206,251,0.05)] overflow-hidden">
-                      <div className="grid grid-cols-3 gap-2 px-6">
+                <div className="relative h-48 w-full flex items-center justify-center pt-8">
+                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.08)_0%,transparent_75%)]" />
+                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/40 transition-all duration-700">
+                      <div className="grid grid-cols-3 gap-3">
                          {[1,2,3,4,5,6,7,8,9].map(i => (
-                           <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/10" />
+                           <motion.div 
+                             key={i} 
+                             whileHover={{ scale: 1.5, color: "#64CEFB" }}
+                             className="w-1.5 h-1.5 rounded-full bg-white/10 transition-colors"
+                           />
                          ))}
                       </div>
-                      <div className="absolute top-2 right-2">
-                        <Lock className="w-3 h-3 text-[#64CEFB]/40" />
+                      <div className="flex items-center gap-1.5">
+                         <Lock className="w-3.5 h-3.5 text-[#64CEFB]" />
+                         <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">ENCRYPTED</span>
                       </div>
                    </div>
                 </div>
@@ -212,18 +216,19 @@ export default function Landing() {
 
             {/* 3. Daily Milestones */}
             <BentoCard
-              title="Growth Badges"
-              desc="Earn tokens and achievements for every savings streak and goal you complete."
+              title="Growth Rewards"
+              desc="Collect premium tokens and verified badges for your financial discipline and consistency."
               icon={Coins}
               visual={
-                <div className="flex gap-4 pt-6 px-4">
+                <div className="flex gap-5 pt-8 px-6">
                    {[1, 2, 3].map(i => (
-                     <div 
+                     <motion.div 
                        key={i}
-                       className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${i === 3 ? 'bg-[#64CEFB]/10 border-[#64CEFB]/20 text-[#64CEFB]' : 'bg-white/5 border-white/10 text-white/10'}`}
+                       whileHover={{ y: -10, rotate: i === 3 ? 15 : -15 }}
+                       className={`w-16 h-16 rounded-[24px] flex items-center justify-center border-2 transition-all cursor-pointer ${i === 3 ? 'bg-[#64CEFB]/10 border-[#64CEFB]/30 text-[#64CEFB] shadow-[0_0_30px_rgba(100,206,251,0.15)]' : 'bg-white/5 border-white/10 text-white/10 grayscale'}`}
                      >
-                        {i === 1 ? <Target className="w-6 h-6" /> : i === 2 ? <Zap className="w-6 h-6" /> : <Gem className="w-6 h-6" />}
-                     </div>
+                        {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
+                     </motion.div>
                    ))}
                 </div>
               }
@@ -231,37 +236,39 @@ export default function Landing() {
 
             {/* 4. Smart Insights */}
             <BentoCard
-              title="Capital Data"
-              desc="Deep-dive into your spending patterns with interactive, real-time capital ledgers."
+              title="Precision Data"
+              desc="Interactive capital modeling that visualizes every rupee, revealing hidden saving opportunities automatically."
               icon={BarChart3}
               className="md:col-span-2"
               visual={
-                <div className="h-48 flex items-end justify-between gap-4 px-10 w-full relative">
-                   {[35, 60, 45, 85, 55, 40, 75, 50, 95].map((h, i) => (
+                <div className="h-52 flex items-end justify-between gap-5 px-12 w-full relative">
+                   <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
+                   {[35, 60, 45, 85, 55, 40, 75, 50, 95, 60].map((h, i) => (
                     <motion.div 
                       key={i}
                       onMouseEnter={() => setActiveBar(i)}
                       onMouseLeave={() => setActiveBar(null)}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
-                      transition={{ duration: 1.5, ease: PREMIUM_EASE, delay: i * 0.05 }}
-                      className="flex-1 relative cursor-pointer"
+                      transition={{ duration: 1.2, ease: PREMIUM_EASE, delay: i * 0.08 }}
+                      className="flex-1 relative group/bar"
                     >
                        <motion.div 
                          animate={{ 
-                           backgroundColor: activeBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.2)",
+                           backgroundColor: activeBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.15)",
+                           boxShadow: activeBar === i ? "0 0 30px rgba(100, 206, 251, 0.4)" : "none"
                          }}
-                         className="h-full w-full rounded-t-sm"
+                         className="h-full w-full rounded-t-md transition-all duration-300"
                        />
                        <AnimatePresence>
                          {activeBar === i && (
                            <motion.div 
-                             initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                             animate={{ opacity: 1, scale: 1, y: -45 }}
-                             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                             className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-2xl"
+                             initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                             animate={{ opacity: 1, y: -45, scale: 1 }}
+                             exit={{ opacity: 0, y: 15, scale: 0.8 }}
+                             className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-tighter shadow-2xl whitespace-nowrap"
                            >
-                              ₹{h * 420}
+                              VALUE: ₹{h * 850}
                            </motion.div>
                          )}
                        </AnimatePresence>
@@ -276,39 +283,46 @@ export default function Landing() {
       </section>
 
       {/* FRIENDLY CHAT: AS IT WAS BEFORE */}
-      <section className="py-24 sm:py-48 bg-black relative z-10 border-t border-white/5">
+      <section className="py-32 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
+        <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-[1600px]">
-          <div className="flex flex-col lg:flex-row items-center gap-24 font-display">
-             <div className="flex-1 space-y-10">
-               <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter leading-[0.9] text-white">
+          <div className="flex flex-col lg:flex-row items-center gap-32">
+             <div className="flex-1 space-y-12 relative z-10">
+               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase">
                  Your AI <br />
                  Savings Buddy.
                </h2>
-               <p className="text-xl text-white/40 leading-relaxed font-medium max-w-lg">
-                 Friendly, judgment-free advice that helps you save more without changing your lifestyle.
+               <p className="text-xl text-white/30 leading-relaxed font-medium max-w-xl">
+                 High-performance guidance that learns your habits and helps you stay on the path to master-level saving.
                </p>
-               <div className="flex gap-4 pt-4">
-                  <div className="px-8 py-4 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">24/7 Advice</div>
-                  <div className="px-8 py-4 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">Privacy First</div>
+               <div className="flex gap-6 pt-6 uppercase tracking-widest font-black text-[11px] text-white/20">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#64CEFB] rounded-full" />
+                    24/7 ADVISORY
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
+                    PRIVACY SECURED
+                  </div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-4">
+             <div className="flex-1 w-full space-y-6 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
-                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
+                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "Client" },
                   { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "Coach" }
                 ].map((chat, i) => (
                   <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
+                    initial={{ opacity: 0, x: chat.pos === 'left' ? -30 : 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.1 }}
+                    transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.15 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1.5 px-6">{chat.sender}</div>
-                    <div className={`p-7 rounded-[2.5rem] max-w-sm text-base font-medium leading-relaxed border transition-all hover:scale-[1.02] cursor-default ${
-                      chat.pos === 'left' ? 'bg-white/5 border-white/10 text-white/80' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black'
+                    <div className="text-[11px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
+                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default ${
+                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_20px_60px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
                     </div>
@@ -320,18 +334,20 @@ export default function Landing() {
       </section>
 
       {/* FOOTER */}
-      <footer className="container mx-auto px-6 py-24 relative z-10 text-center space-y-16">
-         <div className="flex items-center justify-center gap-4">
-            <div className="w-10 h-10 rounded-full border-2 border-white/40" />
-            <span className="text-2xl font-bold tracking-tight text-white uppercase">Pocket Fund</span>
+      <footer className="container mx-auto px-10 py-32 relative z-10 text-center space-y-20">
+         <div className="flex items-center justify-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-1000">
+            <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center">
+               <div className="w-3 h-3 bg-white rounded-full" />
+            </div>
+            <span className="text-3xl font-black tracking-tighter text-white uppercase">Pocket Fund</span>
          </div>
-         <div className="flex flex-wrap items-center justify-center gap-16">
-            {['Privacy', 'Security', 'Contact', 'Support'].map(item => (
-              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-white transition-all">{item}</a>
+         <div className="flex flex-wrap items-center justify-center gap-20">
+            {['Privacy Protocol', 'Security Standard', 'Mastery Network', 'Support Authority'].map(item => (
+              <a key={item} href="#" className="text-[11px] font-black uppercase tracking-[0.6em] text-white/10 hover:text-white transition-all transform hover:scale-110">{item}</a>
             ))}
          </div>
-         <div className="pt-16 border-t border-white/5 max-w-[1600px] mx-auto">
-            <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 Architectural Capital Systems. Hand-crafted Excellence.</p>
+         <div className="pt-20 border-t border-white/5 max-w-[1600px] mx-auto">
+            <p className="text-[10px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 Architectural Capital. High-Performance Financial Assets.</p>
          </div>
       </footer>
     </div>
