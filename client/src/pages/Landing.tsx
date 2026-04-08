@@ -169,7 +169,7 @@ export default function Landing() {
                      {[20, 60, 40, 80, 50, 90, 30, 70, 45, 100, 60].map((h, i) => (
                        <motion.div 
                          key={i}
-                         animate={{ height: listening ? [10, h, 10] : 8 }}
+                         animate={{ height: [10, h, 10] }}
                          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
                          className="w-1.5 bg-[#64CEFB]/40 rounded-full"
                          style={{ height: 8 }}
@@ -183,8 +183,6 @@ export default function Landing() {
                 </div>
               }
             />
-            {/* Mock listening state for visual effect */}
-            {(() => { var listening = true; return null; })()}
 
             {/* 2. Secure Savings Vault (Confirmed via Vault.tsx) */}
             <BentoCard
