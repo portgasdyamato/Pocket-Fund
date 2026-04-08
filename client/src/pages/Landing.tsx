@@ -28,7 +28,11 @@ import {
   BrainCircuit,
   Settings,
   ShieldAlert,
-  Coins
+  Coins,
+  Twitter,
+  Instagram,
+  Github,
+  Linkedin
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
 import { useState, useRef } from "react";
@@ -55,7 +59,7 @@ const BentoCard = ({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.6, ease: PREMIUM_EASE }}
       className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/10 shadow-2xl transition-all duration-500 hover:bg-[#0F0F0F] hover:border-white/20 ${className}`}
-      style={{ overflow: 'visible' }} // Essential for shadows/glows
+      style={{ overflow: 'visible' }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[40px] pointer-events-none" />
       
@@ -89,15 +93,15 @@ export default function Landing() {
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
       
       {/* 
-          --- HERO SECTION --- 
+          --- HERO SECTION (Viewport Optimized) --- 
       */}
-      <section className="relative min-h-[100vh] w-full bg-black overflow-hidden flex flex-col justify-start">
+      <section className="relative h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 shadow-[inset_0_0_200px_rgba(0,0,0,1)]"
         >
           <source 
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
@@ -105,43 +109,43 @@ export default function Landing() {
           />
         </video>
 
-        <div className="relative z-10 w-full flex-1 flex flex-col items-center">
-          <nav className="w-full max-w-[1600px] mx-auto px-10 py-10 flex items-center justify-between">
+        <div className="relative z-10 w-full flex flex-col items-center h-full">
+          <nav className="w-full max-w-[1600px] mx-auto px-10 pt-10 pb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full border-2 border-white/10 flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rounded-full" />
+              <div className="w-8 h-8 rounded-full border-2 border-white/10 flex items-center justify-center">
+                <div className="w-2.5 h-2.5 bg-white rounded-full" />
               </div>
-              <span className="text-white font-black text-2xl tracking-tighter uppercase transition-opacity hover:opacity-80">Pocket Fund</span>
+              <span className="text-white font-black text-xl tracking-tighter uppercase">Pocket Fund</span>
             </div>
-            <button onClick={handleLogin} className="text-white/40 hover:text-white text-[11px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
+            <button onClick={handleLogin} className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
           </nav>
 
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20 pb-40">
+          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 max-h-[85vh]">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.5, ease: PREMIUM_EASE }}
-              className="max-w-6xl space-y-14"
+              className="max-w-6xl space-y-12"
             >
-              <div className="space-y-6">
-                <span className="text-[#64CEFB] text-[11px] font-black uppercase tracking-[1em] block opacity-60">STILL UNDER CONSTRUCTION</span>
-                <motion.h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[8rem] font-black tracking-tighter leading-[0.8] uppercase">
+              <div className="space-y-4">
+                <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[1em] block opacity-60">STILL UNDER CONSTRUCTION</span>
+                <motion.h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.85] uppercase">
                   <div className="text-white/95">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-16 pt-8">
-                <p className="text-white/30 text-sm md:text-base max-w-[340px] leading-relaxed font-medium">Professional-grade tools to track, stash, and grow your wealth with surgical precision.</p>
-                <div className="hidden md:block w-px h-16 bg-white/10" />
-                <div className="space-y-1.5 text-left">
-                  <p className="text-white/20 text-[11px] font-black uppercase tracking-[0.4em]">Active Network</p>
-                  <p className="text-[#64CEFB] text-[18px] font-black tracking-tighter uppercase">54,000 Nodes Online</p>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-12 pt-4">
+                <p className="text-white/30 text-xs md:text-sm max-w-[340px] leading-relaxed font-medium">Professional-grade tools to track, stash, and grow your wealth with surgical precision.</p>
+                <div className="hidden md:block w-px h-12 bg-white/10" />
+                <div className="space-y-1 text-left">
+                  <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">Active Network</p>
+                  <p className="text-[#64CEFB] text-[16px] font-black tracking-tighter uppercase">54,000 Nodes Online</p>
                 </div>
               </div>
 
-              <div className="pt-12">
-                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-20 py-10 text-base font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+              <div className="pt-10">
+                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-16 py-8 text-sm font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl">
                   Start Your Journey
                 </Button>
               </div>
@@ -187,13 +191,13 @@ export default function Landing() {
               }
             />
 
-            {/* 2. Secure Vault (NO CUTOFF) */}
+            {/* 2. Secure Vault */}
             <BentoCard
               title="Secure Stash Vault"
               desc="Tier-1 capital protection. Lock your long-term wealth behind a customized PIN-secure storage layer."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-48 w-full flex items-center justify-center overflow-visible">
+                <div className="relative h-48 w-full flex items-center justify-center">
                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.12)_0%,transparent_70%)] blur-2xl" />
                    <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_60px_rgba(100,206,251,0.1)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/50 transition-all duration-700 z-10">
                       <div className="grid grid-cols-3 gap-3">
@@ -214,7 +218,7 @@ export default function Landing() {
               }
             />
 
-            {/* 3. Daily Milestones (GLOWING ICONS) */}
+            {/* 3. Daily Milestones (Unified Premium Glow) */}
             <BentoCard
               title="Growth Rewards"
               desc="Collect premium tokens and verified badges for your financial discipline and consistency."
@@ -224,10 +228,10 @@ export default function Landing() {
                    {[1, 2, 3].map(i => (
                      <motion.div 
                        key={i}
-                       whileHover={{ y: -10, rotate: i === 3 ? 15 : -15 }}
-                       className={`w-16 h-16 rounded-[24px] flex items-center justify-center border transition-all cursor-pointer relative ${i === 3 ? 'bg-[#64CEFB]/15 border-[#64CEFB]/40 text-[#64CEFB] shadow-[0_0_30px_rgba(100,206,251,0.25)]' : 'bg-white/5 border-white/10 text-white/20'}`}
+                       className="w-16 h-16 rounded-[24px] flex items-center justify-center border border-[#64CEFB]/40 bg-[#64CEFB]/10 text-[#64CEFB] cursor-pointer relative shadow-[0_0_25px_rgba(100,206,251,0.2)]"
+                       whileHover={{ y: -8, scale: 1.05, boxShadow: "0 0 40px rgba(100,206,251,0.4)" }}
                      >
-                        <div className={`absolute inset-0 rounded-[24px] blur-md transition-opacity duration-500 ${i === 3 ? 'bg-[#64CEFB]/10 opacity-100' : 'bg-white/5 opacity-0 group-hover:opacity-100'}`} />
+                        <div className="absolute inset-0 rounded-[24px] blur-md bg-[#64CEFB]/20 opacity-100" />
                         <div className="relative z-10">
                           {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
                         </div>
@@ -254,7 +258,7 @@ export default function Landing() {
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
                       transition={{ duration: 1.2, ease: PREMIUM_EASE, delay: i * 0.08 }}
-                      className="flex-1 relative group/bar"
+                      className="flex-1 relative"
                     >
                        <motion.div 
                          animate={{ 
@@ -271,7 +275,7 @@ export default function Landing() {
                              exit={{ opacity: 0, y: 15, scale: 0.8 }}
                              className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-tighter shadow-2xl whitespace-nowrap"
                            >
-                              VALUE: ₹{h * 850}
+                              ENTRY: ₹{h * 850}
                            </motion.div>
                          )}
                        </AnimatePresence>
@@ -286,31 +290,30 @@ export default function Landing() {
       </section>
 
       {/* FRIENDLY CHAT (AS IT WAS BEFORE) */}
-      <section className="py-32 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
-        <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
+      <section className="py-32 bg-[#050505] relative z-10 border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="flex flex-col lg:flex-row items-center gap-32">
-             <div className="flex-1 space-y-12 relative z-10">
-               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase font-display">
+             <div className="flex-1 space-y-12">
+               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase">
                  Your AI <br />
                  Savings Buddy.
                </h2>
                <p className="text-xl text-white/30 leading-relaxed font-medium max-w-xl">
                  High-performance guidance that learns your habits and helps you stay on the path to master-level saving.
                </p>
-               <div className="flex gap-6 pt-6 uppercase tracking-widest font-black text-[11px] text-white/20">
+               <div className="flex gap-6 uppercase tracking-[0.5em] font-black text-[10px] text-white/20">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#64CEFB] rounded-full" />
+                    <div className="w-2 h-2 bg-[#64CEFB] rounded-full" />
                     24/7 ADVISORY
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
-                    PRIVACY SECURED
+                    <div className="w-2 h-2 bg-white/10 rounded-full" />
+                    ENCRYPTED
                   </div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-6 relative z-10">
+             <div className="flex-1 w-full space-y-6">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "Client" },
@@ -323,9 +326,9 @@ export default function Landing() {
                     transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.15 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[11px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
-                    <div className={`p-10 rounded-[3rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default font-sans ${
-                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_20px_60px_rgba(100,206,251,0.2)]'
+                    <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.5em] mb-3 px-8">{chat.sender}</div>
+                    <div className={`p-10 rounded-[3.5rem] max-w-md text-base leading-relaxed border transition-all hover:scale-[1.03] cursor-default ${
+                      chat.pos === 'left' ? 'bg-[#0A0A0A] border-white/5 text-white/60' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_30px_60px_rgba(100,206,251,0.2)]'
                     }`}>
                       {chat.text}
                     </div>
@@ -336,22 +339,95 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="container mx-auto px-10 py-32 relative z-10 text-center space-y-20">
-         <div className="flex items-center justify-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-1000">
-            <div className="w-12 h-12 rounded-full border-2 border-white/40 flex items-center justify-center">
-               <div className="w-3 h-3 bg-white rounded-full" />
+      {/* 
+          --- WORLD-CLASS FOOTER REDESIGN --- 
+      */}
+      <footer className="bg-black relative z-10 border-t border-white/5 pt-32 pb-16 overflow-hidden">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[#64CEFB]/[0.02] blur-[150px] pointer-events-none" />
+        
+        <div className="container mx-auto px-10 max-w-[1600px] relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 pb-24">
+            
+            {/* Logo & Manifesto Section */}
+            <div className="lg:col-span-5 space-y-12">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="flex items-center gap-4 group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-700">
+                  <motion.div 
+                    animate={{ scale: [1, 1.2, 1] }} 
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="w-3 h-3 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
+                  />
+                </div>
+                <h2 className="text-4xl font-black tracking-tighter text-white uppercase">Pocket Fund</h2>
+              </motion.div>
+              
+              <p className="text-2xl text-white/40 font-medium leading-[1.4] max-w-sm">
+                Architecting the future of personal capital through <span className="text-white/80 italic">human-centric</span> intelligence.
+              </p>
+              
+              <div className="flex items-center gap-6 pt-4">
+                {[Twitter, Instagram, Github, Linkedin].map((Icon, idx) => (
+                  <motion.a 
+                    key={idx}
+                    href="#" 
+                    whileHover={{ scale: 1.2, color: "#64CEFB", y: -5 }}
+                    className="text-white/20 transition-all duration-300"
+                  >
+                    <Icon className="w-6 h-6" />
+                  </motion.a>
+                ))}
+              </div>
             </div>
-            <span className="text-3xl font-black tracking-tighter text-white uppercase font-display">Pocket Fund</span>
-         </div>
-         <div className="flex flex-wrap items-center justify-center gap-20">
-            {['Privacy Protocol', 'Security Standard', 'Mastery Network', 'Support Authority'].map(item => (
-              <a key={item} href="#" className="text-[11px] font-black uppercase tracking-[0.6em] text-white/10 hover:text-white transition-all transform hover:scale-110">{item}</a>
-            ))}
-         </div>
-         <div className="pt-20 border-t border-white/5 max-w-[1600px] mx-auto">
-            <p className="text-[10px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 Architectural Capital. High-Performance Financial Assets.</p>
-         </div>
+
+            {/* Navigation Grid */}
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-12">
+              {[
+                { title: "Network", links: ["Ecosystem", "API Access", "Nodes", "Security"] },
+                { title: "Platform", links: ["Vault", "Advisor", "Milestones", "Capital"] },
+                { title: "Legal", links: ["Privacy", "Terms", "Licensing", "Standards"] }
+              ].map((group, idx) => (
+                <div key={idx} className="space-y-8">
+                  <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.5em]">{group.title}</h4>
+                  <ul className="space-y-5">
+                    {group.links.map((link, lIdx) => (
+                      <motion.li key={lIdx}>
+                        <motion.a 
+                          href="#" 
+                          whileHover={{ x: 10, color: "#64CEFB" }}
+                          className="text-base font-bold text-white/40 hover:text-white transition-all cursor-pointer inline-block"
+                        >
+                          {link}
+                        </motion.a>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-[#64CEFB] rounded-full animate-pulse" />
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.6em]">SYSTEM STATUS: OPTIMAL</span>
+            </div>
+            
+            <p className="text-[10px] font-black text-white/5 uppercase tracking-[0.8em]">
+              © 2026 ARCHITECTURAL CAPITAL SYSTEMS INC.
+            </p>
+            
+            <div className="flex items-center gap-12 text-[10px] font-black text-white/10 uppercase tracking-[0.4em]">
+               <a href="#" className="hover:text-white transition-colors">EST. 2024</a>
+               <a href="#" className="hover:text-white transition-colors">V2.4.0</a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
