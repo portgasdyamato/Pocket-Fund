@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
   Wallet, 
@@ -16,46 +16,75 @@ import {
   Target,
   ArrowUpRight,
   Lock,
-  ArrowDownRight
+  ArrowDownRight,
+  Fingerprint,
+  BarChart3,
+  Star
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+// Premium Bezier for "Hand-crafted" feel
+const PREMIUM_EASE = [0.23, 1, 0.32, 1];
+
+const BentoCard = ({ 
+  children, 
+  className, 
+  title, 
+  desc, 
+  icon: Icon, 
+  visual 
+}: { 
+  children?: React.ReactNode, 
+  className?: string, 
+  title: string, 
+  desc: string, 
+  icon: any,
+  visual?: React.ReactNode
+}) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
     x.set(xPct);
     y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
   };
 
   return (
     <motion.div
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className={className}
+      className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/10 overflow-hidden shadow-2xl transition-all duration-500 hover:border-[#64CEFB]/40 ${className}`}
     >
-      {children}
+      {/* Universal Background Fill */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-[#64CEFB]/[0.02] opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(100,206,251,0.08)_0%,transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      <div className="relative z-10 p-10 h-full flex flex-col justify-between" style={{ transform: "translateZ(50px)" }}>
+        <div className="space-y-6">
+          <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/30 transition-all duration-500">
+            <Icon className="w-6 h-6 text-white/40 group-hover:text-[#64CEFB] group-hover:scale-110 transition-all duration-500" />
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-2xl font-black tracking-tight uppercase leading-none text-white/90 group-hover:text-white transition-colors">{title}</h3>
+            <p className="text-sm text-white/40 font-medium leading-relaxed max-w-[280px] group-hover:text-white/60 transition-colors">{desc}</p>
+          </div>
+        </div>
+        
+        <div className="mt-8 flex-1 flex flex-col justify-end">
+          {visual}
+        </div>
+      </div>
     </motion.div>
   );
 };
@@ -65,7 +94,7 @@ export default function Landing() {
     window.location.href = '/api/auth/google';
   };
 
-  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
+  const [activeBar, setActiveBar] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative font-['Inter'] overflow-x-hidden">
@@ -105,11 +134,11 @@ export default function Landing() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 1, ease: PREMIUM_EASE }}
               className="max-w-5xl space-y-10"
             >
               <div className="space-y-4">
-                <span className="text-[#64CEFB] text-[10px] md:text-xs font-black uppercase tracking-[0.6em] block opacity-80">REIMAGINE YOUR WEALTH</span>
+                <span className="text-[#64CEFB] text-[10px] md:text-xs font-black uppercase tracking-[0.6em] block opacity-80">STILL UNDER CONSTRUCTION</span>
                 <motion.h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] uppercase">
                   <div className="text-white">Take Control Of</div>
                   <ShinyText text="Your Financial Future" />
@@ -136,141 +165,137 @@ export default function Landing() {
       </section>
 
       {/* 
-          BENTO GRID: High-Performance Interactions
+          UNIFIED BENTO GRID: REFINED & CONSISTENT
       */}
-      <section id="features" className="py-24 sm:py-32 container mx-auto px-6 border-t border-white/5 bg-[#020202]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          {/* Card 1: Main Focus (Full-Fill Gradient) */}
-          <TiltCard className="md:col-span-2 p-10 sm:p-14 rounded-[40px] bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-transparent border border-white/10 flex flex-col justify-between group overflow-hidden relative shadow-2xl">
-            <div className="absolute top-0 right-0 w-full h-full bg-[#64CEFB]/[0.02] group-hover:bg-[#64CEFB]/[0.05] transition-colors duration-700" />
-            <div className="space-y-6 relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Zap className="w-6 h-6 text-[#64CEFB]" />
-              </div>
-              <h3 className="text-4xl font-black tracking-tight uppercase leading-none">High-Speed Tracking.</h3>
-              <p className="text-lg text-white/40 font-medium max-w-sm">Ditch the spreadsheets. Add expenses in seconds and see your net worth update as you live.</p>
-            </div>
-            <div className="mt-12 flex gap-4 relative z-10">
-              <div className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50 group-hover:border-[#64CEFB]/30 group-hover:text-white transition-all">Instant Sync</div>
-              <div className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50 group-hover:border-[#64CEFB]/30 group-hover:text-white transition-all">Zero Friction</div>
-            </div>
-          </TiltCard>
-
-          {/* Card 2: Interactive Vault (Dynamic Visualization) */}
-          <TiltCard className="p-10 rounded-[40px] bg-gradient-to-br from-[#0A0A0A] to-[#010101] border border-white/10 flex flex-col justify-between group overflow-hidden relative shadow-2xl">
-             <div className="absolute inset-0 bg-grid-white/[0.02] [mask-image:radial-gradient(white,transparent)]" />
-             <div className="space-y-6 relative z-10">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/20 group-hover:rotate-12 transition-all">
-                  <Lock className="w-6 h-6 text-white group-hover:text-[#64CEFB]" />
+      <section id="features" className="py-24 sm:py-40 bg-black relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Card 1: High-Speed Tracking */}
+            <BentoCard
+              title="Hyper-Speed Tracking."
+              desc="Experience the world's fastest ledger. Log transactions at the speed of thought."
+              icon={Zap}
+              className="md:col-span-2"
+              visual={
+                <div className="flex gap-4">
+                  <div className="px-6 py-2.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-black uppercase tracking-widest text-[#64CEFB]">0.8s Latency</div>
+                  <div className="px-6 py-2.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">Auto-Categorize</div>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">The Vault.</h3>
-                <p className="text-white/40 font-medium text-sm">Safe-guard your long-term wealth in an isolated, protected layer.</p>
-             </div>
-             
-             <div className="mt-10 relative h-32 w-full flex items-center justify-center z-10">
-                <motion.div 
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="w-24 h-24 rounded-full bg-[#64CEFB]/10 border-4 border-dashed border-[#64CEFB]/30 flex items-center justify-center blur-sm group-hover:blur-none transition-all duration-700"
-                >
-                   <Shield className="w-10 h-10 text-[#64CEFB]/60" />
-                </motion.div>
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#64CEFB]/40 to-transparent" />
-             </div>
-          </TiltCard>
+              }
+            />
 
-          {/* Card 3: Interactive Milestones (Dynamic Badge Reveal) */}
-          <TiltCard className="p-10 rounded-[40px] bg-gradient-to-br from-[#0C0C0C] to-black border border-white/10 flex flex-col justify-between group overflow-hidden relative shadow-2xl">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-[#64CEFB]/5 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
-             <div className="space-y-6 relative z-10">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#64CEFB]/10 transition-all">
-                  <Trophy className="w-6 h-6 text-white group-hover:text-[#64CEFB]" />
+            {/* Card 2: The Vault */}
+            <BentoCard
+              title="The Vault."
+              desc="Isolated security reserves with deep-cold storage architecture."
+              icon={Fingerprint}
+              visual={
+                <div className="relative h-32 w-full flex items-center justify-center">
+                   <div className="absolute inset-0 bg-grid-white/[0.02] [mask-image:radial-gradient(circle,white,transparent)]" />
+                   <motion.div 
+                     animate={{ rotate: 360 }}
+                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                     className="relative w-24 h-24 rounded-full border border-dashed border-[#64CEFB]/40 flex items-center justify-center"
+                   >
+                     <div className="w-16 h-16 rounded-full bg-[#64CEFB]/5 border border-[#64CEFB]/20 flex items-center justify-center">
+                        <Lock className="w-6 h-6 text-[#64CEFB]/80" />
+                     </div>
+                   </motion.div>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">Milestones.</h3>
-                <p className="text-white/40 font-medium text-sm">Earn badges and level up your financial status as you hit your savings goals.</p>
-             </div>
-             
-             <div className="mt-8 flex flex-wrap gap-3 relative z-10">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <motion.div 
-                    key={i}
-                    whileHover={{ scale: 1.2, rotate: 15, y: -5 }}
-                    className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/[0.08] to-transparent border border-white/10 flex items-center justify-center cursor-pointer hover:border-[#64CEFB]/50 transition-all shadow-inner"
-                  >
-                    <Star variant={i === 5 ? "gold" : "silver"} />
-                  </motion.div>
-                ))}
-             </div>
-          </TiltCard>
+              }
+            />
 
-          {/* Card 4: Interactive Analysis (Animatable Bars) */}
-          <TiltCard className="md:col-span-2 p-10 sm:p-14 rounded-[40px] bg-gradient-to-tr from-[#080808] to-[#020202] border border-white/10 flex flex-col sm:flex-row items-center gap-12 group shadow-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-[#64CEFB]/[0.01] opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="space-y-6 flex-1 relative z-10">
-                 <h3 className="text-3xl font-black tracking-tight uppercase leading-[0.85]">Analyze <br /> Everything.</h3>
-                 <p className="text-base text-white/40 font-medium leading-relaxed">Deep dive into your spending habits with granular analytics that reveal exactly where your leaks are.</p>
-              </div>
-              
-              <div className="flex-1 w-full h-48 flex items-end justify-between gap-2.5 px-6 relative z-10">
-                 {[40, 70, 50, 95, 60, 45, 80, 55, 90].map((h, i) => (
+            {/* Card 3: Milestones */}
+            <BentoCard
+              title="Milestones."
+              desc="Gamified wealth markers that reward discipline and consistency."
+              icon={Trophy}
+              visual={
+                <div className="flex gap-2.5">
+                   {[1,2,3,4,5].map(i => (
+                     <motion.div 
+                       key={i}
+                       whileHover={{ y: -5, scale: 1.1 }}
+                       className={`w-11 h-11 rounded-xl flex items-center justify-center border transition-all duration-300 ${i === 5 ? 'bg-[#64CEFB]/10 border-[#64CEFB]/40 text-[#64CEFB]' : 'bg-white/5 border-white/10 text-white/20'}`}
+                     >
+                        <Star className={`w-5 h-5 ${i === 5 ? 'fill-[#64CEFB]' : ''}`} />
+                     </motion.div>
+                   ))}
+                </div>
+              }
+            />
+
+            {/* Card 4: Analyze Everything */}
+            <BentoCard
+              title="Deep Analytics."
+              desc="Neural-driven heuristics that reveal exactly where your capital is leaking."
+              icon={BarChart3}
+              className="md:col-span-2"
+              visual={
+                <div className="h-44 flex items-end justify-between gap-3 px-4 w-full">
+                  {[35, 60, 45, 85, 55, 40, 75, 50, 95].map((h, i) => (
                     <motion.div 
                       key={i}
-                      onMouseEnter={() => setHoveredBar(i)}
-                      onMouseLeave={() => setHoveredBar(null)}
+                      onMouseEnter={() => setActiveBar(i)}
+                      onMouseLeave={() => setActiveBar(null)}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
-                      animate={{ 
-                        opacity: hoveredBar !== null && hoveredBar !== i ? 0.3 : 1,
-                        scaleX: hoveredBar === i ? 1.1 : 1,
-                        backgroundColor: hoveredBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.2)"
-                      }}
-                      className="flex-1 rounded-t-lg transition-all border-t-2 border-[#64CEFB]/40 cursor-crosshair relative group/bar"
+                      transition={{ duration: 1, ease: PREMIUM_EASE, delay: i * 0.05 }}
+                      className="flex-1 relative cursor-pointer"
                     >
-                       {hoveredBar === i && (
-                         <motion.div 
-                           initial={{ opacity: 0, y: 10 }}
-                           animate={{ opacity: 1, y: -30 }}
-                           className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-black px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter"
-                         >
-                           ₹{h*120}
-                         </motion.div>
-                       )}
+                       <motion.div 
+                         animate={{ 
+                           backgroundColor: activeBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.15)",
+                           scaleX: activeBar === i ? 1.1 : 1
+                         }}
+                         className="h-full w-full rounded-t-lg border-t-2 border-[#64CEFB]/40 transition-colors"
+                       />
+                       <AnimatePresence>
+                         {activeBar === i && (
+                           <motion.div 
+                             initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                             animate={{ opacity: 1, y: -40, scale: 1 }}
+                             exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                             className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black px-3 py-1.5 rounded-lg text-[10px] font-black uppercase flex items-center gap-1.5 shadow-2xl"
+                           >
+                             <TrendingUp className="w-3 h-3 text-green-500" />
+                             ₹{h * 150}
+                           </motion.div>
+                         )}
+                       </AnimatePresence>
                     </motion.div>
-                 ))}
-              </div>
-          </TiltCard>
+                  ))}
+                </div>
+              }
+            />
+
+          </div>
         </div>
       </section>
 
       {/* 
-          FRIENDLY CHAT SECTION: RESTORED & POLISHED
+          FRIENDLY CHAT SECTION: AS IT WAS BEFORE
       */}
-      <section className="py-32 sm:py-48 bg-black relative z-10 border-t border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-center gap-24">
-             <div className="flex-1 space-y-10">
-               <div className="space-y-4">
-                  <span className="text-[#64CEFB] text-[10px] font-black uppercase tracking-[0.5em] block">PROTOCOL 03</span>
-                  <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter font-display leading-[0.9] text-white uppercase">
-                    Your AI <br />
-                    Financial Buddy.
-                  </h2>
-               </div>
-               <p className="text-xl text-white/40 leading-relaxed font-medium max-w-lg">
-                 Get 24/7 help without the judgment. From managing debt to finding better ways to save, your coach is always there to guide you toward financial freedom.
+      <section className="py-24 sm:py-40 bg-black relative z-10 border-t border-white/5 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[#64CEFB]/[0.02] blur-[150px] pointer-events-none" />
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="flex flex-col lg:flex-row items-center gap-20">
+             <div className="flex-1 space-y-8 relative z-10">
+               <h2 className="text-5xl sm:text-7xl font-bold tracking-tighter font-display leading-[0.9] text-white">
+                 Your AI <br />
+                 Financial Buddy.
+               </h2>
+               <p className="text-xl text-white/40 leading-relaxed font-medium">
+                 Get 24/7 help without the judgment. From managing debt to finding better ways to save, your coach is always there.
                </p>
-               <div className="flex flex-wrap gap-4">
-                  <div className="px-8 py-4 bg-white/5 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white/10 transition-colors">Judgment Free</div>
-                  <div className="px-8 py-4 bg-white/5 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white/10 transition-colors">Neural Sync</div>
+               <div className="flex gap-4 pt-4">
+                  <div className="px-6 py-3 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">Zero Judgment</div>
+                  <div className="px-6 py-3 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/40">Neural Sync</div>
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-6 relative">
-                <div className="absolute inset-0 bg-[#64CEFB]/10 blur-[200px] -z-10 opacity-40 animate-pulse" />
+             <div className="flex-1 w-full space-y-4 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
@@ -278,14 +303,14 @@ export default function Landing() {
                 ].map((chat, i) => (
                   <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, x: chat.pos === 'left' ? -30 : 30 }}
+                    initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.15, duration: 0.6 }}
+                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.1 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-2 px-5">{chat.sender}</div>
-                    <div className={`p-7 rounded-[2.5rem] max-w-md text-base font-medium leading-relaxed transition-transform hover:scale-[1.02] cursor-default ${
-                      chat.pos === 'left' ? 'bg-white/5 border border-white/10 text-white/80' : 'bg-[#64CEFB] text-black shadow-2xl shadow-[#64CEFB]/20 font-bold'
+                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1.5 px-4">{chat.sender}</div>
+                    <div className={`p-6 rounded-3xl max-w-sm text-base font-medium leading-relaxed shadow-xl transform active:scale-[0.98] transition-all cursor-default ${
+                      chat.pos === 'left' ? 'bg-white/5 border border-white/10 text-white/80' : 'bg-[#64CEFB] text-black font-black'
                     }`}>
                       {chat.text}
                     </div>
@@ -298,27 +323,21 @@ export default function Landing() {
 
       {/* MINIMAL FOOTER */}
       <footer className="container mx-auto px-6 py-24 relative z-10 text-center space-y-12">
-         <div className="flex items-center justify-center gap-3">
-            <div className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center">
-               <div className="w-3 h-3 bg-white rounded-full" />
+         <div className="flex items-center justify-center gap-3 opacity-50 hover:opacity-100 transition-opacity">
+            <div className="w-8 h-8 rounded-sm border-2 border-white/20 flex items-center justify-center">
+               <div className="w-2 h-2 bg-white rounded-full" />
             </div>
-            <span className="text-2xl font-black tracking-tighter text-white uppercase font-display">Pocket Fund</span>
+            <span className="text-xl font-bold tracking-tight text-white uppercase font-display">Pocket Fund</span>
          </div>
-         <div className="flex flex-wrap items-center justify-center gap-12">
-            {['Privacy', 'Security', 'Protocols', 'Support'].map(item => (
-              <a key={item} href="#" className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 hover:text-[#64CEFB] transition-all transform hover:scale-110">{item}</a>
+         <div className="flex flex-wrap items-center justify-center gap-10">
+            {['Privacy Protocol', 'Encryption Standard', 'Contact Authority'].map(item => (
+              <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] text-white/10 hover:text-[#64CEFB] transition-all">{item}</a>
             ))}
          </div>
-         <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/5 pt-10 border-t border-white/5">© 2026 Architectural Capital Systems. High-Performance Finance.</p>
+         <div className="pt-10 border-t border-white/5 max-w-2xl mx-auto">
+            <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/5">© 2026 Architectural Capital Systems. Hand-crafted Excellence.</p>
+         </div>
       </footer>
     </div>
-  );
-}
-
-function Star({ variant = "silver" }: { variant?: "gold" | "silver" }) {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={variant === "gold" ? "#FFD700" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill={variant === "gold" ? "#FFD700" : "rgba(255,255,255,0.1)"} />
-    </svg>
   );
 }
