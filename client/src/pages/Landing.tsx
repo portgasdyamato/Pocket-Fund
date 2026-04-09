@@ -179,10 +179,9 @@ function Footer({ onLogin }: { onLogin: () => void }) {
 
   return (
     <footer
-      className="relative w-full flex flex-col justify-between"
+      className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden"
       style={{
         background: "#000",
-        minHeight: "100vh",
         borderTop: "1px solid rgba(255,255,255,0.04)"
       }}
     >
@@ -483,25 +482,6 @@ export default function Landing() {
               icon={ShieldCheck}
               visual={
                 <div className="relative h-44 w-full flex items-center justify-center overflow-hidden">
-                  {/* Orbiting particles */}
-                  <div className="absolute inset-0">
-                    {[1, 2, 3].map((particle) => (
-                      <motion.div
-                        key={particle}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 10 + particle * 5, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 flex items-center justify-center"
-                      >
-                         <div className="w-[120px] h-[120px] rounded-full border border-dashed border-primary/10" />
-                         <motion.div 
-                           animate={{ scale: [1, 1.5, 1] }}
-                           transition={{ duration: 4, repeat: Infinity }}
-                           className="absolute top-0 w-1 h-1 rounded-full bg-primary/40 shadow-[0_0_8px_#64CEFB]"
-                         />
-                      </motion.div>
-                    ))}
-                  </div>
-
                   <div className="relative w-32 h-32 rounded-3xl flex flex-col items-center justify-center gap-4 ice-frost border-white/10 group-hover:scale-105 transition-transform duration-500 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
                     
@@ -564,19 +544,6 @@ export default function Landing() {
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl opacity-0 group-hover/card:opacity-100" />
                       <Icon className="w-7 h-7 relative z-10" />
-                      
-                      {/* Floating Sparkle on hover */}
-                      <motion.div 
-                        animate={{ 
-                          opacity: [0, 1, 0],
-                          scale: [0.5, 1, 0.5],
-                          y: [-10, -20]
-                        }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100"
-                      >
-                         <Sparkles className="w-4 h-4 text-primary" />
-                      </motion.div>
                     </motion.div>
                   ))}
                 </div>
@@ -678,8 +645,8 @@ export default function Landing() {
               </p>
               <div className="flex flex-wrap gap-3">
                 {["Neural Analysis", "Zero Judgment", "256-bit Secured"].map((tag, idx) => (
-                  <span key={tag} className="px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.4em] flex items-center gap-2"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}
+                  <span key={tag} className="px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.4em] flex items-center gap-2 ice-frost border-white/10"
+                    style={{ color: "rgba(255,255,255,0.6)" }}
                   >
                     {idx === 0 && <div className="w-1 h-1 rounded-full bg-[#64CEFB] animate-pulse" />}
                     {tag}
