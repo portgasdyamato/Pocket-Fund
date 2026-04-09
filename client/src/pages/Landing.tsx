@@ -22,13 +22,13 @@ import { useState } from "react";
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ACCENT = "#64CEFB";
 
-// Ice-Frost: navy-tinted translucent + heavy blur/saturate
+// Thick Glass Bevel (mirrors PremiumButton aesthetics globally)
 const frost: React.CSSProperties = {
-  background: "rgba(8, 8, 12, 0.6)",
-  backdropFilter: "blur(48px) saturate(180%)",
-  WebkitBackdropFilter: "blur(48px) saturate(180%)",
-  border: "1px solid rgba(255,255,255,0.06)",
-  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 60px rgba(0,0,0,0.9)",
+  background: "rgba(255,255,255,0.06)",
+  backdropFilter: "blur(24px) saturate(180%)",
+  WebkitBackdropFilter: "blur(24px) saturate(180%)",
+  border: "1px solid rgba(255,255,255,0.25)",
+  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.4), 0 12px 40px rgba(0,0,0,0.8)",
 };
 
 // ── Premium Button ────────────────────────────────────────────────────────────
@@ -112,8 +112,8 @@ const BentoCard = ({
       style={{
         ...frost,
         boxShadow: hovered
-          ? `inset 0 1px 0 rgba(255,255,255,0.07), 0 24px 60px rgba(0,0,0,0.95), 0 0 0 1px rgba(100,206,251,0.06)`
-          : `inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 60px rgba(0,0,0,0.9)`,
+          ? `inset 0 1px 1px rgba(255,255,255,0.5), 0 24px 60px rgba(0,0,0,0.95), 0 0 0 1px rgba(100,206,251,0.15)`
+          : frost.boxShadow,
         transition: "box-shadow 0.5s ease",
       }}
     >
@@ -200,19 +200,21 @@ function Footer({ onLogin }: { onLogin: () => void }) {
 
         {/* Middle Section: Contact & Horizontal Nav */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-12">
-          {/* Left: Email */}
-          <div className="space-y-3">
+          {/* Left: Buttons replacing email per request */}
+          <div className="space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.3)" }}>
-              Contact Pocket Fund at:
+              Ready to Accelerate?
             </p>
-            <a
-              href="mailto:hello@pocketfund.in"
-              className="group inline-flex items-center gap-3 text-lg sm:text-xl font-medium transition-colors"
-              style={{ color: "rgba(255,255,255,0.9)" }}
-            >
-              hello@pocketfund.in
-              <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+            <div className="flex items-center gap-3">
+              <PremiumButton onClick={onLogin} variant="default" className="px-8 py-3.5 rounded-[32px] text-[15px] font-normal">
+                Start Your Journey
+              </PremiumButton>
+              <PremiumButton onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} variant="default" className="w-[52px] h-[52px] rounded-full flex items-center justify-center p-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+              </PremiumButton>
+            </div>
           </div>
 
           {/* Right: Horizontal Nav */}
@@ -239,13 +241,13 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full flex justify-center select-none pointer-events-none mt-auto pt-6 overflow-hidden">
+      <div className="w-full flex justify-center select-none pointer-events-none mt-auto overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: "100%" }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "50px" }}
           transition={{ duration: 1.2, ease: EASE }}
-          className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
+          className="text-center font-black uppercase leading-none whitespace-nowrap block pb-4"
           style={{
             fontSize: "clamp(40px, 13.5vw, 260px)",
             background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
@@ -597,12 +599,7 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: EASE }}
                 className="relative z-10 p-6 sm:p-8 space-y-8 rounded-[32px] overflow-hidden"
-                style={{
-                  ...frost,
-                  background: "rgba(10, 14, 20, 0.3)",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.08), 0 24px 60px rgba(0,0,0,0.8)",
-                }}
+                style={frost}
               >
                 {/* Status indicator */}
                 <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
