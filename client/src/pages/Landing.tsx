@@ -309,28 +309,42 @@ export default function Landing() {
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-4 relative z-10">
+             <div className="flex-1 w-full space-y-8 relative z-10">
                 {[
-                  { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
+                  { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "AI Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
-                  { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "Coach" }
+                  { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "AI Coach" }
                 ].map((chat, i) => (
                   <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, x: chat.pos === 'left' ? -20 : 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.1 }}
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.15 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2 px-6">{chat.sender}</div>
-                    <div className={`px-6 sm:px-8 py-4 sm:py-6 rounded-[2rem] sm:rounded-[2.5rem] max-w-md text-sm sm:text-base leading-relaxed border transition-all hover:scale-[1.02] cursor-default font-sans ${
-                      chat.pos === 'left' ? 'bg-white/5 border-white/10 text-white/80' : 'bg-[#64CEFB] text-black border-[#64CEFB] font-black shadow-[0_15px_40px_rgba(100,206,251,0.2)]'
-                    }`}>
-                      {chat.text}
+                    <div className="flex items-center gap-2 mb-3 px-2">
+                       {chat.pos === 'left' && <div className="w-1.5 h-1.5 rounded-full bg-[#64CEFB] animate-pulse" />}
+                       <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] font-display">{chat.sender}</span>
+                    </div>
+                    
+                    <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed border transition-all duration-500 cursor-default
+                      ${chat.pos === 'left' 
+                        ? 'bg-white/[0.03] border-white/10 text-white/70 backdrop-blur-3xl hover:bg-white/[0.06] hover:border-white/20' 
+                        : 'bg-gradient-to-br from-[#64CEFB] to-[#4FB7E5] text-black border-[#64CEFB]/50 font-black shadow-[0_20px_50px_rgba(100,206,251,0.25)] hover:scale-[1.02] hover:shadow-[0_25px_60px_rgba(100,206,251,0.35)]'
+                      }`}
+                    >
+                      {/* Subtle Glow for Left Messages */}
+                      {chat.pos === 'left' && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#64CEFB]/5 to-transparent rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                      )}
+                      
+                      <p className={chat.pos === 'right' ? 'drop-shadow-sm' : ''}>
+                        {chat.text}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
-             </div>
+               </div>
           </div>
         </div>
       </section>

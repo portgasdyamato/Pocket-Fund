@@ -63,7 +63,7 @@ export default function BudgetCategoryCard({
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
                   transition={{ duration: 1, ease: "easeOut" }}
-                  className={`h-full relative ${isOverBudget ? 'bg-destructive' : 'bg-primary'} shadow-[0_0_10px_rgba(139,92,246,0.3)]`}
+                  className={`h-full relative ${isOverBudget ? 'bg-destructive' : 'bg-primary'} shadow-[0_0_10px_rgba(100,206,251,0.3)]`}
                 />
              </div>
           </div>

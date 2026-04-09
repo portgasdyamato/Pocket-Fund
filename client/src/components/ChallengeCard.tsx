@@ -89,7 +89,7 @@ export default function ChallengeCard({
                  initial={{ width: 0 }}
                  animate={{ width: `${progress}%` }}
                  transition={{ duration: 1, ease: "easeOut" }}
-                 className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${isCompleted ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)]'}`}
+                 className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${isCompleted ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(100,206,251,0.5)]'}`}
                />
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function ChallengeCard({
               className={`w-full rounded-2xl h-14 font-black uppercase tracking-widest text-[10px] transition-all duration-300 border-none ${
                 isCompleted 
                 ? "bg-green-500 text-white hover:bg-green-600" 
-                : "bg-purple-600 text-white hover:bg-purple-500 hover:scale-[1.02] active:scale-95 click-scale !shadow-none"
+                : "bg-[#64CEFB] text-black hover:bg-[#64CEFB]/90 hover:scale-[1.02] active:scale-95 click-scale !shadow-none"
               }`}
               disabled={!!isCompleted}
             >

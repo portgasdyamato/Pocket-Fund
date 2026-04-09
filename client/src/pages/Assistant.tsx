@@ -29,7 +29,7 @@ const QUICK_PROMPTS = [
     q: "Explain the 50/30/20 rule",
     label: "Budgeting",
     icon: Zap,
-    gradient: "from-blue-600 to-indigo-700",
+    gradient: "from-blue-600 to-[#64CEFB]",
   },
   {
     q: "Build an emergency fund",

@@ -29,11 +29,11 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
       tip: "Your financial health is top-tier. Your discipline is paying off!"
     };
     if (score >= 70) return { 
-      color: "text-indigo-400", 
-      glow: "rgba(129, 140, 248, 0.4)", 
+      color: "text-blue-400", 
+      glow: "rgba(100, 206, 251, 0.4)", 
       label: "STABLE", 
       icon: TrendingUp,
-      hex: "#818cf8",
+      hex: "#64CEFB",
       tip: "You have a solid foundation. Keep hitting those goals."
     };
     if (score >= 50) return { 

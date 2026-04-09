@@ -42,7 +42,7 @@ export default function ChallengeCelebration({ isOpen, onClose, challengeName = 
             <div className="mx-auto bg-primary/10 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-4 animate-bounce">
               <Sparkles className="w-10 h-10 text-primary" />
             </div>
-            <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+            <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-[#64CEFB]">
               Challenge Complete!
             </DialogTitle>
             <DialogDescription className="text-lg pt-2">
