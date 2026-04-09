@@ -9,6 +9,7 @@ import {
   Target,
   Zap,
   Gem,
+  Sparkles,
   Twitter,
   Instagram,
   Linkedin,
