@@ -241,18 +241,17 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full flex justify-center select-none pointer-events-none overflow-hidden pb-4">
+      <div className="w-full flex justify-center select-none pointer-events-none pb-4">
         <motion.div
-          initial={{ opacity: 0, y: "150%" }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "50px" }}
-          transition={{ duration: 1.2, ease: EASE }}
-          className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="text-center font-black uppercase whitespace-nowrap block"
           style={{
-            fontSize: "clamp(40px, 13vw, 260px)",
-            background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+            fontSize: "clamp(30px, 12vw, 240px)",
+            color: "rgba(255,255,255,0.4)",
+            lineHeight: "0.8",
             letterSpacing: "-0.04em",
           }}
         >
@@ -590,24 +589,8 @@ export default function Landing() {
                 style={{ background: "radial-gradient(circle, rgba(100,206,251,0.08) 0%, transparent 60%)" }}
               />
 
-              {/* The Container - Refined Glass Frame */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: EASE }}
-                className="relative z-10 p-6 sm:p-8 space-y-8 rounded-[32px] overflow-hidden"
-                style={frost}
-              >
-                {/* Status indicator */}
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" style={{ background: "#22c55e" }} />
-                    <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-white/40">Secure Neural Link</span>
-                  </div>
-                  <Mic className="w-3.5 h-3.5 text-white/30" />
-                </div>
-
+              {/* The Container - Simple list, no outside frame */}
+              <div className="relative z-10 w-full sm:px-8 space-y-8">
                 {/* Chat Bubbles */}
                 <div className="space-y-6 pt-2">
                   {[
@@ -635,14 +618,12 @@ export default function Landing() {
 
                       <div
                         className={`px-6 py-4 text-sm leading-relaxed max-w-[85%] sm:max-w-[75%] font-medium ${
-                          chat.pos === "left" ? "rounded-[20px] rounded-tl-sm" : "rounded-[20px] rounded-br-sm"
+                          chat.pos === "left" ? "rounded-[24px] rounded-tl-sm ice-frost" : "rounded-[24px] rounded-br-sm"
                         }`}
                         style={
                           chat.pos === "left"
                             ? { 
-                                background: "rgba(255,255,255,0.03)", 
-                                border: "1px solid rgba(255,255,255,0.06)",
-                                color: "rgba(255,255,255,0.6)"
+                                color: "rgba(255,255,255,0.7)"
                               }
                             : {
                                 background: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)", // Brand cyan-sky deep mix
@@ -667,7 +648,7 @@ export default function Landing() {
                      </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
