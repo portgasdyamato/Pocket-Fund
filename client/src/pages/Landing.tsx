@@ -165,7 +165,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       className="relative w-full overflow-hidden flex flex-col justify-end"
       style={{
         background: "#000",
-        minHeight: "70vh",
+        height: "100vh",
         borderTop: "1px solid rgba(255,255,255,0.04)"
       }}
     >
@@ -196,7 +196,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         </div>
 
         {/* Spacer pushes the bottom row down */}
-        <div className="flex-1 min-h-[80px] sm:min-h-[160px]" />
+        <div className="flex-1 min-h-[40px] sm:min-h-[80px]" />
 
         {/* Middle Section: Contact & Horizontal Nav */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-12">
@@ -239,15 +239,15 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full select-none pointer-events-none mt-auto pt-12 overflow-hidden">
+      <div className="w-full flex justify-center select-none pointer-events-none mt-auto pt-6 overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: "100%" }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "100px" }}
+          viewport={{ once: false, margin: "50px" }}
           transition={{ duration: 1.2, ease: EASE }}
           className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
           style={{
-            fontSize: "clamp(50px, 16vw, 320px)",
+            fontSize: "clamp(40px, 13.5vw, 260px)",
             background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
