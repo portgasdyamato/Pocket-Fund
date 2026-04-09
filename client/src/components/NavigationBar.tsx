@@ -87,11 +87,11 @@ export function NavigationBar() {
     <div className="sticky top-0 z-[100]">
       <nav className="ice-frost border-b border-white/[0.05]">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group transition-all shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#64CEFB]" />
+          <Link href="/" className="flex items-center gap-3 group transition-all shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+              <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-base font-semibold tracking-tight hidden sm:block">Pocket Fund</span>
+            <span className="text-lg font-bold tracking-tighter uppercase font-display hidden sm:block">Pocket Fund</span>
           </Link>
           
           <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.05]">
@@ -171,7 +171,7 @@ export function NavigationBar() {
                     ))}
                   </div>
                   <DropdownMenuSeparator className="bg-white/5 mx-2 my-2" />
-                  <DropdownMenuItem onClick={handleLogout} className="hover:bg-red-500/10 cursor-pointer rounded-xl p-3 focus:bg-red-500/10 text-red-400 transition-all">
+                  <DropdownMenuItem onClick={handleLogout} className="blue-glass-button cursor-pointer rounded-xl p-3 transition-all">
                     <div className="flex items-center gap-3">
                       <LogOut className="w-4 h-4" />
                       <span className="text-xs font-bold">Sign Out</span>
@@ -198,7 +198,7 @@ export function NavigationBar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/[0.05] bg-[#050505]/95 backdrop-blur-2xl overflow-hidden"
+              className="ice-frost border-white/5 p-6 h-full relative overflow-hidden group"
             >
               <div className="p-6 space-y-6">
                  <div className="grid grid-cols-2 gap-3">
