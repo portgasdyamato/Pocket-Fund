@@ -239,11 +239,11 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full select-none pointer-events-none mt-auto">
+      <div className="w-full select-none pointer-events-none mt-auto pt-12 overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: "100%" }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "100px" }}
           transition={{ duration: 1.2, ease: EASE }}
           className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
           style={{
@@ -601,16 +601,31 @@ export default function Landing() {
                 style={{ background: "radial-gradient(circle, rgba(100,206,251,0.08) 0%, transparent 60%)" }}
               />
 
-              {/* The Container - Clean floating list instead of a bulky box */}
+              {/* The Container - Refined Glass Frame */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: EASE }}
-                className="relative z-10 p-6 sm:p-8 space-y-8"
+                className="relative z-10 p-6 sm:p-8 space-y-8 rounded-[32px] overflow-hidden"
+                style={{
+                  ...frost,
+                  background: "rgba(10, 14, 20, 0.3)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.08), 0 24px 60px rgba(0,0,0,0.8)",
+                }}
               >
+                {/* Status indicator */}
+                <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" style={{ background: "#22c55e" }} />
+                    <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-white/40">Secure Neural Link</span>
+                  </div>
+                  <Mic className="w-3.5 h-3.5 text-white/30" />
+                </div>
+
                 {/* Chat Bubbles */}
-                <div className="space-y-6">
+                <div className="space-y-6 pt-2">
                   {[
                     { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
                     { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
@@ -646,8 +661,8 @@ export default function Landing() {
                                 color: "rgba(255,255,255,0.6)"
                               }
                             : {
-                                background: "linear-gradient(135deg, #0A84FF 0%, #005EEA 100%)",
-                                boxShadow: "0 4px 14px rgba(10, 132, 255, 0.3)",
+                                background: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)", // Brand cyan-sky deep mix
+                                boxShadow: "0 4px 14px rgba(2, 132, 199, 0.4)",
                                 border: "1px solid rgba(255,255,255,0.1)",
                                 color: "#ffffff"
                               }
