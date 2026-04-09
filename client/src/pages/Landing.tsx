@@ -104,40 +104,56 @@ const BentoCard = ({
   const [hovered, setHovered] = useState(false);
   return (
     <motion.div
-      whileHover={{ y: -5 }}
+      whileHover={{ y: -8, scale: 1.01 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      transition={{ duration: 0.5, ease: EASE }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+        e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+      }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative rounded-[32px] overflow-visible ${className}`}
       style={{
         ...frost,
         boxShadow: hovered
-          ? `inset 0 1px 1px rgba(255,255,255,0.5), 0 24px 60px rgba(0,0,0,0.95), 0 0 0 1px rgba(100,206,251,0.15)`
+          ? `inset 0 1px 1px rgba(255,255,255,0.6), 0 30px 70px rgba(0,0,0,0.9), 0 0 0 1px rgba(100,206,251,0.25)`
           : frost.boxShadow,
-        transition: "box-shadow 0.5s ease",
       }}
     >
-      {/* Subtle top-left specular */}
+      {/* Dynamic Spotlight Glow */}
       <div
-        className="absolute inset-0 rounded-[32px] pointer-events-none"
+        className="absolute inset-0 rounded-[32px] pointer-events-none overflow-hidden"
         style={{
           background: hovered
-            ? "linear-gradient(135deg, rgba(100,206,251,0.03) 0%, transparent 50%)"
+            ? "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(100,206,251,0.08), transparent 40%)"
+            : "none",
+          transition: "opacity 0.5s ease",
+        }}
+      />
+      
+      {/* Subtle top-left specular */}
+      <div
+        className="absolute inset-0 rounded-[32px] pointer-events-none border border-white/5 group-hover:border-white/15 transition-colors duration-500"
+        style={{
+          background: hovered
+            ? "linear-gradient(135deg, rgba(100,206,251,0.05) 0%, transparent 50%)"
             : "linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%)",
-          transition: "background 0.5s ease",
         }}
       />
 
       <div className="relative z-10 p-8 sm:p-10 h-full flex flex-col justify-between">
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div
-            className="w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500"
+            className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-700 shadow-inner group-hover:scale-110"
             style={{
-              background: hovered ? "rgba(100,206,251,0.08)" : "rgba(255,255,255,0.04)",
-              border: `1px solid ${hovered ? "rgba(100,206,251,0.25)" : "rgba(255,255,255,0.07)"}`,
+              background: hovered ? "rgba(100,206,251,0.12)" : "rgba(255,255,255,0.04)",
+              border: `1px solid ${hovered ? "rgba(100,206,251,0.4)" : "rgba(255,255,255,0.07)"}`,
             }}
           >
-            <Icon className="w-5 h-5" style={{ color: hovered ? ACCENT : "rgba(255,255,255,0.5)" }} />
+            <Icon className="w-5.5 h-5.5" style={{ color: hovered ? ACCENT : "rgba(255,255,255,0.4)" }} />
           </div>
           <div className="space-y-2">
             <h3 className="text-lg font-bold tracking-[-0.02em] text-white/85 uppercase">
@@ -413,25 +429,48 @@ export default function Landing() {
               icon={Mic}
               className="md:col-span-2"
               visual={
-                <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 px-2">
-                  <div className="flex items-end gap-1.5 h-14">
-                    {[30,70,45,90,55,100,35,80,50,95,70,45,85].map((h, i) => (
+                <div className="flex flex-col sm:flex-row items-center gap-8 pt-6 px-2 relative group-hover:scale-[1.02] transition-transform duration-700">
+                  <div className="relative flex items-end gap-2 h-16">
+                    {/* Animated Glow behind wave */}
+                    <div className="absolute inset-0 bg-primary/20 blur-[30px] rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                    
+                    {[35, 80, 50, 100, 65, 120, 45, 95, 60, 110, 80, 55, 95, 40, 75, 50].map((h, i) => (
                       <motion.div key={i}
-                        animate={{ height: [6, h * 0.55, 6] }}
-                        transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.12, ease: "easeInOut" }}
-                        className="w-1.5 rounded-full"
-                        style={{ height: 6, background: `linear-gradient(to top, rgba(100,206,251,0.08), rgba(100,206,251,0.6))` }}
-                      />
+                        animate={{ 
+                          height: [8, h * 0.6, 8],
+                          opacity: [0.3, 1, 0.3]
+                        }}
+                        transition={{ 
+                          duration: 2.5, 
+                          repeat: Infinity, 
+                          delay: i * 0.08, 
+                          ease: "easeInOut" 
+                        }}
+                        className="w-1.5 rounded-full relative z-10"
+                        style={{ 
+                          height: 8, 
+                          background: `linear-gradient(to top, #64CEFB 0%, #3b82f6 100%)`,
+                          boxShadow: `0 0 10px rgba(100, 206, 251, 0.3)`
+                        }}
+                      ></motion.div>
                     ))}
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-2 relative z-10">
                     <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: ACCENT }} />
-                      <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: ACCENT }}>Neural Link Active</span>
+                      <div className="relative w-2 h-2">
+                         <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-40" />
+                         <div className="relative w-2 h-2 rounded-full shadow-[0_0_10px_#64CEFB]" style={{ background: ACCENT }} />
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Neural Voice Core</span>
                     </div>
-                    <span className="text-[9px] uppercase tracking-widest font-bold pl-3.5" style={{ color: "rgba(255,255,255,0.2)" }}>
-                      Analyzing Spending Habits...
-                    </span>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[9px] uppercase tracking-widest font-bold text-white/30 pl-4">Sampling patterns...</span>
+                      <motion.div 
+                        animate={{ width: ["0%", "100%", "0%"] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="h-px bg-primary/40 ml-4 rounded-full"
+                      />
+                    </div>
                   </div>
                 </div>
               }
@@ -442,24 +481,51 @@ export default function Landing() {
               desc="Tier-1 capital protection. Lock your wealth behind a PIN-secure encrypted storage layer."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-40 w-full flex items-center justify-center">
-                  <div className="w-28 h-28 rounded-[2rem] flex flex-col items-center justify-center gap-3"
-                    style={{ background: "rgba(100,206,251,0.03)", border: "1px solid rgba(100,206,251,0.1)" }}
-                  >
-                    <div className="grid grid-cols-3 gap-2.5">
-                      {[1,2,3,4,5,6,7,8,9].map(i => (
+                <div className="relative h-44 w-full flex items-center justify-center overflow-hidden">
+                  {/* Orbiting particles */}
+                  <div className="absolute inset-0">
+                    {[1, 2, 3].map((particle) => (
+                      <motion.div
+                        key={particle}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 10 + particle * 5, repeat: Infinity, ease: "linear" }}
+                        className="absolute inset-0 flex items-center justify-center"
+                      >
+                         <div className="w-[120px] h-[120px] rounded-full border border-dashed border-primary/10" />
+                         <motion.div 
+                           animate={{ scale: [1, 1.5, 1] }}
+                           transition={{ duration: 4, repeat: Infinity }}
+                           className="absolute top-0 w-1 h-1 rounded-full bg-primary/40 shadow-[0_0_8px_#64CEFB]"
+                         />
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="relative w-32 h-32 rounded-3xl flex flex-col items-center justify-center gap-4 ice-frost border-white/10 group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                    
+                    {/* Scanning Line */}
+                    <motion.div 
+                      animate={{ top: ["-10%", "110%"] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent blur-sm z-10"
+                    />
+
+                    <div className="grid grid-cols-3 gap-3 relative z-20">
+                      {[1, 2, 3, 4, 5, 6].map(i => (
                         <motion.div key={i}
-                          whileHover={{ scale: 1.6 }}
-                          className="w-1.5 h-1.5 rounded-full cursor-pointer"
-                          style={{ background: "rgba(100,206,251,0.2)" }}
+                          animate={{ 
+                            background: ["rgba(100,206,251,0.1)", "rgba(100,206,251,0.4)", "rgba(100,206,251,0.1)"]
+                          }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                          className="w-2 h-2 rounded-[2px]"
                         />
                       ))}
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <Lock className="w-3 h-3" style={{ color: ACCENT }} />
-                      <span className="text-[8px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
-                        Encrypted
-                      </span>
+
+                    <div className="flex items-center gap-2 relative z-20">
+                      <Lock className="w-3.5 h-3.5 text-primary drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]" />
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">Secured</span>
                     </div>
                   </div>
                 </div>
@@ -471,26 +537,45 @@ export default function Landing() {
               desc="Collect premium tokens and verified badges for financial discipline and consistency."
               icon={Coins}
               visual={
-                <div className="flex gap-3 pt-4 px-2">
+                <div className="flex gap-4 pt-6 px-4 relative">
                   {[Target, Zap, Gem].map((Icon, i) => (
                     <motion.div key={i}
-                      whileHover={{ y: -8 }}
-                      className="w-14 h-14 rounded-[20px] flex items-center justify-center cursor-pointer transition-all duration-300"
-                      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.25)" }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.15 }}
+                      whileHover={{ 
+                        y: -12,
+                        scale: 1.1,
+                        rotate: [0, -5, 5, 0]
+                      }}
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-500 ice-frost border-white/10 group-hover:border-primary/40 relative"
                       onMouseEnter={(e) => {
                         const el = e.currentTarget as HTMLDivElement;
-                        el.style.background = "rgba(100,206,251,0.06)";
-                        el.style.borderColor = "rgba(100,206,251,0.2)";
                         el.style.color = ACCENT;
+                        el.style.boxShadow = "0 20px 40px rgba(100, 206, 251, 0.2)";
                       }}
                       onMouseLeave={(e) => {
                         const el = e.currentTarget as HTMLDivElement;
-                        el.style.background = "rgba(255,255,255,0.03)";
-                        el.style.borderColor = "rgba(255,255,255,0.06)";
                         el.style.color = "rgba(255,255,255,0.25)";
+                        el.style.boxShadow = "none";
                       }}
                     >
-                      <Icon className="w-6 h-6" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl opacity-0 group-hover/card:opacity-100" />
+                      <Icon className="w-7 h-7 relative z-10" />
+                      
+                      {/* Floating Sparkle on hover */}
+                      <motion.div 
+                        animate={{ 
+                          opacity: [0, 1, 0],
+                          scale: [0.5, 1, 0.5],
+                          y: [-10, -20]
+                        }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100"
+                      >
+                         <Sparkles className="w-4 h-4 text-primary" />
+                      </motion.div>
                     </motion.div>
                   ))}
                 </div>
@@ -503,39 +588,58 @@ export default function Landing() {
               icon={BarChart3}
               className="md:col-span-2"
               visual={
-                <div className="h-36 sm:h-40 flex items-end justify-between gap-1.5 px-2 w-full relative">
-                  <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
-                  {[35,60,45,85,55,40,75,50,95,60].map((h, i) => (
+                <div className="h-40 sm:h-44 flex items-end justify-between gap-1.5 px-4 w-full relative">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-x-0 bottom-0 h-full flex flex-col justify-between opacity-10 pointer-events-none">
+                    {[1, 2, 3, 4].map(line => (
+                      <div key={line} className="w-full h-px bg-white" />
+                    ))}
+                  </div>
+                  
+                  {[45, 75, 55, 95, 65, 50, 85, 60, 100, 70].map((h, i) => (
                     <motion.div key={i}
                       onMouseEnter={() => setActiveBar(i)}
                       onMouseLeave={() => setActiveBar(null)}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
-                      transition={{ duration: 1.2, ease: EASE, delay: i * 0.07 }}
-                      className="flex-1 relative"
+                      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                      className="flex-1 relative group/bar"
                     >
                       <motion.div
                         animate={{
-                          background: activeBar === i ? ACCENT : "rgba(100,206,251,0.12)",
+                          background: activeBar === i 
+                            ? `linear-gradient(to top, #64CEFB 0%, #3b82f6 100%)` 
+                            : "rgba(100,206,251,0.12)",
+                          boxShadow: activeBar === i 
+                            ? "0 0 25px rgba(100, 206, 251, 0.4)" 
+                            : "none"
                         }}
-                        transition={{ duration: 0.25 }}
-                        className="h-full w-full rounded-t-sm"
-                      />
+                        transition={{ duration: 0.3 }}
+                        className="h-full w-full rounded-t-[4px] relative z-10"
+                      >
+                         {/* Reflection effect */}
+                         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover/bar:opacity-100 transition-opacity" />
+                      </motion.div>
+                      
                       <AnimatePresence>
                         {activeBar === i && (
                           <motion.div
-                            initial={{ opacity: 0, y: 8, scale: 0.9 }}
-                            animate={{ opacity: 1, y: -40, scale: 1 }}
-                            exit={{ opacity: 0, y: 8, scale: 0.9 }}
-                            className="absolute left-1/2 -translate-x-1/2 px-2.5 py-1.5 rounded-lg text-[9px] font-bold whitespace-nowrap"
+                            initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                            animate={{ opacity: 1, y: -50, scale: 1 }}
+                            exit={{ opacity: 0, y: 15, scale: 0.8 }}
+                            className="absolute left-1/2 -translate-x-1/2 px-4 py-2 rounded-[12px] text-[10px] font-black whitespace-nowrap z-30"
                             style={{
-                              background: "rgba(8,8,12,0.9)",
-                              border: "1px solid rgba(100,206,251,0.2)",
+                              background: "rgba(13,13,18,0.95)",
+                              border: "1px solid rgba(100,206,251,0.3)",
                               color: ACCENT,
-                              backdropFilter: "blur(12px)",
+                              backdropFilter: "blur(20px)",
+                              boxShadow: "0 10px 30px rgba(0,0,0,0.5)"
                             }}
                           >
-                            ₹{h * 850}
+                            <div className="flex flex-col items-center">
+                              <span className="text-white/40 uppercase tracking-widest text-[8px] mb-1">Projected Yield</span>
+                              ₹{(h * 920).toLocaleString('en-IN')}
+                            </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
