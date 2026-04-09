@@ -63,7 +63,7 @@ export function NavigationBar() {
 
   if (!isAuthenticated) {
     return (
-      <nav className="fixed top-0 left-0 w-full z-[100] border-b border-white/[0.05] backdrop-blur-md">
+      <nav className="ice-frost border-b border-white/[0.05] fixed top-0 w-full z-50">
         <div className="container mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group cursor-pointer transition-all">
             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
@@ -73,7 +73,7 @@ export function NavigationBar() {
           </Link>
           <div className="flex items-center gap-6">
              <button onClick={handleLogin} className="text-sm font-medium text-white/60 hover:text-white transition-colors hidden sm:block">Log in</button>
-             <button onClick={handleLogin} className="bg-white text-black text-sm font-bold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2">
+             <button onClick={handleLogin} className="blue-glass-button px-6 py-2.5 rounded-full">
                Get Started
                <ArrowUpRight className="w-4 h-4" />
              </button>
@@ -85,7 +85,7 @@ export function NavigationBar() {
 
   return (
     <div className="sticky top-0 z-[100]">
-      <nav className="bg-[#020202]/80 backdrop-blur-2xl border-b border-white/[0.05]">
+      <nav className="ice-frost border-b border-white/[0.05]">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group transition-all shrink-0">
             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
@@ -171,7 +171,7 @@ export function NavigationBar() {
                     ))}
                   </div>
                   <DropdownMenuSeparator className="bg-white/5 mx-2 my-2" />
-                  <DropdownMenuItem onClick={handleLogout} className="hover:bg-red-500/10 cursor-pointer rounded-xl p-3 focus:bg-red-500/20 text-red-500 transition-all">
+                  <DropdownMenuItem onClick={handleLogout} className="blue-glass-button cursor-pointer rounded-xl p-3 transition-all">
                     <div className="flex items-center gap-3">
                       <LogOut className="w-4 h-4" />
                       <span className="text-xs font-bold">Sign Out</span>
@@ -198,7 +198,7 @@ export function NavigationBar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/[0.05] bg-[#020202] overflow-hidden"
+              className="ice-frost border-white/5 p-6 h-full relative overflow-hidden group"
             >
               <div className="p-6 space-y-6">
                  <div className="grid grid-cols-2 gap-3">

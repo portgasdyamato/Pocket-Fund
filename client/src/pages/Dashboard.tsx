@@ -391,7 +391,7 @@ export default function Dashboard() {
             {/* Wallet & Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div variants={item}>
-                <Card className="glass-morphism border-white/5 p-6 sm:p-8 h-full relative overflow-hidden group min-h-[400px] sm:min-h-[420px] flex flex-col justify-between">
+                <Card className="ice-frost p-6 sm:p-8 h-full relative overflow-hidden group min-h-[400px] sm:min-h-[420px] flex flex-col justify-between">
                   {/* Premium Background Effects */}
                   <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -mr-32 -mt-32" />
                   <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 blur-[100px] rounded-full -ml-24 -mb-24" />
@@ -409,11 +409,11 @@ export default function Dashboard() {
                         <div className="flex gap-2">
                           <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
                             <DialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-[#64CEFB] border border-[#64CEFB]/20 hover:bg-[#4FB7E5] text-white transition-all click-scale shadow-[0_10px_20px_rgba(100,206,251,0.3)]">
-                                <Plus className="w-6 h-6 border-2 border-white/60 rounded-full p-0.5" />
-                              </Button>
+                              <button onClick={() => setIsTopUpOpen(true)} className="h-12 w-12 rounded-2xl blue-glass-button flex items-center justify-center">
+                                <Plus className="w-6 h-6 border-2 border-[#64CEFB]/40 rounded-full p-0.5" />
+                              </button>
                             </DialogTrigger>
-                            <DialogContent className="glass-morphism border-white/10 text-white p-8">
+                            <DialogContent className="ice-frost border-white/10 text-white p-8">
                               <DialogHeader>
                                 <DialogTitle className="text-3xl font-black tracking-tight font-display">Add Funds</DialogTitle>
                               </DialogHeader>
@@ -545,7 +545,7 @@ export default function Dashboard() {
             
             {/* Recent Wins */}
             <motion.div variants={item}>
-              <Card className="glass-morphism border-white/5 p-6 h-full">
+              <Card className="ice-frost border-white/5 p-6 h-full">
                 <h3 className="text-xl font-black mb-6 flex items-center gap-2 font-display">
                   <Trophy className="w-5 h-5 text-accent" />
                   Achievements
@@ -575,10 +575,10 @@ export default function Dashboard() {
 
             {/* Activity Logger */}
             <motion.div variants={item}>
-              <Card className="glass-morphism border-white/5 p-6 min-h-[400px]">
+              <Card className="ice-frost border-white/5 p-6 min-h-[400px]">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-black font-display">Recent Activity</h3>
-                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setLocation('/history')}>
+                  <Button variant="ghost" size="sm" className="blue-glass-button" onClick={() => setLocation('/history')}>
                     View All
                   </Button>
                 </div>

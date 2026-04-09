@@ -120,7 +120,7 @@ export default function Analytics() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-5 sm:p-6 h-full relative overflow-hidden group">
+            <Card className="ice-frost p-5 sm:p-6 h-full relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Expenses</p>
               <div className="flex items-end justify-between">

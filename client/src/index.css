@@ -75,11 +75,50 @@
   }
   
   .glass-morphism {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .ice-frost {
     background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(40px) saturate(150%);
+    -webkit-backdrop-filter: blur(40px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.05),
+                0 20px 40px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  .glass-button {
+    @apply relative overflow-hidden transition-all duration-500 active:scale-95;
+    background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5);
+  }
+
+  .blue-glass-button {
+    @apply relative overflow-hidden transition-all duration-500 active:scale-95;
+    background: rgba(100, 206, 251, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(100, 206, 251, 0.3);
+    color: #64CEFB;
+  }
+
+  .blue-glass-button:hover {
+    background: rgba(100, 206, 251, 0.25);
+    border-color: rgba(100, 206, 251, 0.5);
+    box-shadow: 0 0 40px -10px rgba(100, 206, 251, 0.4);
   }
 
   .text-gradient {

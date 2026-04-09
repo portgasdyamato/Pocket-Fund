@@ -59,7 +59,7 @@ const BentoCard = ({
     <motion.div
       whileHover={{ y: -8 }}
       transition={{ duration: 0.6, ease: PREMIUM_EASE }}
-      className={`group relative rounded-[40px] bg-[#0A0A0A] border border-white/10 shadow-2xl transition-all duration-500 hover:bg-[#0F0F0F] hover:border-white/20 ${className}`}
+      className={`group relative rounded-[40px] ice-frost transition-all duration-500 hover:bg-[#0F0F0F] hover:border-[#64CEFB]/20 ${className}`}
       style={{ overflow: 'visible' }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[40px] pointer-events-none" />
@@ -94,13 +94,13 @@ export default function Landing() {
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative overflow-x-hidden">
       
       {/* HERO SECTION */}
-      <section className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col pt-32 pb-24 sm:py-0 sm:justify-center">
+      <section className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-30"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-20"
         >
           <source 
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
@@ -108,16 +108,19 @@ export default function Landing() {
           />
         </video>
 
-        <div className="relative z-10 w-full flex flex-col items-center">
-          <nav className="absolute top-0 left-0 w-full max-w-[1600px] mx-auto px-6 sm:px-10 py-6 sm:py-10 flex items-center justify-between">
+        <nav className="absolute top-0 left-0 w-full z-50">
+          <div className="max-w-[1600px] mx-auto px-6 sm:px-10 py-8 flex items-center justify-between">
             <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-500">
-                <div className="w-2 h-2 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
+              <div className="w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-500 backdrop-blur-xl">
+                <div className="w-2 h-2 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors shadow-[0_0_10px_#64CEFB]/0 group-hover:shadow-[0_0_10px_#64CEFB]/50" />
               </div>
-              <span className="text-white font-bold text-lg tracking-tight uppercase transition-opacity font-display">Pocket Fund</span>
+              <span className="text-white font-bold text-xl tracking-tight uppercase transition-opacity font-display">Pocket Fund</span>
             </div>
-            <button onClick={handleLogin} className="text-white/30 hover:text-white text-[9px] font-bold uppercase tracking-[0.5em] transition-all px-4 py-2 rounded-full border border-transparent hover:border-white/5 hover:bg-white/[0.02]">SIGN IN</button>
-          </nav>
+            <button onClick={handleLogin} className="blue-glass-button px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-[0.4em] transition-all">SIGN IN</button>
+          </div>
+        </nav>
+
+        <div className="relative z-10 w-full flex flex-col items-center pt-24">
 
           <div className="flex flex-col items-center justify-center text-center px-6 max-w-7xl mx-auto">
             <motion.div
@@ -151,10 +154,10 @@ export default function Landing() {
               </div>
 
               <div className="pt-8 block">
-                <Button onClick={handleLogin} className="group relative bg-[#64CEFB] text-black hover:bg-[#4FB7E5] rounded-full px-12 sm:px-16 py-6 sm:py-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.5em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(100,206,251,0.3)]">
+                <button onClick={handleLogin} className="blue-glass-button px-14 py-7 rounded-2xl text-[11px] font-bold uppercase tracking-[0.6em] group flex items-center gap-3 mx-auto">
                   Start Your Journey
-                  <ArrowUpRight className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </Button>
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
               </div>
             </motion.div>
           </div>
@@ -331,10 +334,10 @@ export default function Landing() {
                         <span className={`text-[9px] font-bold uppercase tracking-[0.4em] ${chat.pos === 'left' ? 'text-[#64CEFB]' : 'text-white/40'}`}>{chat.sender}</span>
                      </div>
                      
-                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed border transition-all duration-500
+                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed transition-all duration-500 ice-frost
                         ${chat.pos === 'left' 
-                          ? 'bg-white/[0.015] border-white/5 text-white/40 backdrop-blur-3xl hover:bg-white/[0.03] hover:border-white/10 rounded-bl-none' 
-                          : 'bg-[#64CEFB]/[0.05] border-[#64CEFB]/20 text-white/90 backdrop-blur-3xl hover:border-[#64CEFB]/50 hover:bg-[#64CEFB]/[0.08] rounded-br-none'
+                          ? 'rounded-bl-none text-white/50' 
+                          : 'bg-[#64CEFB]/[0.05] border-[#64CEFB]/30 text-white/90 rounded-br-none'
                         }`}
                       >
                         {/* Interactive glow for User bubbles */}
