@@ -179,7 +179,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
 
   return (
     <footer
-      className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden"
+      className="relative w-full py-24 sm:py-32 flex flex-col items-center"
       style={{
         background: "#000",
         borderTop: "1px solid rgba(255,255,255,0.04)"
