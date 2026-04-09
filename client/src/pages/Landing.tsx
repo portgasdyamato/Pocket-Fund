@@ -236,17 +236,17 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full overflow-hidden select-none pointer-events-none relative flex flex-col justify-end">
+      <div className="w-full select-none pointer-events-none mt-auto">
         <motion.div
           initial={{ opacity: 0, y: "100%" }}
-          whileInView={{ opacity: 1, y: "15%" }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1.6, ease: EASE }}
-          className="text-center font-black uppercase leading-[0.7] whitespace-nowrap"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: EASE }}
+          className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
           style={{
             fontSize: "clamp(60px, 18vw, 320px)",
             color: "transparent",
-            WebkitTextStroke: "1px rgba(255,255,255,0.06)",
+            WebkitTextStroke: "1px rgba(255,255,255,0.08)",
             letterSpacing: "-0.04em",
           }}
         >
@@ -560,11 +560,7 @@ export default function Landing() {
             >
               <h2 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-[-0.03em] leading-[0.9] uppercase text-white/90">
                 Your AI<br />
-                <span className="relative inline-block mt-2">
-                  {/* Subtle glow behind the word "Savings" */}
-                  <span className="absolute inset-0 blur-2xl opacity-40 bg-[#64CEFB]" />
-                  <span className="relative z-10" style={{ color: ACCENT }}>Savings</span>
-                </span><br />
+                <span style={{ color: ACCENT }}>Savings</span><br />
                 Buddy.
               </h2>
               <p className="text-sm sm:text-base max-w-md leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
@@ -582,106 +578,78 @@ export default function Landing() {
               </div>
             </motion.div>
 
-            {/* Right Side: The Glass Terminal */}
+            {/* Right Side: The Chat Interface */}
             <div className="flex-1 w-full relative">
               {/* Massive ambient glow behind the container to show off the glass */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] rounded-full blur-[100px] pointer-events-none"
-                style={{ background: "radial-gradient(circle, rgba(100,206,251,0.15) 0%, transparent 70%)" }}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] rounded-full blur-[120px] pointer-events-none"
+                style={{ background: "radial-gradient(circle, rgba(100,206,251,0.08) 0%, transparent 60%)" }}
               />
 
-              {/* The Container */}
+              {/* The Container - Clean floating list instead of a bulky box */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: EASE }}
-                className="relative z-10 rounded-[40px] p-2 sm:p-3 overflow-hidden"
-                style={{
-                  ...frost,
-                  background: "rgba(8, 8, 12, 0.4)", // slightly more transparent to let the orb shine
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 30px 60px rgba(0,0,0,0.95)",
-                }}
+                className="relative z-10 p-6 sm:p-8 space-y-8"
               >
-                {/* Simulated Device Screen Inner */}
-                <div className="rounded-[32px] overflow-hidden bg-black/40 border border-white/[0.04] p-6 sm:p-8 space-y-6 relative">
-                  
-                  {/* Status header inside the device */}
-                  <div className="flex items-center justify-between border-b border-white/[0.04] pb-4 mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center p-1"
-                        style={{ border: "1px solid rgba(100,206,251,0.2)", background: "rgba(100,206,251,0.05)" }}
-                      >
-                         <Mic className="w-3.5 h-3.5 text-[#64CEFB]" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#64CEFB]">Pocket Coach</p>
-                        <p className="text-[8px] font-medium tracking-widest text-white/30 uppercase">Online</p>
-                      </div>
-                    </div>
-                    <div className="w-1.5 h-1.5 rounded-full animate-pulse bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                  </div>
-
-                  {/* Chat Bubbles */}
-                  <div className="space-y-6">
-                    {[
-                      { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
-                      { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
-                      { text: "Stash ₹500 more and you'll hit 50% of your new laptop goal.", pos: "left", sender: "Coach" },
-                    ].map((chat, i) => (
-                      <motion.div key={i}
-                        initial={{ opacity: 0, x: chat.pos === "left" ? -16 : 16, y: 10 }}
-                        whileInView={{ opacity: 1, x: 0, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, ease: EASE, delay: i * 0.15 + 0.3 }}
-                        className={`flex flex-col ${chat.pos === "left" ? "items-start" : "items-end"}`}
-                      >
-                        <div
-                          className={`px-5 py-3.5 text-sm leading-relaxed max-w-[88%] sm:max-w-[75%] font-medium relative ${
-                            chat.pos === "left" ? "rounded-[24px] rounded-tl-sm" : "rounded-[24px] rounded-br-sm"
-                          }`}
-                          style={
-                            chat.pos === "left"
-                              ? { 
-                                  background: "rgba(255,255,255,0.04)", 
-                                  border: "1px solid rgba(255,255,255,0.08)",
-                                  color: "rgba(255,255,255,0.7)"
-                                }
-                              : {
-                                  background: ACCENT,
-                                  boxShadow: `0 8px 24px -6px rgba(100,206,251,0.4), inset 0 2px 0 rgba(255,255,255,0.3)`,
-                                  color: "#020617",
-                                  fontWeight: 700
-                                }
-                          }
+                {/* Chat Bubbles */}
+                <div className="space-y-6">
+                  {[
+                    { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "Coach" },
+                    { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
+                    { text: "Stash ₹500 more and you'll hit 50% of your new laptop goal.", pos: "left", sender: "Coach" },
+                  ].map((chat, i) => (
+                    <motion.div key={i}
+                      initial={{ opacity: 0, x: chat.pos === "left" ? -16 : 16, y: 10 }}
+                      whileInView={{ opacity: 1, x: 0, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, ease: EASE, delay: i * 0.15 + 0.3 }}
+                      className={`flex flex-col ${chat.pos === "left" ? "items-start" : "items-end"}`}
+                    >
+                      <div className={`flex items-center gap-2 mb-2 ${chat.pos === "right" ? "flex-row-reverse" : ""}`}>
+                        <div className="w-1.5 h-1.5 rounded-full"
+                          style={{ background: chat.pos === "left" ? ACCENT : "rgba(255,255,255,0.3)" }}
+                        />
+                        <span className="text-[9px] font-bold uppercase tracking-[0.4em]"
+                          style={{ color: chat.pos === "left" ? "rgba(100,206,251,0.6)" : "rgba(255,255,255,0.25)" }}
                         >
-                          {chat.text}
-                          
-                          {/* Elegant tiny tail indicator */}
-                          {chat.pos === "left" && (
-                            <svg className="absolute -top-px -left-2 w-3 h-3 text-white/[0.08] fill-current" viewBox="0 0 10 10">
-                              <path d="M10 0H0v10C0 4.477 4.477 0 10 0z" />
-                            </svg>
-                          )}
-                          {chat.pos === "right" && (
-                            <svg className="absolute -bottom-px -right-2 w-3 h-3 flex-shrink-0 fill-current" style={{ color: ACCENT }} viewBox="0 0 10 10">
-                              <path d="M0 10h10V0c0 5.523-4.477 10-10 10z" />
-                            </svg>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                          {chat.sender}
+                        </span>
+                      </div>
 
-                  {/* Input Simulation */}
-                  <div className="mt-8 pt-4">
-                    <div className="w-full h-12 rounded-full border border-white/[0.06] bg-white/[0.02] flex items-center px-4 justify-between">
-                       <span className="text-[10px] uppercase tracking-widest font-bold text-white/20">Ask for advice...</span>
-                       <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
-                         <ArrowRight className="w-3.5 h-3.5 text-white/50" />
-                       </div>
-                    </div>
-                  </div>
+                      <div
+                        className={`px-6 py-4 text-sm leading-relaxed max-w-[85%] sm:max-w-[75%] font-medium ${
+                          chat.pos === "left" ? "rounded-[20px] rounded-tl-sm" : "rounded-[20px] rounded-br-sm"
+                        }`}
+                        style={
+                          chat.pos === "left"
+                            ? { 
+                                background: "rgba(255,255,255,0.03)", 
+                                border: "1px solid rgba(255,255,255,0.06)",
+                                color: "rgba(255,255,255,0.6)"
+                              }
+                            : {
+                                background: "rgba(100,206,251,0.1)",
+                                border: "1px solid rgba(100,206,251,0.2)",
+                                color: "#ffffff"
+                              }
+                        }
+                      >
+                        {chat.text}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
 
+                {/* Input Simulation */}
+                <div className="mt-8 pt-6 border-t border-white/[0.04]">
+                  <div className="w-full h-12 rounded-full border border-white/[0.06] flex items-center px-4 justify-between" style={{ background: "rgba(8,8,12,0.4)" }}>
+                     <span className="text-[10px] uppercase tracking-widest font-bold text-white/20">Ask for advice...</span>
+                     <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all" style={{ background: "rgba(255,255,255,0.05)" }}>
+                       <ArrowRight className="w-3.5 h-3.5 text-white/40" />
+                     </div>
+                  </div>
                 </div>
               </motion.div>
             </div>
