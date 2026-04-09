@@ -26,7 +26,6 @@ import {
   Trophy, 
   User, 
   LogOut,
-  Settings,
   Menu,
   X,
   Receipt,
@@ -162,7 +161,6 @@ export function NavigationBar() {
                     {[
                       { icon: User, label: "My Profile", url: "/profile" },
                       { icon: Trophy, label: "Achievements", url: "/achievements" },
-                      { icon: Settings, label: "Settings", url: "/settings" }
                     ].map((item, i) => (
                       <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.05] cursor-pointer rounded-xl p-3 focus:bg-white/[0.1] transition-all">
                         <Link href={item.url} className="flex items-center gap-3">

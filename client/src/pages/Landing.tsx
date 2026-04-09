@@ -70,7 +70,7 @@ const BentoCard = ({
             <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#64CEFB]" />
           </div>
           <div className="space-y-2 sm:space-y-3">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase leading-none text-white font-display">{title}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight uppercase leading-none text-white font-display">{title}</h3>
             <p className="text-sm sm:text-base text-white/40 font-medium leading-relaxed max-w-[340px] group-hover:text-white/60 transition-colors">{desc}</p>
           </div>
         </div>
@@ -110,13 +110,13 @@ export default function Landing() {
 
         <div className="relative z-10 w-full flex flex-col items-center h-full">
           <nav className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 pt-6 sm:pt-10 pb-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full border-2 border-white/10 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 bg-white rounded-full" />
+            <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-500">
+                <div className="w-2 h-2 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
               </div>
-              <span className="text-white font-black text-xl tracking-tighter uppercase transition-opacity hover:opacity-80">Pocket Fund</span>
+              <span className="text-white font-bold text-lg tracking-tight uppercase transition-opacity font-display">Pocket Fund</span>
             </div>
-            <button onClick={handleLogin} className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all">SIGN IN</button>
+            <button onClick={handleLogin} className="text-white/30 hover:text-white text-[9px] font-bold uppercase tracking-[0.5em] transition-all px-4 py-2 rounded-full border border-transparent hover:border-white/5 hover:bg-white/[0.02]">SIGN IN</button>
           </nav>
 
           <div className="flex-1 flex flex-col items-center justify-center text-center px-6 max-h-[85vh]">
@@ -126,30 +126,31 @@ export default function Landing() {
               transition={{ duration: 1.5, ease: PREMIUM_EASE }}
               className="max-w-6xl space-y-12"
             >
-              <div className="space-y-8">
-                <span className="text-[#64CEFB] text-[11px] font-bold uppercase tracking-[0.4em] px-6 py-2 rounded-full bg-[#64CEFB]/10 border border-[#64CEFB]/20 inline-block shadow-[0_0_20px_rgba(100,206,251,0.1)]">
+              <div className="space-y-6 sm:space-y-10">
+                <span className="text-[#64CEFB] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.5em] px-5 py-2 rounded-full bg-[#64CEFB]/5 border border-[#64CEFB]/20 inline-block">
                   PERSONAL SAVINGS CO-PILOT
                 </span>
-                <motion.h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.85] uppercase font-display">
-                  <div className="text-white/95">Master Your</div>
+                <motion.h1 className="text-4xl sm:text-7xl lg:text-[8.5rem] font-bold tracking-[-0.04em] leading-[0.9] uppercase font-display text-balance">
+                  <div className="text-white/90">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 pt-4 px-4 sm:px-0">
-                <p className="text-white/30 text-xs md:text-sm max-w-[400px] leading-relaxed font-medium">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 pt-6 px-6 sm:px-0">
+                <p className="text-white/25 text-sm sm:text-base max-w-[440px] leading-relaxed font-medium text-balance">
                   Financial empathy meets smart technology. Track your expenses effortlessly, protect your stash in the vault, and grow with your AI savings buddy.
                 </p>
-                <div className="hidden md:block w-px h-12 bg-white/10" />
-                <div className="space-y-1 text-center md:text-left">
-                  <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">STASHED SAFELY</p>
-                  <p className="text-[#64CEFB] text-[16px] font-black tracking-tighter uppercase">₹1.2Cr+ SECURED</p>
+                <div className="hidden md:block w-px h-14 bg-white/10" />
+                <div className="space-y-2 text-center md:text-left">
+                  <p className="text-white/10 text-[9px] font-bold uppercase tracking-[0.6em] whitespace-nowrap">STASHED SAFELY</p>
+                  <p className="text-[#64CEFB] text-[18px] sm:text-[22px] font-bold tracking-tight uppercase tabular-nums">₹1.2CR+ SECURED</p>
                 </div>
               </div>
 
-              <div className="pt-10">
-                <Button onClick={handleLogin} className="bg-white text-black hover:bg-gray-100 rounded-full px-16 py-8 text-sm font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-2xl">
+              <div className="pt-12 sm:pt-16">
+                <Button onClick={handleLogin} className="group relative bg-[#64CEFB] text-black hover:bg-[#4FB7E5] rounded-full px-10 sm:px-14 py-6 sm:py-8 text-xs sm:text-sm font-bold uppercase tracking-[0.4em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(100,206,251,0.2)]">
                   Start Your Journey
+                  <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </div>
             </motion.div>
@@ -184,7 +185,7 @@ export default function Landing() {
                   <div className="flex flex-col gap-2">
                      <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-[#64CEFB] rounded-full animate-pulse" />
-                        <span className="text-[11px] font-black text-[#64CEFB] uppercase tracking-[0.4em]">NEURAL LINK ACTIVE</span>
+                        <span className="text-[11px] font-bold text-[#64CEFB] uppercase tracking-[0.4em]">NEURAL LINK ACTIVE</span>
                      </div>
                      <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest pl-4">Analyzing Spending Habits...</span>
                   </div>
@@ -212,7 +213,7 @@ export default function Landing() {
                       </div>
                       <div className="flex items-center gap-1.5">
                          <Lock className="w-3.5 h-3.5 text-[#64CEFB]" />
-                         <span className="text-[8px] font-black text-white/20 uppercase tracking-widest leading-none">ENCRYPTED</span>
+                         <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest leading-none">ENCRYPTED</span>
                       </div>
                    </div>
                 </div>
@@ -274,7 +275,7 @@ export default function Landing() {
                              initial={{ opacity: 0, y: 15, scale: 0.8 }}
                              animate={{ opacity: 1, y: -45, scale: 1 }}
                              exit={{ opacity: 0, y: 15, scale: 0.8 }}
-                             className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-tighter shadow-2xl whitespace-nowrap"
+                             className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-bold uppercase tracking-tighter shadow-2xl whitespace-nowrap"
                            >
                               VALUE: ₹{h * 850}
                            </motion.div>
@@ -296,16 +297,16 @@ export default function Landing() {
         <div className="container mx-auto px-6 max-w-[1600px]">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
              <div className="flex-1 space-y-10 relative z-10">
-               <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] text-white uppercase font-display">
+               <h2 className="text-4xl sm:text-7xl lg:text-9xl font-bold tracking-[-0.04em] leading-[0.85] text-white uppercase font-display text-balance">
                  Your AI <br />
                  Savings Buddy.
                </h2>
-               <p className="text-lg sm:text-xl text-white/30 leading-relaxed font-medium max-w-lg">
+               <p className="text-lg sm:text-2xl text-white/20 leading-relaxed font-medium max-w-xl text-balance">
                  Friendly, judgment-free advice that helps you save more without changing your lifestyle.
                </p>
                <div className="flex flex-wrap gap-3 sm:gap-4 pt-4">
-                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">24/7 ADVISORY</div>
-                  <div className="px-8 py-3 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/40">PRIVACY SECURED</div>
+                  <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5 text-[9px] font-bold uppercase tracking-[0.4em] text-white/20">24/7 ADVISORY</div>
+                  <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5 text-[9px] font-bold uppercase tracking-[0.4em] text-white/20">PRIVACY SECURED</div>
                </div>
              </div>
              
@@ -322,118 +323,116 @@ export default function Landing() {
                     transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.15 }}
                     className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
                   >
-                    <div className="flex items-center gap-2 mb-3 px-2">
-                       {chat.pos === 'left' && <div className="w-1.5 h-1.5 rounded-full bg-[#64CEFB] animate-pulse" />}
-                       <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] font-display">{chat.sender}</span>
-                    </div>
-                    
-                    <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed border transition-all duration-500 cursor-default
-                      ${chat.pos === 'left' 
-                        ? 'bg-white/[0.03] border-white/10 text-white/70 backdrop-blur-3xl hover:bg-white/[0.06] hover:border-white/20' 
-                        : 'bg-gradient-to-br from-[#64CEFB] to-[#4FB7E5] text-black border-[#64CEFB]/50 font-black shadow-[0_20px_50px_rgba(100,206,251,0.25)] hover:scale-[1.02] hover:shadow-[0_25px_60px_rgba(100,206,251,0.35)]'
-                      }`}
-                    >
-                      {/* Subtle Glow for Left Messages */}
-                      {chat.pos === 'left' && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#64CEFB]/5 to-transparent rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                      )}
-                      
-                      <p className={chat.pos === 'right' ? 'drop-shadow-sm' : ''}>
-                        {chat.text}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-               </div>
+                    <div className={`flex items-center gap-2 mb-4 ${chat.pos === 'right' ? 'flex-row-reverse' : ''}`}>
+                        {chat.pos === 'left' && <div className="w-1 h-1 rounded-full bg-[#64CEFB]/50" />}
+                        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.4em] font-display">{chat.sender}</span>
+                     </div>
+                     
+                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[28px] max-w-[90%] sm:max-w-md text-sm sm:text-base leading-relaxed border transition-all duration-500 cursor-default
+                        ${chat.pos === 'left' 
+                          ? 'bg-white/[0.015] border-white/5 text-white/40 backdrop-blur-3xl hover:bg-white/[0.03] hover:border-white/10' 
+                          : 'bg-white/[0.04] border-[#64CEFB]/20 text-white/80 backdrop-blur-3xl hover:border-[#64CEFB]/40 hover:bg-white/[0.06]'
+                        }`}
+                      >
+                        {/* Subtle accent line for User bubbles */}
+                        {chat.pos === 'right' && (
+                          <div className="absolute top-0 right-0 w-10 h-px bg-gradient-to-l from-[#64CEFB]/40 to-transparent" />
+                        )}
+                        
+                        <p className="font-medium tracking-tight">
+                          {chat.text}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-black relative z-10 border-t border-white/5 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-[#64CEFB]/[0.02] blur-[120px] pointer-events-none" />
+            {/* FOOTER */}
+      <footer className="bg-[#050505] relative z-10 border-t border-white/5 overflow-hidden font-sans">
+        {/* Grainy Texture Overlay */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02] pointer-events-none" />
         
-        <div className="container mx-auto px-6 max-w-[1600px] pt-16 sm:pt-24 pb-12">
-           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20 mb-20">
-              <div className="lg:col-span-1 space-y-8">
-                 <div className="flex items-center gap-4 group cursor-pointer">
-                    <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/50 transition-all duration-500">
-                       <div className="w-3 h-3 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
+        {/* Ambient Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] bg-[#64CEFB]/[0.015] blur-[150px] pointer-events-none" />
+        
+        <div className="container mx-auto px-6 max-w-[1600px] pt-24 pb-8 relative z-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-16 mb-32">
+               <div className="space-y-10">
+                  <div className="flex items-center gap-4 group cursor-pointer">
+                     <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-700 bg-black shadow-inner">
+                        <div className="w-2.5 h-2.5 bg-white rounded-full group-hover:bg-[#64CEFB] transition-all duration-500 scale-100 group-hover:scale-125 shadow-[0_0_15px_#64CEFB]/0 group-hover:shadow-[0_0_15px_#64CEFB]/50" />
+                     </div>
+                     <span className="text-3xl font-bold tracking-tighter text-white uppercase font-display leading-none">Pocket Fund</span>
+                  </div>
+                  
+                  <div className="max-w-md space-y-6">
+                    <p className="text-white/20 text-sm sm:text-base leading-relaxed font-medium tracking-wide">
+                       We are engineering the future of capital governance. High-performance tooling for the modern individual, without compromise.
+                    </p>
+                    <div className="flex items-center gap-8">
+                       {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
+                         <motion.a 
+                           key={i}
+                           whileHover={{ y: -4, color: "#64CEFB" }}
+                           href="#" 
+                           className="text-white/10 transition-all duration-300"
+                         >
+                            <Icon className="w-4 h-4" />
+                         </motion.a>
+                       ))}
                     </div>
-                    <span className="text-2xl font-black tracking-tighter text-white uppercase group-hover:opacity-80 transition-opacity">Pocket Fund</span>
-                 </div>
-                 <p className="text-white/20 text-sm leading-relaxed font-medium max-w-[240px]">
-                    High-performance financial governance for the modern capital architect.
-                 </p>
-                 <div className="flex items-center gap-5">
-                    {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
-                      <motion.a 
-                        key={i}
-                        whileHover={{ y: -3, scale: 1.1 }}
-                        href="#" 
-                        className="w-9 h-9 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-white/10 hover:text-[#64CEFB] hover:border-[#64CEFB]/30 transition-all"
-                      >
-                         <Icon className="w-3.5 h-3.5" />
-                      </motion.a>
-                    ))}
-                 </div>
-              </div>
+                  </div>
+               </div>
 
-              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8">
-                 {[
-                   { title: 'Platform', links: ['Dashboard', 'Savings Vault', 'Coach AI', 'Analytics'] },
-                   { title: 'Governance', links: ['Privacy Protocol', 'Security Layer', 'Terms of Service'] },
-                   { title: 'Collective', links: ['Advisory Hub', 'Status Network', 'Support'] }
-                 ].map((col, i) => (
-                   <div key={i} className="space-y-6">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#64CEFB]/40">{col.title}</h4>
-                      <ul className="space-y-3">
-                        {col.links.map(link => (
-                          <li key={link}>
-                            <motion.a 
-                              whileHover={{ x: 3 }}
-                              href="#" 
-                              className="text-white/10 hover:text-white text-[12px] font-bold transition-all flex items-center gap-2 group whitespace-nowrap"
-                            >
-                               {link}
-                               <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-0.5 transition-all" />
-                            </motion.a>
-                          </li>
-                        ))}
-                      </ul>
-                   </div>
-                 ))}
-              </div>
-           </div>
-
-           <div className="relative border-t border-white/5 pt-12 overflow-hidden">
-              <div className="flex flex-col items-center justify-center gap-4 text-center">
-                 <div className="w-full relative overflow-visible flex justify-center">
-                    <motion.h2 
-                      initial={{ y: "120%", opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 1.2, ease: PREMIUM_EASE }}
-                      className="text-[13vw] font-black tracking-[-0.05em] leading-[0.75] text-white/[0.08] uppercase pointer-events-none select-none pb-4"
-                    >
-                       Pocket Fund
-                    </motion.h2>
-                 </div>
-                 
-                 <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
-                    <p className="text-[9px] font-black uppercase tracking-[0.8em] text-white/5">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
-                    <div className="h-px w-24 bg-white/[0.03] hidden md:block" />
+               <div className="flex flex-col items-start lg:items-end gap-10">
+                  <div className="flex flex-col lg:items-end">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-white/10 mb-4 italic">Operational Protocol</span>
                     <button 
                       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className="group flex items-center gap-4 px-8 py-3 rounded-full bg-white/[0.02] border border-white/5 hover:border-[#64CEFB]/30 transition-all active:scale-95"
+                      className="group relative flex items-center gap-10 px-0 sm:px-4 py-2 transition-all active:scale-95"
                     >
-                       <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-white transition-colors">Return Top</span>
-                       <ArrowRightCircle className="w-4 h-4 text-white/20 group-hover:text-[#64CEFB] -rotate-90 transition-all" />
+                       <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white/30 group-hover:text-white transition-all duration-500">Return Top</span>
+                       <div className="w-12 h-px bg-white/10 group-hover:bg-[#64CEFB]/40 group-hover:w-20 transition-all duration-700" />
                     </button>
-                 </div>
-              </div>
-           </div>
+                  </div>
+               </div>
+            </div>
+
+            {/* BIG BRAND MARK */}
+            <div className="relative overflow-visible flex justify-center py-16">
+                <motion.h2 
+                  initial={{ y: "100%", opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-[14vw] font-bold tracking-[-0.04em] leading-[0.65] text-transparent bg-clip-text bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent uppercase pointer-events-none select-none italic"
+                >
+                   Pocket Fund
+                </motion.h2>
+            </div>
+
+            {/* SYSTEM STATUS BAR */}
+            <div className="mt-16 pt-8 border-t border-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6 opacity-30 group/status hover:opacity-100 transition-opacity duration-700">
+               <div className="flex items-center gap-8 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                    <span>System Nominal</span>
+                  </div>
+                  <span className="hidden sm:block text-white/10">|</span>
+                  <p>v1.0.42_ARCHITECT</p>
+               </div>
+               
+               <p className="text-[9px] font-bold uppercase tracking-[0.8em] text-white/20">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
+               
+               <div className="flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
+                  <span className="hidden md:block">Region: Global_Edge</span>
+                  <span className="hidden md:block text-white/10">|</span>
+                  <span>Latency: 14ms</span>
+               </div>
+            </div>
         </div>
       </footer>
     </div>
-  );
+   );
 }

@@ -8,7 +8,7 @@ import { Activity, TrendingUp, TrendingDown, Target, Wallet, PieChart as PieChar
 import type { Transaction, StashTransaction } from "@shared/schema";
 import { motion } from "framer-motion";
 
-const COLORS = ['#8b5cf6', '#3b82f6', '#f43f5e', '#10b981', '#f59e0b'];
+const COLORS = ['#64CEFB', '#3b82f6', '#f43f5e', '#10b981', '#f59e0b'];
 
 export default function Analytics() {
   const { data: transactions = [], isLoading: isLoadingTransactions } = useQuery<Transaction[]>({
@@ -28,7 +28,7 @@ export default function Analytics() {
 
   const TAG_COLORS: Record<string, string> = {
     'Need': '#2563eb',       // Blue-600
-    'Want': '#9333ea',       // Purple-600 (Primary)
+    'Want': '#64CEFB',       // Brand Blue (Primary)
     'Ick': '#dc2626',        // Red-600
     'Goal Claim': '#16a34a',  // Green-600
     'Uncategorized': '#3f3f46' // Zinc-600
@@ -226,7 +226,7 @@ export default function Analytics() {
                       contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                       itemStyle={{ color: '#fff' }}
                     />
-                    <Bar dataKey="value" fill="#8b5cf6" radius={[6, 6, 0, 0]} barSize={40} />
+                    <Bar dataKey="value" fill="#64CEFB" radius={[6, 6, 0, 0]} barSize={40} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -250,8 +250,8 @@ export default function Analytics() {
                     <AreaChart data={barData}>
                       <defs>
                         <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="#64CEFB" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#64CEFB" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
@@ -274,7 +274,7 @@ export default function Analytics() {
                         contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
                         itemStyle={{ color: '#fff' }}
                       />
-                      <Area type="monotone" dataKey="amount" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorAmount)" strokeWidth={3} />
+                      <Area type="monotone" dataKey="amount" stroke="#64CEFB" fillOpacity={1} fill="url(#colorAmount)" strokeWidth={3} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>

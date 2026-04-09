@@ -409,8 +409,8 @@ export default function Dashboard() {
                         <div className="flex gap-2">
                           <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
                             <DialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-[#64CEFB] border border-[#64CEFB]/20 hover:bg-[#4FB7E5] text-black transition-all click-scale shadow-[0_10px_20px_rgba(100,206,251,0.3)]">
-                                <Plus className="w-6 h-6 border-2 border-white/40 rounded-full p-0.5" />
+                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-[#64CEFB] border border-[#64CEFB]/20 hover:bg-[#4FB7E5] text-white transition-all click-scale shadow-[0_10px_20px_rgba(100,206,251,0.3)]">
+                                <Plus className="w-6 h-6 border-2 border-white/60 rounded-full p-0.5" />
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="glass-morphism border-white/10 text-white p-8">
@@ -499,10 +499,10 @@ export default function Dashboard() {
                   onClick={() => setLocation(action.path)}
                   className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-[#64CEFB]/10 border border-[#64CEFB]/20 hover:bg-[#64CEFB]/20 shadow-2xl transition-all duration-300 click-scale group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#64CEFB] shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                    <action.icon className="w-7 h-7 text-black" />
+                  <div className="w-14 h-14 rounded-2xl bg-[#64CEFB] shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 shadow-[0_10px_20px_rgba(100,206,251,0.2)]">
+                    <action.icon className="w-7 h-7 text-white" />
                   </div>
-                  <span className="text-[10px] font-black text-[#64CEFB] tracking-[0.2em] transition-colors">{action.label}</span>
+                  <span className="text-[10px] font-bold text-white/40 tracking-[0.2em] transition-colors group-hover:text-white uppercase">{action.label}</span>
                 </button>
               ))}
             </motion.div>
