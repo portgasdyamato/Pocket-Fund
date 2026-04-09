@@ -1,443 +1,450 @@
-import { Button } from "@/components/ui/button";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ArrowRight, 
-  Wallet, 
-  Zap, 
-  Trophy, 
-  MessageCircle, 
-  TrendingUp, 
-  Shield, 
-  Heart,
-  ChevronRight,
-  Sparkles,
-  PieChart as PieChartIcon,
-  Activity,
-  Target,
   ArrowUpRight,
   Lock,
-  ArrowDownRight,
-  Fingerprint,
   BarChart3,
-  Star,
-  ShieldCheck,
-  Layout,
-  Clock,
-  Gem,
   Mic,
-  BrainCircuit,
-  Settings,
-  ShieldAlert,
+  ShieldCheck,
   Coins,
-  Instagram,
+  Target,
+  Zap,
+  Gem,
   Twitter,
+  Instagram,
   Linkedin,
   Github,
-  ArrowRightCircle
 } from "lucide-react";
 import { ShinyText } from "@/components/ShinyText";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
-const PREMIUM_EASE = [0.16, 1, 0.3, 1];
+const EASE = [0.16, 1, 0.3, 1];
 
-const BentoCard = ({ 
-  children, 
-  className, 
-  title, 
-  desc, 
-  icon: Icon, 
-  visual 
-}: { 
-  children?: React.ReactNode, 
-  className?: string, 
-  title: string, 
-  desc: string, 
-  icon: any,
-  visual?: React.ReactNode
-}) => {
-  return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.6, ease: PREMIUM_EASE }}
-      className={`group relative rounded-[40px] ice-frost transition-all duration-500 hover:bg-[#0F0F0F] hover:border-[#64CEFB]/20 ${className}`}
-      style={{ overflow: 'visible' }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent rounded-[40px] pointer-events-none" />
-      
-      <div className="relative z-10 p-8 sm:p-12 h-full flex flex-col justify-between" style={{ overflow: 'visible' }}>
-        <div className="space-y-6 sm:space-y-8">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-[#64CEFB]/10 group-hover:border-[#64CEFB]/40">
-            <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#64CEFB]" />
-          </div>
-          <div className="space-y-2 sm:space-y-3">
-            <h3 className="text-xl sm:text-2xl font-bold tracking-tight uppercase leading-none text-white font-display">{title}</h3>
-            <p className="text-sm sm:text-base text-white/40 font-medium leading-relaxed max-w-[340px] group-hover:text-white/60 transition-colors">{desc}</p>
-          </div>
-        </div>
-        
-        <div className="mt-8 sm:mt-12 flex-1 flex flex-col justify-end min-h-[140px] sm:min-h-[180px] relative" style={{ overflow: 'visible' }}>
-          {visual}
-        </div>
+// ─── Bento Card ──────────────────────────────────────────────────────────────
+const BentoCard = ({
+  className = "",
+  title,
+  desc,
+  icon: Icon,
+  visual,
+}: {
+  className?: string;
+  title: string;
+  desc: string;
+  icon: any;
+  visual?: React.ReactNode;
+}) => (
+  <motion.div
+    whileHover={{ y: -6 }}
+    transition={{ duration: 0.5, ease: EASE }}
+    className={`group relative rounded-3xl bg-white/[0.02] border border-white/[0.06] overflow-hidden transition-all duration-500 hover:border-white/[0.12] hover:bg-white/[0.04] ${className}`}
+  >
+    {/* Subtle top-edge glow on hover */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#64CEFB]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+    <div className="p-8 lg:p-10 h-full flex flex-col">
+      {/* Icon */}
+      <div className="w-10 h-10 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-7 transition-all group-hover:border-[#64CEFB]/30 group-hover:bg-[#64CEFB]/[0.08]">
+        <Icon className="w-5 h-5 text-[#64CEFB]" />
       </div>
-    </motion.div>
-  );
-};
 
+      {/* Text */}
+      <h3 className="text-lg font-semibold text-white mb-2 tracking-tight">{title}</h3>
+      <p className="text-sm text-white/40 leading-relaxed mb-8 max-w-xs">{desc}</p>
+
+      {/* Visual */}
+      <div className="mt-auto">{visual}</div>
+    </div>
+  </motion.div>
+);
+
+// ─── Chat Bubble ─────────────────────────────────────────────────────────────
+const ChatBubble = ({
+  text,
+  isAI,
+  label,
+}: {
+  text: string;
+  isAI: boolean;
+  label: string;
+}) => (
+  <div className={`flex flex-col gap-1.5 ${isAI ? "items-start" : "items-end"}`}>
+    <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25 px-1">
+      {label}
+    </span>
+    <div
+      className={`max-w-[85%] sm:max-w-sm px-5 py-3.5 rounded-2xl text-sm leading-relaxed font-medium transition-all duration-300 ${
+        isAI
+          ? "bg-white/[0.04] border border-white/[0.08] text-white/70 rounded-tl-sm"
+          : "bg-[#64CEFB]/[0.12] border border-[#64CEFB]/[0.25] text-white/90 rounded-tr-sm"
+      }`}
+    >
+      {text}
+    </div>
+  </div>
+);
+
+// ─── Main Component ──────────────────────────────────────────────────────────
 export default function Landing() {
   const handleLogin = () => {
-    window.location.href = '/api/auth/google';
+    window.location.href = "/api/auth/google";
   };
 
   const [activeBar, setActiveBar] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative overflow-x-hidden">
-      
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
+    <div className="min-h-screen bg-[#030303] text-white overflow-x-hidden">
+
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
+
+        {/* BG video */}
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-20"
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] z-0"
         >
-          <source 
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
-            type="video/mp4" 
+          <source
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4"
+            type="video/mp4"
           />
         </video>
 
-        <nav className="absolute top-0 left-0 w-full z-50">
-          <div className="max-w-[1600px] mx-auto px-6 sm:px-10 py-8 flex items-center justify-between">
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-500 backdrop-blur-xl">
-                <div className="w-2 h-2 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors shadow-[0_0_10px_#64CEFB]/0 group-hover:shadow-[0_0_10px_#64CEFB]/50" />
-              </div>
-              <span className="text-white font-bold text-xl tracking-tight uppercase transition-opacity font-display">Pocket Fund</span>
+        {/* Radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_40%,#030303_100%)] z-[1]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,#030303_0%,transparent_60%)] z-[1]" />
+
+        {/* NAV */}
+        <nav className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-7 max-w-[1400px] mx-auto w-full">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-[#64CEFB]" />
             </div>
-            <button onClick={handleLogin} className="blue-glass-button px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-[0.4em] transition-all">SIGN IN</button>
+            <span className="text-white font-semibold text-base tracking-tight">Pocket Fund</span>
           </div>
+          <button
+            onClick={handleLogin}
+            className="text-white/50 hover:text-white text-xs font-medium tracking-wide transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08]"
+          >
+            Sign in
+          </button>
         </nav>
 
-        <div className="relative z-10 w-full flex flex-col items-center pt-24">
+        {/* HERO CONTENT */}
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: EASE }}
+            className="max-w-4xl mx-auto space-y-8"
+          >
+            {/* Eyebrow */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#64CEFB] shadow-[0_0_8px_#64CEFB]" />
+              <span className="text-white/40 text-[10px] font-semibold uppercase tracking-[0.2em]">
+                Personal Savings Co-Pilot
+              </span>
+            </div>
 
-          <div className="flex flex-col items-center justify-center text-center px-6 max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.5, ease: PREMIUM_EASE }}
-              className="space-y-12 sm:space-y-16"
-            >
-              <div className="space-y-6 sm:space-y-10">
-                <div className="flex items-center justify-center gap-4 px-6 py-2 bg-white/[0.03] border border-white/[0.05] rounded-full backdrop-blur-3xl mx-auto w-fit">
-                  <div className="w-1 h-1 rounded-full bg-[#64CEFB] shadow-[0_0_10px_#64CEFB]" />
-                  <span className="text-white/30 text-[9px] font-bold uppercase tracking-[0.6em]">
-                    PERSONAL SAVINGS CO-PILOT
-                  </span>
-                </div>
-                <motion.h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[-0.04em] leading-[0.95] uppercase font-display text-balance">
-                  <div className="text-white/90">Master Your</div>
-                  <ShinyText text="Money With Ease" />
-                </motion.h1>
-              </div>
+            {/* Headline */}
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-[-0.03em] leading-[1] text-white">
+              Master Your<br />
+              <ShinyText text="Money With Ease" />
+            </h1>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-6 sm:px-0">
-                <p className="text-white/25 text-sm sm:text-lg max-w-[440px] leading-relaxed font-medium text-balance">
-                  Financial empathy meets smart technology. Track your expenses effortlessly, protect your stash in the vault, and grow with your AI savings buddy.
-                </p>
-                <div className="hidden md:block w-px h-14 bg-white/10" />
-                <div className="space-y-2 text-center md:text-left">
-                  <p className="text-white/10 text-[9px] font-bold uppercase tracking-[0.6em] whitespace-nowrap">STASHED SAFELY</p>
-                  <p className="text-[#64CEFB] text-2xl sm:text-4xl font-bold tracking-tight uppercase tabular-nums">₹1.2CR+ SECURED</p>
-                </div>
-              </div>
+            {/* Subheadline */}
+            <p className="text-white/40 text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+              Financial empathy meets smart technology. Track expenses, lock savings in the vault, and grow with your AI buddy.
+            </p>
 
-              <div className="pt-8 block">
-                <button onClick={handleLogin} className="blue-glass-button px-14 py-7 rounded-2xl text-[11px] font-bold uppercase tracking-[0.6em] group flex items-center gap-3 mx-auto">
-                  Start Your Journey
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
+            {/* CTA */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+              <button
+                onClick={handleLogin}
+                className="group flex items-center gap-2 bg-[#64CEFB] hover:bg-[#57BDED] text-black text-sm font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-[0_0_30px_rgba(100,206,251,0.25)] hover:shadow-[0_0_40px_rgba(100,206,251,0.4)]"
+              >
+                Start Your Journey
+                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
+              <button
+                onClick={handleLogin}
+                className="text-white/40 hover:text-white text-sm font-medium transition-colors duration-200"
+              >
+                Sign in →
+              </button>
+            </div>
+
+            {/* Social proof */}
+            <div className="flex items-center justify-center gap-6 pt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                <span className="text-white/30 text-xs">₹1.2Cr+ secured</span>
               </div>
-            </motion.div>
-          </div>
+              <div className="w-px h-3 bg-white/10" />
+              <span className="text-white/30 text-xs">Trusted by thousands</span>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5">
-        <div className="container mx-auto px-6 max-w-[1600px]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            
-            {/* 1. Assistant Coach */}
+      {/* ── FEATURES ──────────────────────────────────────────────────────── */}
+      <section className="py-24 sm:py-36 border-t border-white/[0.05]">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+
+          {/* Section header */}
+          <div className="mb-16">
+            <p className="text-[#64CEFB] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Platform</p>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white max-w-xl">
+              Everything you need to save smarter
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+            {/* AI Coach — wide */}
             <BentoCard
-              title="AI Assistant Coach"
-              desc="Deep-learning advisor that monitors your patterns and provides real-time voice feedback to optimize your saving strategy."
+              title="AI Savings Coach"
+              desc="Deep-learning advisor that monitors your patterns and provides real-time voice guidance to optimize your strategy."
               icon={Mic}
               className="md:col-span-2"
               visual={
-                <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 pt-6 sm:pt-10 px-4 sm:px-6">
-                  <div className="flex items-end gap-2 h-16">
-                     {[30, 70, 45, 90, 55, 100, 35, 80, 50, 100, 70, 45, 85].map((h, i) => (
-                       <motion.div 
-                         key={i}
-                         animate={{ height: [12, h, 12] }}
-                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.12 }}
-                         className="w-2 bg-gradient-to-t from-[#64CEFB]/10 to-[#64CEFB]/60 rounded-full"
-                         style={{ height: 12 }}
-                       />
-                     ))}
+                <div className="flex items-center gap-6 py-4">
+                  <div className="flex items-end gap-1.5 h-12">
+                    {[30, 70, 45, 90, 55, 100, 35, 80, 50, 100, 70, 45].map((h, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{ height: [8, h * 0.45, 8] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.12 }}
+                        className="w-1.5 bg-[#64CEFB]/40 rounded-full"
+                        style={{ height: 8 }}
+                      />
+                    ))}
                   </div>
-                  <div className="flex flex-col gap-2">
-                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-[#64CEFB] rounded-full animate-pulse" />
-                        <span className="text-[11px] font-bold text-[#64CEFB] uppercase tracking-[0.4em]">NEURAL LINK ACTIVE</span>
-                     </div>
-                     <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest pl-4">Analyzing Spending Habits...</span>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 bg-[#64CEFB] rounded-full animate-pulse" />
+                      <span className="text-[10px] font-semibold text-[#64CEFB] uppercase tracking-widest">Active</span>
+                    </div>
+                    <p className="text-xs text-white/30">Analyzing spending habits…</p>
                   </div>
                 </div>
               }
             />
 
-            {/* 2. Secure Vault */}
+            {/* Vault */}
             <BentoCard
               title="Secure Stash Vault"
-              desc="Tier-1 capital protection. Lock your long-term wealth behind a customized PIN-secure storage layer."
+              desc="PIN-locked storage for your long-term savings. Your money, your rules."
               icon={ShieldCheck}
               visual={
-                <div className="relative h-48 w-full flex items-center justify-center overflow-visible">
-                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(100,206,251,0.12)_0%,transparent_70%)] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                   <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#111111] border border-white/10 shadow-[0_0_60px_rgba(100,206,251,0.05)] flex flex-col items-center justify-center gap-4 group-hover:border-[#64CEFB]/50 transition-all duration-700 z-10">
-                      <div className="grid grid-cols-3 gap-3">
-                         {[1,2,3,4,5,6,7,8,9].map(i => (
-                           <motion.div 
-                             key={i} 
-                             whileHover={{ scale: 1.5, backgroundColor: "#64CEFB" }}
-                             className="w-1.5 h-1.5 rounded-full bg-white/10 transition-colors"
-                           />
-                         ))}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                         <Lock className="w-3.5 h-3.5 text-[#64CEFB]" />
-                         <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest leading-none">ENCRYPTED</span>
-                      </div>
-                   </div>
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-24 h-24 rounded-3xl bg-white/[0.03] border border-white/[0.08] flex flex-col items-center justify-center gap-3 group-hover:border-[#64CEFB]/30 transition-all duration-500">
+                    <div className="grid grid-cols-3 gap-2">
+                      {[1,2,3,4,5,6,7,8,9].map(i => (
+                        <motion.div
+                          key={i}
+                          whileHover={{ scale: 1.6, backgroundColor: "#64CEFB" }}
+                          className="w-1.5 h-1.5 rounded-full bg-white/15"
+                        />
+                      ))}
+                    </div>
+                    <Lock className="w-3.5 h-3.5 text-[#64CEFB]/60" />
+                  </div>
                 </div>
               }
             />
 
-            {/* 3. Daily Milestones */}
+            {/* Rewards */}
             <BentoCard
               title="Growth Rewards"
-              desc="Collect premium tokens and verified badges for your financial discipline and consistency."
+              desc="Earn tokens and badges for consistent saving discipline."
               icon={Coins}
               visual={
-                <div className="flex gap-3 sm:gap-5 pt-6 sm:pt-8 px-4 sm:px-6 overflow-visible">
-                   {[1, 2, 3].map(i => (
-                     <motion.div 
-                       key={i}
-                       whileHover={{ y: -10, rotate: i === 3 ? 15 : -15 }}
-                       className="w-16 h-16 rounded-[24px] flex items-center justify-center border border-white/10 bg-white/5 text-white/20 transition-all cursor-pointer relative hover:bg-[#64CEFB]/10 hover:border-[#64CEFB]/40 hover:text-[#64CEFB] hover:shadow-[0_0_30px_rgba(100,206,251,0.3)]"
-                     >
-                        <div className="absolute inset-0 rounded-[24px] blur-md bg-[#64CEFB]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                        <div className="relative z-10">
-                          {i === 1 ? <Target className="w-7 h-7" /> : i === 2 ? <Zap className="w-7 h-7" /> : <Gem className="w-7 h-7" />}
-                        </div>
-                     </motion.div>
-                   ))}
+                <div className="flex gap-3 py-4">
+                  {[Target, Zap, Gem].map((Icon, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ y: -6 }}
+                      className="w-12 h-12 rounded-2xl flex items-center justify-center border border-white/[0.08] bg-white/[0.03] text-white/30 cursor-pointer hover:border-[#64CEFB]/30 hover:text-[#64CEFB] hover:bg-[#64CEFB]/[0.06] transition-all duration-300"
+                    >
+                      <Icon className="w-5 h-5" />
+                    </motion.div>
+                  ))}
                 </div>
               }
             />
 
-            {/* 4. Smart Insights */}
+            {/* Analytics — wide */}
             <BentoCard
-              title="Precision Data"
-              desc="Interactive capital modeling that visualizes every rupee, revealing hidden saving opportunities automatically."
+              title="Precision Analytics"
+              desc="Interactive capital modeling that reveals hidden saving opportunities automatically."
               icon={BarChart3}
               className="md:col-span-2"
               visual={
-                <div className="h-40 sm:h-52 flex items-end justify-between gap-2 sm:gap-5 px-6 sm:px-12 w-full relative">
-                   <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
-                   {[35, 60, 45, 85, 55, 40, 75, 50, 95, 60].map((h, i) => (
-                    <motion.div 
+                <div className="h-28 flex items-end gap-1.5 w-full relative">
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.06]" />
+                  {[35, 60, 45, 85, 55, 40, 75, 50, 95, 60, 70, 80].map((h, i) => (
+                    <motion.div
                       key={i}
                       onMouseEnter={() => setActiveBar(i)}
                       onMouseLeave={() => setActiveBar(null)}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
-                      transition={{ duration: 1.2, ease: PREMIUM_EASE, delay: i * 0.08 }}
-                      className="flex-1 relative group/bar"
+                      transition={{ duration: 1, ease: EASE, delay: i * 0.06 }}
+                      className="flex-1 relative"
                     >
-                       <motion.div 
-                         animate={{ 
-                           backgroundColor: activeBar === i ? "#64CEFB" : "rgba(100, 206, 251, 0.15)",
-                           boxShadow: activeBar === i ? "0 0 30px rgba(100, 206, 251, 0.4)" : "none"
-                         }}
-                         className="h-full w-full rounded-t-md transition-all duration-300"
-                       />
-                       <AnimatePresence>
-                         {activeBar === i && (
-                           <motion.div 
-                             initial={{ opacity: 0, y: 15, scale: 0.8 }}
-                             animate={{ opacity: 1, y: -45, scale: 1 }}
-                             exit={{ opacity: 0, y: 15, scale: 0.8 }}
-                             className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-2 rounded-2xl text-[11px] font-bold uppercase tracking-tighter shadow-2xl whitespace-nowrap"
-                           >
-                              VALUE: ₹{h * 850}
-                           </motion.div>
-                         )}
-                       </AnimatePresence>
+                      <div
+                        className={`h-full w-full rounded-t transition-all duration-200 ${
+                          activeBar === i
+                            ? "bg-[#64CEFB]"
+                            : "bg-[#64CEFB]/20"
+                        }`}
+                      />
                     </motion.div>
                   ))}
                 </div>
               }
             />
-
           </div>
         </div>
       </section>
 
-      {/* FRIENDLY CHAT SECTION */}
-      <section className="py-24 sm:py-56 bg-black relative z-10 border-t border-white/5 overflow-hidden">
-        <div className="absolute inset-0 bg-[#64CEFB]/[0.01] pointer-events-none" />
-        <div className="container mx-auto px-6 max-w-[1600px]">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
-             <div className="flex-1 space-y-10 relative z-10">
-               <h2 className="text-4xl sm:text-7xl lg:text-9xl font-bold tracking-[-0.04em] leading-[0.85] text-white uppercase font-display text-balance">
-                 Your AI <br />
-                 Savings Buddy.
-               </h2>
-               <p className="text-lg sm:text-2xl text-white/20 leading-relaxed font-medium max-w-xl text-balance">
-                 Friendly, judgment-free advice that helps you save more without changing your lifestyle.
-               </p>
-               <div className="flex flex-wrap gap-3 sm:gap-4 pt-4">
-                  <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5 text-[9px] font-bold uppercase tracking-[0.4em] text-white/20">24/7 ADVISORY</div>
-                  <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5 text-[9px] font-bold uppercase tracking-[0.4em] text-white/20">PRIVACY SECURED</div>
-               </div>
-             </div>
-             
-             <div className="flex-1 w-full space-y-12 sm:space-y-16 relative z-10">
-                {[
-                  { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "AI Coach" },
-                  { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
-                  { text: "Keep going! If you stash ₹500 more, you'll reach 50% of your new laptop goal.", pos: "left", sender: "AI Coach" }
-                ].map((chat, i) => (
-                  <motion.div 
-                    key={i} 
-                    initial={{ opacity: 0, x: chat.pos === 'left' ? -30 : 30, y: 20 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.15 }}
-                    className={`flex flex-col ${chat.pos === 'left' ? 'items-start sm:mr-12' : 'items-end sm:ml-12'}`}
-                  >
-                    <div className={`flex items-center gap-3 mb-3 ${chat.pos === 'right' ? 'flex-row-reverse' : ''}`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${chat.pos === 'left' ? 'bg-[#64CEFB]' : 'bg-white/40'}`} />
-                        <span className={`text-[9px] font-bold uppercase tracking-[0.4em] ${chat.pos === 'left' ? 'text-[#64CEFB]' : 'text-white/40'}`}>{chat.sender}</span>
-                     </div>
-                     
-                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed transition-all duration-500 ice-frost
-                        ${chat.pos === 'left' 
-                          ? 'rounded-bl-none text-white/50' 
-                          : 'bg-[#64CEFB]/[0.05] border-[#64CEFB]/30 text-white/90 rounded-br-none'
-                        }`}
-                      >
-                        {/* Interactive glow for User bubbles */}
-                        {chat.pos === 'right' && (
-                          <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#64CEFB]/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                        )}
-                        
-                        <p className="relative z-10 font-medium tracking-tight leading-normal text-balance">
-                           {chat.text}
-                        </p>
-                      </div>
+      {/* ── CHAT SECTION ──────────────────────────────────────────────────── */}
+      <section className="py-24 sm:py-36 border-t border-white/[0.05]">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+            {/* Left: copy */}
+            <div className="space-y-6">
+              <p className="text-[#64CEFB] text-xs font-semibold uppercase tracking-[0.2em]">AI Coach</p>
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight">
+                Your savings buddy,<br />always in your corner.
+              </h2>
+              <p className="text-white/40 text-base leading-relaxed max-w-sm">
+                Judgment-free advice that helps you save more — without upending your lifestyle.
+              </p>
+              <div className="flex gap-3 flex-wrap">
+                {["24/7 Advisory", "Privacy Secured", "Goal Tracking"].map(t => (
+                  <span key={t} className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.07] text-white/40 text-xs font-medium">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: chat UI */}
+            <div className="space-y-4 w-full">
+              {/* Chat window chrome */}
+              <div className="rounded-2xl bg-white/[0.02] border border-white/[0.07] overflow-hidden">
+
+                {/* Window toolbar */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05]">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                  </div>
+                  <span className="text-white/20 text-[10px] font-medium mx-auto">AI Savings Coach</span>
+                </div>
+
+                {/* Messages */}
+                <div className="p-6 space-y-5">
+                  {[
+                    { text: "Hey! You've stashed ₹2,000 more than last week. Keep it up! 🏆", isAI: true, label: "Coach" },
+                    { text: "That's great! What should I focus on next?", isAI: false, label: "You" },
+                    { text: "₹500 more and you'll hit 50% of your laptop goal. You're on track.", isAI: true, label: "Coach" },
+                  ].map((msg, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: EASE, delay: i * 0.12 }}
+                    >
+                      <ChatBubble {...msg} />
                     </motion.div>
                   ))}
                 </div>
-            </div>
-          </div>
-        </section>
-            {/* FOOTER */}
-      <footer className="bg-[#050505] relative z-10 border-t border-white/5 overflow-hidden font-sans">
-        {/* Grainy Texture Overlay */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02] pointer-events-none" />
-        
-        {/* Ambient Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] bg-[#64CEFB]/[0.015] blur-[150px] pointer-events-none" />
-        
-        <div className="container mx-auto px-6 max-w-[1600px] pt-24 pb-8 relative z-10">
-            <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-16 mb-32">
-               <div className="space-y-10">
-                  <div className="flex items-center gap-4 group cursor-pointer">
-                     <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-700 bg-black shadow-inner">
-                        <div className="w-2.5 h-2.5 bg-white rounded-full group-hover:bg-[#64CEFB] transition-all duration-500 scale-100 group-hover:scale-125 shadow-[0_0_15px_#64CEFB]/0 group-hover:shadow-[0_0_15px_#64CEFB]/50" />
-                     </div>
-                     <span className="text-3xl font-bold tracking-tighter text-white uppercase font-display leading-none">Pocket Fund</span>
-                  </div>
-                  
-                  <div className="max-w-md space-y-6">
-                    <p className="text-white/20 text-sm sm:text-base leading-relaxed font-medium tracking-wide">
-                       We are engineering the future of capital governance. High-performance tooling for the modern individual, without compromise.
-                    </p>
-                    <div className="flex items-center gap-8">
-                       {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
-                         <motion.a 
-                           key={i}
-                           whileHover={{ y: -4, color: "#64CEFB" }}
-                           href="#" 
-                           className="text-white/10 transition-all duration-300"
-                         >
-                            <Icon className="w-4 h-4" />
-                         </motion.a>
-                       ))}
+
+                {/* Input bar */}
+                <div className="px-6 pb-5">
+                  <div className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3">
+                    <span className="text-white/20 text-sm flex-1">Ask your coach…</span>
+                    <div className="w-6 h-6 rounded-lg bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
+                      <ArrowUpRight className="w-3 h-3 text-[#64CEFB]" />
                     </div>
                   </div>
-               </div>
-
-               <div className="flex flex-col items-start lg:items-end gap-10">
-                  <div className="flex flex-col lg:items-end">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-white/10 mb-4 italic">Operational Protocol</span>
-                    <button 
-                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className="group relative flex items-center gap-10 px-0 sm:px-4 py-2 transition-all active:scale-95"
-                    >
-                       <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white/30 group-hover:text-white transition-all duration-500">Return Top</span>
-                       <div className="w-12 h-px bg-white/10 group-hover:bg-[#64CEFB]/40 group-hover:w-20 transition-all duration-700" />
-                    </button>
-               </div>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ────────────────────────────────────────────────────────── */}
+      <footer className="border-t border-white/[0.05] bg-[#030303]">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-16">
+
+          {/* Top row */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10 mb-12">
+
+            {/* Brand */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#64CEFB]/10 border border-[#64CEFB]/20 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-[#64CEFB]" />
+                </div>
+                <span className="text-white font-semibold text-base tracking-tight">Pocket Fund</span>
+              </div>
+              <p className="text-white/30 text-sm max-w-[260px] leading-relaxed">
+                The smarter way to save, track, and grow your money.
+              </p>
             </div>
 
-            <div className="relative overflow-hidden flex justify-center py-8 sm:py-16 w-full">
-                <motion.h2 
-                  initial={{ y: "100%", opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[10vw] sm:text-[12vw] font-bold tracking-[-0.04em] leading-[0.65] text-transparent bg-clip-text bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent uppercase pointer-events-none select-none italic text-center whitespace-nowrap px-4"
+            {/* Links */}
+            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm text-white/40">
+              <div className="space-y-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/20 mb-4">Product</p>
+                {["Dashboard", "Vault", "Analytics", "AI Coach"].map(link => (
+                  <a key={link} href="#" onClick={handleLogin} className="block hover:text-white transition-colors duration-200">{link}</a>
+                ))}
+              </div>
+              <div className="space-y-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/20 mb-4">Company</p>
+                {["About", "Privacy", "Terms"].map(link => (
+                  <a key={link} href="#" className="block hover:text-white transition-colors duration-200">{link}</a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-white/[0.06] mb-8" />
+
+          {/* Bottom row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/25 text-xs">© 2026 Pocket Fund. All rights reserved.</p>
+
+            <div className="flex items-center gap-5">
+              {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
+                <motion.a
+                  key={i}
+                  href="#"
+                  whileHover={{ y: -2 }}
+                  className="text-white/20 hover:text-white/60 transition-colors duration-200"
                 >
-                   Pocket Fund
-                </motion.h2>
+                  <Icon className="w-4 h-4" />
+                </motion.a>
+              ))}
             </div>
 
-            {/* SYSTEM STATUS BAR */}
-            <div className="mt-8 sm:mt-16 pt-8 border-t border-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6 opacity-30 group/status hover:opacity-100 transition-opacity duration-700">
-               <div className="flex items-center gap-8 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                    <span>System Nominal</span>
-                  </div>
-                  <span className="hidden sm:block text-white/10">|</span>
-                  <p>v1.0.42_ARCHITECT</p>
-               </div>
-               
-               <p className="text-[9px] font-bold uppercase tracking-[0.8em] text-white/20 text-center">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
-               
-               <div className="flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
-                  <span className="hidden md:block">Region: Global_Edge</span>
-                  <span className="hidden md:block text-white/10">|</span>
-                  <span>Latency: 14ms</span>
-               </div>
-            </div>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-white/25 hover:text-white text-xs font-medium transition-colors duration-200 flex items-center gap-1.5"
+            >
+              Back to top
+              <span className="rotate-[-90deg] inline-block">→</span>
+            </button>
+          </div>
         </div>
       </footer>
     </div>
-   );
+  );
 }
