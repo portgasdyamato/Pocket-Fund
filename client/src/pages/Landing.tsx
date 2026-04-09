@@ -155,174 +155,99 @@ const BentoCard = ({
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ onLogin }: { onLogin: () => void }) {
-  const navLinks = ["Features", "Pricing", "Security", "Analytics"];
-  const socials = [
-    { Icon: Twitter, label: "Twitter" },
-    { Icon: Instagram, label: "Instagram" },
-    { Icon: Linkedin, label: "LinkedIn" },
-    { Icon: Github, label: "GitHub" },
-  ];
+  const navLinks = ["Features", "Pricing", "Security", "Analytics", "Team"];
 
   return (
     <footer
-      className="relative w-full overflow-hidden"
-      style={{ background: "#000", borderTop: "1px solid rgba(255,255,255,0.04)" }}
+      className="relative w-full overflow-hidden flex flex-col justify-end"
+      style={{
+        background: "#000",
+        minHeight: "70vh",
+        borderTop: "1px solid rgba(255,255,255,0.04)"
+      }}
     >
-      {/* Ambient glow - subtle, not dominant */}
+      {/* Ambient glow */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+        className="absolute top-0 right-0 pointer-events-none"
         style={{
           width: "800px",
-          height: "200px",
-          background: `radial-gradient(ellipse, rgba(100,206,251,0.04) 0%, transparent 70%)`,
-          filter: "blur(40px)",
+          height: "600px",
+          background: `radial-gradient(ellipse at top right, rgba(100,206,251,0.06) 0%, transparent 60%)`,
+          filter: "blur(60px)",
         }}
       />
 
-      {/* Foreground 3-column grid — sits ON TOP */}
-      <div className="relative z-10 container mx-auto px-6 max-w-[1400px] pt-20 pb-10">
-        <div
-          className="rounded-[24px] p-8 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-12 mb-0"
-          style={frost}
-        >
-          {/* Col 1: Brand */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: EASE }}
-            className="space-y-6"
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: "rgba(100,206,251,0.06)", border: "1px solid rgba(100,206,251,0.15)" }}
-              >
-                <div className="w-2 h-2 rounded-full" style={{ background: ACCENT }} />
-              </div>
-              <span className="text-xl font-bold tracking-[-0.02em] text-white/85 uppercase">
-                Pocket Fund
-              </span>
-            </div>
-            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
-              Engineering the next generation of personal finance — purposeful, private, and precise.
-            </p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em]" style={{ color: "rgba(100,206,251,0.25)" }}>
-              © 2026 Pocket Fund Inc.
-            </p>
-          </motion.div>
-
-          {/* Col 2: Nav */}
-          <div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.5em] mb-7" style={{ color: "rgba(255,255,255,0.2)" }}>
-              Navigation
-            </p>
-            <div className="space-y-3.5">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link}
-                  href="#"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, ease: EASE, delay: i * 0.08 }}
-                  className="flex items-center gap-3 text-sm group/link transition-all duration-300"
-                  style={{ color: "rgba(255,255,255,0.3)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; }}
-                >
-                  <div
-                    className="w-4 h-px group-link-hover:w-6 transition-all duration-300"
-                    style={{ background: "rgba(100,206,251,0.25)" }}
-                  />
-                  {link}
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          {/* Col 3: Socials + Back to top */}
-          <div className="space-y-8">
-            <div>
-              <p className="text-[9px] font-bold uppercase tracking-[0.5em] mb-7" style={{ color: "rgba(255,255,255,0.2)" }}>
-                Connect
-              </p>
-              <div className="flex items-center gap-4">
-                {socials.map(({ Icon, label }, i) => (
-                  <motion.a
-                    key={label}
-                    href="#"
-                    aria-label={label}
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, ease: EASE, delay: i * 0.08 }}
-                    whileHover={{ y: -3 }}
-                    className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.8)";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.07)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.3)";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                    }}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-
-            {/* Clean "Back to top" — no glow, just text + arrow */}
-            <motion.button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              whileTap={{ scale: 0.97 }}
-              className="group flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-300"
-              style={{ color: "rgba(255,255,255,0.25)", background: "none", border: "none", padding: 0 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.7)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }}
-            >
-              Back to top
-              <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform duration-300" />
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Status bar */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
-          <div className="flex items-center gap-2.5">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#22c55e" }} />
-            <span className="text-[9px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.15)" }}>
-              All Systems Nominal
+      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col pt-24 pb-12 sm:pb-20">
+        
+        {/* Top Section: CTA / Headline */}
+        <div className="max-w-4xl space-y-6">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: ACCENT, boxShadow: `0 0 8px ${ACCENT}` }} />
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
+              Contact Us
             </span>
           </div>
-          <span className="text-[9px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.1)" }}>
-            v1.0.42 · Global Edge · 14ms
-          </span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1] text-white/90">
+            Interested in taking control, scaling your wealth <span style={{ color: "rgba(255,255,255,0.4)" }}>or simply learning more?</span>
+          </h2>
         </div>
+
+        {/* Spacer pushes the bottom row down */}
+        <div className="flex-1 min-h-[80px] sm:min-h-[160px]" />
+
+        {/* Middle Section: Contact & Horizontal Nav */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-12">
+          {/* Left: Email */}
+          <div className="space-y-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.3)" }}>
+              Contact Pocket Fund at:
+            </p>
+            <a
+              href="mailto:hello@pocketfund.in"
+              className="group inline-flex items-center gap-3 text-lg sm:text-xl font-medium transition-colors"
+              style={{ color: "rgba(255,255,255,0.9)" }}
+            >
+              hello@pocketfund.in
+              <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+          </div>
+
+          {/* Right: Horizontal Nav */}
+          <div className="flex flex-wrap gap-x-8 gap-y-4">
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link}
+                href="#"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, ease: EASE, delay: i * 0.1 }}
+                className="text-sm font-medium transition-colors duration-300"
+                style={{ color: "rgba(255,255,255,0.5)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}
+              >
+                {link}
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
       </div>
 
-      {/* ── Massive Typography — UNDER the content, clipped to container ── */}
-      <div
-        className="w-full overflow-hidden select-none pointer-events-none"
-        style={{ marginTop: "-60px" }}
-      >
+      {/* ── Massive Sliding Typography (Bottom aligned) ── */}
+      <div className="w-full overflow-hidden select-none pointer-events-none relative flex flex-col justify-end">
         <motion.div
-          initial={{ opacity: 0, y: 120, filter: "blur(12px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: "100%" }}
+          whileInView={{ opacity: 1, y: "15%" }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 1.6, ease: EASE }}
-          className="text-center font-black uppercase leading-none whitespace-nowrap"
+          className="text-center font-black uppercase leading-[0.7] whitespace-nowrap"
           style={{
-            fontSize: "clamp(80px, 14vw, 220px)",
+            fontSize: "clamp(60px, 18vw, 320px)",
             color: "transparent",
-            WebkitTextStroke: "1px rgba(100,206,251,0.07)",
+            WebkitTextStroke: "1px rgba(255,255,255,0.06)",
             letterSpacing: "-0.04em",
-            paddingBottom: "2rem",
           }}
         >
           POCKET FUND
