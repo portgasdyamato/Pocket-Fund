@@ -254,9 +254,9 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full relative select-none pointer-events-none overflow-visible">
+      <div className="w-full relative select-none pointer-events-none overflow-visible mt-auto">
         <motion.div
-          initial={{ opacity: 0, y: 120 }}
+          initial={{ opacity: 0, y: 200 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.05 }}
           transition={{ duration: 1.8, ease: EASE }}
