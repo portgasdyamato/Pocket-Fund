@@ -244,9 +244,10 @@ function Footer({ onLogin }: { onLogin: () => void }) {
           transition={{ duration: 1.2, ease: EASE }}
           className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
           style={{
-            fontSize: "clamp(60px, 18vw, 320px)",
-            color: "transparent",
-            WebkitTextStroke: "1px rgba(255,255,255,0.08)",
+            fontSize: "clamp(50px, 16vw, 320px)",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
             letterSpacing: "-0.04em",
           }}
         >
@@ -630,8 +631,9 @@ export default function Landing() {
                                 color: "rgba(255,255,255,0.6)"
                               }
                             : {
-                                background: "rgba(100,206,251,0.1)",
-                                border: "1px solid rgba(100,206,251,0.2)",
+                                background: "linear-gradient(135deg, #0A84FF 0%, #005EEA 100%)",
+                                boxShadow: "0 4px 14px rgba(10, 132, 255, 0.3)",
+                                border: "1px solid rgba(255,255,255,0.1)",
                                 color: "#ffffff"
                               }
                         }
