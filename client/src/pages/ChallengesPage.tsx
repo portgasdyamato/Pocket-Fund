@@ -119,7 +119,7 @@ export default function ChallengesPage() {
         >
           {/* Performance Overview */}
           <motion.div variants={item}>
-            <div className="p-8 rounded-[40px] glass-morphism border-white/5 relative overflow-hidden">
+            <div className="p-8 rounded-[40px] ice-frost border-white/5 relative overflow-hidden">
                <div className="absolute top-0 right-0 p-12 opacity-[0.02]">
                   <Trophy className="w-64 h-64 text-primary" />
                </div>

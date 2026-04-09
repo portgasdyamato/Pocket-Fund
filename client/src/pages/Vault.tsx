@@ -244,7 +244,7 @@ export default function GlowUp() {
                 Secure Vault
               </Button>
             </DialogTrigger>
-            <DialogContent className="glass-morphism border-white/10 text-white p-8">
+            <DialogContent className="ice-frost border-white/10 text-white p-8">
                <AnimatePresence mode="wait">
                 {vaultStep === 'action' ? (
                   <motion.div
@@ -438,7 +438,7 @@ export default function GlowUp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="group relative overflow-hidden glass-morphism border-white/5 p-8 sm:p-12 text-center">
+          <Card className="group relative overflow-hidden ice-frost border-white/5 p-8 sm:p-12 text-center">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-50 pointer-events-none" />
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-4 sm:mb-6">
@@ -496,7 +496,7 @@ export default function GlowUp() {
               const isReadyToClaim = current >= target;
               return (
                 <motion.div key={goal.id} variants={item}>
-                  <Card className="group relative overflow-hidden glass-morphism border-white/5 p-8 h-full hover:scale-[1.02] transition-all duration-300">
+                  <Card className="group relative overflow-hidden ice-frost border-white/5 p-8 h-full hover:scale-[1.02] transition-all duration-300">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div className="flex justify-between items-start mb-8">
@@ -559,7 +559,7 @@ export default function GlowUp() {
             })}
             
             <Dialog open={isNewGoalOpen} onOpenChange={setIsNewGoalOpen}>
-               <DialogContent className="glass-morphism border-white/10 text-white p-8">
+               <DialogContent className="ice-frost border-white/10 text-white p-8">
                  <DialogHeader>
                    <DialogTitle className="text-3xl font-black">Create Savings Goal</DialogTitle>
                  </DialogHeader>
@@ -633,7 +633,7 @@ export default function GlowUp() {
                   Export
                 </Button>
               </div>
-              <div className="glass-morphism border-white/5 rounded-3xl overflow-hidden">
+              <div className="ice-frost border-white/5 rounded-3xl overflow-hidden">
                  {stashTransactions.length > 0 ? (
                     <div className="divide-y divide-white/[0.03]">
                       {stashTransactions.slice(0, 8).map((t) => (

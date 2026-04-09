@@ -59,7 +59,7 @@ export default function HealthScoreCard({ score, message }: HealthScoreCardProps
   const gradientId = `scoreGradient-${info.label}`;
 
   return (
-    <Card className="glass-morphism border-white/5 p-8 h-full relative group min-h-[420px] flex flex-col justify-between overflow-hidden">
+    <Card className="ice-frost border-white/5 p-8 h-full relative group min-h-[420px] flex flex-col justify-between overflow-hidden">
       {/* Carbon Fibre Texture Overlay Only */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
 

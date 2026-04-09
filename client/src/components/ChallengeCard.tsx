@@ -57,7 +57,7 @@ export default function ChallengeCard({
       whileHover={{ y: -5, scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
-      <Card className={`group relative overflow-hidden glass-morphism border-white/5 p-6 h-full transition-all duration-300 ${isCompleted ? 'opacity-80' : ''}`} data-testid={`card-challenge-${id}`}>
+      <Card className={`group relative overflow-hidden ice-frost border-white/5 p-6 h-full transition-all duration-300 ${isCompleted ? 'opacity-80' : ''}`} data-testid={`card-challenge-${id}`}>
         {/* Glow Effect on Hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         

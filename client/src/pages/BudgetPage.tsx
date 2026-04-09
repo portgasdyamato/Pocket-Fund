@@ -72,7 +72,7 @@ export default function BudgetPage() {
         >
           {/* Main Console */}
           <motion.div variants={item}>
-            <div className="relative p-10 rounded-[40px] glass-morphism border-white/5 overflow-hidden group">
+            <div className="relative p-10 rounded-[40px] ice-frost border-white/5 overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary animate-pulse" />
               <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
               
@@ -154,7 +154,7 @@ export default function BudgetPage() {
 
           {/* Tactical Advice */}
           <motion.div variants={item}>
-            <div className="p-8 rounded-[40px] glass-morphism border-primary/20 bg-primary/[0.03] flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
+            <div className="p-8 rounded-[40px] ice-frost border-primary/20 bg-primary/[0.03] flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
                <div className="absolute top-0 right-0 p-12 opacity-5">
                   <Shield className="w-48 h-48 text-primary" />
                </div>

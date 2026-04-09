@@ -233,7 +233,7 @@ export default function ExpenseLog() {
 
           {/* High-Level Stats Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="glass-morphism border-white/5 p-6 sm:p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
+            <Card className="ice-frost border-white/5 p-6 sm:p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Monthly Volume</p>
               <h3 className="text-3xl sm:text-4xl font-black tabular-nums tracking-tighter">₹{stats.total.toLocaleString('en-IN')}</h3>
@@ -242,7 +242,7 @@ export default function ExpenseLog() {
                 <span>Global Spending Active</span>
               </div>
             </Card>
-            <Card className="glass-morphism border-white/5 p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
+            <Card className="ice-frost border-white/5 p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Pending Review</p>
               <h3 className="text-4xl font-black tabular-nums tracking-tighter">{stats.untagged} Items</h3>
@@ -251,7 +251,7 @@ export default function ExpenseLog() {
                 <span>Deep Analysis Required</span>
               </div>
             </Card>
-            <Card className="glass-morphism border-white/5 p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
+            <Card className="ice-frost border-white/5 p-8 space-y-2 group overflow-hidden relative rounded-[32px]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Financial IQ</p>
               <h3 className="text-4xl font-black tabular-nums tracking-tighter">{stats.efficiency}%</h3>
@@ -422,7 +422,7 @@ export default function ExpenseLog() {
                       <motion.div
                         key={t.id}
                         variants={item}
-                        className="group flex items-center gap-6 p-6 rounded-[32px] glass-morphism border-white/5 hover:border-white/20 hover:bg-white/[0.03] transition-all cursor-pointer relative overflow-hidden"
+                        className="group flex items-center gap-6 p-6 rounded-[32px] ice-frost border-white/5 hover:border-white/20 hover:bg-white/[0.03] transition-all cursor-pointer relative overflow-hidden"
                       >
                         {/* Hover Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

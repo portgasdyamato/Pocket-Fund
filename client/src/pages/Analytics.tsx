@@ -134,7 +134,7 @@ export default function Analytics() {
           </motion.div>
 
           <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-6 h-full relative overflow-hidden group">
+            <Card className="ice-frost border-white/5 p-6 h-full relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Total Savings</p>
               <div className="flex items-end justify-between">
@@ -148,7 +148,7 @@ export default function Analytics() {
           </motion.div>
 
           <motion.div variants={item}>
-            <Card className="glass-morphism border-white/5 p-6 h-full relative overflow-hidden group">
+            <Card className="ice-frost border-white/5 p-6 h-full relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">Savings Rate</p>
               <div className="flex items-end justify-between">
@@ -167,7 +167,7 @@ export default function Analytics() {
           
           {/* Spending Intent Breakdown (Needs/Wants/Icks) */}
           <motion.div variants={item} initial="hidden" animate="show" transition={{ delay: 0.3 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full flex flex-col">
+            <Card className="ice-frost border-white/5 p-8 h-full flex flex-col">
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-bold">Spending Intent</h3>
@@ -206,7 +206,7 @@ export default function Analytics() {
 
           {/* Category Distribution */}
           <motion.div variants={item} initial="hidden" animate="show" transition={{ delay: 0.4 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full flex flex-col">
+            <Card className="ice-frost border-white/5 p-8 h-full flex flex-col">
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-bold">Category Distribution</h3>
@@ -235,7 +235,7 @@ export default function Analytics() {
 
           {/* Spending Over Time */}
           <motion.div variants={item} className="lg:col-span-2" initial="hidden" animate="show" transition={{ delay: 0.5 }}>
-            <Card className="glass-morphism border-white/5 p-8 h-full">
+            <Card className="ice-frost border-white/5 p-8 h-full">
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-bold">Monthly Spending Trend</h3>

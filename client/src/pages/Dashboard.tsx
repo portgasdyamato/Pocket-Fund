@@ -531,7 +531,7 @@ export default function Dashboard() {
                     />
                   ))
                 ) : (
-                  <div className="col-span-2 glass-morphism border-white/5 p-12 text-center rounded-3xl">
+                  <div className="col-span-2 ice-frost border-white/5 p-12 text-center rounded-3xl">
                     <Trophy className="w-12 h-12 text-white/10 mx-auto mb-4" />
                     <p className="text-white/40 font-medium">No challenges available.</p>
                   </div>
