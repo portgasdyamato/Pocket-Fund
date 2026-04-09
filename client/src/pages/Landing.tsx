@@ -162,10 +162,10 @@ function Footer({ onLogin }: { onLogin: () => void }) {
 
   return (
     <footer
-      className="relative w-full overflow-hidden flex flex-col justify-end"
+      className="relative w-full flex flex-col justify-between"
       style={{
         background: "#000",
-        height: "100vh",
+        minHeight: "100vh",
         borderTop: "1px solid rgba(255,255,255,0.04)"
       }}
     >
@@ -180,7 +180,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         }}
       />
 
-      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col pt-24 pb-12 sm:pb-20">
+      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col pt-16 sm:pt-24 pb-8 sm:pb-12">
         
         {/* Top Section: CTA / Headline */}
         <div className="max-w-4xl space-y-6">
@@ -199,7 +199,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         <div className="flex-1 min-h-[40px] sm:min-h-[80px]" />
 
         {/* Middle Section: Contact & Horizontal Nav */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-8">
           {/* Left: Buttons replacing email per request */}
           <div className="space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.3)" }}>
@@ -241,15 +241,15 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full flex justify-center select-none pointer-events-none mt-auto overflow-hidden">
+      <div className="w-full flex justify-center select-none pointer-events-none overflow-hidden pb-4">
         <motion.div
-          initial={{ opacity: 0, y: "100%" }}
+          initial={{ opacity: 0, y: "150%" }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "50px" }}
           transition={{ duration: 1.2, ease: EASE }}
-          className="text-center font-black uppercase leading-normal whitespace-nowrap block pb-8 sm:pb-12"
+          className="text-center font-black uppercase leading-[0.75] whitespace-nowrap block"
           style={{
-            fontSize: "clamp(40px, 13.5vw, 260px)",
+            fontSize: "clamp(40px, 13vw, 260px)",
             background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
