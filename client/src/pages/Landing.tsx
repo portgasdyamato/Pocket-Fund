@@ -399,8 +399,9 @@ export default function Landing() {
                        <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white/30 group-hover:text-white transition-all duration-500">Return Top</span>
                        <div className="w-12 h-px bg-white/10 group-hover:bg-[#64CEFB]/40 group-hover:w-20 transition-all duration-700" />
                     </button>
-                  </div>
                </div>
+            </div>
+
             <div className="relative overflow-hidden flex justify-center py-8 sm:py-16 w-full">
                 <motion.h2 
                   initial={{ y: "100%", opacity: 0 }}
