@@ -184,9 +184,9 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         
         {/* Top Section: CTA / Headline */}
         <div className="max-w-4xl space-y-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 px-5 py-2.5 rounded-full ice-frost w-fit">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: ACCENT, boxShadow: `0 0 8px ${ACCENT}` }} />
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.8)" }}>
               Contact Us
             </span>
           </div>
@@ -247,7 +247,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "50px" }}
           transition={{ duration: 1.2, ease: EASE }}
-          className="text-center font-black uppercase leading-none whitespace-nowrap block pb-4"
+          className="text-center font-black uppercase leading-normal whitespace-nowrap block pb-8 sm:pb-12"
           style={{
             fontSize: "clamp(40px, 13.5vw, 260px)",
             background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%)",
@@ -335,11 +335,9 @@ export default function Landing() {
             className="flex flex-col items-center text-center space-y-10 max-w-5xl mx-auto"
           >
             {/* Eyebrow */}
-            <div className="flex items-center gap-3 px-5 py-2 rounded-full"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-            >
+            <div className="flex items-center gap-3 px-5 py-2.5 rounded-full ice-frost">
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: ACCENT, boxShadow: `0 0 6px ${ACCENT}` }} />
-              <span className="text-[9px] font-bold uppercase tracking-[0.6em]" style={{ color: "rgba(255,255,255,0.3)" }}>
+              <span className="text-[9px] font-bold uppercase tracking-[0.6em]" style={{ color: "rgba(255,255,255,0.8)" }}>
                 Personal Savings Co-Pilot
               </span>
             </div>
