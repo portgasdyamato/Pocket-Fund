@@ -316,15 +316,9 @@ export default function Landing() {
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: EASE }}
-              className="flex items-center gap-2"
             >
-              <PremiumButton onClick={handleLogin} variant="default" className="px-6 py-2.5 rounded-[32px] text-base font-normal">
+              <PremiumButton onClick={handleLogin} variant="default" className="px-6 py-2.5 rounded-[32px] text-sm sm:text-base font-normal">
                 Sign In
-              </PremiumButton>
-              <PremiumButton onClick={handleLogin} variant="default" className="w-[44px] h-[44px] rounded-full flex items-center justify-center p-0">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                  <path d="M12 19V5M5 12l7-7 7 7"/>
-                </svg>
               </PremiumButton>
             </motion.div>
           </div>
@@ -371,18 +365,13 @@ export default function Landing() {
             </div>
 
             {/* CTA — clean pill, no glow overload */}
-            <div className="flex items-center gap-3 mt-6">
+            <div className="mt-6">
               <PremiumButton
                 onClick={handleLogin}
                 variant="default"
                 className="px-8 py-3.5 rounded-[32px] text-[15px] font-normal"
               >
                 Start Your Journey
-              </PremiumButton>
-              <PremiumButton onClick={handleLogin} variant="default" className="w-[52px] h-[52px] rounded-full flex items-center justify-center p-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                  <path d="M12 19V5M5 12l7-7 7 7"/>
-                </svg>
               </PremiumButton>
             </div>
           </motion.div>
