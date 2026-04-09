@@ -179,7 +179,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
 
   return (
     <footer
-      className="relative w-full py-24 sm:py-32 flex flex-col items-center"
+      className="relative w-full pt-24 sm:pt-32 flex flex-col items-center"
       style={{
         background: "#000",
         borderTop: "1px solid rgba(255,255,255,0.04)"
@@ -196,7 +196,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         }}
       />
 
-      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col pt-16 sm:pt-24 pb-8 sm:pb-12">
+      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col gap-12">
         
         {/* Top Section: CTA / Headline */}
         <div className="max-w-4xl space-y-6">
@@ -210,9 +210,6 @@ function Footer({ onLogin }: { onLogin: () => void }) {
             Interested in taking control, scaling your wealth <span style={{ color: "rgba(255,255,255,0.4)" }}>or simply learning more?</span>
           </h2>
         </div>
-
-        {/* Spacer pushes the bottom row down */}
-        <div className="flex-1 min-h-[40px] sm:min-h-[80px]" />
 
         {/* Middle Section: Contact & Horizontal Nav */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-8">
@@ -257,7 +254,7 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full relative select-none pointer-events-none pb-8 sm:pb-12 overflow-visible">
+      <div className="w-full relative select-none pointer-events-none overflow-visible">
         <motion.div
           initial={{ opacity: 0, y: 120 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -702,7 +699,7 @@ export default function Landing() {
                                 background: "linear-gradient(135deg, #64CEFB 0%, #3b82f6 100%)", // Brand Blue (Primary)
                                 boxShadow: "0 8px 24px rgba(100, 206, 251, 0.3)",
                                 border: "1px solid rgba(255,255,255,0.2)",
-                                color: "#000000"
+                                color: "#ffffff"
                               }
                         }
                       >
