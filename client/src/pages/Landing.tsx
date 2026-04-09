@@ -94,13 +94,13 @@ export default function Landing() {
     <div className="min-h-screen bg-[#000000] text-white selection:bg-[#64CEFB]/30 relative overflow-x-hidden">
       
       {/* HERO SECTION */}
-      <section className="relative h-screen w-full bg-black overflow-hidden flex flex-col justify-center">
+      <section className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col pt-32 pb-24 sm:py-0 sm:justify-center">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-30"
         >
           <source 
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_105406_16f4600d-7a92-4292-b96e-b19156c7830a.mp4" 
@@ -108,8 +108,8 @@ export default function Landing() {
           />
         </video>
 
-        <div className="relative z-10 w-full flex flex-col items-center h-full">
-          <nav className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 pt-6 sm:pt-10 pb-4 flex items-center justify-between">
+        <div className="relative z-10 w-full flex flex-col items-center">
+          <nav className="absolute top-0 left-0 w-full max-w-[1600px] mx-auto px-6 sm:px-10 py-6 sm:py-10 flex items-center justify-between">
             <div className="flex items-center gap-3 group cursor-pointer">
               <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#64CEFB]/40 transition-all duration-500">
                 <div className="w-2 h-2 bg-white rounded-full group-hover:bg-[#64CEFB] transition-colors" />
@@ -119,38 +119,41 @@ export default function Landing() {
             <button onClick={handleLogin} className="text-white/30 hover:text-white text-[9px] font-bold uppercase tracking-[0.5em] transition-all px-4 py-2 rounded-full border border-transparent hover:border-white/5 hover:bg-white/[0.02]">SIGN IN</button>
           </nav>
 
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-6 max-h-[85vh]">
+          <div className="flex flex-col items-center justify-center text-center px-6 max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.5, ease: PREMIUM_EASE }}
-              className="max-w-6xl space-y-12"
+              className="space-y-12 sm:space-y-16"
             >
               <div className="space-y-6 sm:space-y-10">
-                <span className="text-[#64CEFB] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.5em] px-5 py-2 rounded-full bg-[#64CEFB]/5 border border-[#64CEFB]/20 inline-block">
-                  PERSONAL SAVINGS CO-PILOT
-                </span>
-                <motion.h1 className="text-4xl sm:text-7xl lg:text-[8.5rem] font-bold tracking-[-0.04em] leading-[0.9] uppercase font-display text-balance">
+                <div className="flex items-center justify-center gap-4 px-6 py-2 bg-white/[0.03] border border-white/[0.05] rounded-full backdrop-blur-3xl mx-auto w-fit">
+                  <div className="w-1 h-1 rounded-full bg-[#64CEFB] shadow-[0_0_10px_#64CEFB]" />
+                  <span className="text-white/30 text-[9px] font-bold uppercase tracking-[0.6em]">
+                    PERSONAL SAVINGS CO-PILOT
+                  </span>
+                </div>
+                <motion.h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[-0.04em] leading-[0.95] uppercase font-display text-balance">
                   <div className="text-white/90">Master Your</div>
                   <ShinyText text="Money With Ease" />
                 </motion.h1>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 pt-6 px-6 sm:px-0">
-                <p className="text-white/25 text-sm sm:text-base max-w-[440px] leading-relaxed font-medium text-balance">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-6 sm:px-0">
+                <p className="text-white/25 text-sm sm:text-lg max-w-[440px] leading-relaxed font-medium text-balance">
                   Financial empathy meets smart technology. Track your expenses effortlessly, protect your stash in the vault, and grow with your AI savings buddy.
                 </p>
                 <div className="hidden md:block w-px h-14 bg-white/10" />
                 <div className="space-y-2 text-center md:text-left">
                   <p className="text-white/10 text-[9px] font-bold uppercase tracking-[0.6em] whitespace-nowrap">STASHED SAFELY</p>
-                  <p className="text-[#64CEFB] text-[18px] sm:text-[22px] font-bold tracking-tight uppercase tabular-nums">₹1.2CR+ SECURED</p>
+                  <p className="text-[#64CEFB] text-2xl sm:text-4xl font-bold tracking-tight uppercase tabular-nums">₹1.2CR+ SECURED</p>
                 </div>
               </div>
 
-              <div className="pt-12 sm:pt-16">
-                <Button onClick={handleLogin} className="group relative bg-[#64CEFB] text-black hover:bg-[#4FB7E5] rounded-full px-10 sm:px-14 py-6 sm:py-8 text-xs sm:text-sm font-bold uppercase tracking-[0.4em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(100,206,251,0.2)]">
+              <div className="pt-8 block">
+                <Button onClick={handleLogin} className="group relative bg-[#64CEFB] text-black hover:bg-[#4FB7E5] rounded-full px-12 sm:px-16 py-6 sm:py-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.5em] transition-all active:scale-95 shadow-[0_20px_40px_rgba(100,206,251,0.3)]">
                   Start Your Journey
-                  <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowUpRight className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </Button>
               </div>
             </motion.div>
@@ -310,7 +313,7 @@ export default function Landing() {
                </div>
              </div>
              
-             <div className="flex-1 w-full space-y-8 relative z-10">
+             <div className="flex-1 w-full space-y-12 sm:space-y-16 relative z-10">
                 {[
                   { text: "Hey! You've stashed ₹2,000 more than usual this week. Huge win! 🏆", pos: "left", sender: "AI Coach" },
                   { text: "That's awesome! What's next for my savings goal?", pos: "right", sender: "You" },
@@ -318,29 +321,29 @@ export default function Landing() {
                 ].map((chat, i) => (
                   <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    initial={{ opacity: 0, x: chat.pos === 'left' ? -30 : 30, y: 20 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
                     transition={{ duration: 0.8, ease: PREMIUM_EASE, delay: i * 0.15 }}
-                    className={`flex flex-col ${chat.pos === 'left' ? 'items-start' : 'items-end'}`}
+                    className={`flex flex-col ${chat.pos === 'left' ? 'items-start sm:mr-12' : 'items-end sm:ml-12'}`}
                   >
-                    <div className={`flex items-center gap-2 mb-4 ${chat.pos === 'right' ? 'flex-row-reverse' : ''}`}>
-                        {chat.pos === 'left' && <div className="w-1 h-1 rounded-full bg-[#64CEFB]/50" />}
-                        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.4em] font-display">{chat.sender}</span>
+                    <div className={`flex items-center gap-3 mb-3 ${chat.pos === 'right' ? 'flex-row-reverse' : ''}`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${chat.pos === 'left' ? 'bg-[#64CEFB]' : 'bg-white/40'}`} />
+                        <span className={`text-[9px] font-bold uppercase tracking-[0.4em] ${chat.pos === 'left' ? 'text-[#64CEFB]' : 'text-white/40'}`}>{chat.sender}</span>
                      </div>
                      
-                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[28px] max-w-[90%] sm:max-w-md text-sm sm:text-base leading-relaxed border transition-all duration-500 cursor-default
+                     <div className={`group relative px-6 sm:px-10 py-5 sm:py-8 rounded-[32px] max-w-[90%] sm:max-w-md text-sm sm:text-lg leading-relaxed border transition-all duration-500
                         ${chat.pos === 'left' 
-                          ? 'bg-white/[0.015] border-white/5 text-white/40 backdrop-blur-3xl hover:bg-white/[0.03] hover:border-white/10' 
-                          : 'bg-white/[0.04] border-[#64CEFB]/20 text-white/80 backdrop-blur-3xl hover:border-[#64CEFB]/40 hover:bg-white/[0.06]'
+                          ? 'bg-white/[0.015] border-white/5 text-white/40 backdrop-blur-3xl hover:bg-white/[0.03] hover:border-white/10 rounded-bl-none' 
+                          : 'bg-[#64CEFB]/[0.05] border-[#64CEFB]/20 text-white/90 backdrop-blur-3xl hover:border-[#64CEFB]/50 hover:bg-[#64CEFB]/[0.08] rounded-br-none'
                         }`}
                       >
-                        {/* Subtle accent line for User bubbles */}
+                        {/* Interactive glow for User bubbles */}
                         {chat.pos === 'right' && (
-                          <div className="absolute top-0 right-0 w-10 h-px bg-gradient-to-l from-[#64CEFB]/40 to-transparent" />
+                          <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#64CEFB]/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                         )}
                         
-                        <p className="font-medium tracking-tight">
-                          {chat.text}
+                        <p className="relative z-10 font-medium tracking-tight leading-normal text-balance">
+                           {chat.text}
                         </p>
                       </div>
                     </motion.div>
@@ -398,22 +401,19 @@ export default function Landing() {
                     </button>
                   </div>
                </div>
-            </div>
-
-            {/* BIG BRAND MARK */}
-            <div className="relative overflow-visible flex justify-center py-16">
+            <div className="relative overflow-hidden flex justify-center py-8 sm:py-16 w-full">
                 <motion.h2 
                   initial={{ y: "100%", opacity: 0 }}
                   whileInView={{ y: 0, opacity: 1 }}
                   transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[14vw] font-bold tracking-[-0.04em] leading-[0.65] text-transparent bg-clip-text bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent uppercase pointer-events-none select-none italic"
+                  className="text-[10vw] sm:text-[12vw] font-bold tracking-[-0.04em] leading-[0.65] text-transparent bg-clip-text bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent uppercase pointer-events-none select-none italic text-center whitespace-nowrap px-4"
                 >
                    Pocket Fund
                 </motion.h2>
             </div>
 
             {/* SYSTEM STATUS BAR */}
-            <div className="mt-16 pt-8 border-t border-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6 opacity-30 group/status hover:opacity-100 transition-opacity duration-700">
+            <div className="mt-8 sm:mt-16 pt-8 border-t border-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6 opacity-30 group/status hover:opacity-100 transition-opacity duration-700">
                <div className="flex items-center gap-8 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
                   <div className="flex items-center gap-2">
                     <div className="w-1 h-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
@@ -423,7 +423,7 @@ export default function Landing() {
                   <p>v1.0.42_ARCHITECT</p>
                </div>
                
-               <p className="text-[9px] font-bold uppercase tracking-[0.8em] text-white/20">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
+               <p className="text-[9px] font-bold uppercase tracking-[0.8em] text-white/20 text-center">© 2026 ARCHITECTURAL CAPITAL SYSTEMS</p>
                
                <div className="flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] text-white/40">
                   <span className="hidden md:block">Region: Global_Edge</span>
