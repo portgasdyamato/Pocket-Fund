@@ -31,7 +31,7 @@ const frost: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 60px rgba(0,0,0,0.9)",
 };
 
-// ── Premium Button: thin border, clean, no glow ─────────────────────────────
+// ── Premium Button ────────────────────────────────────────────────────────────
 const PremiumButton = ({
   onClick,
   children,
@@ -47,25 +47,28 @@ const PremiumButton = ({
 
   const base: React.CSSProperties = {
     transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+    backdropFilter: "blur(24px) saturate(180%)",
+    WebkitBackdropFilter: "blur(24px) saturate(180%)",
   };
 
   const styles: Record<string, React.CSSProperties> = {
     default: {
       ...base,
-      background: hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
-      border: `1px solid ${hovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)"}`,
-      color: hovered ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+      background: hovered ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.08)",
+      border: "1px solid rgba(255,255,255,0.3)",
+      boxShadow: "inset 0 1px 1px rgba(255,255,255,0.5), 0 8px 20px rgba(0,0,0,0.4)",
+      color: "#ffffff",
     },
     ghost: {
       ...base,
       background: "transparent",
       border: "none",
-      color: hovered ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.3)",
+      color: hovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.5)",
     },
     accent: {
       ...base,
-      background: hovered ? `rgba(100,206,251,0.12)` : "rgba(100,206,251,0.06)",
-      border: `1px solid ${hovered ? "rgba(100,206,251,0.35)" : "rgba(100,206,251,0.2)"}`,
+      background: hovered ? `rgba(100,206,251,0.15)` : "rgba(100,206,251,0.1)",
+      border: `1px solid rgba(100,206,251,0.3)`,
       color: ACCENT,
     },
   };
@@ -75,7 +78,7 @@ const PremiumButton = ({
       onClick={onClick}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      whileTap={{ scale: 0.97 }}
+      whileTap={{ scale: 0.96 }}
       style={styles[variant]}
       className={`inline-flex items-center justify-center gap-2.5 font-medium cursor-pointer select-none ${className}`}
     >
@@ -313,9 +316,15 @@ export default function Landing() {
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: EASE }}
+              className="flex items-center gap-2"
             >
-              <PremiumButton onClick={handleLogin} variant="default" className="px-5 py-2 rounded-full text-[9px] tracking-[0.4em] uppercase">
+              <PremiumButton onClick={handleLogin} variant="default" className="px-6 py-2.5 rounded-[32px] text-base font-normal">
                 Sign In
+              </PremiumButton>
+              <PremiumButton onClick={handleLogin} variant="default" className="w-[44px] h-[44px] rounded-full flex items-center justify-center p-0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
               </PremiumButton>
             </motion.div>
           </div>
@@ -362,14 +371,20 @@ export default function Landing() {
             </div>
 
             {/* CTA — clean pill, no glow overload */}
-            <PremiumButton
-              onClick={handleLogin}
-              variant="default"
-              className="px-10 py-4 rounded-2xl text-[10px] tracking-[0.5em] uppercase"
-            >
-              Start Your Journey
-              <ArrowUpRight className="w-4 h-4" />
-            </PremiumButton>
+            <div className="flex items-center gap-3 mt-6">
+              <PremiumButton
+                onClick={handleLogin}
+                variant="default"
+                className="px-8 py-3.5 rounded-[32px] text-[15px] font-normal"
+              >
+                Start Your Journey
+              </PremiumButton>
+              <PremiumButton onClick={handleLogin} variant="default" className="w-[52px] h-[52px] rounded-full flex items-center justify-center p-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+              </PremiumButton>
+            </div>
           </motion.div>
         </div>
       </section>
