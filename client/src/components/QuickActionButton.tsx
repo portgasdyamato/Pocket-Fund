@@ -11,7 +11,7 @@ export default function QuickActionButton({ icon: Icon, label, onClick }: QuickA
   return (
     <Button
       variant="outline"
-      className="h-auto flex-col gap-2 p-4 hover-elevate active-elevate-2"
+      className="h-auto flex-col gap-2 p-4 ice-frost hover-elevate active-elevate-2 font-black uppercase tracking-widest text-[10px]"
       onClick={onClick}
       data-testid={`button-${label.toLowerCase().replace(/\s+/g, '-')}`}
     >

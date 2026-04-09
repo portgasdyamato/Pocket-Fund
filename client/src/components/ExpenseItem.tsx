@@ -40,8 +40,8 @@ export default function ExpenseItem({ id, category, description, tag, amount, da
     <motion.div 
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.03)" }}
-      className="flex items-center gap-4 p-5 rounded-[24px] border border-white/5 transition-all group cursor-pointer relative overflow-hidden" 
+      whileHover={{ scale: 1.02 }}
+      className="flex items-center gap-4 p-5 rounded-[24px] ice-frost border-white/5 hover:border-white/20 transition-all group cursor-pointer relative overflow-hidden" 
       data-testid={`item-expense-${id}`}
     >
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 ${getCategoryColor(category)} bg-black group-hover:scale-110 shadow-2xl`}>

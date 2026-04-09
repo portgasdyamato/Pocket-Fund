@@ -166,7 +166,7 @@ export default function AskCoach() {
       {/* ══════════ HEADER ══════════ */}
       <div className="relative shrink-0 z-20 px-6 pt-5 pb-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.03] border border-white/[0.07] backdrop-blur-xl">
+          <div className="flex items-center justify-between p-3 rounded-2xl ice-frost">
             {/* Left: Identity */}
             <div className="flex items-center gap-3">
               {/* Animated icon */}
@@ -230,7 +230,7 @@ export default function AskCoach() {
                       whileHover={{ scale: 1.03, y: -2 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => { setChatMessage(p.q); handleSend(); }}
-                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10`}
+                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/20 ice-frost`}
                     >
                       {/* Shine overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
@@ -276,8 +276,8 @@ export default function AskCoach() {
                 {/* Bubble */}
                 <div className={`group relative max-w-[84%] md:max-w-[72%] ${
                   msg.role === 'user'
-                    ? 'bg-gradient-to-br from-white/[0.07] to-white/[0.03] border border-white/[0.09] rounded-2xl rounded-br-sm'
-                    : 'bg-gradient-to-br from-primary/[0.07] to-blue-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm'
+                    ? 'rounded-2xl rounded-br-sm ice-frost'
+                    : 'rounded-2xl rounded-bl-sm ice-frost'
                 } px-5 py-4 shadow-xl`}>
 
                   {/* Inner content */}
@@ -314,7 +314,7 @@ export default function AskCoach() {
                         className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[9px] font-black uppercase tracking-wide transition-all ${
                           currentlyPlaying === index
                             ? "bg-primary/20 border-primary/40 text-primary"
-                            : "bg-white/[0.03] border-white/[0.07] text-white/20 hover:text-white/50 hover:border-white/20"
+                            : "ice-frost text-white/20 hover:text-white/50 hover:border-white/20"
                         }`}
                       >
                         <Volume2 className="w-3 h-3" />
@@ -336,10 +336,10 @@ export default function AskCoach() {
                 exit={{ opacity: 0, y: -4 }}
                 className="flex gap-3 items-end"
               >
-                <div className="w-7 h-7 mb-1 rounded-xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border border-primary/30 flex items-center justify-center">
+                <div className="w-7 h-7 mb-1 rounded-xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 flex items-center justify-center ice-frost">
                   <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
                 </div>
-                <div className="bg-gradient-to-br from-primary/[0.07] to-blue-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm px-5 py-4">
+                <div className="rounded-2xl rounded-bl-sm px-5 py-4 ice-frost">
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]" />
                     <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />
@@ -357,7 +357,7 @@ export default function AskCoach() {
       {/* ══════════ INPUT DOCK ══════════ */}
       <div className="relative shrink-0 z-20 px-6 pt-3 pb-5">
         <div className="max-w-3xl mx-auto">
-          <div className="relative p-1.5 rounded-2xl bg-gradient-to-r from-white/[0.04] via-white/[0.03] to-white/[0.04] border border-white/[0.08] focus-within:border-primary/40 transition-all duration-300 backdrop-blur-xl shadow-2xl">
+          <div className="relative p-1.5 rounded-2xl ice-frost border-white/20 focus-within:border-primary/40 transition-all duration-300">
             {/* Glow on focus */}
             <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 focus-within:opacity-100 transition-opacity pointer-events-none blur-sm" />
 

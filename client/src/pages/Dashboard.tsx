@@ -349,7 +349,7 @@ export default function Dashboard() {
               <h2 className="text-2xl sm:text-3xl font-black tracking-tight font-display">Welcome back, {user?.firstName || 'Member'}!</h2>
               <div className="flex items-center gap-2 mt-1">
                 <ShieldCheck className={`w-3.5 h-3.5 ${healthLabel.color}`} />
-                <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${healthLabel.color}`}>
+                <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${healthLabel.color} ice-frost px-2 py-0.5 rounded-full border border-current/10`}>
                   {healthLabel.label} MEMBER STATUS
                 </span>
               </div>
@@ -360,7 +360,7 @@ export default function Dashboard() {
             <div className="flex flex-col items-start md:items-end mr-0 md:mr-4">
               <div className="text-[10px] font-bold text-white/30 tracking-widest uppercase mb-1">Reward Points</div>
               <div className="flex items-center gap-2">
-                <div className="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 border border-primary/30">
+                <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 border border-primary/20 ice-frost">
                   <Star className="w-3 h-3 fill-primary" />
                   {totalXP} XP
                 </div>

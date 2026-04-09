@@ -241,18 +241,19 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-    <div className="w-full flex justify-center select-none pointer-events-none pb-4">
+      <div className="w-full relative select-none pointer-events-none pb-8 sm:pb-12 overflow-visible">
         <motion.div
-          initial={{ opacity: 0, y: 100 }}
+          initial={{ opacity: 0, y: 120 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.1 }}
+          viewport={{ once: false, amount: 0.05 }}
           transition={{ duration: 1.8, ease: EASE }}
           className="text-center font-black uppercase whitespace-nowrap block"
           style={{
-            fontSize: "clamp(30px, 12vw, 240px)",
-            color: "rgba(255,255,255,0.4)",
-            lineHeight: "0.8",
-            letterSpacing: "-0.04em",
+            fontSize: "clamp(40px, 15vw, 280px)",
+            color: "rgba(255,255,255,0.06)",
+            lineHeight: "0.9",
+            letterSpacing: "-0.05em",
+            textShadow: "0 0 40px rgba(0,0,0,0.5)"
           }}
         >
           POCKET FUND
@@ -626,10 +627,10 @@ export default function Landing() {
                                 color: "rgba(255,255,255,0.7)"
                               }
                             : {
-                                background: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)", // Brand cyan-sky deep mix
-                                boxShadow: "0 4px 14px rgba(2, 132, 199, 0.4)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                color: "#ffffff"
+                                background: "linear-gradient(135deg, #64CEFB 0%, #3b82f6 100%)", // Brand Blue (Primary)
+                                boxShadow: "0 8px 24px rgba(100, 206, 251, 0.3)",
+                                border: "1px solid rgba(255,255,255,0.2)",
+                                color: "#000000"
                               }
                         }
                       >

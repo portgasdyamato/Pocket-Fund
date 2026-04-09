@@ -22,11 +22,10 @@ export default function AchievementBadge({ id, type, title, description, points 
   };
 
   return (
-    <motion.div 
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ x: 5 }}
-      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-accent/30 transition-all group" 
+      className="flex items-center gap-4 p-4 rounded-2xl ice-frost border-white/5 hover:border-accent/30 transition-all group" 
       data-testid={`badge-achievement-${id}`}
     >
       <div className="relative">

@@ -173,7 +173,7 @@ export default function ExpenseLog() {
           {/* Enhanced Header Section */}
           <div className="flex flex-col md:flex-row items-end md:items-center justify-between gap-8">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full ice-frost border-primary/20">
                 <Sparkles className="w-3.5 h-3.5 text-primary fill-primary" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Intelligence Hub</span>
               </div>

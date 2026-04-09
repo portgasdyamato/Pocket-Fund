@@ -29,7 +29,7 @@ export default function BudgetCategoryCard({
       whileTap={{ scale: 0.98 }}
       className="h-full"
     >
-      <Card className="h-full p-6 backdrop-blur-3xl bg-white/[0.03] border-white/5 hover:border-primary/20 transition-all duration-500 overflow-hidden relative group" data-testid={`card-budget-${id}`}>
+      <Card className="h-full p-6 ice-frost border-white/5 hover:border-primary/20 transition-all duration-500 overflow-hidden relative group" data-testid={`card-budget-${id}`}>
         <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
           <ArrowUpRight className="w-4 h-4 text-primary" />
         </div>
