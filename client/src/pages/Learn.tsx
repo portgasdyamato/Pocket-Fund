@@ -132,7 +132,7 @@ export default function LearnPage() {
 
     return (
       <div className="min-h-screen bg-[#050505] text-white flex flex-col">
-        {isCompleted && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} gravity={0.12} colors={["#8B5CF6","#D946EF","#F59E0B","#2DD4BF"]} />}
+        {isCompleted && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} gravity={0.12} colors={["#64CEFB","#4FB7E5","#F59E0B","#2DD4BF"]} />}
 
         {/* Top bar */}
         <div className="sticky top-0 z-50 bg-[#050505]/95 backdrop-blur-xl border-b border-white/5 px-4 py-3">
@@ -487,7 +487,7 @@ export default function LearnPage() {
                               initial={{ width: 0 }}
                               animate={{ width: `${masteryPercentage}%` }}
                               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                              className="h-full bg-primary rounded-full relative shadow-[0_0_15px_rgba(139,92,246,0.4)]"
+                              className="h-full bg-primary rounded-full relative shadow-[0_0_15px_rgba(100,206,251,0.4)]"
                             >
                                <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.4)_50%,transparent_100%)] animate-shimmer" />
                             </motion.div>

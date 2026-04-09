@@ -29,7 +29,7 @@ export default function ExpenseItem({ id, category, description, tag, amount, da
       case 'food': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
       case 'transport': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
       case 'shopping': return 'bg-pink-500/10 text-pink-400 border-pink-500/20';
-      case 'entertainment': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+      case 'entertainment': return 'bg-[#64CEFB]/10 text-[#64CEFB] border-[#64CEFB]/20';
       case 'bills': return 'bg-green-500/10 text-green-400 border-green-500/20';
       case 'ick': return 'bg-destructive/10 text-destructive border-destructive/20';
       default: return 'bg-white/5 text-white/60 border-white/10';

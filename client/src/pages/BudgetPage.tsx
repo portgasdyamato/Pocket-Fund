@@ -32,7 +32,7 @@ export default function BudgetPage() {
     { id: '1', category: 'Food & Dining', icon: Coffee, spent: 380, budget: 400, color: 'text-orange-400' },
     { id: '2', category: 'Transport', icon: Car, spent: 150, budget: 200, color: 'text-blue-400' },
     { id: '3', category: 'Shopping', icon: ShoppingBag, spent: 520, budget: 500, color: 'text-pink-400' },
-    { id: '4', category: 'Entertainment', icon: Ticket, spent: 200, budget: 300, color: 'text-purple-400' },
+    { id: '4', category: 'Entertainment', icon: Ticket, spent: 200, budget: 300, color: 'text-[#64CEFB]' },
     { id: '5', category: 'Bills', icon: FileText, spent: 206, budget: 600, color: 'text-green-400' },
   ];
 
@@ -104,7 +104,7 @@ export default function BudgetPage() {
                         initial={{ width: 0 }}
                         animate={{ width: `${percentageUsed}%` }}
                         transition={{ duration: 1.5, ease: "circOut" }}
-                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full shadow-[0_0_20px_rgba(139,92,246,0.5)]"
+                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full shadow-[0_0_20px_rgba(100,206,251,0.5)]"
                       />
                     </div>
                   </div>

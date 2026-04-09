@@ -20,7 +20,7 @@ const categories = [
   { name: 'Food', icon: Coffee, color: 'text-orange-400', bg: 'bg-orange-400/10', border: 'border-orange-400/20', shadow: 'shadow-orange-400/10' },
   { name: 'Transport', icon: Car, color: 'text-blue-400', bg: 'bg-blue-400/10', border: 'border-blue-400/20', shadow: 'shadow-blue-400/10' },
   { name: 'Shopping', icon: ShoppingBag, color: 'text-pink-400', bg: 'bg-pink-400/10', border: 'border-pink-400/20', shadow: 'shadow-pink-400/10' },
-  { name: 'Entertainment', icon: Ticket, color: 'text-purple-400', bg: 'bg-purple-400/10', border: 'border-purple-400/20', shadow: 'shadow-purple-400/10' },
+  { name: 'Entertainment', icon: Ticket, color: 'text-[#64CEFB]', bg: 'bg-[#64CEFB]/10', border: 'border-[#64CEFB]/20', shadow: 'shadow-[#64CEFB]/10' },
   { name: 'Bills', icon: FileText, color: 'text-green-400', bg: 'bg-green-400/10', border: 'border-green-400/20', shadow: 'shadow-green-400/10' },
   { name: 'Other', icon: Tag, color: 'text-white/40', bg: 'bg-white/5', border: 'border-white/10', shadow: 'shadow-white/5' },
 ];

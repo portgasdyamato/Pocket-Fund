@@ -118,7 +118,7 @@ export default function Profile() {
 
   const statusItems = [
     { label: "KYC Verification", status: user?.kycCompleted ? "Secured" : "Pending", color: user?.kycCompleted ? "text-green-400" : "text-orange-400", dot: user?.kycCompleted ? "bg-green-400" : "bg-orange-400" },
-    { label: "Account Aggregator", status: user?.aaToken ? "Connected" : "Inactive", color: user?.aaToken ? "text-[#6366f1]" : "text-white/40", dot: user?.aaToken ? "bg-[#6366f1]" : "bg-white/20" },
+    { label: "Account Aggregator", status: user?.aaToken ? "Connected" : "Inactive", color: user?.aaToken ? "text-[#64CEFB]" : "text-white/40", dot: user?.aaToken ? "bg-[#64CEFB]" : "bg-white/20" },
     { label: "Onboarding State", status: "Phase 4", color: "text-[#0ea5e9]", dot: "bg-[#0ea5e9]" },
     { label: "UPI Authorization", status: user?.mandateId ? "Active" : "Disabled", color: user?.mandateId ? "text-green-400" : "text-red-400", dot: user?.mandateId ? "bg-green-400" : "bg-red-400" },
   ];
@@ -140,7 +140,7 @@ export default function Profile() {
         >
           <div className="relative rounded-3xl overflow-hidden border border-white/10 p-6"
             style={{
-              background: "linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.06))",
+              background: "linear-gradient(135deg, rgba(100,206,251,0.12), rgba(100,206,251,0.06))",
               backdropFilter: "blur(12px)"
             }}
           >

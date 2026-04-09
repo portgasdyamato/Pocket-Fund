@@ -136,7 +136,7 @@ export default function ExpenseLog() {
       case 'food': return 'text-orange-400';
       case 'transport': return 'text-blue-400';
       case 'shopping': return 'text-pink-400';
-      case 'entertainment': return 'text-purple-400';
+      case 'entertainment': return 'text-[#64CEFB]';
       case 'bills': return 'text-green-400';
       default: return 'text-white/40';
     }
@@ -146,7 +146,7 @@ export default function ExpenseLog() {
     if (!tag) return 'bg-white/5 text-white/40 border-white/5';
     switch (tag) {
       case 'Need': return 'bg-blue-600 text-white border-blue-600';
-      case 'Want': return 'bg-purple-600 text-white border-purple-600';
+      case 'Want': return 'bg-[#64CEFB] text-black border-[#64CEFB]';
       case 'Ick': return 'bg-red-600 text-white border-red-600';
       case 'Goal Claim': return 'bg-green-600 text-white border-green-600';
       default: return 'bg-white/10 text-white border-white/20';
@@ -186,8 +186,8 @@ export default function ExpenseLog() {
                     <motion.button
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`h-12 sm:h-14 px-4 sm:px-8 rounded-2xl font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(147,51,234,0.15)] group/trigger relative overflow-hidden
-                        ${filterTag ? 'bg-purple-600 text-white' : 'bg-purple-600 text-white'}`}
+                      className={`h-12 sm:h-14 px-4 sm:px-8 rounded-2xl font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(100,206,251,0.15)] group/trigger relative overflow-hidden
+                        ${filterTag ? 'bg-[#64CEFB] text-black' : 'bg-[#64CEFB] text-black'}`}
                     >
                       <Filter className="w-4 h-4 mr-2 sm:mr-3" />
                       <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter'}</span>
@@ -195,24 +195,24 @@ export default function ExpenseLog() {
                     </motion.button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-64 p-2 rounded-[24px] bg-black border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)]">
-                     <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                     <DropdownMenuItem onClick={() => setFilterTag(null)} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-[#64CEFB] focus:text-black flex items-center gap-4 px-4 transition-colors cursor-pointer group">
                         <LayoutGrid className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                         All History
                      </DropdownMenuItem>
                      <div className="h-px bg-white/5 my-1 mx-2" />
-                     <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                     <DropdownMenuItem onClick={() => setFilterTag('Need')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-[#64CEFB] focus:text-black flex items-center gap-4 px-4 transition-colors cursor-pointer group">
                         <ShieldCheck className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                         Needs Only
                      </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                     <DropdownMenuItem onClick={() => setFilterTag('Want')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-[#64CEFB] focus:text-black flex items-center gap-4 px-4 transition-colors cursor-pointer group">
                         <Star className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                         Wants Only
                      </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                     <DropdownMenuItem onClick={() => setFilterTag('Ick')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-[#64CEFB] focus:text-black flex items-center gap-4 px-4 transition-colors cursor-pointer group">
                         <TrendingDown className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                         Icks Only
                      </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => setFilterTag('Goal Claim')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-purple-600 focus:text-white flex items-center gap-4 px-4 transition-colors cursor-pointer group">
+                     <DropdownMenuItem onClick={() => setFilterTag('Goal Claim')} className="rounded-xl h-12 font-black text-[11px] uppercase tracking-widest text-white/90 focus:bg-[#64CEFB] focus:text-black flex items-center gap-4 px-4 transition-colors cursor-pointer group">
                         <Sparkles className="w-4 h-4 opacity-40 group-focus:opacity-100" />
                         Goals Only
                      </DropdownMenuItem>
@@ -225,7 +225,7 @@ export default function ExpenseLog() {
                    onClick={() => setIsAddExpenseOpen(true)}
                    className="bg-white text-black h-12 sm:h-14 px-6 sm:px-8 rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center shadow-[0_20px_40px_rgba(255,255,255,0.1)] group/btn relative overflow-hidden border border-white/20 flex-1 sm:flex-none"
                 >
-                   <Plus className="w-4 h-4 mr-2 sm:mr-3 text-purple-600" />
+                   <Plus className="w-4 h-4 mr-2 sm:mr-3 text-[#64CEFB]" />
                    New Entry
                 </motion.button>
             </div>
@@ -326,7 +326,7 @@ export default function ExpenseLog() {
                       </div>
 
                       {/* Right Interaction Zone - Console */}
-                      <div className="w-full sm:w-[140px] flex flex-row sm:flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-purple-600">
+                      <div className="w-full sm:w-[140px] flex flex-row sm:flex-col relative z-10 rounded-[24px] overflow-hidden border border-white/[0.05] bg-[#64CEFB]">
                         {[
                           { label: 'NEED', id: 'Need', icon: ShieldCheck, corners: 'rounded-l-[24px] sm:rounded-t-[24px] sm:rounded-bl-none' },
                           { label: 'WANT', id: 'Want', icon: Star, corners: '' },
@@ -337,7 +337,7 @@ export default function ExpenseLog() {
                             whileTap={{ scale: 0.96 }}
                             onClick={() => tagMutation.mutate({ id: t.id, tag: btn.id })}
                             className={`flex flex-col items-center justify-center gap-1.5 flex-1 transition-all duration-200 group/btn relative min-h-[70px] sm:min-h-[80px] w-full text-white
-                               ${btn.corners} hover:bg-purple-500 hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
+                               ${btn.corners} hover:bg-[#4FB7E5] text-black hover:shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]
                                ${idx !== 2 ? 'border-r sm:border-r-0 sm:border-b border-white/10' : ''}`}
                           >
                             <btn.icon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/btn:scale-105" />
@@ -446,7 +446,7 @@ export default function ExpenseLog() {
                             {t.tag && (
                               <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black border transition-colors ${
                                 t.tag === 'Need' ? 'bg-blue-600 text-white border-blue-600 shadow-[0_2px_10px_rgba(37,99,235,0.3)]' :
-                                t.tag === 'Want' ? 'bg-purple-600 text-white border-purple-600 shadow-[0_2px_10px_rgba(147,51,234,0.3)]' :
+                                t.tag === 'Want' ? 'bg-[#64CEFB] text-black border-[#64CEFB] shadow-[0_2px_10px_rgba(100,206,251,0.3)]' :
                                 t.tag === 'Goal Claim' ? 'bg-green-600 text-white border-green-600 shadow-[0_2px_10px_rgba(22,163,74,0.3)]' :
                                 'bg-red-600 text-white border-red-600 shadow-[0_2px_10px_rgba(220,38,38,0.3)]'
                               }`}>
@@ -495,13 +495,13 @@ export default function ExpenseLog() {
 
       <AlertDialog open={deleteId !== null} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent className="border-white/10 text-white p-10 overflow-hidden rounded-[40px] bg-[#0A0A0B] shadow-[0_40px_100px_rgba(0,0,0,1)] max-w-md">
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#64CEFB]/5 to-transparent pointer-events-none" />
           
           <div className="flex flex-col items-center text-center space-y-6 relative z-10">
             {/* Premium Icon Container */}
-            <div className="w-24 h-24 rounded-[32px] bg-purple-600/10 flex items-center justify-center border border-purple-500/20 shadow-[0_0_40px_rgba(147,51,234,0.15)] relative">
-              <div className="absolute inset-0 rounded-[32px] bg-purple-400/20 blur-xl opacity-50" />
-              <Trash2 className="w-10 h-10 text-purple-400 relative z-10" />
+            <div className="w-24 h-24 rounded-[32px] bg-[#64CEFB]/10 flex items-center justify-center border border-[#64CEFB]/20 shadow-[0_0_40px_rgba(100,206,251,0.15)] relative">
+              <div className="absolute inset-0 rounded-[32px] bg-[#64CEFB]/20 blur-xl opacity-50" />
+              <Trash2 className="w-10 h-10 text-[#64CEFB] relative z-10" />
             </div>
             
             <div className="space-y-3">
@@ -521,7 +521,7 @@ export default function ExpenseLog() {
               Cancel
             </Button>
             <Button 
-               className="flex-1 h-14 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-2xl shadow-[0_15px_30px_rgba(147,51,234,0.25)] tracking-[0.2em] uppercase text-[10px] transition-all hover:-translate-y-1 click-scale"
+               className="flex-1 h-14 bg-[#64CEFB] hover:bg-[#4FB7E5] text-black font-black rounded-2xl shadow-[0_15px_30px_rgba(100,206,251,0.25)] tracking-[0.2em] uppercase text-[10px] transition-all hover:-translate-y-1 click-scale"
                onClick={() => deleteId && deleteMutation.mutate(deleteId)}
             >
               Confirm

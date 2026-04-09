@@ -103,7 +103,7 @@ export default function Onboarding() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">Welcome to Bootcamp</h1>
+          <h1 className="text-4xl font-black mb-2 font-display">Welcome to Bootcamp</h1>
           <p className="text-muted-foreground">Let's get you ready for The Fight</p>
         </div>
 
@@ -130,7 +130,7 @@ export default function Onboarding() {
         {currentStep === 1 && (
           <Card data-testid="card-step-1">
             <CardHeader>
-              <CardTitle>Set Your Quest</CardTitle>
+              <CardTitle className="font-display">Set Your Quest</CardTitle>
               <CardDescription>What are you saving for? Give it a name and a target.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -169,7 +169,7 @@ export default function Onboarding() {
         {currentStep === 2 && (
           <Card data-testid="card-step-2">
             <CardHeader>
-              <CardTitle>Connect Intel</CardTitle>
+              <CardTitle className="font-display">Connect Intel</CardTitle>
               <CardDescription>Link your bank account to track transactions automatically.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -196,7 +196,7 @@ export default function Onboarding() {
         {currentStep === 3 && (
           <Card data-testid="card-step-3">
             <CardHeader>
-              <CardTitle>Unlock Locker</CardTitle>
+              <CardTitle className="font-display">Unlock Locker</CardTitle>
               <CardDescription>Complete quick eKYC to create your Liquid Fund account.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -220,7 +220,7 @@ export default function Onboarding() {
         {currentStep === 4 && (
           <Card data-testid="card-step-4">
             <CardHeader>
-              <CardTitle>Enable Stash</CardTitle>
+              <CardTitle className="font-display">Enable Stash</CardTitle>
               <CardDescription>Approve UPI mandate for one-tap savings.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

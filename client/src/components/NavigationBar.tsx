@@ -70,7 +70,7 @@ export function NavigationBar() {
             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-xl font-bold tracking-tight font-['Space_Grotesk'] text-white">Pocket Fund</span>
+            <span className="text-xl font-bold tracking-tight font-display text-white">Pocket Fund</span>
           </Link>
           <div className="flex items-center gap-6">
              <button onClick={handleLogin} className="text-sm font-medium text-white/60 hover:text-white transition-colors hidden sm:block">Log in</button>
@@ -92,7 +92,7 @@ export function NavigationBar() {
             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
               <Wallet className="w-5 h-5 text-black" />
             </div>
-            <span className="text-lg font-bold tracking-tighter uppercase font-['Space_Grotesk'] hidden sm:block">Pocket Fund</span>
+            <span className="text-lg font-bold tracking-tighter uppercase font-display hidden sm:block">Pocket Fund</span>
           </Link>
           
           <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.05]">
@@ -119,11 +119,11 @@ export function NavigationBar() {
             <div className="hidden xl:flex items-center gap-2 bg-white/[0.02] p-1 rounded-2xl border border-white/[0.05]">
                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
                   <Wallet className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-bold font-['Space_Grotesk'] tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
+                  <span className="text-xs font-bold font-display tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
                </div>
                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
                   <Lock className="w-3.5 h-3.5 text-accent" />
-                  <span className="text-xs font-bold font-['Space_Grotesk'] tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
+                  <span className="text-xs font-bold font-display tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
                </div>
             </div>
 

@@ -346,7 +346,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Welcome back, {user?.firstName || 'Member'}!</h2>
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight font-display">Welcome back, {user?.firstName || 'Member'}!</h2>
               <div className="flex items-center gap-2 mt-1">
                 <ShieldCheck className={`w-3.5 h-3.5 ${healthLabel.color}`} />
                 <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${healthLabel.color}`}>
@@ -409,13 +409,13 @@ export default function Dashboard() {
                         <div className="flex gap-2">
                           <Dialog open={isTopUpOpen} onOpenChange={setIsTopUpOpen}>
                             <DialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-purple-600 border border-purple-500/20 hover:bg-purple-500 text-white transition-all click-scale shadow-[0_10px_20px_rgba(147,51,234,0.3)]">
+                              <Button variant="ghost" size="icon" className="h-12 w-12 rounded-2xl bg-[#64CEFB] border border-[#64CEFB]/20 hover:bg-[#4FB7E5] text-black transition-all click-scale shadow-[0_10px_20px_rgba(100,206,251,0.3)]">
                                 <Plus className="w-6 h-6 border-2 border-white/40 rounded-full p-0.5" />
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="glass-morphism border-white/10 text-white p-8">
                               <DialogHeader>
-                                <DialogTitle className="text-3xl font-black tracking-tight">Add Funds</DialogTitle>
+                                <DialogTitle className="text-3xl font-black tracking-tight font-display">Add Funds</DialogTitle>
                               </DialogHeader>
                               <div className="space-y-8 pt-8">
                                 <div className="space-y-4">
@@ -424,7 +424,7 @@ export default function Dashboard() {
                                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-3xl font-black text-white/20">₹</span>
                                     <Input 
                                       type="number" 
-                                      className="bg-white/5 border-white/10 h-20 pl-12 text-4xl font-black focus:border-primary transition-all rounded-3xl"
+                                      className="bg-white/5 border-white/10 h-20 pl-12 text-4xl font-black focus:border-primary transition-all rounded-3xl font-display"
                                       placeholder="0.00"
                                       value={topUpAmount}
                                       onChange={(e) => setTopUpAmount(e.target.value)}
@@ -466,7 +466,7 @@ export default function Dashboard() {
                       <p className="text-white/30 text-[10px] font-black tracking-[0.4em] uppercase mb-2">Available Balance</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-xl sm:text-2xl font-black text-white/20">₹</span>
-                        <div className="text-4xl sm:text-6xl font-black tracking-tighter tabular-nums text-white leading-none">
+                        <div className="text-4xl sm:text-6xl font-black tracking-tighter tabular-nums text-white leading-none font-display">
                           {parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}
                         </div>
                       </div>
@@ -497,12 +497,12 @@ export default function Dashboard() {
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-purple-600 border border-white/10 hover:bg-purple-500 shadow-2xl transition-all duration-300 click-scale group"
+                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-[#64CEFB]/10 border border-[#64CEFB]/20 hover:bg-[#64CEFB]/20 shadow-2xl transition-all duration-300 click-scale group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-purple-500 shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                    <action.icon className="w-7 h-7 text-white" />
+                  <div className="w-14 h-14 rounded-2xl bg-[#64CEFB] shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <action.icon className="w-7 h-7 text-black" />
                   </div>
-                  <span className="text-[10px] font-black text-white tracking-[0.2em] transition-colors">{action.label}</span>
+                  <span className="text-[10px] font-black text-[#64CEFB] tracking-[0.2em] transition-colors">{action.label}</span>
                 </button>
               ))}
             </motion.div>
@@ -512,7 +512,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-8 bg-primary rounded-full" />
-                  <h3 className="text-2xl font-bold tracking-tight">Available Challenges</h3>
+                  <h3 className="text-2xl font-black tracking-tight font-display">Available Challenges</h3>
                 </div>
                 <Button variant="ghost" className="text-white/40 hover:text-white" onClick={() => setLocation('/learn')}>
                   View All
@@ -546,7 +546,7 @@ export default function Dashboard() {
             {/* Recent Wins */}
             <motion.div variants={item}>
               <Card className="glass-morphism border-white/5 p-6 h-full">
-                <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-black mb-6 flex items-center gap-2 font-display">
                   <Trophy className="w-5 h-5 text-accent" />
                   Achievements
                 </h3>
@@ -577,7 +577,7 @@ export default function Dashboard() {
             <motion.div variants={item}>
               <Card className="glass-morphism border-white/5 p-6 min-h-[400px]">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Recent Activity</h3>
+                  <h3 className="text-xl font-black font-display">Recent Activity</h3>
                   <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setLocation('/history')}>
                     View All
                   </Button>
@@ -601,7 +601,7 @@ export default function Dashboard() {
                               {expense.tag && (
                                 <span className={`px-2 py-0.5 rounded-md text-[8px] font-black border transition-colors ${
                                   expense.tag === 'Need' ? 'bg-blue-600 text-white border-blue-600' :
-                                  expense.tag === 'Want' ? 'bg-purple-600 text-white border-purple-600' :
+                                  expense.tag === 'Want' ? 'bg-[#64CEFB] text-black border-[#64CEFB]' :
                                   expense.tag === 'Goal Claim' ? 'bg-green-600 text-white border-green-600' :
                                   'bg-red-600 text-white border-red-600'
                                 }`}>

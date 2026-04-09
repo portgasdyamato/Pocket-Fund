@@ -63,8 +63,8 @@ export default function AchievementsPage() {
       description: "10 transactions categorized. Total visibility established across your financial architecture.",
       points: 400,
       unlocked: transactions.filter(t => !!t.tag).length >= 10,
-      color: "border-purple-500/30",
-      accent: "text-purple-500"
+      color: "border-[#64CEFB]/30",
+      accent: "text-[#64CEFB]"
     },
     {
       id: "smart-decisions",
@@ -232,7 +232,7 @@ export default function AchievementsPage() {
                       whileTap={{ scale: 0.95 }}
                       className={`aspect-[1/1.2] flex items-center justify-center rounded-lg transition-all duration-300 relative border ${
                         day.hasActivity
-                          ? "bg-primary border-transparent text-white shadow-[0_10px_30px_rgba(139,92,246,0.3)]"
+                          ? "bg-primary border-transparent text-white shadow-[0_10px_30px_rgba(100,206,251,0.3)]"
                           : "bg-white/[0.01] border-white/[0.04] text-white/10"
                       }`}
                     >

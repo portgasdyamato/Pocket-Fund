@@ -35,7 +35,7 @@ const QUICK_PROMPTS = [
     q: "Build an emergency fund",
     label: "Safety Net",
     icon: ShieldCheck,
-    gradient: "from-violet-600 to-purple-700",
+    gradient: "from-blue-600 to-[#64CEFB]",
   },
   {
     q: "Help me fight Spending Icks",
@@ -160,7 +160,7 @@ export default function AskCoach() {
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-32 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-violet-700/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#64CEFB]/5 rounded-full blur-[120px]" />
       </div>
 
       {/* ══════════ HEADER ══════════ */}
@@ -172,7 +172,7 @@ export default function AskCoach() {
               {/* Animated icon */}
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 rounded-xl blur-lg animate-pulse" />
-                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-violet-800/30 border border-primary/30 flex items-center justify-center">
+                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-[#64CEFB]/20 border border-primary/30 flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-primary" />
                 </div>
               </div>
@@ -266,7 +266,7 @@ export default function AskCoach() {
                 <div className={`shrink-0 mb-1 w-7 h-7 rounded-xl flex items-center justify-center border ${
                   msg.role === 'user'
                     ? 'bg-white/5 border-white/10 text-white/40'
-                    : 'bg-gradient-to-br from-primary/25 to-violet-700/20 border-primary/30 text-primary'
+                    : 'bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 text-primary'
                 }`}>
                   {msg.role === 'user'
                     ? <User className="w-3.5 h-3.5" />
@@ -277,7 +277,7 @@ export default function AskCoach() {
                 <div className={`group relative max-w-[84%] md:max-w-[72%] ${
                   msg.role === 'user'
                     ? 'bg-gradient-to-br from-white/[0.07] to-white/[0.03] border border-white/[0.09] rounded-2xl rounded-br-sm'
-                    : 'bg-gradient-to-br from-primary/[0.07] to-violet-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm'
+                    : 'bg-gradient-to-br from-primary/[0.07] to-blue-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm'
                 } px-5 py-4 shadow-xl`}>
 
                   {/* Inner content */}
@@ -336,10 +336,10 @@ export default function AskCoach() {
                 exit={{ opacity: 0, y: -4 }}
                 className="flex gap-3 items-end"
               >
-                <div className="w-7 h-7 mb-1 rounded-xl bg-gradient-to-br from-primary/25 to-violet-700/20 border border-primary/30 flex items-center justify-center">
+                <div className="w-7 h-7 mb-1 rounded-xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border border-primary/30 flex items-center justify-center">
                   <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
                 </div>
-                <div className="bg-gradient-to-br from-primary/[0.07] to-violet-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm px-5 py-4">
+                <div className="bg-gradient-to-br from-primary/[0.07] to-blue-900/[0.05] border border-primary/[0.15] rounded-2xl rounded-bl-sm px-5 py-4">
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]" />
                     <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />

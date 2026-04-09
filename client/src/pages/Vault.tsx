@@ -525,7 +525,7 @@ export default function GlowUp() {
                             initial={{ width: 0 }}
                             animate={{ width: `${Math.min(progress, 100)}%` }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
-                            className={`absolute inset-y-0 left-0 ${isReadyToClaim ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(139,92,246,0.5)]'} rounded-full`}
+                            className={`absolute inset-y-0 left-0 ${isReadyToClaim ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-primary shadow-[0_0_15px_rgba(100,206,251,0.5)]'} rounded-full`}
                          />
                        </div>
                     </div>
