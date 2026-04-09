@@ -401,6 +401,7 @@ export default function Landing() {
                     </button>
                </div>
             </div>
+            </div>
 
             <div className="relative overflow-hidden flex justify-center py-8 sm:py-16 w-full">
                 <motion.h2 
