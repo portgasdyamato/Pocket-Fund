@@ -348,7 +348,7 @@ export default function Landing() {
                 </div>
             </div>
           </div>
-        </div>
+        </section>
             {/* FOOTER */}
       <footer className="bg-[#050505] relative z-10 border-t border-white/5 overflow-hidden font-sans">
         {/* Grainy Texture Overlay */}
