@@ -241,12 +241,12 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       </div>
 
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
-      <div className="w-full flex justify-center select-none pointer-events-none pb-4">
+    <div className="w-full flex justify-center select-none pointer-events-none pb-4">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.1 }}
-          transition={{ duration: 0.8, ease: EASE }}
+          transition={{ duration: 1.8, ease: EASE }}
           className="text-center font-black uppercase whitespace-nowrap block"
           style={{
             fontSize: "clamp(30px, 12vw, 240px)",
