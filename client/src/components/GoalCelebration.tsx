@@ -34,13 +34,16 @@ export default function GoalCelebration({ isOpen, onClose, goalName = "Goal" }: 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[200] bg-[#020202] flex flex-col items-center justify-center overflow-hidden grain-texture"
           >
-            {/* Cinematic Background */}
+            {/* Ultra-High Fidelity Mesh Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-yellow-500/10 rounded-full blur-[180px] opacity-40" />
-              <div className="absolute -top-32 -right-32 w-96 h-96 bg-accent/5 rounded-full blur-[120px]" />
-              <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-yellow-500/5 rounded-full blur-[120px]" />
+              <div className="absolute top-[20%] left-[10%] w-[800px] h-[800px] bg-yellow-500/10 rounded-full blur-[140px] animate-blob" />
+              <div className="absolute bottom-[20%] right-[10%] w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[140px] animate-blob animation-delay-2000" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-yellow-600/5 rounded-full blur-[200px]" />
+              
+              {/* Architectural Layout Lines */}
+              <div className="absolute inset-0 architectural-grid opacity-20" />
             </div>
 
             {showConfetti && (
@@ -48,92 +51,98 @@ export default function GoalCelebration({ isOpen, onClose, goalName = "Goal" }: 
                 <Confetti 
                   width={width} 
                   height={height} 
-                  numberOfPieces={400} 
+                  numberOfPieces={450} 
                   recycle={false} 
-                  colors={["#FFD700", "#F59E0B", "#FFF", "#64CEFB"]}
-                  gravity={0.08}
+                  colors={["#FFD700", "#F59E0B", "#FFF", "#64CEFB", "#FFA500"]}
+                  gravity={0.07}
                 />
               </div>
             )}
 
-            <div className="relative z-10 w-full max-w-5xl px-8 flex flex-col items-center text-center">
+            <div className="relative z-10 w-full max-w-6xl px-12 flex flex-col items-center text-center">
               <motion.div 
-                initial={{ scale: 0.5, opacity: 0, rotate: -15 }} 
-                animate={{ scale: 1, opacity: 1, rotate: 0 }} 
-                transition={{ type: "spring", damping: 15, stiffness: 100, delay: 0.2 }}
-                className="relative mb-12"
+                initial={{ scale: 0.4, opacity: 0, rotateY: 90 }} 
+                animate={{ scale: 1, opacity: 1, rotateY: 0 }} 
+                transition={{ type: "spring", damping: 18, stiffness: 80, delay: 0.2 }}
+                className="relative mb-16"
               >
-                <div className="w-56 h-56 rounded-[64px] bg-gradient-to-tr from-yellow-500 via-orange-400 to-yellow-600 flex items-center justify-center relative overflow-hidden group premium-shadow">
-                  <Trophy className="w-28 h-28 text-black relative z-10 drop-shadow-2xl" />
-                  <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute inset-2 rounded-[56px] border border-white/20" />
+                <div className="w-64 h-64 rounded-[80px] bg-gradient-to-tr from-yellow-500 via-orange-400 to-yellow-200 flex items-center justify-center relative overflow-hidden premium-shadow group border border-white/20">
+                  <Trophy className="w-32 h-32 text-black relative z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]" />
+                  <div className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-3 rounded-[68px] border border-black/10" />
                 </div>
                 
-                {/* Outer Glowing Rings */}
                 <motion.div 
-                  animate={{ rotate: 360, scale: [1, 1.1, 1] }} 
-                  transition={{ rotate: { duration: 25, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity } }}
-                  className="absolute inset-0 w-[320px] h-[320px] -top-[52px] -left-[52px] border border-yellow-500/20 rounded-full blur-sm" 
+                  animate={{ rotate: 360 }} 
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 w-[400px] h-[400px] -top-[68px] -left-[68px] border-[0.5px] border-yellow-500/30 rounded-full border-dashed" 
                 />
               </motion.div>
 
-              <div className="space-y-6">
-                <motion.p 
-                  initial={{ tracking: "1em", opacity: 0 }} 
-                  animate={{ tracking: "0.5em", opacity: 1 }} 
-                  transition={{ duration: 1, delay: 0.4 }}
-                  className="text-[11px] font-black uppercase text-yellow-500 italic"
+              <div className="space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/5 backdrop-blur-md"
                 >
-                  LEGACY // DEFINED
-                </motion.p>
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                  <span className="text-[12px] font-black uppercase tracking-[0.6em] text-yellow-500 italic">Protocol // Legacy Defined</span>
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                </motion.div>
                 
                 <motion.h2 
-                  initial={{ y: 40, opacity: 0 }} 
-                  animate={{ y: 0, opacity: 1 }} 
-                  transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.8] text-white"
+                  initial={{ y: 60, opacity: 0, scale: 0.9 }} 
+                  animate={{ y: 0, opacity: 1, scale: 1 }} 
+                  transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-8xl md:text-[11rem] font-black italic uppercase tracking-tighter leading-[0.75] text-white pointer-events-none"
                 >
-                  OBJECTIVE <br /><span className="text-yellow-500 italic">REACHED</span>
+                  ASSET <br /><span className="text-yellow-500 italic">SECURED</span>
                 </motion.h2>
 
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.9 }} 
                   animate={{ opacity: 1, scale: 1 }} 
                   transition={{ delay: 0.7 }}
-                  className="mt-8 mb-12 p-8 rounded-[40px] bg-white/[0.03] border border-white/10 backdrop-blur-2xl inline-block"
+                  className="mt-10 mb-14 p-10 rounded-[48px] bg-stone-900/60 border border-white/10 backdrop-blur-3xl inline-block relative overflow-hidden group shadow-3xl"
                 >
-                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2 italic">Realized Asset</p>
-                   <h3 className="text-3xl font-black text-white italic tracking-tighter">"{goalName}"</h3>
+                   <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                   <p className="text-[12px] font-black uppercase tracking-[0.3em] text-white/30 mb-3 italic">Verified Objective</p>
+                   <h3 className="text-4xl font-black text-white italic tracking-tighter">"{goalName}"</h3>
                 </motion.div>
 
                 <motion.p 
                   initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }} 
                   transition={{ delay: 0.8 }}
-                  className="text-white/40 text-xl font-medium max-w-2xl mx-auto italic leading-relaxed"
+                  className="text-white/40 text-2xl font-medium max-w-3xl mx-auto italic leading-tight text-balance"
                 >
-                  This milestone marks a permanent shift in your financial power. 
-                  Your execution has been logged in the permanent record.
+                  This milestone represents a profound elevation in your capital hierarchy. 
+                  Transaction integrity has been finalized in the decentralized ledger.
                 </motion.p>
               </div>
 
               <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
+                initial={{ opacity: 0, y: 30 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.9 }}
-                className="mt-16"
+                className="mt-20"
               >
                 <Button 
                   onClick={onClose} 
-                  className="h-24 px-16 rounded-[32px] bg-yellow-500 text-black font-black text-2xl uppercase tracking-tighter hover:bg-yellow-400 active:scale-95 transition-all shadow-[0_20px_80px_rgba(245,158,11,0.25)] group"
+                  className="h-28 px-20 rounded-[40px] bg-yellow-500 text-black font-black text-3xl uppercase tracking-tighter hover:bg-yellow-400 active:scale-95 transition-all shadow-[0_30px_100px_rgba(245,158,11,0.3)] group relative overflow-hidden"
                 >
-                  Continue Ascending
-                  <TrendingUp className="w-8 h-8 ml-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <span className="relative z-10 flex items-center">
+                    Initiate Next Ascent
+                    <Activity className="w-10 h-10 ml-6 group-hover:scale-125 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </Button>
                 
-                <div className="flex items-center justify-center gap-3 mt-8">
-                   <ShieldCheck className="w-5 h-5 text-white/10" />
-                   <span className="text-white/10 text-[10px] font-black uppercase tracking-[0.4em] italic leading-none">Institutional Integrity Verified // Level 04</span>
+                <div className="flex items-center justify-center gap-6 mt-12 opacity-20">
+                   <ShieldCheck className="w-6 h-6 text-white" />
+                   <span className="text-white text-[11px] font-black uppercase tracking-[0.5em] italic leading-none whitespace-nowrap">Institutional Clearance Alpha-09 // Verified Integrity</span>
+                   <ShieldCheck className="w-6 h-6 text-white" />
                 </div>
               </motion.div>
             </div>
