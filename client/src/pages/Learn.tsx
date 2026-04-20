@@ -7,7 +7,7 @@ import {
   BookOpen, Star, ChevronRight, ChevronLeft, CheckCircle2,
   Trophy, Home, ShoppingBag, Shield, HelpCircle, Calculator,
   Lock, TrendingUp, ArrowLeft, Brain, Zap, Globe, Lightbulb,
-  Target, Clock, Award, BarChart3
+  Target, Clock, Award, BarChart3, ArrowRight, ShieldCheck
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
@@ -389,43 +389,76 @@ export default function LearnPage() {
 
                         return (
                           <button key={index}
-                            className={`w-full text-left p-5 rounded-2xl border transition-all flex items-start gap-4 group ${
-                              isWrong ? "border-red-500/50 bg-red-500/10"
-                              : showCorrect ? "border-green-500/50 bg-green-500/10"
-                              : isSelected && !showSolution ? "border-primary/50 bg-primary/10"
-                              : "border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/20"
+                            className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-start gap-5 group relative overflow-hidden ${
+                              isWrong ? "border-red-500/30 bg-red-500/[0.08] shadow-[inset_0_0_20px_rgba(239,68,68,0.05)]"
+                              : showCorrect ? "border-green-500/30 bg-green-500/[0.08] shadow-[inset_0_0_20px_rgba(34,197,94,0.05)]"
+                              : isSelected && !showSolution ? "border-primary/40 bg-primary/[0.08] shadow-[inset_0_0_20px_rgba(100,206,251,0.05)]"
+                              : "border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
                             }`}
                             onClick={() => !showSolution && setSelectedOption(index)}
                             disabled={showSolution && !isCorrect && !isSelected}
                           >
-                            <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 font-black text-sm transition-all ${
-                              isWrong ? "bg-red-500 border-red-500 text-white"
-                              : showCorrect ? "bg-green-500 border-green-500 text-white"
-                              : isSelected && !showSolution ? "bg-primary border-primary text-white"
-                              : "border-white/15 text-white/30 group-hover:border-white/30"
+                            {/* Letter Indicator */}
+                            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 font-black text-sm transition-all duration-300 ${
+                              isWrong ? "bg-red-500 border-red-400 text-white shadow-lg shadow-red-500/20"
+                              : showCorrect ? "bg-green-500 border-green-400 text-white shadow-lg shadow-green-500/20"
+                              : isSelected && !showSolution ? "bg-primary border-primary/50 text-white shadow-lg shadow-primary/20"
+                              : "bg-white/[0.03] border-white/10 text-white/30 group-hover:border-white/20 group-hover:text-white/50"
                             }`}>
                               {String.fromCharCode(65 + index)}
                             </div>
-                            <div className="flex-1 pt-0.5">
-                              <p className={`font-bold leading-snug ${(isSelected || showCorrect) ? "text-white" : "text-white/60"}`}>{option}</p>
-                              {isWrong && <p className="text-xs text-red-400 mt-1 font-black uppercase tracking-widest">✗ Incorrect</p>}
-                              {showCorrect && <p className="text-xs text-green-400 mt-1 font-black uppercase tracking-widest">✓ Correct Answer</p>}
+
+                            <div className="flex-1 pt-1">
+                              <p className={`font-bold italic tracking-tight leading-snug transition-colors ${
+                                (isSelected || showCorrect) ? "text-white" : "text-white/50 group-hover:text-white/70"
+                              }`}>
+                                {option}
+                              </p>
+                              
+                              {/* Feedback Label */}
+                              <AnimatePresence>
+                                {isWrong && (
+                                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1.5 mt-2">
+                                    <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
+                                    <p className="text-[9px] text-red-400 font-black uppercase tracking-[0.2em] italic">Incorrect Strategy</p>
+                                  </motion.div>
+                                )}
+                                {showCorrect && (
+                                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1.5 mt-2">
+                                    <div className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
+                                    <p className="text-[9px] text-green-400 font-black uppercase tracking-[0.2em] italic">Correct Target</p>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
                             </div>
+
+                            {/* Decorative Corner Accent */}
+                            {(isWrong || showCorrect) && (
+                              <div className={`absolute top-0 right-0 w-16 h-16 opacity-10 pointer-events-none transform translate-x-8 -translate-y-8 rounded-full blur-2xl ${
+                                isWrong ? "bg-red-500" : "bg-green-500"
+                              }`} />
+                            )}
                           </button>
                         );
                       })}
                     </div>
                     {showSolution && (
-                      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                        className="mx-6 mb-6 p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
-                        <Lightbulb className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-bold text-white/80 mb-3">Review the correct answer highlighted above, then retry or continue.</p>
-                          <Button size="sm" variant="outline"
-                            className="h-9 px-5 rounded-xl border-white/10 text-xs font-black uppercase tracking-widest"
-                            onClick={() => { setShowSolution(false); setSelectedOption(null); }}>
-                            Retry
-                          </Button>
+                      <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+                        className="mx-6 mb-8 p-6 rounded-[28px] bg-white/[0.03] border border-white/10 flex items-start gap-5 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-yellow-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0">
+                          <Lightbulb className="w-6 h-6 text-yellow-400 animate-pulse" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-400/60 mb-2">Technical Insight</p>
+                          <p className="text-sm font-medium text-white/70 italic leading-relaxed mb-4">The correct answer is highlighted above for your records. Review the strategy before continuing.</p>
+                          <div className="flex gap-3">
+                            <Button size="sm" variant="outline"
+                              className="h-10 px-6 rounded-xl border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest hover:bg-white/10"
+                              onClick={() => { setShowSolution(false); setSelectedOption(null); }}>
+                              Recalibrate
+                            </Button>
+                          </div>
                         </div>
                       </motion.div>
                     )}

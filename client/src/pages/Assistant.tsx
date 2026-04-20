@@ -164,69 +164,35 @@ export default function AskCoach() {
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#64CEFB]/5 rounded-full blur-[120px]" />
       </div>
 
-      {/* ══════════ HEADER ══════════ */}
-      <div className="relative shrink-0 z-20 px-6 pt-5 pb-4">
-        <div className="w-full">
-          <div className="flex items-center justify-between p-3 rounded-2xl ice-frost border-white/10">
-            {/* Left: Identity */}
-            <div className="flex items-center gap-4">
-              <Logo size="sm" showText={false} />
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-3 italic">
-                    FINANCIAL AI COACH
-                    <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 backdrop-blur-sm h-fit self-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-                      <span className="text-[9px] sm:text-[10px] font-black text-green-400 tracking-wider leading-none">LIVE</span>
-                    </div>
-                  </h1>
-                </div>
-                <p className="text-[10px] text-white/30 font-black uppercase tracking-widest mt-0.5 italic">Pro Financial Advisor</p>
-              </div>
-            </div>
-
-            {/* Right: Mute toggle */}
-            <button
-              onClick={toggleMute}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider border transition-all duration-200 ${
-                isMuted
-                  ? "bg-white/5 border-white/10 text-white/30 hover:border-white/20"
-                  : "bg-primary/10 border-primary/25 text-primary hover:bg-primary/15"
-              }`}
-            >
-              {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline italic">{isMuted ? "Audio Muted" : "Audio Active"}</span>
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* ══════════ MAIN CONTENT AREA ══════════ */}
       <div className="flex-1 flex overflow-hidden relative border-t border-white/5">
         
         {/* Left Sidebar (Desktop Only) */}
-        <aside className="hidden xl:flex flex-col w-80 p-6 space-y-6 border-r border-white/5 bg-black/20 backdrop-blur-sm">
+        <aside className="hidden xl:flex flex-col w-72 p-4 space-y-4 border-r border-white/5 bg-black/20 backdrop-blur-sm relative z-30">
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
+                <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[8px] font-black text-green-400 tracking-tighter">LIVE</span>
+              </div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] font-bold text-white/40 uppercase">Wallet</span>
-                <span className="text-[10px] font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase">Wallet</span>
+                <span className="text-[9px] font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[10px] font-bold text-white/40 uppercase">Status</span>
-                <span className="text-[10px] font-black text-white/60 italic">Online & Secure</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-bold text-white/40 uppercase">Assistance</span>
-                <span className="text-[10px] font-black text-white/60 italic">Pro Advisor</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase">Status</span>
+                <span className="text-[9px] font-black text-white/60 italic">Online</span>
               </div>
             </div>
           </div>
           
-          <div className="space-y-4 pt-4 border-t border-white/5">
-             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Service Capabilities</p>
-             <div className="space-y-3">
+          <div className="space-y-3 pt-3 border-t border-white/5">
+             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Capabilities</p>
+             <div className="space-y-2">
                 {[
                   "Investment Strategy",
                   "Expense Auditing",
@@ -234,11 +200,28 @@ export default function AskCoach() {
                   "Habit Tracking"
                 ].map((cap, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-primary/40" />
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{cap}</span>
+                    <div className="w-1 h-1 rounded-full bg-primary/30" />
+                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{cap}</span>
                   </div>
                 ))}
              </div>
+          </div>
+
+          <div className="mt-auto pt-4 border-t border-white/5">
+            <button
+               onClick={toggleMute}
+               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all duration-200 ${
+                 isMuted
+                   ? "bg-white/5 border-white/10 text-white/30"
+                   : "bg-primary/5 border-primary/20 text-primary"
+               }`}
+             >
+               <div className="flex items-center gap-2">
+                 {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                 <span>{isMuted ? "Audio Off" : "Audio On"}</span>
+               </div>
+               <div className={`w-1.5 h-1.5 rounded-full ${isMuted ? "bg-white/10" : "bg-primary animate-pulse"}`} />
+             </button>
           </div>
         </aside>
 
@@ -436,42 +419,35 @@ export default function AskCoach() {
                 </div>
               </div>
 
-              {/* Bottom tag */}
-              <div className="flex flex-col items-center gap-2 mt-4 select-none opacity-20">
-                <Logo size="sm" showText={false} />
-                <p className="text-[8px] font-black uppercase tracking-[0.6em] text-white">
-                  Your conversations are private and encrypted.
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Right Sidebar (Desktop Only) */}
-        <aside className="hidden 2xl:flex flex-col w-80 p-6 space-y-6 border-l border-white/5 bg-black/20 backdrop-blur-sm">
+        <aside className="hidden 2xl:flex flex-col w-72 p-4 space-y-4 border-l border-white/5 bg-black/20 backdrop-blur-sm">
            <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Financial Metrics</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Metrics</p>
               <div className="grid grid-cols-1 gap-3">
                  {[
                    { label: "Wallet Stability", value: "98.4%", color: "text-emerald-400" },
                    { label: "Savings Velocity", value: "+12.4%", color: "text-primary" },
                    { label: "Risk Index", value: "Low", color: "text-white/60" }
                  ].map((stat, i) => (
-                   <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                      <p className="text-[8px] font-black text-white/30 uppercase tracking-widest">{stat.label}</p>
-                      <p className={`text-lg font-black italic ${stat.color} mt-1`}>{stat.value}</p>
-                   </div>
+                    <div key={i} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+                       <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">{stat.label}</p>
+                       <p className={`text-base font-black italic ${stat.color} mt-1`}>{stat.value}</p>
+                    </div>
                  ))}
               </div>
            </div>
            
-           <div className="mt-auto p-6 rounded-3xl bg-primary/5 border border-primary/20 space-y-3">
+           <div className="mt-auto p-4 rounded-3xl bg-primary/5 border border-primary/20 space-y-2">
               <div className="flex items-center gap-2 text-primary">
-                 <ShieldCheck className="w-4 h-4" />
-                 <span className="text-[10px] font-black uppercase tracking-widest italic">Advisor Privacy</span>
+                 <ShieldCheck className="w-3.5 h-3.5" />
+                 <span className="text-[9px] font-black uppercase tracking-widest italic">Advisor Privacy</span>
               </div>
-              <p className="text-[10px] font-medium text-white/30 leading-relaxed italic">
-                 Your data is private. Your financial footprint remains entirely between you and your coach.
+              <p className="text-[9px] font-medium text-white/20 leading-relaxed italic">
+                 Your data is private. Your financial footprint remains between you and your coach.
               </p>
            </div>
         </aside>
