@@ -98,7 +98,7 @@ export default function ChallengeCelebration({ isOpen, onClose, challengeName = 
                     className="text-4xl sm:text-5xl font-black italic tracking-tighter uppercase leading-[0.85] text-white"
                   >
                     Target <br /> <span className="text-primary">Eliminated</span>
-                  </h2 >
+                  </motion.h2>
                 </div>
 
                 {/* Content Section */}
