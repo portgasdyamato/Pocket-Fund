@@ -197,83 +197,105 @@ export default function LearnPage() {
             <AnimatePresence mode="wait">
               {/* Completed */}
               {isCompleted ? (
-                /* Completion Screen - WORLD CLASS REDESIGN */
-                <motion.div key="done" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 px-8 max-w-3xl mx-auto space-y-12">
-                  <div className="relative">
-                    <motion.div 
-                      initial={{ scale: 0, rotate: -20 }} 
-                      animate={{ scale: 1, rotate: 0 }} 
-                      transition={{ type: "spring", damping: 12, stiffness: 100 }} 
-                      className="w-40 h-40 rounded-[48px] bg-gradient-to-tr from-primary to-accent mx-auto flex items-center justify-center premium-shadow relative z-10"
-                    >
-                      <Trophy className="w-20 h-20 text-white" />
-                      <div className="absolute inset-0 rounded-[48px] border-4 border-white/20 animate-pulse" />
-                    </motion.div>
-                    
-                    {/* Decorative Rings */}
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-64 h-64 -top-12 -left-12 mx-auto border-2 border-dashed border-primary/10 rounded-full" />
-                    <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-56 h-56 -top-8 -left-8 mx-auto border border-white/5 rounded-full" />
+                /* Completion Screen - WORLD CLASS FULL-SCREEN REDESIGN */
+                <motion.div 
+                  key="done" 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  className="fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center overflow-hidden"
+                >
+                  {/* Cinematic Background */}
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[160px] opacity-50" />
+                    <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
+                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
                   </div>
 
-                  <div className="space-y-4">
-                    <motion.p 
-                      initial={{ opacity: 0 }} 
-                      animate={{ opacity: 1 }} 
-                      transition={{ delay: 0.4 }}
-                      className="text-[10px] font-black uppercase tracking-[0.6em] text-primary italic"
+                  <div className="relative z-10 w-full max-w-5xl px-8 flex flex-col items-center text-center">
+                    <motion.div 
+                      initial={{ scale: 0.5, opacity: 0, rotate: -15 }} 
+                      animate={{ scale: 1, opacity: 1, rotate: 0 }} 
+                      transition={{ type: "spring", damping: 15, stiffness: 100, delay: 0.2 }}
+                      className="relative mb-12"
                     >
-                      Curriculum // Validated
-                    </motion.p>
-                    <motion.h2 
+                      <div className="w-48 h-48 rounded-[56px] bg-gradient-to-tr from-primary to-accent flex items-center justify-center relative overflow-hidden group">
+                        <Trophy className="w-24 h-24 text-white relative z-10 drop-shadow-2xl" />
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        {/* Internal Glow */}
+                        <div className="absolute inset-2 rounded-[48px] border border-white/20" />
+                      </div>
+                      
+                      {/* Outer Glowing Rings */}
+                      <motion.div 
+                        animate={{ rotate: 360, scale: [1, 1.1, 1] }} 
+                        transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity } }}
+                        className="absolute inset-0 w-[280px] h-[280px] -top-[44px] -left-[44px] border border-primary/20 rounded-full blur-sm" 
+                      />
+                    </motion.div>
+
+                    <div className="space-y-6">
+                      <motion.p 
+                        initial={{ tracking: "1em", opacity: 0 }} 
+                        animate={{ tracking: "0.5em", opacity: 1 }} 
+                        transition={{ duration: 1, delay: 0.4 }}
+                        className="text-[11px] font-black uppercase text-primary italic"
+                      >
+                        CREDENTIAL // VALIDATED
+                      </motion.p>
+                      
+                      <motion.h2 
+                        initial={{ y: 40, opacity: 0 }} 
+                        animate={{ y: 0, opacity: 1 }} 
+                        transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.8] text-white"
+                      >
+                        MASTERY <br /><span className="text-primary italic">ACHIEVED</span>
+                      </motion.h2>
+
+                      <motion.p 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        transition={{ delay: 0.7 }}
+                        className="text-white/40 text-xl font-medium max-w-2xl mx-auto italic leading-relaxed"
+                      >
+                        You've successfully decoded <span className="text-white">"{activeQuest.title}"</span>. 
+                        Your financial intelligence has been upgraded to institutional standards.
+                      </motion.p>
+                    </div>
+
+                    <motion.div 
                       initial={{ opacity: 0, y: 20 }} 
                       animate={{ opacity: 1, y: 0 }} 
-                      transition={{ delay: 0.5 }}
-                      className="text-6xl sm:text-7xl font-black italic uppercase tracking-tighter leading-[0.8] mb-4"
+                      transition={{ delay: 0.8 }}
+                      className="grid grid-cols-2 gap-8 w-full max-w-xl mt-16 mb-16"
                     >
-                      Mastery <br /><span className="text-white">Achieved</span>
-                    </motion.h2>
-                    <motion.p 
-                      initial={{ opacity: 0 }} 
-                      animate={{ opacity: 1 }} 
-                      transition={{ delay: 0.6 }}
-                      className="text-white/40 text-xl font-medium max-w-xl mx-auto italic leading-relaxed"
+                      <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Knowledge Index</p>
+                        <p className="text-5xl font-black italic text-white leading-none">100%</p>
+                      </div>
+                      <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-2">XP Allocated</p>
+                        <p className="text-5xl font-black italic text-white leading-none">+{activeQuest.points}</p>
+                      </div>
+                    </motion.div>
+
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }} 
+                      animate={{ opacity: 1, scale: 1 }} 
+                      transition={{ delay: 1 }}
+                      className="space-y-6"
                     >
-                      You've successfully decoded <span className="text-white">"{activeQuest.title}"</span>. 
-                      Your financial intelligence has been upgraded to institutional standards.
-                    </motion.p>
+                      <Button onClick={closeQuest} className="h-24 px-16 rounded-[32px] bg-white text-black font-black text-2xl uppercase tracking-tighter hover:bg-white/90 active:scale-95 transition-all shadow-[0_20px_80px_rgba(255,255,255,0.15)] group">
+                        Collect Assets & Exit
+                        <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-3 transition-transform" />
+                      </Button>
+                      
+                      <div className="flex items-center justify-center gap-3">
+                         <ShieldCheck className="w-5 h-5 text-white/20" />
+                         <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em] italic leading-none">Credential Verified by Pocket Fund Academy</span>
+                      </div>
+                    </motion.div>
                   </div>
-
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    transition={{ delay: 0.7 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
-                  >
-                    <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Knowledge Index</p>
-                      <p className="text-5xl font-black italic text-white group-hover:scale-110 transition-transform origin-left">100%</p>
-                    </div>
-                    <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-2">XP Allocated</p>
-                      <p className="text-5xl font-black italic text-white group-hover:scale-110 transition-transform origin-left">+{activeQuest.points}</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    transition={{ delay: 0.8 }}
-                    className="pt-6 space-y-6"
-                  >
-                    <Button onClick={closeQuest} className="h-20 px-12 rounded-3xl bg-white text-black font-black text-xl uppercase tracking-widest hover:bg-white/90 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.1)] group">
-                      Claim Assets & Exit
-                      <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                    </Button>
-                    <div className="flex items-center justify-center gap-2">
-                       <ShieldCheck className="w-4 h-4 text-white/20" />
-                       <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] italic">Credential Verified by Financial GlowUp Academy</span>
-                    </div>
-                  </motion.div>
                 </motion.div>
 
               ) : step === 0 ? (
