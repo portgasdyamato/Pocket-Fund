@@ -227,7 +227,7 @@ export default function AskCoach() {
 
         {/* Central Chat Column */}
         <div className="flex-1 flex flex-col min-w-0">
-          <div className={`flex-1 ${isFirstMessage ? "overflow-hidden" : "overflow-y-auto"} scrollbar-hide px-6 pb-4 pt-4`}>
+          <div className="flex-1 overflow-y-auto scrollbar-hide px-6 pb-4 pt-12">
             <div className="max-w-5xl mx-auto space-y-8">
 
               {/* Quick prompt cards */}
