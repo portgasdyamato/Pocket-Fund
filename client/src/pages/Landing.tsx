@@ -173,6 +173,8 @@ const BentoCard = ({
   );
 };
 
+import { Logo } from "@/components/Logo";
+
 // ── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ onLogin }: { onLogin: () => void }) {
   const navLinks = ["Features", "Pricing", "Security", "Analytics", "Team"];
@@ -196,14 +198,14 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         }}
       />
 
-      <div className="relative z-10 container mx-auto px-6 sm:px-10 max-w-[1400px] flex-1 flex flex-col gap-12">
+      <div className="relative z-10 w-full px-6 sm:px-10 max-w-none flex-1 flex flex-col gap-12">
         
         {/* Top Section: CTA / Headline */}
         <div className="max-w-4xl space-y-6">
           <div className="flex items-center gap-3 px-5 py-2.5 rounded-full ice-frost w-fit">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: ACCENT, boxShadow: `0 0 8px ${ACCENT}` }} />
             <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.8)" }}>
-              Contact Us
+              Get in touch
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1] text-white/90">
@@ -214,10 +216,11 @@ function Footer({ onLogin }: { onLogin: () => void }) {
         {/* Middle Section: Contact & Horizontal Nav */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/[0.04] pb-8">
           {/* Left: Buttons replacing email per request */}
-          <div className="space-y-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "rgba(255,255,255,0.3)" }}>
-              Ready to Accelerate?
-            </p>
+          <div className="space-y-6">
+            <div className="flex flex-col gap-2">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Certified Member</p>
+              <Logo size="sm" />
+            </div>
             <div className="flex items-center gap-3">
               <PremiumButton onClick={onLogin} variant="default" className="px-8 py-3.5 rounded-[32px] text-[15px] font-normal">
                 Start Your Journey
@@ -256,18 +259,18 @@ function Footer({ onLogin }: { onLogin: () => void }) {
       {/* ── Massive Sliding Typography (Bottom aligned) ── */}
       <div className="w-full relative select-none pointer-events-none overflow-visible mt-auto">
         <motion.div
-          initial={{ opacity: 0, y: 200 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.05 }}
-          transition={{ duration: 1.8, ease: EASE }}
-          className="text-center font-black uppercase whitespace-nowrap block"
-          style={{
-            fontSize: "clamp(40px, 15vw, 280px)",
-            color: "rgba(255,255,255,0.06)",
-            lineHeight: "0.9",
-            letterSpacing: "-0.05em",
-            textShadow: "0 0 40px rgba(0,0,0,0.5)"
-          }}
+           initial={{ opacity: 0, scale: 0.9 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: false, amount: 0.05 }}
+           transition={{ duration: 1.8, ease: EASE }}
+           className="text-center font-black uppercase whitespace-nowrap block italic"
+           style={{
+             fontSize: "clamp(40px, 15vw, 280px)",
+             color: "rgba(255,255,255,0.06)",
+             lineHeight: "0.9",
+             letterSpacing: "-0.05em",
+             textShadow: "0 0 40px rgba(0,0,0,0.5)"
+           }}
         >
           POCKET FUND
         </motion.div>
@@ -316,19 +319,14 @@ export default function Landing() {
 
         {/* ── Nav ── */}
         <nav className="absolute top-0 left-0 w-full z-50">
-          <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-8 flex items-center justify-between">
+          <div className="w-full px-6 sm:px-10 py-8 flex items-center justify-between">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: EASE }}
-              className="flex items-center gap-3 cursor-pointer"
+              className="cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-2xl flex items-center justify-center"
-                style={{ background: "rgba(100,206,251,0.06)", border: "1px solid rgba(100,206,251,0.15)" }}
-              >
-                <div className="w-2 h-2 rounded-full" style={{ background: ACCENT, boxShadow: `0 0 6px ${ACCENT}` }} />
-              </div>
-              <span className="text-lg font-bold tracking-[-0.02em] uppercase text-white/80">Pocket Fund</span>
+              <Logo size="md" />
             </motion.div>
 
             <motion.div
@@ -355,7 +353,7 @@ export default function Landing() {
             <div className="flex items-center gap-3 px-5 py-2.5 rounded-full ice-frost">
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: ACCENT, boxShadow: `0 0 6px ${ACCENT}` }} />
               <span className="text-[9px] font-bold uppercase tracking-[0.6em]" style={{ color: "rgba(255,255,255,0.8)" }}>
-                Personal Savings Co-Pilot
+                Your Savings Buddy
               </span>
             </div>
 
@@ -373,10 +371,10 @@ export default function Landing() {
               <div className="hidden md:block w-px h-10" style={{ background: "rgba(255,255,255,0.07)" }} />
               <div className="space-y-1 text-center md:text-left">
                 <p className="text-[9px] font-bold uppercase tracking-[0.6em]" style={{ color: "rgba(100,206,251,0.3)" }}>
-                  Stashed Safely
+                  Trusted by
                 </p>
                 <p className="text-2xl sm:text-3xl font-bold tracking-[-0.02em]" style={{ color: ACCENT }}>
-                  ₹1.2CR+ Secured
+                  12,400+ Smart Savers
                 </p>
               </div>
             </div>

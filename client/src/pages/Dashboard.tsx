@@ -42,6 +42,8 @@ import ChallengeCelebration from "@/components/ChallengeCelebration";
 import type { Transaction, Quest, UserQuest, Badge, UserBadge, Goal } from "@shared/schema";
 import { format } from "date-fns";
 
+import { BrandFooter } from "@/components/BrandFooter";
+
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -626,6 +628,8 @@ export default function Dashboard() {
           </div>
         </motion.div>
       </main>
+
+      <BrandFooter />
 
       {/* Modals & Celebrations */}
       <AnimatePresence>

@@ -13,6 +13,8 @@ import GoalCelebration from "@/components/GoalCelebration";
 import { useAuth } from "@/hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { BrandFooter } from "@/components/BrandFooter";
+
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -689,6 +691,7 @@ export default function GlowUp() {
         onClose={() => setShowCelebration(false)} 
         goalName={completedGoalName} 
       />
+      <BrandFooter />
     </div>
   );
 }

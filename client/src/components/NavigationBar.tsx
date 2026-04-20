@@ -37,6 +37,8 @@ import {
   Lock
 } from "lucide-react";
 
+import { Logo } from "@/components/Logo";
+
 const menuItems = [
   { title: "Vault", url: "/vault", icon: TrendingUp },
   { title: "Coach", url: "/assistant", icon: MessageCircle },
@@ -64,12 +66,9 @@ export function NavigationBar() {
   if (!isAuthenticated) {
     return (
       <nav className="ice-frost border-b border-white/[0.05] fixed top-0 w-full z-50">
-        <div className="container mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group cursor-pointer transition-all">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-               <Wallet className="w-5 h-5 text-black" />
-            </div>
-            <span className="text-xl font-bold tracking-tight font-display text-white">Pocket Fund</span>
+        <div className="w-full px-6 sm:px-10 h-16 sm:h-20 flex items-center justify-between">
+          <Link href="/" className="group cursor-pointer">
+            <Logo size="sm" />
           </Link>
           <div className="flex items-center gap-6">
              <button onClick={handleLogin} className="text-sm font-medium text-white/60 hover:text-white transition-colors hidden sm:block">Log in</button>
@@ -86,12 +85,9 @@ export function NavigationBar() {
   return (
     <div className="sticky top-0 z-[100]">
       <nav className="ice-frost border-b border-white/[0.05]">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group transition-all shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-              <Wallet className="w-5 h-5 text-black" />
-            </div>
-            <span className="text-lg font-bold tracking-tighter uppercase font-display hidden sm:block">Pocket Fund</span>
+        <div className="w-full px-6 sm:px-10 h-20 flex items-center justify-between">
+          <Link href="/" className="group transition-all shrink-0">
+            <Logo size="sm" />
           </Link>
           
           <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.05]">

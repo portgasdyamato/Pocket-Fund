@@ -29,6 +29,8 @@ import {
   AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
 
+import { BrandFooter } from "@/components/BrandFooter";
+
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -529,6 +531,7 @@ export default function ExpenseLog() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+      <BrandFooter />
     </div>
   );
 }

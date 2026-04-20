@@ -197,38 +197,83 @@ export default function LearnPage() {
             <AnimatePresence mode="wait">
               {/* Completed */}
               {isCompleted ? (
-                /* Completion Screen - THE WOW FACTOR */
-                <motion.div key="done" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16 px-8 max-w-2xl mx-auto">
-                  <div className="relative mb-12">
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", damping: 10 }} className="w-32 h-32 rounded-[40px] bg-gradient-to-tr from-yellow-400 to-orange-500 mx-auto flex items-center justify-center premium-shadow relative z-10">
-                      <Trophy className="w-16 h-16 text-black" />
+                /* Completion Screen - WORLD CLASS REDESIGN */
+                <motion.div key="done" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 px-8 max-w-3xl mx-auto space-y-12">
+                  <div className="relative">
+                    <motion.div 
+                      initial={{ scale: 0, rotate: -20 }} 
+                      animate={{ scale: 1, rotate: 0 }} 
+                      transition={{ type: "spring", damping: 12, stiffness: 100 }} 
+                      className="w-40 h-40 rounded-[48px] bg-gradient-to-tr from-primary to-accent mx-auto flex items-center justify-center premium-shadow relative z-10"
+                    >
+                      <Trophy className="w-20 h-20 text-white" />
+                      <div className="absolute inset-0 rounded-[48px] border-4 border-white/20 animate-pulse" />
                     </motion.div>
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-44 h-44 -top-6 -left-6 mx-auto border-2 border-dashed border-yellow-500/20 rounded-full" />
+                    
+                    {/* Decorative Rings */}
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-64 h-64 -top-12 -left-12 mx-auto border-2 border-dashed border-primary/10 rounded-full" />
+                    <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-0 w-56 h-56 -top-8 -left-8 mx-auto border border-white/5 rounded-full" />
                   </div>
 
-                  <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-4">Mastery <span className="text-primary">Achieved!</span></h2>
-                  <p className="text-white/50 text-xl font-medium mb-10 leading-relaxed">
-                    You've successfully completed <span className="text-white">"{activeQuest.title}"</span>. 
-                    Your financial intelligence is growing.
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-4 mb-12">
-                    <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Knowledge</p>
-                      <p className="text-3xl font-black italic">100%</p>
-                    </div>
-                    <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-1">XP Earned</p>
-                      <p className="text-3xl font-black italic">+{activeQuest.points}</p>
-                    </div>
+                  <div className="space-y-4">
+                    <motion.p 
+                      initial={{ opacity: 0 }} 
+                      animate={{ opacity: 1 }} 
+                      transition={{ delay: 0.4 }}
+                      className="text-[10px] font-black uppercase tracking-[0.6em] text-primary italic"
+                    >
+                      Curriculum // Validated
+                    </motion.p>
+                    <motion.h2 
+                      initial={{ opacity: 0, y: 20 }} 
+                      animate={{ opacity: 1, y: 0 }} 
+                      transition={{ delay: 0.5 }}
+                      className="text-6xl sm:text-7xl font-black italic uppercase tracking-tighter leading-[0.8] mb-4"
+                    >
+                      Mastery <br /><span className="text-white">Achieved</span>
+                    </motion.h2>
+                    <motion.p 
+                      initial={{ opacity: 0 }} 
+                      animate={{ opacity: 1 }} 
+                      transition={{ delay: 0.6 }}
+                      className="text-white/40 text-xl font-medium max-w-xl mx-auto italic leading-relaxed"
+                    >
+                      You've successfully decoded <span className="text-white">"{activeQuest.title}"</span>. 
+                      Your financial intelligence has been upgraded to institutional standards.
+                    </motion.p>
                   </div>
 
-                  <div className="flex flex-col gap-4">
-                    <Button onClick={closeQuest} className="h-16 rounded-2xl bg-primary text-white font-black text-lg uppercase tracking-widest premium-shadow hover:scale-[1.02] active:scale-[0.98] transition-all">
-                      Collect Rewards & Continue
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: 0.7 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
+                  >
+                    <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Knowledge Index</p>
+                      <p className="text-5xl font-black italic text-white group-hover:scale-110 transition-transform origin-left">100%</p>
+                    </div>
+                    <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-2">XP Allocated</p>
+                      <p className="text-5xl font-black italic text-white group-hover:scale-110 transition-transform origin-left">+{activeQuest.points}</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ delay: 0.8 }}
+                    className="pt-6 space-y-6"
+                  >
+                    <Button onClick={closeQuest} className="h-20 px-12 rounded-3xl bg-white text-black font-black text-xl uppercase tracking-widest hover:bg-white/90 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.1)] group">
+                      Claim Assets & Exit
+                      <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
                     </Button>
-                    <p className="text-white/20 text-xs font-bold uppercase tracking-[0.3em]">Module Verified by Financial GlowUp Academy</p>
-                  </div>
+                    <div className="flex items-center justify-center gap-2">
+                       <ShieldCheck className="w-4 h-4 text-white/20" />
+                       <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] italic">Credential Verified by Financial GlowUp Academy</span>
+                    </div>
+                  </motion.div>
                 </motion.div>
 
               ) : step === 0 ? (

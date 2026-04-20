@@ -12,6 +12,8 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { Logo } from "@/components/Logo";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -46,6 +48,7 @@ const QUICK_PROMPTS = [
 ];
 
 export default function AskCoach() {
+  const { user } = useAuth();
   const { toast } = useToast();
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
@@ -70,7 +73,6 @@ export default function AskCoach() {
     if (transcript) setChatMessage(transcript);
   }, [transcript]);
 
-  // Load available TTS voices (Chrome fires 'voiceschanged' asynchronously)
   useEffect(() => {
     const loadVoices = () => {
       voicesRef.current = window.speechSynthesis?.getVoices() ?? [];
@@ -98,7 +100,6 @@ export default function AskCoach() {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text.replace(/[*#_`]/g, ''));
 
-    // Pick a female voice — prefer en-IN, then any English, then any female
     const voices = voicesRef.current;
     const femaleVoice =
       voices.find(v => /female|zira|susan|hazel|samantha|victoria|karen|moira|fiona|tessa|veena|heera|ava|allison|sayaka/i.test(v.name) && /en[-_]IN/i.test(v.lang)) ||
@@ -108,7 +109,7 @@ export default function AskCoach() {
       null;
 
     if (femaleVoice) utterance.voice = femaleVoice;
-    utterance.pitch = 1.1;   // slightly higher pitch for femininity on voices without a label
+    utterance.pitch = 1.1;
     utterance.rate  = 1.0;
 
     utterance.onstart = () => { if (index !== undefined) setCurrentlyPlaying(index); };
@@ -165,28 +166,22 @@ export default function AskCoach() {
 
       {/* ══════════ HEADER ══════════ */}
       <div className="relative shrink-0 z-20 px-6 pt-5 pb-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-between p-3 rounded-2xl ice-frost">
+        <div className="w-full">
+          <div className="flex items-center justify-between p-3 rounded-2xl ice-frost border-white/10">
             {/* Left: Identity */}
-            <div className="flex items-center gap-3">
-              {/* Animated icon */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/40 rounded-xl blur-lg animate-pulse" />
-                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-[#64CEFB]/20 border border-primary/30 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                </div>
-              </div>
+            <div className="flex items-center gap-4">
+              <Logo size="sm" showText={false} />
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-3">
-                    Financial AI Coach
+                  <h1 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-3 italic">
+                    FINANCIAL AI COACH
                     <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 backdrop-blur-sm h-fit self-center">
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
                       <span className="text-[9px] sm:text-[10px] font-black text-green-400 tracking-wider leading-none">LIVE</span>
                     </div>
                   </h1>
                 </div>
-                <p className="text-[10px] text-white/30 font-medium mt-0.5">Financial Glow-Up AI · Powered by OpenRouter</p>
+                <p className="text-[10px] text-white/30 font-black uppercase tracking-widest mt-0.5 italic">Pro Financial Advisor</p>
               </div>
             </div>
 
@@ -200,217 +195,286 @@ export default function AskCoach() {
               }`}
             >
               {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline">{isMuted ? "Muted" : "Voice On"}</span>
+              <span className="hidden sm:inline italic">{isMuted ? "Audio Muted" : "Audio Active"}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ══════════ CHAT AREA ══════════ */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide px-6 pb-4">
-        <div className="max-w-3xl mx-auto space-y-4">
+      {/* ══════════ MAIN CONTENT AREA ══════════ */}
+      <div className="flex-1 flex overflow-hidden relative border-t border-white/5">
+        
+        {/* Left Sidebar (Desktop Only) */}
+        <aside className="hidden xl:flex flex-col w-80 p-6 space-y-6 border-r border-white/5 bg-black/20 backdrop-blur-sm">
+          <div className="space-y-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-white/40 uppercase">Wallet</span>
+                <span className="text-[10px] font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-white/40 uppercase">Status</span>
+                <span className="text-[10px] font-black text-white/60 italic">Online & Secure</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-white/40 uppercase">Assistance</span>
+                <span className="text-[10px] font-black text-white/60 italic">Pro Advisor</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-4 pt-4 border-t border-white/5">
+             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Service Capabilities</p>
+             <div className="space-y-3">
+                {[
+                  "Investment Strategy",
+                  "Expense Auditing",
+                  "Wealth Scaling",
+                  "Habit Tracking"
+                ].map((cap, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-primary/40" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{cap}</span>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </aside>
 
-          {/* Quick prompt cards */}
-          <AnimatePresence>
-            {isFirstMessage && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 pb-1"
-              >
-                {QUICK_PROMPTS.map((p, i) => {
-                  const Icon = p.icon;
-                  return (
-                    <motion.button
-                      key={i}
-                      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+        {/* Central Chat Column */}
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 overflow-y-auto scrollbar-hide px-6 pb-4 pt-4">
+            <div className="max-w-5xl mx-auto space-y-8">
+
+              {/* Quick prompt cards */}
+              <AnimatePresence>
+                {isFirstMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                  >
+                    {QUICK_PROMPTS.map((p, i) => {
+                      const Icon = p.icon;
+                      return (
+                        <motion.button
+                          key={i}
+                          initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 20 }}
+                          whileHover={{ scale: 1.03, y: -2 }}
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => { setChatMessage(p.q); handleSend(); }}
+                          className={`group relative p-6 rounded-3xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10 ice-frost`}
+                        >
+                          {/* Shine overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+                          
+                          <div className="relative">
+                            <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 shadow-inner">
+                              <Icon className="w-5 h-5 text-white" />
+                            </div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/70 italic">{p.label}</p>
+                            <p className="text-sm font-bold text-white leading-snug">{p.q}</p>
+                            <ArrowRight className="w-4 h-4 mt-4 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Messages */}
+              <div className="space-y-8">
+                <AnimatePresence mode="popLayout">
+                  {chatHistory.map((msg, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 14, scale: 0.99 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 20 }}
-                      whileHover={{ scale: 1.03, y: -2 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => { setChatMessage(p.q); handleSend(); }}
-                      className={`group relative p-4 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/20 ice-frost`}
+                      transition={{ duration: 0.28, ease: "easeOut" }}
+                      className={`flex gap-6 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end`}
                     >
-                      {/* Shine overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
-                      {/* Top-right glow orb */}
-                      <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all" />
+                      {/* Avatar */}
+                      <div className={`shrink-0 mb-1 w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xl ${
+                        msg.role === 'user'
+                          ? 'bg-white/5 border-white/10 text-white/40'
+                          : 'bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 text-primary'
+                      }`}>
+                        {msg.role === 'user'
+                          ? <User className="w-5 h-5" />
+                          : <Sparkles className="w-5 h-5" />}
+                      </div>
 
-                      <div className="relative">
-                        <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 shadow-inner">
-                          <Icon className="w-4.5 h-4.5 text-white" />
+                      {/* Bubble */}
+                      <div className={`group relative max-w-[85%] sm:max-w-[80%] ${
+                        msg.role === 'user'
+                          ? 'rounded-[32px] rounded-br-sm ice-frost border-white/5'
+                          : 'rounded-[32px] rounded-bl-sm ice-frost border-primary/10 bg-primary/[0.02]'
+                      } px-8 py-7 shadow-2xl`}>
+
+                        {/* Inner content */}
+                        <div className={`text-base leading-relaxed ${
+                          msg.role === 'user'
+                            ? 'text-white/80 font-medium italic'
+                            : 'text-white/90'
+                        }`}>
+                          {msg.role === 'assistant' ? (
+                            <div className="prose prose-invert prose-sm max-w-none
+                              prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-headings:mb-4 prose-headings:mt-6 first:prose-headings:mt-0 italic
+                              prose-h2:text-lg prose-h3:text-sm prose-h3:uppercase prose-h3:tracking-widest prose-h3:text-primary/80
+                              prose-strong:text-primary prose-strong:font-black
+                              prose-p:text-white/85 prose-p:leading-relaxed prose-p:mb-4 last:prose-p:mb-0
+                              prose-li:text-white/80 prose-li:leading-relaxed
+                              prose-ul:my-4 prose-ol:my-4 prose-li:mb-2
+                              prose-code:text-primary prose-code:bg-primary/10 prose-code:px-2 prose-code:py-1 prose-code:rounded-lg prose-code:text-xs prose-code:font-mono
+                              prose-hr:border-white/10 prose-hr:my-6
+                              prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/40 prose-blockquote:italic
+                            ">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.message}</ReactMarkdown>
+                            </div>
+                          ) : (
+                            <p className="whitespace-pre-wrap">{msg.message}</p>
+                          )}
                         </div>
-                        <p className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 text-white/70">{p.label}</p>
-                        <p className="text-xs font-bold text-white leading-snug">{p.q}</p>
-                        <ArrowRight className="w-3.5 h-3.5 mt-2 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
+
+                        {/* Replay footer for AI messages */}
+                        {msg.role === 'assistant' && (
+                          <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/[0.08]">
+                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/15 italic inline-flex items-center gap-2">
+                               <ShieldCheck className="w-3 h-3" /> Privacy Shield Active
+                            </span>
+                            <button
+                              onClick={() => speak(msg.message, index)}
+                              className={`flex items-center gap-2 px-4 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+                                currentlyPlaying === index
+                                  ? "bg-primary/20 border-primary/40 text-primary"
+                                  : "bg-white/[0.03] border-white/5 text-white/20 hover:text-white/50 hover:border-white/20"
+                              }`}
+                            >
+                              <Volume2 className="w-3.5 h-3.5" />
+                              <span>{currentlyPlaying === index ? "Playing..." : "Listen"}</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </motion.button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
 
-          {/* Messages */}
-          <AnimatePresence mode="popLayout">
-            {chatHistory.map((msg, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 14, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-                className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end`}
-              >
-                {/* Avatar */}
-                <div className={`shrink-0 mb-1 w-7 h-7 rounded-xl flex items-center justify-center border ${
-                  msg.role === 'user'
-                    ? 'bg-white/5 border-white/10 text-white/40'
-                    : 'bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 text-primary'
-                }`}>
-                  {msg.role === 'user'
-                    ? <User className="w-3.5 h-3.5" />
-                    : <Sparkles className="w-3.5 h-3.5" />}
-                </div>
-
-                {/* Bubble */}
-                <div className={`group relative max-w-[84%] md:max-w-[72%] ${
-                  msg.role === 'user'
-                    ? 'rounded-2xl rounded-br-sm ice-frost'
-                    : 'rounded-2xl rounded-bl-sm ice-frost'
-                } px-5 py-4 shadow-xl`}>
-
-                  {/* Inner content */}
-                  <div className={`text-sm leading-relaxed ${
-                    msg.role === 'user'
-                      ? 'text-white/80 font-medium'
-                      : 'text-white/90'
-                  }`}>
-                    {msg.role === 'assistant' ? (
-                      <div className="prose prose-invert prose-sm max-w-none
-                        prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-headings:mb-2 prose-headings:mt-4 first:prose-headings:mt-0
-                        prose-h2:text-sm prose-h3:text-xs prose-h3:uppercase prose-h3:tracking-widest prose-h3:text-primary/80
-                        prose-strong:text-primary prose-strong:font-bold
-                        prose-p:text-white/82 prose-p:leading-relaxed prose-p:mb-2.5 last:prose-p:mb-0
-                        prose-li:text-white/78 prose-li:leading-relaxed
-                        prose-ul:my-2 prose-ol:my-2 prose-li:mb-1
-                        prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-xs prose-code:font-mono
-                        prose-hr:border-white/10 prose-hr:my-3
-                        prose-blockquote:border-l-primary prose-blockquote:border-l-2 prose-blockquote:pl-3 prose-blockquote:text-white/50 prose-blockquote:italic
-                      ">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.message}</ReactMarkdown>
-                      </div>
-                    ) : (
-                      <p className="whitespace-pre-wrap">{msg.message}</p>
-                    )}
-                  </div>
-
-                  {/* Replay footer for AI messages */}
-                  {msg.role === 'assistant' && (
-                    <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-white/[0.06]">
-                      <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/15">Pocket Coach</span>
-                      <button
-                        onClick={() => speak(msg.message, index)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[9px] font-black uppercase tracking-wide transition-all ${
-                          currentlyPlaying === index
-                            ? "bg-primary/20 border-primary/40 text-primary"
-                            : "ice-frost text-white/20 hover:text-white/50 hover:border-white/20"
-                        }`}
-                      >
-                        <Volume2 className="w-3 h-3" />
-                        <span className="hidden sm:inline">{currentlyPlaying === index ? "Playing…" : "Replay"}</span>
-                      </button>
+              {/* Typing indicator */}
+              <AnimatePresence>
+                {chatMutation.isPending && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="flex gap-6 items-end pt-4"
+                  >
+                    <div className="w-10 h-10 mb-1 rounded-2xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 flex items-center justify-center ice-frost">
+                      <Sparkles className="w-5 h-5 text-primary animate-pulse" />
                     </div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                    <div className="rounded-[32px] rounded-bl-sm px-8 py-7 ice-frost border-white/5">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary/60 animate-bounce" />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-          {/* Typing indicator */}
-          <AnimatePresence>
-            {chatMutation.isPending && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                className="flex gap-3 items-end"
-              >
-                <div className="w-7 h-7 mb-1 rounded-xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 flex items-center justify-center ice-frost">
-                  <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
-                </div>
-                <div className="rounded-2xl rounded-bl-sm px-5 py-4 ice-frost">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]" />
-                    <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />
-                    <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div ref={scrollRef} className="h-1" />
-        </div>
-      </div>
-
-      {/* ══════════ INPUT DOCK ══════════ */}
-      <div className="relative shrink-0 z-20 px-6 pt-3 pb-5">
-        <div className="max-w-3xl mx-auto">
-          <div className="relative p-1.5 rounded-2xl ice-frost border-white/20 focus-within:border-primary/40 transition-all duration-300">
-            {/* Glow on focus */}
-            <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 focus-within:opacity-100 transition-opacity pointer-events-none blur-sm" />
-
-            <div className="relative flex items-center gap-2">
-              {/* Mic */}
-              {browserSupportsSpeechRecognition && (
-                <button
-                  onClick={toggleListening}
-                  title={listening ? "Stop listening" : "Voice input"}
-                  className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                    listening
-                      ? "bg-red-500/15 text-red-400 ring-1 ring-red-500/30 animate-pulse"
-                      : "text-white/25 hover:text-white/60 hover:bg-white/[0.06]"
-                  }`}
-                >
-                  {listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
-              )}
-
-              {/* Text input */}
-              <input
-                ref={inputRef}
-                value={chatMessage}
-                onChange={e => setChatMessage(e.target.value)}
-                onKeyDown={handleKey}
-                placeholder={listening ? "🎙 Listening..." : "Ask your coach anything..."}
-                className="flex-1 bg-transparent border-none outline-none text-sm text-white placeholder:text-white/25 font-medium py-2.5"
-              />
-
-              {/* Character hint */}
-              {chatMessage.length > 0 && (
-                <span className="shrink-0 text-[10px] text-white/20 font-medium hidden sm:block">
-                  ↵ Send
-                </span>
-              )}
-
-              {/* Send button */}
-              <Button
-                onClick={handleSend}
-                disabled={!chatMessage.trim() || chatMutation.isPending}
-                size="icon"
-                className="shrink-0 w-9 h-9 rounded-xl bg-primary hover:bg-primary/85 disabled:opacity-25 transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 active:scale-95"
-              >
-                <Send className="w-3.5 h-3.5" />
-              </Button>
+              <div ref={scrollRef} className="h-20 sm:h-32" />
             </div>
           </div>
 
-          {/* Bottom tag */}
-          <p className="text-center text-[9px] font-black uppercase tracking-[0.4em] text-white/10 mt-2.5 select-none">
-            Pocket Fund · Financial Glow-Up Coach
-          </p>
+          {/* ══════════ INPUT DOCK ══════════ */}
+          <div className="relative shrink-0 z-20 px-6 pb-8">
+            <div className="max-w-5xl mx-auto">
+              <div className="relative p-2 rounded-[32px] ice-frost border-white/20 focus-within:border-primary/50 transition-all duration-500 shadow-2xl">
+                {/* Glow on focus */}
+                <div className="absolute inset-0 rounded-[32px] bg-primary/5 opacity-0 focus-within:opacity-100 transition-opacity pointer-events-none blur-xl" />
+
+                <div className="relative flex items-center gap-3">
+                  {/* Mic */}
+                  {browserSupportsSpeechRecognition && (
+                    <button
+                      onClick={toggleListening}
+                      className={`shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                        listening
+                          ? "bg-red-500/20 text-red-400 ring-2 ring-red-500/40 animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                          : "bg-white/[0.03] text-white/25 hover:text-white/60 hover:bg-white/[0.08] hover:border-white/10 border border-transparent"
+                      }`}
+                    >
+                      {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                    </button>
+                  )}
+
+                  {/* Text input */}
+                  <input
+                    ref={inputRef}
+                    value={chatMessage}
+                    onChange={e => setChatMessage(e.target.value)}
+                    onKeyDown={handleKey}
+                    placeholder={listening ? "I'm listening..." : "Ask me anything..."}
+                    className="flex-1 bg-transparent border-none outline-none text-base text-white placeholder:text-white/15 font-black tracking-wide py-3 italic"
+                  />
+
+                  {/* Send button */}
+                  <Button
+                    onClick={handleSend}
+                    disabled={!chatMessage.trim() || chatMutation.isPending}
+                    className="shrink-0 w-14 h-14 rounded-2xl bg-white text-black hover:bg-white/90 disabled:opacity-30 transition-all shadow-2xl hover:scale-105 active:scale-95 group"
+                  >
+                    <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Bottom tag */}
+              <div className="flex flex-col items-center gap-2 mt-4 select-none opacity-20">
+                <Logo size="sm" showText={false} />
+                <p className="text-[8px] font-black uppercase tracking-[0.6em] text-white">
+                  Your conversations are private and encrypted.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Right Sidebar (Desktop Only) */}
+        <aside className="hidden 2xl:flex flex-col w-80 p-6 space-y-6 border-l border-white/5 bg-black/20 backdrop-blur-sm">
+           <div className="space-y-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Financial Metrics</p>
+              <div className="grid grid-cols-1 gap-3">
+                 {[
+                   { label: "Wallet Stability", value: "98.4%", color: "text-emerald-400" },
+                   { label: "Savings Velocity", value: "+12.4%", color: "text-primary" },
+                   { label: "Risk Index", value: "Low", color: "text-white/60" }
+                 ].map((stat, i) => (
+                   <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                      <p className="text-[8px] font-black text-white/30 uppercase tracking-widest">{stat.label}</p>
+                      <p className={`text-lg font-black italic ${stat.color} mt-1`}>{stat.value}</p>
+                   </div>
+                 ))}
+              </div>
+           </div>
+           
+           <div className="mt-auto p-6 rounded-3xl bg-primary/5 border border-primary/20 space-y-3">
+              <div className="flex items-center gap-2 text-primary">
+                 <ShieldCheck className="w-4 h-4" />
+                 <span className="text-[10px] font-black uppercase tracking-widest italic">Advisor Privacy</span>
+              </div>
+              <p className="text-[10px] font-medium text-white/30 leading-relaxed italic">
+                 Your data is private. Your financial footprint remains entirely between you and your coach.
+              </p>
+           </div>
+        </aside>
       </div>
     </div>
   );

@@ -368,6 +368,7 @@ export default function AchievementsPage() {
             </div>
          </div>
       </footer>
+      <BrandFooter />
     </div>
   );
 }

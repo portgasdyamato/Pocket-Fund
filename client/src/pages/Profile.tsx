@@ -45,16 +45,16 @@ export default function Profile() {
       setLastName(updatedUser.lastName || "");
       setProfileImageUrl(updatedUser.profileImageUrl || "");
       toast({
-        title: "Database Synchronized",
-        description: "Your digital identity has been updated.",
+        title: "Profile Updated",
+        description: "Your details have been saved successfully.",
       });
       setIsEditing(false);
       setPreviewImage(null);
     },
     onError: (error: any) => {
       toast({
-        title: "Sync Error",
-        description: error?.message || "Failed to update profile protocols.",
+        title: "Update Error",
+        description: error?.message || "Failed to update profile.",
         variant: "destructive",
       });
     },
@@ -96,7 +96,7 @@ export default function Profile() {
       setPreviewImage(compressed);
       setProfileImageUrl(compressed);
     } catch (error) {
-      toast({ title: "Visual Array Error", description: "Failed to process image.", variant: "destructive" });
+      toast({ title: "Image Error", description: "Failed to process image.", variant: "destructive" });
     }
   };
 
@@ -119,7 +119,7 @@ export default function Profile() {
   const statusItems = [
     { label: "KYC Verification", status: user?.kycCompleted ? "Secured" : "Pending", color: user?.kycCompleted ? "text-green-400" : "text-orange-400", dot: user?.kycCompleted ? "bg-green-400" : "bg-orange-400" },
     { label: "Account Aggregator", status: user?.aaToken ? "Connected" : "Inactive", color: user?.aaToken ? "text-[#64CEFB]" : "text-white/40", dot: user?.aaToken ? "bg-[#64CEFB]" : "bg-white/20" },
-    { label: "Onboarding State", status: "Phase 4", color: "text-[#0ea5e9]", dot: "bg-[#0ea5e9]" },
+    { label: "Account Tier", status: "Premium", color: "text-[#0ea5e9]", dot: "bg-[#0ea5e9]" },
     { label: "UPI Authorization", status: user?.mandateId ? "Active" : "Disabled", color: user?.mandateId ? "text-green-400" : "text-red-400", dot: user?.mandateId ? "bg-green-400" : "bg-red-400" },
   ];
 
@@ -147,8 +147,8 @@ export default function Profile() {
             {/* Action Bar */}
             <div className="flex justify-between items-start mb-6">
               <div>
-                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Subject Identity</p>
-                <p className="text-[10px] font-bold text-primary mt-0.5">Authenticated Operator</p>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Your Profile</p>
+                <p className="text-[10px] font-bold text-primary mt-0.5">Verified Member</p>
               </div>
               <div className="flex gap-2">
                 {!isEditing ? (
@@ -208,7 +208,7 @@ export default function Profile() {
                 <p className="text-xs text-white/40 font-bold truncate mt-0.5">{user?.email}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-[10px] font-black text-white/40 uppercase tracking-wider">Session Active</span>
+                  <span className="text-[10px] font-black text-white/40 uppercase tracking-wider">Member Since 2024</span>
                 </div>
               </div>
             </div>
@@ -216,10 +216,10 @@ export default function Profile() {
             {/* Quick Stats Row */}
             <div className="grid grid-cols-4 gap-2 mt-5">
               {[
-                { label: "Security", val: "T1", icon: <Shield className="w-3 h-3" /> },
-                { label: "Power", val: "High", icon: <Zap className="w-3 h-3" /> },
-                { label: "Region", val: "Global", icon: <Globe className="w-3 h-3" /> },
-                { label: "Matrix", val: "Active", icon: <Cpu className="w-3 h-3" /> },
+                { label: "Security", val: "Tier 1", icon: <Shield className="w-3 h-3" /> },
+                { label: "Activity", val: "High", icon: <Zap className="w-3 h-3" /> },
+                { label: "Tier", val: "Pro", icon: <Globe className="w-3 h-3" /> },
+                { label: "Status", val: "Active", icon: <Cpu className="w-3 h-3" /> },
               ].map((s, i) => (
                 <div key={i} className="flex flex-col items-center p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06]">
                   <div className="text-primary mb-1">{s.icon}</div>
@@ -267,9 +267,9 @@ export default function Profile() {
                 </div>
 
                 <div className="relative z-10 w-full">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-2">Subject Identity</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-2">Your Profile</h3>
                   <h2 className="text-3xl font-black tracking-tighter mb-1">
-                    {firstName ? `${firstName} ${lastName}` : "Authenticated User"}
+                    {firstName ? `${firstName} ${lastName}` : "Verified Member"}
                   </h2>
                   <p className="text-white/40 font-bold text-sm lowercase">{user?.email}</p>
                   
@@ -311,9 +311,9 @@ export default function Profile() {
             >
               {[
                 { label: "Security", val: "Tier 1", icon: <Shield className="w-4 h-4" /> },
-                { label: "Efficiency", val: "High", icon: <Zap className="w-4 h-4" /> },
-                { label: "Region", val: "Global", icon: <Globe className="w-4 h-4" /> },
-                { label: "Matrix", val: "Active", icon: <Cpu className="w-4 h-4" /> },
+                { label: "Activity", val: "High", icon: <Zap className="w-4 h-4" /> },
+                { label: "Tier", val: "Premium", icon: <Globe className="w-4 h-4" /> },
+                { label: "Status", val: "Active", icon: <Cpu className="w-4 h-4" /> },
               ].map((s, i) => (
                 <div key={i} className="p-4 rounded-[22px] border border-white/5 flex items-center gap-3"
                   style={{ background: "rgba(255,255,255,0.02)" }}
@@ -345,7 +345,7 @@ export default function Profile() {
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     <User className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Protocol Attributes</h2>
+                  <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Account Details</h2>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-6 sm:gap-y-5">
@@ -376,7 +376,7 @@ export default function Profile() {
                     </div>
                   </div>
                   <div className="sm:col-span-2 space-y-2">
-                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-1">Communications Link</Label>
+                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-1">Email Address</Label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                       <Input
@@ -397,7 +397,7 @@ export default function Profile() {
                       className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 transition-all active:scale-95"
                     >
                       <LogOut className="w-4 h-4 text-red-400" />
-                      <span className="text-sm font-black text-red-400">Terminate Session</span>
+                      <span className="text-sm font-black text-red-400">Log Out</span>
                     </button>
                   ) : null}
                 </div>
@@ -414,7 +414,7 @@ export default function Profile() {
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500">
                     <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">System Clearances</h2>
+                  <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Account Status</h2>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
