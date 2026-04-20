@@ -226,9 +226,9 @@ export default function AskCoach() {
         </aside>
 
         {/* Central Chat Column */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <div className={`flex-1 ${isFirstMessage ? "overflow-hidden flex items-center" : "overflow-y-auto pt-12"} scrollbar-hide px-6 pb-4`}>
-            <div className={`max-w-5xl mx-auto space-y-8 w-full ${isFirstMessage ? "py-12" : ""}`}>
+        <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+          <div className="flex-1 overflow-y-auto scrollbar-hide px-6">
+            <div className={`max-w-5xl mx-auto space-y-4 w-full ${isFirstMessage ? "pt-6 pb-20" : "pt-8 pb-20"}`}>
 
               {/* Quick prompt cards */}
               <AnimatePresence>
@@ -250,18 +250,18 @@ export default function AskCoach() {
                           whileHover={{ scale: 1.02, y: -4 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => { setChatMessage(p.q); handleSend(); }}
-                          className={`group relative p-5 rounded-[28px] bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/15 ice-frost h-full min-h-[160px] flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.4)]`}
+                          className={`group relative p-3 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10 ice-frost h-full min-h-[110px] flex flex-col justify-between shadow-xl hover:shadow-2xl`}
                         >
                           {/* Shine overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
                           
                           <div className="relative">
-                            <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 shadow-inner">
-                              <Icon className="w-5 h-5 text-white" />
+                            <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 shadow-inner">
+                              <Icon className="w-4 h-4 text-white" />
                             </div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/70 italic">{p.label}</p>
-                            <p className="text-sm font-bold text-white leading-snug">{p.q}</p>
-                            <ArrowRight className="w-4 h-4 mt-4 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                            <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1 text-white/70 italic">{p.label}</p>
+                            <p className="text-xs font-bold text-white leading-snug line-clamp-2">{p.q}</p>
+                            <ArrowRight className="w-4 h-4 mt-2 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
                           </div>
                         </motion.button>
                       );
@@ -279,7 +279,7 @@ export default function AskCoach() {
                       initial={{ opacity: 0, y: 14, scale: 0.99 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.28, ease: "easeOut" }}
-                      className={`flex gap-6 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end`}
+                      className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end`}
                     >
                       {/* Avatar */}
                       <div className={`shrink-0 mb-1 w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xl ${
@@ -293,29 +293,29 @@ export default function AskCoach() {
                       </div>
 
                       {/* Bubble */}
-                      <div className={`group relative max-w-[85%] sm:max-w-[80%] ${
+                      <div className={`group relative max-w-[85%] sm:max-w-[75%] ${
                         msg.role === 'user'
-                          ? 'rounded-[32px] rounded-br-sm ice-frost border-white/5'
-                          : 'rounded-[32px] rounded-bl-sm ice-frost border-primary/10 bg-primary/[0.02]'
-                      } px-8 py-7 shadow-2xl`}>
+                          ? 'rounded-[24px] rounded-br-sm ice-frost border-white/5'
+                          : 'rounded-[24px] rounded-bl-sm ice-frost border-primary/10 bg-primary/[0.02]'
+                      } px-5 py-4 shadow-xl`}>
 
                         {/* Inner content */}
-                        <div className={`text-base leading-relaxed ${
+                        <div className={`text-sm leading-relaxed ${
                           msg.role === 'user'
                             ? 'text-white/80 font-medium italic'
                             : 'text-white/90'
                         }`}>
                           {msg.role === 'assistant' ? (
-                            <div className="prose prose-invert prose-sm max-w-none
-                              prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-headings:mb-4 prose-headings:mt-6 first:prose-headings:mt-0 italic
-                              prose-h2:text-lg prose-h3:text-sm prose-h3:uppercase prose-h3:tracking-widest prose-h3:text-primary/80
+                            <div className="prose prose-invert prose-xs max-w-none
+                              prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-headings:mb-2 prose-headings:mt-4 first:prose-headings:mt-0 italic
+                              prose-h2:text-base prose-h3:text-[10px] prose-h3:uppercase prose-h3:tracking-widest prose-h3:text-primary/80
                               prose-strong:text-primary prose-strong:font-black
-                              prose-p:text-white/85 prose-p:leading-relaxed prose-p:mb-4 last:prose-p:mb-0
+                              prose-p:text-white/85 prose-p:leading-relaxed prose-p:mb-2 last:prose-p:mb-0
                               prose-li:text-white/80 prose-li:leading-relaxed
-                              prose-ul:my-4 prose-ol:my-4 prose-li:mb-2
-                              prose-code:text-primary prose-code:bg-primary/10 prose-code:px-2 prose-code:py-1 prose-code:rounded-lg prose-code:text-xs prose-code:font-mono
-                              prose-hr:border-white/10 prose-hr:my-6
-                              prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/40 prose-blockquote:italic
+                              prose-ul:my-2 prose-ol:my-2 prose-li:mb-1
+                              prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-lg prose-code:text-[10px] prose-code:font-mono
+                              prose-hr:border-white/10 prose-hr:my-4
+                              prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:text-white/40 prose-blockquote:italic
                             ">
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.message}</ReactMarkdown>
                             </div>

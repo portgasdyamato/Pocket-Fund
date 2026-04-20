@@ -11,7 +11,6 @@ export default function AddExpenseModalExample() {
       <AddExpenseModal 
         open={open} 
         onOpenChange={setOpen}
-        onAdd={(expense) => console.log('Expense added:', expense)}
       />
     </div>
   );

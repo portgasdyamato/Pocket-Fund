@@ -267,7 +267,7 @@ export default function GlowUp() {
                     <div className="flex justify-between items-start">
                       <DialogHeader>
                         <DialogTitle className="text-3xl font-black tracking-tight">Vault Management</DialogTitle>
-                        <DialogDescription className="text-white/40">Deposit or withdraw funds from your secure vault.</DialogDescription>
+                        <DialogDescription className="text-white/40">Securely allocate capital to your specific financial milestones or retrieve assets to your primary wallet.</DialogDescription>
                       </DialogHeader>
                       {user?.vaultPin && !getPinRestrictionMessage() && (
                         <Button 
@@ -296,7 +296,7 @@ export default function GlowUp() {
                           <SelectTrigger className="h-14 rounded-xl border-white/10 bg-white/5 px-4 text-white font-black italic tracking-tight focus:ring-primary/20">
                             <SelectValue placeholder="General Vault" />
                           </SelectTrigger>
-                          <SelectContent className="ice-frost border-white/10 bg-[#0A0A0A]/95 backdrop-blur-2xl text-white rounded-2xl overflow-hidden shadow-[0_30px_90px_-15px_rgba(0,0,0,0.9)]">
+                          <SelectContent className="bg-[#080808] border-white/10 text-white rounded-2xl overflow-hidden shadow-[0_30px_90px_-15px_rgba(0,0,0,1)] border">
                             <SelectItem value="none" className="py-4 px-6 focus:bg-white/5 focus:text-primary transition-colors cursor-pointer border-b border-white/5 font-black italic uppercase text-[10px] tracking-widest">
                               General Vault
                             </SelectItem>

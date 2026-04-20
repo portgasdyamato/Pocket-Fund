@@ -23,7 +23,7 @@ import {
   Ticket,
   FileText
 } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
@@ -418,6 +418,7 @@ export default function Dashboard() {
                             <DialogContent className="ice-frost border-white/10 text-white p-8">
                               <DialogHeader>
                                 <DialogTitle className="text-3xl font-black tracking-tight font-display">Add Funds</DialogTitle>
+                                <DialogDescription className="text-white/40 hidden">Manually increase your primary wallet liquidity for tactical expenditure.</DialogDescription>
                               </DialogHeader>
                               <div className="space-y-8 pt-8">
                                 <div className="space-y-4">

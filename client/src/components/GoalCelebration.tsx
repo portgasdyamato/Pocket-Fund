@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Button } from "@/components/ui/button";
-import { Trophy, Star, ArrowRight, Activity, TrendingUp } from "lucide-react";
+import { Trophy, Star, ArrowRight, Activity, TrendingUp, ShieldCheck } from "lucide-react";
 import { useWindowSize } from "react-use";
 import { motion, AnimatePresence } from "framer-motion";
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +84,7 @@ export default function AddExpenseModal({ open, onOpenChange }: AddExpenseModalP
           <DialogHeader className="pr-10">
             <div className="flex justify-between items-center w-full">
               <DialogTitle className="text-xl font-black tracking-tighter">New Entry</DialogTitle>
+              <DialogDescription className="text-[10px] text-white/30 hidden">Record a new financial transaction to your ledger.</DialogDescription>
               <div className="flex flex-col items-end leading-none mr-2">
                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30">Vault</span>
                 <span className="text-base font-black text-primary">₹{user?.walletBalance ? parseFloat(user.walletBalance.toString()).toLocaleString('en-IN') : '0'}</span>

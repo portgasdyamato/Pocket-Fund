@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Trophy, Flame, Calendar, Star, Shield, Zap, Target, Award, Sparkles, TrendingUp, Heart, CheckCircle2, Search, ArrowUpRight, BarChart3, Fingerprint, Activity } from "lucide-react";
 import type { Streak, UserQuest, Quest, StashTransaction, Goal, Transaction, Badge, UserBadge } from "@shared/schema";
 import { motion, AnimatePresence } from "framer-motion";
+import { BrandFooter } from "@/components/BrandFooter";
 
 // Snappy, non-AI-feeling transitions (Inspired by technical dashboards like Linear/Vercel)
 const transition = { type: "spring", damping: 30, stiffness: 200, mass: 1 };
