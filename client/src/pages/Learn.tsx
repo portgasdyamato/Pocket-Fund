@@ -197,93 +197,72 @@ export default function LearnPage() {
             <AnimatePresence mode="wait">
               {/* Completed */}
               {isCompleted ? (
-                /* Completion Screen - WORLD CLASS FULL-SCREEN REDESIGN */
+                /* Completion Screen - WORLD CLASS BOUTIQUE REDESIGN */
                 <motion.div 
                   key="done" 
                   initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }} 
-                  className="fixed inset-0 z-[100] bg-[#020202] flex flex-col items-center justify-center overflow-hidden grain-texture"
+                  className="fixed inset-0 z-[150] bg-[#020202]/80 backdrop-blur-2xl flex flex-col items-center justify-center p-6 overflow-hidden grain-texture"
                 >
-                  {/* Ultra-High Fidelity Mesh Background */}
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-[20%] left-[10%] w-[900px] h-[900px] bg-primary/10 rounded-full blur-[140px] animate-blob" />
-                    <div className="absolute bottom-[20%] right-[10%] w-[700px] h-[700px] bg-accent/10 rounded-full blur-[140px] animate-blob animation-delay-2000" />
-                    <div className="absolute inset-0 architectural-grid opacity-20" />
-                  </div>
-
-                  <div className="relative z-10 w-full max-w-6xl px-12 flex flex-col items-center text-center">
-                    <motion.div 
-                      initial={{ scale: 0.4, opacity: 0, rotateY: -90 }} 
-                      animate={{ scale: 1, opacity: 1, rotateY: 0 }} 
-                      transition={{ type: "spring", damping: 15, stiffness: 80, delay: 0.2 }}
-                      className="relative mb-16"
-                    >
-                      <div className="w-56 h-56 rounded-[64px] bg-gradient-to-tr from-primary via-primary to-accent flex items-center justify-center relative overflow-hidden group border border-white/20 premium-shadow">
-                        <Trophy className="w-28 h-28 text-white relative z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]" />
-                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="absolute inset-2 rounded-[56px] border border-white/20" />
-                      </div>
-                      
-                      <motion.div 
-                        animate={{ rotate: 360 }} 
-                        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 w-[350px] h-[350px] -top-[47px] -left-[47px] border-[0.5px] border-primary/30 rounded-full border-dashed" 
-                      />
-                    </motion.div>
-
-                    <div className="space-y-8">
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-md"
-                      >
-                        <Star className="w-4 h-4 text-primary fill-primary" />
-                        <span className="text-[12px] font-black uppercase tracking-[0.6em] text-primary italic">Credential // Validated</span>
-                        <Star className="w-4 h-4 text-primary fill-primary" />
-                      </motion.div>
-                      
-                      <motion.h2 
-                        initial={{ y: 60, opacity: 0 }} 
-                        animate={{ y: 0, opacity: 1 }} 
-                        transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        className="text-8xl md:text-[10rem] font-black italic uppercase tracking-tighter leading-[0.75] text-white"
-                      >
-                        MASTERY <br /><span className="text-primary italic">ACHIEVED</span>
-                      </motion.h2>
-
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.9 }} 
-                        animate={{ opacity: 1, scale: 1 }} 
-                        transition={{ delay: 0.7 }}
-                        className="mt-10 p-10 rounded-[48px] bg-white/[0.03] border border-white/10 backdrop-blur-3xl inline-block"
-                      >
-                         <p className="text-[12px] font-black uppercase tracking-[0.3em] text-white/30 mb-3 italic">Decoded Asset</p>
-                         <h3 className="text-4xl font-black text-white italic tracking-tighter">"{activeQuest.title}"</h3>
-                      </motion.div>
+                  <Confetti 
+                    width={width} 
+                    height={height} 
+                    numberOfPieces={150} 
+                    recycle={false} 
+                    colors={["#64CEFB", "#ffffff", "#3b82f6", "#2DD4BF"]}
+                    gravity={0.15}
+                  />
+                  
+                  <motion.div 
+                    initial={{ scale: 0.95, opacity: 0, y: 30 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 100, delay: 0.1 }}
+                    className="relative w-full max-w-2xl rounded-[40px] border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-3xl shadow-2xl p-10 flex flex-col items-center text-center premium-shadow"
+                  >
+                    {/* Inner Architectural Glow */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[40px]">
+                      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] transform translate-x-1/2 -translate-y-1/2" />
+                      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[80px] transform -translate-x-1/2 translate-y-1/2" />
+                      <div className="absolute inset-0 architectural-grid opacity-10" />
                     </div>
 
-                    <motion.div 
-                      initial={{ opacity: 0, y: 30 }} 
-                      animate={{ opacity: 1, y: 0 }} 
-                      transition={{ delay: 0.8 }}
-                      className="grid grid-cols-2 gap-px bg-white/10 border border-white/15 rounded-[48px] overflow-hidden w-full max-w-2xl mt-16 mb-16 shadow-3xl"
-                    >
-                      <div className="bg-white/[0.04] p-10 text-center backdrop-blur-3xl">
-                        <p className="text-[11px] font-black uppercase tracking-widest text-primary mb-3">Knowledge Index</p>
-                        <p className="text-6xl font-black italic text-white leading-none tabular-nums">100%</p>
-                      </div>
-                      <div className="bg-white/[0.04] p-10 text-center backdrop-blur-3xl">
-                        <p className="text-[11px] font-black uppercase tracking-widest text-yellow-500 mb-3">XP Allocated</p>
-                        <p className="text-6xl font-black italic text-white leading-none tabular-nums">+{activeQuest.points}</p>
-                      </div>
-                    </motion.div>
+                    <div className="relative mb-8 w-24 h-24 rounded-3xl bg-gradient-to-tr from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shadow-[inset_0_0_20px_rgba(100,206,251,0.1)] group">
+                      <Trophy className="w-12 h-12 text-primary drop-shadow-[0_0_15px_rgba(100,206,251,0.5)]" />
+                      <div className="absolute inset-0 rounded-3xl shadow-[0_0_40px_rgba(100,206,251,0.2)] pointer-events-none" />
+                    </div>
 
-                    <Button onClick={closeQuest} className="h-24 px-16 rounded-[40px] bg-white text-black font-black text-2xl uppercase tracking-tighter hover:bg-white/90 active:scale-95 transition-all shadow-[0_20px_80px_rgba(255,255,255,0.15)] group">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 mb-6">
+                      <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Credential Validated</span>
+                      <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+                    </div>
+                    
+                    <h2 className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter leading-none text-white mb-8 drop-shadow-md">
+                      Mastery <br /><span className="text-primary italic">Achieved</span>
+                    </h2>
+
+                    <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 mb-8 text-left flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 backdrop-blur-md hover:bg-white/[0.07] transition-colors">
+                        <div>
+                           <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-1">Decoded Asset</p>
+                           <h3 className="text-2xl font-black italic tracking-tight text-white line-clamp-1">"{activeQuest.title}"</h3>
+                        </div>
+                        <div className="flex gap-6 shrink-0">
+                          <div className="text-right">
+                            <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Knowledge</p>
+                            <p className="text-2xl font-black italic text-white tabular-nums">100%</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-[9px] font-black uppercase tracking-widest text-yellow-500 mb-1">XP Value</p>
+                            <p className="text-2xl font-black italic text-white tabular-nums">+{activeQuest.points}</p>
+                          </div>
+                        </div>
+                    </div>
+
+                    <Button onClick={closeQuest} className="w-full h-16 rounded-[20px] bg-white text-black font-black text-lg uppercase tracking-widest hover:bg-white/90 active:scale-95 transition-all outline-none relative z-10 group shadow-[0_10px_30px_rgba(255,255,255,0.15)]">
                       Collect Assets & Exit
-                      <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-3 transition-transform" />
+                      <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
                     </Button>
-                  </div>
+                  </motion.div>
                 </motion.div>
 
               ) : step === 0 ? (

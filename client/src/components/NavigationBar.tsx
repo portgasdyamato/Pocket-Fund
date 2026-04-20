@@ -139,18 +139,18 @@ export function NavigationBar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
                   className="w-72 border-white/[0.05] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl" 
-                  align="end"
-                >
-                  <div className="p-6 flex items-center gap-4 bg-white/[0.02] rounded-2xl border border-white/[0.05] mb-2">
-                    <Avatar className="h-14 w-14 border border-white/10">
-                      <AvatarImage src={user?.profileImageUrl || undefined} className="object-cover" />
-                      <AvatarFallback className="bg-white/5 text-white font-bold text-xl">
-                        {user?.firstName?.[0] || user?.email?.[0] || "U"}
+                <DropdownMenuContent align="end" className="w-64 p-2 bg-[#121212]/95 backdrop-blur-3xl border-white/10 rounded-3xl mt-2 overflow-hidden shadow-2xl">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-2xl rounded-full transform translate-x-1/2 -translate-y-1/2" />
+                  <div className="p-4 flex items-center gap-4 relative z-10">
+                    <Avatar className="w-12 h-12 border-2 border-white/10 shrink-0">
+                      <AvatarImage src={user?.profileImageUrl || `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.email}`} />
+                      <AvatarFallback className="bg-primary/20 text-primary font-bold">
+                        {user?.firstName?.charAt(0) || user?.email?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
                       <p className="font-bold text-white text-lg tracking-tight truncate w-32">{user?.firstName || 'User'}</p>
-                      <p className="text-[10px] font-bold uppercase text-white/30 tracking-widest">{user?.email?.split('@')[0]}</p>
+                      <p className="text-[10px] font-bold uppercase text-white/50 tracking-widest">{user?.email?.split('@')[0]}</p>
                     </div>
                   </div>
                   <div className="space-y-1">
@@ -158,19 +158,19 @@ export function NavigationBar() {
                       { icon: User, label: "My Profile", url: "/profile" },
                       { icon: Trophy, label: "Achievements", url: "/achievements" },
                     ].map((item, i) => (
-                      <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.05] cursor-pointer rounded-xl p-3 focus:bg-white/[0.1] transition-all">
+                      <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.08] cursor-pointer rounded-xl p-3 focus:bg-white/[0.1] transition-all">
                         <Link href={item.url} className="flex items-center gap-3">
-                          <item.icon className="w-4 h-4 text-white/40" />
-                          <span className="text-xs font-bold text-white/70">{item.label}</span>
+                          <item.icon className="w-4 h-4 text-white/60" />
+                          <span className="text-xs font-bold text-white/90">{item.label}</span>
                         </Link>
                       </DropdownMenuItem>
                     ))}
                   </div>
-                  <DropdownMenuSeparator className="bg-white/5 mx-2 my-2" />
-                  <DropdownMenuItem onClick={handleLogout} className="blue-glass-button cursor-pointer rounded-xl p-3 transition-all">
+                  <DropdownMenuSeparator className="bg-white/10 mx-2 my-2" />
+                  <DropdownMenuItem onClick={handleLogout} className="blue-glass-button cursor-pointer rounded-xl p-3 transition-all hover:bg-white/[0.08]">
                     <div className="flex items-center gap-3">
-                      <LogOut className="w-4 h-4" />
-                      <span className="text-xs font-bold">Sign Out</span>
+                      <LogOut className="w-4 h-4 text-white/60" />
+                      <span className="text-xs font-bold text-white/90">Sign Out</span>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

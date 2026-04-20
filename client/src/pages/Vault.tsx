@@ -293,18 +293,18 @@ export default function GlowUp() {
                       <div className="space-y-3">
                         <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Goal</Label>
                         <Select value={selectedGoalId} onValueChange={setSelectedGoalId}>
-                          <SelectTrigger className="h-14 rounded-xl border-white/10 bg-white/5 px-4 text-white font-black italic tracking-tight focus:ring-primary/20">
+                          <SelectTrigger className="h-14 rounded-xl border-white/10 bg-white/5 px-4 text-white font-bold uppercase tracking-widest text-xs focus:ring-primary/20 hover:bg-white/10 transition-colors">
                             <SelectValue placeholder="General Vault" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[#080808] border-white/10 text-white rounded-2xl overflow-hidden shadow-[0_30px_90px_-15px_rgba(0,0,0,1)] border">
-                            <SelectItem value="none" className="py-4 px-6 focus:bg-white/5 focus:text-primary transition-colors cursor-pointer border-b border-white/5 font-black italic uppercase text-[10px] tracking-widest">
+                          <SelectContent className="bg-[#121212]/98 backdrop-blur-3xl border-white/10 text-white rounded-2xl overflow-hidden shadow-2xl border p-1">
+                            <SelectItem value="none" className="py-3 px-4 rounded-xl focus:bg-white/5 focus:text-primary transition-colors cursor-pointer font-bold uppercase text-[10px] tracking-widest my-1">
                               General Vault
                             </SelectItem>
                             {goals.filter(g => !g.completed && parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
-                              <SelectItem key={goal.id} value={goal.id.toString()} className="py-4 px-6 focus:bg-white/5 focus:text-primary transition-colors cursor-pointer border-b border-white/5 last:border-0">
-                                <div className="flex flex-col gap-1">
-                                  <span className="font-black italic text-base uppercase tracking-tighter">{goal.name}</span>
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 italic">
+                              <SelectItem key={goal.id} value={goal.id.toString()} className="py-3 px-4 rounded-xl focus:bg-white/5 focus:text-primary transition-colors cursor-pointer my-1 group">
+                                <div className="flex flex-col text-left">
+                                  <span className="font-bold text-xs uppercase tracking-widest text-white group-hover:text-primary transition-colors">{goal.name}</span>
+                                  <span className="text-[9px] font-bold uppercase tracking-widest text-white/40 mt-1">
                                     {((parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100).toFixed(0)}% Decoded
                                   </span>
                                 </div>
