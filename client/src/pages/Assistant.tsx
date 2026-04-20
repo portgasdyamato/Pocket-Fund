@@ -169,39 +169,39 @@ export default function AskCoach() {
       <div className="flex-1 flex overflow-hidden relative border-t border-white/5">
         
         {/* Left Sidebar (Desktop Only) */}
-        <aside className="hidden xl:flex flex-col w-72 p-4 space-y-4 border-r border-white/5 bg-black/20 backdrop-blur-sm relative z-30">
-          <div className="space-y-2">
+        <aside className="hidden xl:flex flex-col w-72 p-6 space-y-6 border-r border-white/5 bg-black/20 backdrop-blur-sm relative z-30">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
-                <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[8px] font-black text-green-400 tracking-tighter">LIVE</span>
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[9px] font-black text-green-400 tracking-tighter italic">LIVE</span>
               </div>
             </div>
-            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-[9px] font-bold text-white/40 uppercase">Wallet</span>
-                <span className="text-[9px] font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+                <span className="text-[11px] font-bold text-white/30 uppercase tracking-widest">Wallet</span>
+                <span className="text-sm font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[9px] font-bold text-white/40 uppercase">Status</span>
-                <span className="text-[9px] font-black text-white/60 italic">Online</span>
+                <span className="text-[11px] font-bold text-white/30 uppercase tracking-widest">Status</span>
+                <span className="text-[11px] font-black text-white/60 italic uppercase tracking-[0.1em]">Online</span>
               </div>
             </div>
           </div>
           
-          <div className="space-y-3 pt-3 border-t border-white/5">
-             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Capabilities</p>
-             <div className="space-y-2">
+          <div className="space-y-4 pt-4 border-t border-white/5">
+             <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Capabilities</p>
+             <div className="space-y-3">
                 {[
                   "Investment Strategy",
                   "Expense Auditing",
                   "Wealth Scaling",
                   "Habit Tracking"
                 ].map((cap, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-primary/30" />
-                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{cap}</span>
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                    <span className="text-xs font-bold text-white/40 uppercase tracking-[0.15em] italic">{cap}</span>
                   </div>
                 ))}
              </div>
@@ -227,7 +227,7 @@ export default function AskCoach() {
 
         {/* Central Chat Column */}
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-1 overflow-y-auto scrollbar-hide px-6 pb-4 pt-4">
+          <div className={`flex-1 ${isFirstMessage ? "overflow-hidden" : "overflow-y-auto"} scrollbar-hide px-6 pb-4 pt-4`}>
             <div className="max-w-5xl mx-auto space-y-8">
 
               {/* Quick prompt cards */}
@@ -424,29 +424,29 @@ export default function AskCoach() {
         </div>
 
         {/* Right Sidebar (Desktop Only) */}
-        <aside className="hidden 2xl:flex flex-col w-72 p-4 space-y-4 border-l border-white/5 bg-black/20 backdrop-blur-sm">
+        <aside className="hidden 2xl:flex flex-col w-72 p-6 space-y-6 border-l border-white/5 bg-black/20 backdrop-blur-sm">
            <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Metrics</p>
-              <div className="grid grid-cols-1 gap-3">
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Metrics</p>
+              <div className="grid grid-cols-1 gap-4">
                  {[
                    { label: "Wallet Stability", value: "98.4%", color: "text-emerald-400" },
                    { label: "Savings Velocity", value: "+12.4%", color: "text-primary" },
                    { label: "Risk Index", value: "Low", color: "text-white/60" }
                  ].map((stat, i) => (
-                    <div key={i} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
-                       <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">{stat.label}</p>
-                       <p className={`text-base font-black italic ${stat.color} mt-1`}>{stat.value}</p>
+                    <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                       <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-1">stat // {stat.label}</p>
+                       <p className={`text-xl font-black italic ${stat.color} leading-none tracking-tighter`}>{stat.value}</p>
                     </div>
                  ))}
               </div>
            </div>
            
-           <div className="mt-auto p-4 rounded-3xl bg-primary/5 border border-primary/20 space-y-2">
+           <div className="mt-auto p-5 rounded-3xl bg-primary/5 border border-primary/20 space-y-3">
               <div className="flex items-center gap-2 text-primary">
-                 <ShieldCheck className="w-3.5 h-3.5" />
-                 <span className="text-[9px] font-black uppercase tracking-widest italic">Advisor Privacy</span>
+                 <ShieldCheck className="w-4 h-4" />
+                 <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Advisor Privacy</span>
               </div>
-              <p className="text-[9px] font-medium text-white/20 leading-relaxed italic">
+              <p className="text-[11px] font-medium text-white/30 leading-relaxed italic">
                  Your data is private. Your financial footprint remains between you and your coach.
               </p>
            </div>
