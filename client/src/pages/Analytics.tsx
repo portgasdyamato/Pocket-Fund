@@ -52,17 +52,25 @@ export default function Analytics() {
     value: categoryBreakdown[name]
   }));
 
-  // Calculate Monthly Spending (last 6 months - simulated for now by date)
-  const monthlySpending = transactions.reduce((acc: any, t) => {
-    const month = new Date(t.date).toLocaleString('default', { month: 'short' });
-    acc[month] = (acc[month] || 0) + parseFloat(t.amount);
+  // Calculate Monthly Spending Trend (chronological order)
+  const monthlySpendingTrend = transactions.reduce((acc: any, t) => {
+    const date = new Date(t.date);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    acc[key] = (acc[key] || 0) + parseFloat(t.amount);
     return acc;
   }, {});
 
-  const barData = Object.keys(monthlySpending).map(name => ({
-    name,
-    amount: monthlySpending[name]
-  }));
+  const barData = Object.keys(monthlySpendingTrend)
+    .sort()
+    .map(key => {
+      const [year, month] = key.split('-');
+      const monthName = new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'short' });
+      return {
+        name: monthName,
+        amount: monthlySpendingTrend[key]
+      };
+    })
+    .slice(-6);
 
   const totalSpent = transactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
   const totalSaved = stashTransactions.reduce((sum, t) => {

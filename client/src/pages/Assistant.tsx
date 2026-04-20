@@ -227,17 +227,17 @@ export default function AskCoach() {
 
         {/* Central Chat Column */}
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-1 overflow-y-auto scrollbar-hide px-6 pb-4 pt-12">
-            <div className="max-w-5xl mx-auto space-y-8">
+          <div className={`flex-1 ${isFirstMessage ? "overflow-hidden flex items-center" : "overflow-y-auto pt-12"} scrollbar-hide px-6 pb-4`}>
+            <div className={`max-w-5xl mx-auto space-y-8 w-full ${isFirstMessage ? "py-12" : ""}`}>
 
               {/* Quick prompt cards */}
               <AnimatePresence>
                 {isFirstMessage && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.97 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                    exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4"
                   >
                     {QUICK_PROMPTS.map((p, i) => {
                       const Icon = p.icon;
@@ -246,11 +246,11 @@ export default function AskCoach() {
                           key={i}
                           initial={{ opacity: 0, y: 12, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 20 }}
-                          whileHover={{ scale: 1.03, y: -2 }}
-                          whileTap={{ scale: 0.97 }}
+                          transition={{ delay: i * 0.05, type: "spring", stiffness: 260, damping: 20 }}
+                          whileHover={{ scale: 1.02, y: -4 }}
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => { setChatMessage(p.q); handleSend(); }}
-                          className={`group relative p-6 rounded-3xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10 ice-frost`}
+                          className={`group relative p-5 rounded-[28px] bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/15 ice-frost h-full min-h-[160px] flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.4)]`}
                         >
                           {/* Shine overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />

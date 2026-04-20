@@ -188,8 +188,8 @@ export default function ExpenseLog() {
                     <motion.button
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`h-12 sm:h-14 px-4 sm:px-8 rounded-2xl font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(100,206,251,0.15)] group/trigger relative overflow-hidden
-                        ${filterTag ? 'bg-[#64CEFB] text-black' : 'bg-[#64CEFB] text-black'}`}
+                      className={`h-12 sm:h-14 px-4 sm:px-8 rounded-[28px] font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.4)] group/trigger relative overflow-hidden backdrop-blur-xl border border-white/10
+                        ${filterTag ? 'bg-primary text-black' : 'bg-white/5 text-white/40 hover:text-white'}`}
                     >
                       <Filter className="w-4 h-4 mr-2 sm:mr-3" />
                       <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter'}</span>
@@ -225,9 +225,9 @@ export default function ExpenseLog() {
                    whileHover={{ scale: 1.02, y: -2 }}
                    whileTap={{ scale: 0.98 }}
                    onClick={() => setIsAddExpenseOpen(true)}
-                   className="bg-white text-black h-12 sm:h-14 px-6 sm:px-8 rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center shadow-[0_20px_40px_rgba(255,255,255,0.1)] group/btn relative overflow-hidden border border-white/20 flex-1 sm:flex-none"
+                   className="h-12 sm:h-14 px-6 sm:px-10 rounded-[28px] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center shadow-[0_20px_50px_rgba(100,206,251,0.3)] group/btn relative overflow-hidden bg-gradient-to-tr from-primary via-primary to-[#85E1FF] text-black border-none flex-1 sm:flex-none"
                 >
-                   <Plus className="w-4 h-4 mr-2 sm:mr-3 text-[#64CEFB]" />
+                   <Plus className="w-4 h-4 mr-2 sm:mr-3" />
                    New Entry
                 </motion.button>
             </div>

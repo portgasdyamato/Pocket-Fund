@@ -29,112 +29,115 @@ export default function GoalCelebration({ isOpen, onClose, goalName = "Goal" }: 
     <>
       <AnimatePresence>
         {isOpen && (
-          <>
+          <motion.div 
+            key="goal-done" 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center overflow-hidden"
+          >
+            {/* Cinematic Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-yellow-500/10 rounded-full blur-[180px] opacity-40" />
+              <div className="absolute -top-32 -right-32 w-96 h-96 bg-accent/5 rounded-full blur-[120px]" />
+              <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-yellow-500/5 rounded-full blur-[120px]" />
+            </div>
+
             {showConfetti && (
-              <div className="fixed inset-0 z-[200] pointer-events-none">
+              <div className="absolute inset-0 pointer-events-none z-[210]">
                 <Confetti 
                   width={width} 
                   height={height} 
-                  numberOfPieces={300} 
+                  numberOfPieces={400} 
                   recycle={false} 
                   colors={["#FFD700", "#F59E0B", "#FFF", "#64CEFB"]}
-                  gravity={0.12}
+                  gravity={0.08}
                 />
               </div>
             )}
-            
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/85 backdrop-blur-xl z-[150]"
-              onClick={onClose}
-            />
 
-            {/* Modal Container */}
-            <div className="fixed inset-0 flex items-center justify-center z-[160] p-4 pointer-events-none">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, rotateX: 20 }}
-                animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-                exit={{ opacity: 0, scale: 0.9, rotateX: -10 }}
-                transition={{ type: "spring", damping: 20, stiffness: 200 }}
-                className="w-full max-w-xl bg-[#080808] border border-white/10 rounded-[48px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] pointer-events-auto relative"
+            <div className="relative z-10 w-full max-w-5xl px-8 flex flex-col items-center text-center">
+              <motion.div 
+                initial={{ scale: 0.5, opacity: 0, rotate: -15 }} 
+                animate={{ scale: 1, opacity: 1, rotate: 0 }} 
+                transition={{ type: "spring", damping: 15, stiffness: 100, delay: 0.2 }}
+                className="relative mb-12"
               >
-                {/* Decorative Background Elements */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 0)", backgroundSize: "30px 30px" }} />
-                <div className="absolute -top-32 -right-32 w-80 h-80 bg-yellow-500/10 blur-[120px] rounded-full" />
-                
-                {/* Main Content */}
-                <div className="relative p-10 sm:p-14 text-center space-y-10">
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="space-y-4"
-                  >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-[10px] font-black uppercase tracking-[0.3em] italic mb-4">
-                      <Star className="w-3 h-3 fill-current" />
-                      Legacy Defined
-                    </div>
-                    
-                    <h2 className="text-5xl sm:text-7xl font-black italic tracking-tighter uppercase leading-[0.8] text-white">
-                      Objective<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-600">Reached</span>
-                    </h2>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="p-8 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-sm relative group overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-4 flex items-center justify-center gap-2">
-                      <Activity className="w-3 h-3" />
-                      Realized Asset
-                    </p>
-                    <h3 className="text-2xl sm:text-3xl font-black text-white italic">"{goalName}"</h3>
-                  </motion.div>
-
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
-                    className="text-white/40 text-sm font-medium leading-relaxed max-w-sm mx-auto italic"
-                  >
-                    This milestone marks a permanent shift in your financial power. Your execution has been logged in the permanent record.
-                  </motion.p>
-
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="pt-6"
-                  >
-                    <Button 
-                      onClick={onClose} 
-                      className="w-full h-20 rounded-3xl bg-yellow-500 text-black hover:bg-yellow-400 font-black text-lg uppercase tracking-tighter italic group transition-all shadow-[0_20px_40px_rgba(245,158,11,0.2)]"
-                    >
-                      Continue Ascending
-                      <TrendingUp className="w-5 h-5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </Button>
-                  </motion.div>
+                <div className="w-56 h-56 rounded-[64px] bg-gradient-to-tr from-yellow-500 via-orange-400 to-yellow-600 flex items-center justify-center relative overflow-hidden group premium-shadow">
+                  <Trophy className="w-28 h-28 text-black relative z-10 drop-shadow-2xl" />
+                  <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-2 rounded-[56px] border border-white/20" />
                 </div>
+                
+                {/* Outer Glowing Rings */}
+                <motion.div 
+                  animate={{ rotate: 360, scale: [1, 1.1, 1] }} 
+                  transition={{ rotate: { duration: 25, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity } }}
+                  className="absolute inset-0 w-[320px] h-[320px] -top-[52px] -left-[52px] border border-yellow-500/20 rounded-full blur-sm" 
+                />
+              </motion.div>
 
-                {/* Technical Sidebar/Details */}
-                <div className="px-10 py-6 bg-yellow-500/[0.02] border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-                  <div className="flex items-center gap-4 overflow-hidden">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <div key={i} className="h-10 w-[1px] bg-white/5" />
-                    ))}
-                    <span className="text-[8px] font-black text-white/10 uppercase tracking-[0.5em] whitespace-nowrap">Institutional Integrity: Verified // Level 04</span>
-                  </div>
-                  <Trophy className="w-5 h-5 text-yellow-500/20" />
+              <div className="space-y-6">
+                <motion.p 
+                  initial={{ tracking: "1em", opacity: 0 }} 
+                  animate={{ tracking: "0.5em", opacity: 1 }} 
+                  transition={{ duration: 1, delay: 0.4 }}
+                  className="text-[11px] font-black uppercase text-yellow-500 italic"
+                >
+                  LEGACY // DEFINED
+                </motion.p>
+                
+                <motion.h2 
+                  initial={{ y: 40, opacity: 0 }} 
+                  animate={{ y: 0, opacity: 1 }} 
+                  transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.8] text-white"
+                >
+                  OBJECTIVE <br /><span className="text-yellow-500 italic">REACHED</span>
+                </motion.h2>
+
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }} 
+                  animate={{ opacity: 1, scale: 1 }} 
+                  transition={{ delay: 0.7 }}
+                  className="mt-8 mb-12 p-8 rounded-[40px] bg-white/[0.03] border border-white/10 backdrop-blur-2xl inline-block"
+                >
+                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2 italic">Realized Asset</p>
+                   <h3 className="text-3xl font-black text-white italic tracking-tighter">"{goalName}"</h3>
+                </motion.div>
+
+                <motion.p 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  transition={{ delay: 0.8 }}
+                  className="text-white/40 text-xl font-medium max-w-2xl mx-auto italic leading-relaxed"
+                >
+                  This milestone marks a permanent shift in your financial power. 
+                  Your execution has been logged in the permanent record.
+                </motion.p>
+              </div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: 0.9 }}
+                className="mt-16"
+              >
+                <Button 
+                  onClick={onClose} 
+                  className="h-24 px-16 rounded-[32px] bg-yellow-500 text-black font-black text-2xl uppercase tracking-tighter hover:bg-yellow-400 active:scale-95 transition-all shadow-[0_20px_80px_rgba(245,158,11,0.25)] group"
+                >
+                  Continue Ascending
+                  <TrendingUp className="w-8 h-8 ml-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </Button>
+                
+                <div className="flex items-center justify-center gap-3 mt-8">
+                   <ShieldCheck className="w-5 h-5 text-white/10" />
+                   <span className="text-white/10 text-[10px] font-black uppercase tracking-[0.4em] italic leading-none">Institutional Integrity Verified // Level 04</span>
                 </div>
               </motion.div>
             </div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

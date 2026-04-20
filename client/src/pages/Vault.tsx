@@ -248,9 +248,9 @@ export default function GlowUp() {
             }
           }}>
             <DialogTrigger asChild>
-              <Button size="lg" className="group">
-                <TrendingUp className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                Secure Vault
+              <Button size="lg" className="group h-16 px-12 rounded-[28px] w-full sm:w-auto min-w-[320px] bg-primary hover:bg-primary/90 text-black shadow-[0_20px_50px_rgba(100,206,251,0.3)]">
+                <ArrowUpDown className="w-6 h-6 mr-4 group-hover:rotate-180 transition-transform duration-500" />
+                <span className="font-black uppercase tracking-[0.1em] text-sm">Allocate / Retrieve Assets</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="ice-frost border-white/10 text-white p-8">
@@ -485,17 +485,19 @@ export default function GlowUp() {
             animate={{ opacity: 1 }}
             className="flex justify-between items-center"
           >
-            <div className="flex items-center gap-3">
+<div className="flex items-center gap-3">
               <div className="w-2 h-8 bg-primary rounded-full" />
               <h2 className="text-3xl font-bold tracking-tight">Active Goals</h2>
             </div>
-            <Button 
-              variant="secondary" 
-              onClick={() => setIsNewGoalOpen(true)}
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Create Goal
-            </Button>
+            <motion.button
+                   whileHover={{ scale: 1.02, y: -2 }}
+                   whileTap={{ scale: 0.98 }}
+                   onClick={() => setIsNewGoalOpen(true)}
+                   className="h-12 sm:h-16 px-8 sm:px-12 rounded-[28px] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] flex items-center justify-center shadow-[0_20px_50px_rgba(100,206,251,0.25)] group/btn relative overflow-hidden bg-gradient-to-tr from-primary via-primary to-[#85E1FF] text-black border-none flex-1 sm:flex-none"
+                >
+                   <Plus className="w-4 h-4 mr-3" />
+                   Create Goal
+                </motion.button>
           </motion.div>
 
           <motion.div 
@@ -644,9 +646,16 @@ export default function GlowUp() {
            <div className="lg:col-span-8 flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold">Savings History</h3>
-                <Button variant="ghost" size="sm">
-                  Export
-                </Button>
+                <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`h-12 sm:h-16 px-6 sm:px-10 rounded-[28px] font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.4)] group/trigger relative overflow-hidden backdrop-blur-xl border border-white/10
+                        ${filterTag ? 'bg-[#64CEFB] text-black shadow-[0_15px_30px_rgba(100,206,251,0.25)]' : 'bg-white/5 text-white/60 hover:text-white'}`}
+                    >
+                      <Filter className="w-4 h-4 mr-3" />
+                      <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter'}</span>
+                      <ChevronDown className="w-4 h-4 ml-3 opacity-40 group-hover/trigger:translate-y-0.5 transition-transform" />
+                    </motion.button>
               </div>
               <div className="ice-frost border-white/5 rounded-3xl overflow-hidden">
                  {stashTransactions.length > 0 ? (
