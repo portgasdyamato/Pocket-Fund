@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer glowing ring -->
+  <circle cx="256" cy="256" r="200" stroke="#64CEFB" stroke-width="4" stroke-opacity="0.4" />
+  <!-- Inner core dot -->
+  <circle cx="256" cy="256" r="110" fill="#64CEFB" />
+  <!-- Subtler glow outer circle for depth -->
+  <circle cx="256" cy="256" r="230" stroke="#64CEFB" stroke-width="2" stroke-opacity="0.15" />
+</svg>

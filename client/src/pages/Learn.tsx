@@ -444,7 +444,7 @@ export default function LearnPage() {
                     </div>
                     {showSolution && (
                       <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-                        className="mx-6 mb-8 p-6 rounded-[28px] bg-white/[0.03] border border-white/10 flex items-start gap-5 shadow-2xl relative overflow-hidden group">
+                        className="mx-6 mb-8 p-6 rounded-[28px] bg-neutral-900 border border-white/10 flex items-start gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
                         <div className="absolute inset-0 bg-yellow-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0">
                           <Lightbulb className="w-6 h-6 text-yellow-400 animate-pulse" />
@@ -454,9 +454,9 @@ export default function LearnPage() {
                           <p className="text-sm font-medium text-white/70 italic leading-relaxed mb-4">The correct answer is highlighted above for your records. Review the strategy before continuing.</p>
                           <div className="flex gap-3">
                             <Button size="sm" variant="outline"
-                              className="h-10 px-6 rounded-xl border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest hover:bg-white/10"
+                              className="h-10 px-6 rounded-xl border-white/20 bg-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white/20 text-white"
                               onClick={() => { setShowSolution(false); setSelectedOption(null); }}>
-                              Recalibrate
+                              Retry
                             </Button>
                           </div>
                         </div>
