@@ -7,7 +7,7 @@ import {
   BookOpen, Star, ChevronRight, ChevronLeft, CheckCircle2,
   Trophy, Home, ShoppingBag, Shield, HelpCircle, Calculator,
   Lock, TrendingUp, ArrowLeft, Brain, Zap, Globe, Lightbulb,
-  Target, Clock, Award, BarChart3, ArrowRight, ShieldCheck
+  Target, Clock, Award, BarChart3, ArrowRight, ShieldCheck, Filter, ChevronDown
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";

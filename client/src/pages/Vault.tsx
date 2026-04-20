@@ -7,11 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock, ArrowRight } from "lucide-react";
+import { TrendingUp, Plus, Target, ArrowUpCircle, ArrowDownCircle, Trophy, Sparkles, ShieldCheck, Lock, ArrowRight, ArrowUpDown } from "lucide-react";
 import type { Goal, StashTransaction } from "@shared/schema";
 import GoalCelebration from "@/components/GoalCelebration";
 import { useAuth } from "@/hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import {
   Select,
   SelectContent,
@@ -646,16 +647,9 @@ export default function GlowUp() {
            <div className="lg:col-span-8 flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold">Savings History</h3>
-                <motion.button
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`h-12 sm:h-16 px-6 sm:px-10 rounded-[28px] font-black transition-all flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.4)] group/trigger relative overflow-hidden backdrop-blur-xl border border-white/10
-                        ${filterTag ? 'bg-[#64CEFB] text-black shadow-[0_15px_30px_rgba(100,206,251,0.25)]' : 'bg-white/5 text-white/60 hover:text-white'}`}
-                    >
-                      <Filter className="w-4 h-4 mr-3" />
-                      <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em]">{filterTag ? `${filterTag}` : 'Filter'}</span>
-                      <ChevronDown className="w-4 h-4 ml-3 opacity-40 group-hover/trigger:translate-y-0.5 transition-transform" />
-                    </motion.button>
+                <Link href="/history">
+                  <Button variant="ghost" className="text-[10px] uppercase tracking-widest text-white/30 hover:text-white">View Full Ledger</Button>
+                </Link>
               </div>
               <div className="ice-frost border-white/5 rounded-3xl overflow-hidden">
                  {stashTransactions.length > 0 ? (
