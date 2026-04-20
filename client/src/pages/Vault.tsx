@@ -12,6 +12,13 @@ import type { Goal, StashTransaction } from "@shared/schema";
 import GoalCelebration from "@/components/GoalCelebration";
 import { useAuth } from "@/hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { BrandFooter } from "@/components/BrandFooter";
 
@@ -284,20 +291,26 @@ export default function GlowUp() {
                       </div>
                       <div className="space-y-3">
                         <Label className="text-sm font-bold text-white/40 uppercase tracking-widest">Allocate to Goal</Label>
-                        <div className="relative">
-                          <select
-                            className="w-full h-14 rounded-xl border border-white/10 bg-white/5 px-4 text-white appearance-none focus:outline-none focus:border-primary font-bold"
-                            value={selectedGoalId}
-                            onChange={(e) => setSelectedGoalId(e.target.value)}
-                          >
-                            <option value="" className="bg-[#0a0a0a]">General Vault</option>
+                        <Select value={selectedGoalId} onValueChange={setSelectedGoalId}>
+                          <SelectTrigger className="h-14 rounded-xl border-white/10 bg-white/5 px-4 text-white font-black italic tracking-tight focus:ring-primary/20">
+                            <SelectValue placeholder="General Vault" />
+                          </SelectTrigger>
+                          <SelectContent className="ice-frost border-white/10 bg-[#0A0A0A]/95 backdrop-blur-2xl text-white rounded-2xl overflow-hidden shadow-[0_30px_90px_-15px_rgba(0,0,0,0.9)]">
+                            <SelectItem value="none" className="py-4 px-6 focus:bg-white/5 focus:text-primary transition-colors cursor-pointer border-b border-white/5 font-black italic uppercase text-[10px] tracking-widest">
+                              General Vault
+                            </SelectItem>
                             {goals.filter(g => !g.completed && parseFloat(g.currentAmount) < parseFloat(g.targetAmount)).map((goal) => (
-                              <option key={goal.id} value={goal.id} className="bg-[#0a0a0a]">
-                                {goal.name} ({(parseFloat(goal.currentAmount)/parseFloat(goal.targetAmount)*100).toFixed(0)}%)
-                              </option>
+                              <SelectItem key={goal.id} value={goal.id.toString()} className="py-4 px-6 focus:bg-white/5 focus:text-primary transition-colors cursor-pointer border-b border-white/5 last:border-0">
+                                <div className="flex flex-col gap-1">
+                                  <span className="font-black italic text-base uppercase tracking-tighter">{goal.name}</span>
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30 italic">
+                                    {((parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100).toFixed(0)}% Decoded
+                                  </span>
+                                </div>
+                              </SelectItem>
                             ))}
-                          </select>
-                        </div>
+                          </SelectContent>
+                        </Select>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-4">
