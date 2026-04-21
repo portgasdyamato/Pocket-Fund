@@ -137,9 +137,10 @@ export function NavigationBar() {
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  className="w-72 border-white/[0.05] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl" 
-                <DropdownMenuContent align="end" className="w-64 p-2 bg-[#121212]/95 backdrop-blur-3xl border-white/10 rounded-3xl mt-2 overflow-hidden shadow-2xl">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-72 border-white/[0.05] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl"
+                >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-2xl rounded-full transform translate-x-1/2 -translate-y-1/2" />
                   <div className="p-4 flex items-center gap-4 relative z-10">
                     <Avatar className="w-12 h-12 border-2 border-white/10 shrink-0">
