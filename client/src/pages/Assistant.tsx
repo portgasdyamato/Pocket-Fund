@@ -157,7 +157,7 @@ export default function AskCoach() {
   const isFirstMessage = chatHistory.length === 1;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-72px)] lg:h-[calc(100vh-80px)] bg-[#050505] text-white overflow-hidden">
+    <div className="flex flex-col h-[calc(100dvh-88px)] lg:h-[calc(100dvh-96px)] bg-[#050505] text-white overflow-hidden">
 
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -170,66 +170,56 @@ export default function AskCoach() {
       <div className="flex-1 flex overflow-hidden relative border-t border-white/5">
         
         {/* Left Sidebar (Desktop Only) */}
-        <aside className="hidden xl:flex flex-col w-72 p-6 space-y-6 border-r border-white/5 bg-black/20 backdrop-blur-sm relative z-30">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/40">Account Overview</p>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[9px] font-black text-emerald-400 tracking-widest uppercase">LIVE</span>
+        <aside className="hidden xl:flex flex-col w-72 p-8 border-r border-white/5 bg-[#050505]/50 relative z-30">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between pb-6 border-b border-white/5">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">Overview</p>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                <span className="text-[9px] font-black text-emerald-500 tracking-widest uppercase">Live</span>
               </div>
             </div>
-            <div className="p-5 rounded-3xl bg-gradient-to-b from-white/[0.05] to-transparent border border-white/10 space-y-5 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-1">Wallet Balance</span>
-                <span className="text-2xl font-black text-primary tracking-tighter drop-shadow-[0_2px_10px_rgba(100,206,251,0.2)]">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
-              </div>
-              <div className="h-[1px] w-full bg-white/5" />
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">System Status</span>
-                <span className="text-[10px] font-black text-[#64CEFB] uppercase tracking-widest px-2 py-0.5 rounded bg-[#64CEFB]/10 border border-[#64CEFB]/20">Online</span>
+            
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Wallet Balance</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-black text-white tracking-tighter">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>
           
-          <div className="space-y-4 pt-4 border-t border-white/5">
-             <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/40">Capabilities</p>
-             <div className="space-y-2">
+          <div className="space-y-5 pt-10 mt-6 border-t border-white/5 flex-1">
+             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">Capabilities</p>
+             <div className="space-y-4">
                 {[
-                  { title: "Investment Strategy", icon: PieChart, color: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-500/20" },
-                  { title: "Expense Auditing", icon: FileText, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
-                  { title: "Wealth Scaling", icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-                  { title: "Habit Tracking", icon: Target, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" }
+                  { title: "Investment Strategy", icon: PieChart, color: "text-purple-400" },
+                  { title: "Expense Auditing", icon: FileText, color: "text-amber-400" },
+                  { title: "Wealth Scaling", icon: TrendingUp, color: "text-emerald-400" },
+                  { title: "Habit Tracking", icon: Target, color: "text-rose-400" }
                 ].map((cap, i) => {
                   const Icon = cap.icon;
                   return (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group cursor-default">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110 ${cap.bg} ${cap.border}`}>
-                      <Icon className={`w-4 h-4 ${cap.color}`} />
+                  <div key={i} className="flex items-center gap-4 group cursor-default">
+                    <div className="w-8 h-8 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all duration-300 group-hover:bg-white/[0.08] group-hover:scale-110">
+                      <Icon className={`w-3.5 h-3.5 ${cap.color} opacity-80 group-hover:opacity-100`} />
                     </div>
-                    <span className="text-[11px] font-black text-white/70 uppercase tracking-[0.15em] group-hover:text-white transition-colors">{cap.title}</span>
+                    <span className="text-[11px] font-bold text-white/50 uppercase tracking-widest group-hover:text-white transition-colors">{cap.title}</span>
                   </div>
                 )})}
              </div>
           </div>
 
-          <div className="mt-auto pt-4 border-t border-white/5">
+          <div className="mt-auto pt-6 border-t border-white/5">
             <button
                onClick={toggleMute}
-               className={`w-full flex items-center justify-between p-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all duration-300 group hover:shadow-lg ${
-                 isMuted
-                   ? "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"
-                   : "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20 shadow-[0_0_15px_rgba(100,206,251,0.1)]"
-               }`}
+               className={`flex items-center gap-3 w-full group transition-all ${isMuted ? 'opacity-50 hover:opacity-100' : ''}`}
              >
-               <div className="flex items-center gap-3">
-                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-black/20 ${!isMuted && 'group-hover:scale-110 transition-transform'}`}>
-                   {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                 </div>
-                 <span>{isMuted ? "Audio Off" : "Audio On"}</span>
+               <div className="w-8 h-8 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all group-hover:bg-white/[0.08]">
+                 {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white/50" /> : <Volume2 className="w-3.5 h-3.5 text-primary" />}
                </div>
-               <div className={`w-2 h-2 rounded-full ${isMuted ? "bg-white/20" : "bg-primary animate-pulse shadow-[0_0_8px_currentColor]"}`} />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition-colors">
+                 {isMuted ? "Audio Disabled" : "Audio Enabled"}
+               </span>
              </button>
           </div>
         </aside>
