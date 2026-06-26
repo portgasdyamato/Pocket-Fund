@@ -325,7 +325,7 @@ export default function AskCoach() {
 
                         {/* Replay footer for AI messages */}
                         {msg.role === 'assistant' && (
-                          <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/[0.08]">
+                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.08]">
                             <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/15 italic inline-flex items-center gap-2">
                                <ShieldCheck className="w-3 h-3" /> Privacy Shield Active
                             </span>
