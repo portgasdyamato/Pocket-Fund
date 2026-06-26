@@ -21,7 +21,11 @@ import {
   Car,
   ShoppingBag,
   Ticket,
-  FileText
+  FileText,
+  BarChart3,
+  Lock,
+  Bot,
+  History
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -492,20 +496,66 @@ export default function Dashboard() {
             {/* Quick Actions Grid */}
             <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Activity, label: "ANALYTICS", path: "/analytics" },
-                { icon: TrendingUp, label: "VAULT", path: "/vault" },
-                { icon: MessageCircle, label: "COACH", path: "/assistant" },
-                { icon: Activity, label: "HISTORY", path: "/history" }
+                { 
+                  icon: BarChart3, 
+                  label: "ANALYTICS", 
+                  path: "/analytics",
+                  color: "from-purple-500 to-pink-500",
+                  bgLight: "bg-purple-500/10",
+                  borderLight: "border-purple-500/20",
+                  hoverBg: "hover:bg-purple-500/20",
+                  glow: "shadow-[0_0_30px_rgba(168,85,247,0.3)]",
+                  iconShadow: "drop-shadow-[0_2px_4px_rgba(168,85,247,0.4)]"
+                },
+                { 
+                  icon: Lock, 
+                  label: "VAULT", 
+                  path: "/vault",
+                  color: "from-emerald-400 to-teal-500",
+                  bgLight: "bg-emerald-500/10",
+                  borderLight: "border-emerald-500/20",
+                  hoverBg: "hover:bg-emerald-500/20",
+                  glow: "shadow-[0_0_30px_rgba(52,211,153,0.3)]",
+                  iconShadow: "drop-shadow-[0_2px_4px_rgba(52,211,153,0.4)]"
+                },
+                { 
+                  icon: Bot, 
+                  label: "COACH", 
+                  path: "/assistant",
+                  color: "from-[#64CEFB] to-blue-500",
+                  bgLight: "bg-[#64CEFB]/10",
+                  borderLight: "border-[#64CEFB]/20",
+                  hoverBg: "hover:bg-[#64CEFB]/20",
+                  glow: "shadow-[0_0_30px_rgba(100,206,251,0.3)]",
+                  iconShadow: "drop-shadow-[0_2px_4px_rgba(100,206,251,0.4)]"
+                },
+                { 
+                  icon: History, 
+                  label: "HISTORY", 
+                  path: "/history",
+                  color: "from-orange-400 to-rose-500",
+                  bgLight: "bg-orange-500/10",
+                  borderLight: "border-orange-500/20",
+                  hoverBg: "hover:bg-orange-500/20",
+                  glow: "shadow-[0_0_30px_rgba(251,146,60,0.3)]",
+                  iconShadow: "drop-shadow-[0_2px_4px_rgba(251,146,60,0.4)]"
+                }
               ].map((action, i) => (
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-[#64CEFB]/10 border border-[#64CEFB]/20 hover:bg-[#64CEFB]/20 shadow-2xl transition-all duration-300 click-scale group"
+                  className={`relative flex flex-col items-center justify-center p-8 rounded-[32px] ${action.bgLight} border ${action.borderLight} ${action.hoverBg} transition-all duration-500 group overflow-hidden`}
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#64CEFB] shadow-lg border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 shadow-[0_10px_20px_rgba(100,206,251,0.2)]">
-                    <action.icon className="w-7 h-7 text-white" />
+                  {/* Subtle Background Glow on Hover */}
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${action.color}`} />
+                  
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ${action.glow} relative z-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-white/20 before:to-transparent before:opacity-50`}>
+                    <action.icon className={`w-6 h-6 text-white ${action.iconShadow}`} strokeWidth={2.5} />
                   </div>
-                  <span className="text-[10px] font-bold text-white/40 tracking-[0.2em] transition-colors group-hover:text-white uppercase">{action.label}</span>
+                  
+                  <span className="text-[11px] font-black text-white/50 tracking-[0.2em] transition-colors group-hover:text-white uppercase relative z-10">
+                    {action.label}
+                  </span>
                 </button>
               ))}
             </motion.div>
@@ -592,21 +642,22 @@ export default function Dashboard() {
                     </div>
                   ) : recentExpenses.length > 0 ? (
                     recentExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all group cursor-pointer" onClick={() => setLocation('/history')}>
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all ${getCategoryColor(expense.category)}`}>
+                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden" onClick={() => setLocation('/history')}>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110 shadow-sm ${getCategoryColor(expense.category)}`}>
                             {getCategoryIcon(expense.category)}
                           </div>
                           <div>
-                            <div className="text-sm font-bold text-white/90 group-hover:text-primary transition-colors">{expense.description}</div>
-                            <div className="text-[10px] font-black uppercase tracking-wider text-white/30 flex items-center gap-2">
+                            <div className="text-sm font-black text-white/90 tracking-wide group-hover:text-primary transition-colors">{expense.description}</div>
+                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 flex items-center gap-2 mt-1">
                               {expense.date} • {expense.category}
                               {expense.tag && (
-                                <span className={`px-2 py-0.5 rounded-md text-[8px] font-black border transition-colors ${
-                                  expense.tag === 'Need' ? 'bg-blue-600 text-white border-blue-600' :
-                                  expense.tag === 'Want' ? 'bg-[#64CEFB] text-black border-[#64CEFB]' :
-                                  expense.tag === 'Goal Claim' ? 'bg-green-600 text-white border-green-600' :
-                                  'bg-red-600 text-white border-red-600'
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-black tracking-widest border transition-all ${
+                                  expense.tag === 'Need' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.2)]' :
+                                  expense.tag === 'Want' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.2)]' :
+                                  expense.tag === 'Goal Claim' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]' :
+                                  'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.2)]'
                                 }`}>
                                   {expense.tag}
                                 </span>
@@ -614,7 +665,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-sm font-black text-white">₹{expense.amount.toLocaleString('en-IN')}</div>
+                        <div className="text-base font-black text-white group-hover:text-primary transition-colors relative z-10 drop-shadow-md">₹{expense.amount.toLocaleString('en-IN')}</div>
                       </div>
                     ))
                   ) : (

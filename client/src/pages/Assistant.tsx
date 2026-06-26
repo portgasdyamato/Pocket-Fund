@@ -7,7 +7,8 @@ import remarkGfm from 'remark-gfm';
 import { Button } from "@/components/ui/button";
 import {
   Send, Sparkles, User, Mic, MicOff, Volume2, VolumeX,
-  TrendingUp, Zap, ShieldCheck, Brain, ArrowRight
+  TrendingUp, Zap, ShieldCheck, Brain, ArrowRight,
+  PieChart, FileText, Target
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -172,55 +173,63 @@ export default function AskCoach() {
         <aside className="hidden xl:flex flex-col w-72 p-6 space-y-6 border-r border-white/5 bg-black/20 backdrop-blur-sm relative z-30">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Account Overview</p>
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[9px] font-black text-green-400 tracking-tighter italic">LIVE</span>
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/40">Account Overview</p>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[9px] font-black text-emerald-400 tracking-widest uppercase">LIVE</span>
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-[11px] font-bold text-white/30 uppercase tracking-widest">Wallet</span>
-                <span className="text-sm font-black text-primary italic">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
+            <div className="p-5 rounded-3xl bg-gradient-to-b from-white/[0.05] to-transparent border border-white/10 space-y-5 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-1">Wallet Balance</span>
+                <span className="text-2xl font-black text-primary tracking-tighter drop-shadow-[0_2px_10px_rgba(100,206,251,0.2)]">₹{parseFloat(user?.walletBalance?.toString() || "0").toLocaleString('en-IN')}</span>
               </div>
+              <div className="h-[1px] w-full bg-white/5" />
               <div className="flex justify-between items-center">
-                <span className="text-[11px] font-bold text-white/30 uppercase tracking-widest">Status</span>
-                <span className="text-[11px] font-black text-white/60 italic uppercase tracking-[0.1em]">Online</span>
+                <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">System Status</span>
+                <span className="text-[10px] font-black text-[#64CEFB] uppercase tracking-widest px-2 py-0.5 rounded bg-[#64CEFB]/10 border border-[#64CEFB]/20">Online</span>
               </div>
             </div>
           </div>
           
           <div className="space-y-4 pt-4 border-t border-white/5">
-             <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Capabilities</p>
-             <div className="space-y-3">
+             <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/40">Capabilities</p>
+             <div className="space-y-2">
                 {[
-                  "Investment Strategy",
-                  "Expense Auditing",
-                  "Wealth Scaling",
-                  "Habit Tracking"
-                ].map((cap, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                    <span className="text-xs font-bold text-white/40 uppercase tracking-[0.15em] italic">{cap}</span>
+                  { title: "Investment Strategy", icon: PieChart, color: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-500/20" },
+                  { title: "Expense Auditing", icon: FileText, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
+                  { title: "Wealth Scaling", icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+                  { title: "Habit Tracking", icon: Target, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" }
+                ].map((cap, i) => {
+                  const Icon = cap.icon;
+                  return (
+                  <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group cursor-default">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110 ${cap.bg} ${cap.border}`}>
+                      <Icon className={`w-4 h-4 ${cap.color}`} />
+                    </div>
+                    <span className="text-[11px] font-black text-white/70 uppercase tracking-[0.15em] group-hover:text-white transition-colors">{cap.title}</span>
                   </div>
-                ))}
+                )})}
              </div>
           </div>
 
           <div className="mt-auto pt-4 border-t border-white/5">
             <button
                onClick={toggleMute}
-               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all duration-200 ${
+               className={`w-full flex items-center justify-between p-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all duration-300 group hover:shadow-lg ${
                  isMuted
-                   ? "bg-white/5 border-white/10 text-white/30"
-                   : "bg-primary/5 border-primary/20 text-primary"
+                   ? "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"
+                   : "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20 shadow-[0_0_15px_rgba(100,206,251,0.1)]"
                }`}
              >
-               <div className="flex items-center gap-2">
-                 {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+               <div className="flex items-center gap-3">
+                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-black/20 ${!isMuted && 'group-hover:scale-110 transition-transform'}`}>
+                   {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                 </div>
                  <span>{isMuted ? "Audio Off" : "Audio On"}</span>
                </div>
-               <div className={`w-1.5 h-1.5 rounded-full ${isMuted ? "bg-white/10" : "bg-primary animate-pulse"}`} />
+               <div className={`w-2 h-2 rounded-full ${isMuted ? "bg-white/20" : "bg-primary animate-pulse shadow-[0_0_8px_currentColor]"}`} />
              </button>
           </div>
         </aside>
