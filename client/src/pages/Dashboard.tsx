@@ -544,15 +544,15 @@ export default function Dashboard() {
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className="relative flex flex-col items-center justify-center p-8 rounded-[32px] bg-white/[0.02] border-t border-l border-white/20 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-xl hover:bg-white/[0.04] transition-all duration-500 group overflow-hidden"
+                  className="relative flex flex-col items-center justify-center p-8 rounded-[32px] bg-white/[0.04] border-t border-l border-white/20 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-xl hover:bg-white/[0.06] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.2)] transition-all duration-500 group overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-100 transition-opacity duration-500" />
                   
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] relative z-10`}>
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-5 scale-110 -translate-y-1 group-hover:scale-[1.2] group-hover:-translate-y-2 transition-all duration-500 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] group-hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.7),inset_0_1px_2px_rgba(255,255,255,0.6)] relative z-10`}>
                     <action.icon className="w-6 h-6 text-white drop-shadow-md" strokeWidth={2.5} />
                   </div>
                   
-                  <span className="text-[11px] font-black text-white/50 tracking-[0.2em] transition-colors group-hover:text-white uppercase relative z-10">
+                  <span className="text-[11px] font-black text-white tracking-[0.2em] transition-all group-hover:tracking-[0.25em] group-hover:text-primary uppercase relative z-10">
                     {action.label}
                   </span>
                 </button>
