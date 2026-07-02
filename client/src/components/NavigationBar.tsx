@@ -16,7 +16,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ThemeToggle from "@/components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Home, 
@@ -99,8 +98,8 @@ export function NavigationBar() {
                   href={item.url}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all duration-300 text-[10px] font-black uppercase tracking-widest ${
                     isActive
-                      ? "bg-white text-black shadow-xl"
-                      : "text-white/40 hover:text-white hover:bg-white/[0.05]"
+                      ? "bg-gradient-to-r from-blue-600 to-primary text-white shadow-[0_0_20px_rgba(100,206,251,0.4)]"
+                      : "text-white hover:bg-white/[0.1] hover:shadow-inner"
                   }`}
                 >
                   <item.icon className="w-3.5 h-3.5" />
@@ -125,7 +124,6 @@ export function NavigationBar() {
             <div className="h-8 w-px bg-white/[0.05] hidden sm:block" />
 
             <div className="flex items-center gap-1 sm:gap-2">
-              <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative h-10 w-10 flex-shrink-0 focus:outline-none group">
@@ -216,7 +214,7 @@ export function NavigationBar() {
                         href={item.url} 
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-                          location === item.url ? 'bg-white text-black border-white' : 'bg-white/[0.02] text-white/40 border-white/[0.05]'
+                          location === item.url ? 'bg-gradient-to-r from-blue-600 to-primary text-white border-transparent shadow-[0_0_20px_rgba(100,206,251,0.3)]' : 'bg-white/[0.02] text-white border-white/[0.05]'
                         }`}
                       >
                          <div className="flex items-center gap-4">

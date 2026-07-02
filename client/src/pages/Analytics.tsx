@@ -192,20 +192,27 @@ export default function Analytics() {
                         data={tagData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={window.innerWidth < 640 ? 50 : 60}
-                        outerRadius={window.innerWidth < 640 ? 70 : 80}
-                        paddingAngle={5}
+                        innerRadius={window.innerWidth < 640 ? 60 : 75}
+                        outerRadius={window.innerWidth < 640 ? 80 : 100}
+                        paddingAngle={6}
+                        cornerRadius={8}
+                        stroke="none"
                         dataKey="value"
                       >
                         {tagData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                          <Cell key={`cell-${index}`} fill={entry.fill} className="hover:opacity-80 transition-opacity duration-300 outline-none" />
                         ))}
                       </Pie>
                       <RechartsTooltip 
-                        contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }}
+                        contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
                         itemStyle={{ color: '#fff' }}
                       />
-                      <Legend verticalAlign={window.innerWidth < 640 ? "bottom" : "middle"} align={window.innerWidth < 640 ? "center" : "right"} layout={window.innerWidth < 640 ? "horizontal" : "vertical"} />
+                      <Legend 
+                        verticalAlign={window.innerWidth < 640 ? "bottom" : "middle"} 
+                        align={window.innerWidth < 640 ? "center" : "right"} 
+                        layout={window.innerWidth < 640 ? "horizontal" : "vertical"}
+                        wrapperStyle={{ paddingLeft: window.innerWidth < 640 ? 0 : '30px', fontSize: '13px', fontWeight: 'bold' }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
