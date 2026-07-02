@@ -596,7 +596,7 @@ export default function LearnPage() {
                 >
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-[18px] flex items-center justify-center ${isDone ? "bg-[#10B981]" : "bg-[#64CEFB]"}`}>
+                      <div className={`w-14 h-14 rounded-[18px] flex items-center justify-center ${isDone ? "bg-[#10B981]" : "bg-gradient-to-r from-blue-500 to-[#64CEFB] shadow-[0_0_15px_rgba(100,206,251,0.25)]"}`}>
                         <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
                       </div>
                       {isDone && (
@@ -636,7 +636,7 @@ export default function LearnPage() {
                       </div>
                       
                       <div className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 mt-0.5 ${
-                        isDone ? "bg-[#10B981] text-white" : "bg-[#64CEFB] text-black"
+                        isDone ? "bg-[#10B981] text-white" : "bg-gradient-to-r from-blue-500 to-[#64CEFB] text-white shadow-[0_0_15px_rgba(100,206,251,0.25)]"
                       }`}>
                         {isDone ? "Review" : "Start"}
                       </div>

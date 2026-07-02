@@ -630,7 +630,7 @@ export default function Dashboard() {
               <Card className="bg-[#0A0A0A]/80 backdrop-blur-[20px] border border-white/[0.05] p-6 min-h-[400px] rounded-[24px]">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-black text-white">Recent Activity</h3>
-                  <Button variant="default" className="bg-[#64CEFB] text-black hover:bg-[#64CEFB]/90 font-black uppercase text-[10px] tracking-widest px-6 h-9 rounded-full shadow-[0_0_20px_rgba(100,206,251,0.2)]" onClick={() => setLocation('/history')}>
+                  <Button variant="default" className="bg-gradient-to-r from-blue-500 to-[#64CEFB] text-white hover:opacity-90 font-black uppercase text-[10px] tracking-widest px-6 h-9 rounded-full shadow-[0_0_20px_rgba(100,206,251,0.25)] border-none" onClick={() => setLocation('/history')}>
                     View All
                   </Button>
                 </div>
