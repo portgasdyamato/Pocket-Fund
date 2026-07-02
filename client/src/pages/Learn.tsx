@@ -115,9 +115,9 @@ export default function LearnPage() {
   };
 
   const getDifficultyColor = (d: string) =>
-    d === "Easy" ? "text-white bg-emerald-500 border-transparent shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-    : d === "Medium" ? "text-white bg-amber-500 border-transparent shadow-[0_0_15px_rgba(245,158,11,0.3)]"
-    : "text-white bg-red-500 border-transparent shadow-[0_0_15px_rgba(239,68,68,0.3)]";
+    d === "Easy" ? "text-white bg-[#22C55E] border-transparent"
+    : d === "Medium" ? "text-white bg-amber-500 border-transparent"
+    : "text-white bg-red-500 border-transparent";
 
   // ── COURSE VIEW ──────────────────────────────────────────
   if (activeQuest && courseData) {
@@ -592,54 +592,53 @@ export default function LearnPage() {
               <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
                 <div
                   onClick={() => startQuest(quest)}
-                  className={`group h-full flex flex-col rounded-[32px] border cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl relative ice-frost ${
-                    isDone ? "border-green-500/30 hover:border-green-400/60 shadow-[0_8px_32px_rgba(74,222,128,0.1)]" : "border-white/10 hover:border-primary/50 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                  className={`group h-full flex flex-col rounded-[24px] border cursor-pointer overflow-hidden transition-all duration-300 relative bg-[#0B0B0B] ${
+                    isDone ? "border-green-500/40 hover:border-green-400" : "border-white/5 hover:border-white/20"
                   }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg ${isDone ? "bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary shadow-[0_0_20px_rgba(100,206,251,0.4)]"}`}>
-                        <Icon className="w-6 h-6 text-white drop-shadow-sm" strokeWidth={2.5} />
+                      <div className={`w-14 h-14 rounded-[18px] flex items-center justify-center ${isDone ? "bg-[#22C55E]" : "bg-[#64CEFB]"}`}>
+                        <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
                       </div>
                       {isDone && (
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#22C55E]">
                           <CheckCircle2 className="w-3.5 h-3.5 text-white" strokeWidth={3} />
-                          <span className="text-[10px] font-black text-white uppercase tracking-widest">Done</span>
+                          <span className="text-[10px] font-black text-white uppercase tracking-widest mt-0.5">Done</span>
                         </div>
                       )}
                     </div>
 
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className={`px-2.5 py-1 rounded-lg border text-[9px] font-black uppercase tracking-widest shadow-sm ${getDifficultyColor(quest.difficulty)}`}>{quest.difficulty}</span>
+                        <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest mt-0.5 ${getDifficultyColor(quest.difficulty)}`}>{quest.difficulty}</span>
                       </div>
-                    <h3 className={`text-2xl font-black tracking-tight mb-3 transition-colors ${isDone ? "group-hover:text-green-400" : "group-hover:text-primary"}`}>{quest.title}</h3>
-                    <p className="text-sm text-white/50 line-clamp-2 mb-6 leading-relaxed flex-1 font-medium">{quest.description}</p>
+                      <h3 className={`text-[22px] leading-tight font-black tracking-tight mb-3 transition-colors ${isDone ? "group-hover:text-green-400" : "group-hover:text-[#64CEFB]"}`}>{quest.title}</h3>
+                      <p className="text-[13px] text-white/50 line-clamp-2 mb-6 leading-relaxed flex-1 font-medium">{quest.description}</p>
                     </div>
 
                     <div className="flex items-center justify-between pt-6 mt-auto relative">
-                      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                      <div className="flex items-center gap-5">
+                      <div className="absolute top-0 left-0 w-full h-[1px] bg-white/5" />
+                      <div className="flex items-center gap-4">
                         <div className="flex flex-col">
-                          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-0.5">Duration</span>
-                          <span className="text-[11px] font-black text-white/80 flex items-center gap-1.5">
+                          <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30 mb-1">Duration</span>
+                          <span className="text-[10px] font-black text-white/80 flex items-center gap-1.5">
                              <Clock className="w-3 h-3 text-white/40" />
                             ~{(content as any).duration || content.slides.length * 2} mins
                           </span>
                         </div>
-                        <div className="w-px h-8 bg-white/10" />
+                        <div className="w-px h-8 bg-white/10 mx-1" />
                         <div className="flex flex-col">
-                          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-0.5">Questions</span>
-                          <span className="text-[11px] font-black text-white/80 flex items-center gap-1.5">
+                          <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30 mb-1">Questions</span>
+                          <span className="text-[10px] font-black text-white/80 flex items-center gap-1.5">
                             <Target className="w-3 h-3 text-white/40" />
                             {content.quizzes.length} Checks
                           </span>
                         </div>
                       </div>
                       
-                      <div className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 ${
-                        isDone ? "bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary text-white shadow-[0_0_20px_rgba(100,206,251,0.4)]"
+                      <div className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 mt-0.5 ${
+                        isDone ? "bg-[#22C55E] text-white" : "bg-[#64CEFB] text-black"
                       }`}>
                         {isDone ? "Review" : "Start"}
                       </div>

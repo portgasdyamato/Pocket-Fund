@@ -212,12 +212,12 @@ export default function AskCoach() {
           <div className="mt-auto pt-6 border-t border-white/5">
             <button
                onClick={toggleMute}
-               className={`flex items-center gap-3 w-full group transition-all ${isMuted ? 'opacity-50 hover:opacity-100' : ''}`}
+               className={`flex items-center gap-4 group transition-all ${isMuted ? 'opacity-50 hover:opacity-100' : ''}`}
              >
-               <div className="w-8 h-8 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all group-hover:bg-white/[0.08]">
-                 {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white/50" /> : <Volume2 className="w-3.5 h-3.5 text-primary" />}
+               <div className="w-12 h-12 rounded-full bg-[#0F0F0F] border border-white/[0.05] flex items-center justify-center transition-all group-hover:bg-[#1A1A1A] shrink-0">
+                 {isMuted ? <VolumeX className="w-5 h-5 text-white/50" /> : <Volume2 className="w-5 h-5 text-[#64CEFB]" />}
                </div>
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition-colors">
+               <span className="text-sm font-black uppercase tracking-[0.2em] text-white/80 group-hover:text-white transition-colors">
                  {isMuted ? "Audio Disabled" : "Audio Enabled"}
                </span>
              </button>
