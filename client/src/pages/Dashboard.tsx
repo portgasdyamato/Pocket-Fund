@@ -326,12 +326,12 @@ export default function Dashboard() {
 
   const getCategoryColor = (cat: string) => {
     switch (cat.toLowerCase()) {
-      case 'food': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-      case 'transport': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'shopping': return 'bg-pink-500/10 text-pink-400 border-pink-500/20';
-      case 'entertainment': return 'bg-[#64CEFB]/10 text-[#64CEFB] border-[#64CEFB]/20';
-      case 'bills': return 'bg-green-500/10 text-green-400 border-green-500/20';
-      default: return 'bg-white/5 text-white/40 border-white/10';
+      case 'food': return 'bg-orange-500 text-white border-transparent shadow-md shadow-orange-500/20';
+      case 'transport': return 'bg-blue-500 text-white border-transparent shadow-md shadow-blue-500/20';
+      case 'shopping': return 'bg-pink-500 text-white border-transparent shadow-md shadow-pink-500/20';
+      case 'entertainment': return 'bg-[#64CEFB] text-black border-transparent shadow-md shadow-[#64CEFB]/20';
+      case 'bills': return 'bg-green-500 text-white border-transparent shadow-md shadow-green-500/20';
+      default: return 'bg-white/20 text-white border-transparent shadow-md';
     }
   };
 
@@ -544,13 +544,12 @@ export default function Dashboard() {
                 <button 
                   key={i}
                   onClick={() => setLocation(action.path)}
-                  className={`relative flex flex-col items-center justify-center p-8 rounded-[32px] ${action.bgLight} border ${action.borderLight} ${action.hoverBg} transition-all duration-500 group overflow-hidden`}
+                  className="relative flex flex-col items-center justify-center p-8 rounded-[32px] bg-white/[0.02] border-t border-l border-white/20 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-xl hover:bg-white/[0.04] transition-all duration-500 group overflow-hidden"
                 >
-                  {/* Subtle Background Glow on Hover */}
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${action.color}`} />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 ${action.glow} relative z-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-b before:from-white/20 before:to-transparent before:opacity-50`}>
-                    <action.icon className={`w-6 h-6 text-white ${action.iconShadow}`} strokeWidth={2.5} />
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] relative z-10`}>
+                    <action.icon className="w-6 h-6 text-white drop-shadow-md" strokeWidth={2.5} />
                   </div>
                   
                   <span className="text-[11px] font-black text-white/50 tracking-[0.2em] transition-colors group-hover:text-white uppercase relative z-10">
@@ -631,7 +630,7 @@ export default function Dashboard() {
               <Card className="ice-frost border-white/5 p-6 min-h-[400px]">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-black font-display">Recent Activity</h3>
-                  <Button variant="ghost" size="sm" className="blue-glass-button" onClick={() => setLocation('/history')}>
+                  <Button variant="default" size="sm" className="bg-primary text-black hover:bg-primary/90 font-bold px-5 rounded-full" onClick={() => setLocation('/history')}>
                     View All
                   </Button>
                 </div>
@@ -654,10 +653,10 @@ export default function Dashboard() {
                               {expense.date} • {expense.category}
                               {expense.tag && (
                                 <span className={`px-2 py-0.5 rounded text-[9px] font-black tracking-widest border transition-all ${
-                                  expense.tag === 'Need' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.2)]' :
-                                  expense.tag === 'Want' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.2)]' :
-                                  expense.tag === 'Goal Claim' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]' :
-                                  'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.2)]'
+                                  expense.tag === 'Need' ? 'bg-blue-500 text-white border-transparent shadow-md shadow-blue-500/20' :
+                                  expense.tag === 'Want' ? 'bg-cyan-500 text-white border-transparent shadow-md shadow-cyan-500/20' :
+                                  expense.tag === 'Goal Claim' ? 'bg-emerald-500 text-white border-transparent shadow-md shadow-emerald-500/20' :
+                                  'bg-rose-500 text-white border-transparent shadow-md shadow-rose-500/20'
                                 }`}>
                                   {expense.tag}
                                 </span>
