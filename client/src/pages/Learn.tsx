@@ -115,9 +115,9 @@ export default function LearnPage() {
   };
 
   const getDifficultyColor = (d: string) =>
-    d === "Easy" ? "text-emerald-400 bg-emerald-400/10 border-emerald-400/20"
-    : d === "Medium" ? "text-amber-400 bg-amber-400/10 border-amberald-400/20"
-    : "text-red-400 bg-red-400/10 border-red-400/20";
+    d === "Easy" ? "text-white bg-emerald-500 border-transparent shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+    : d === "Medium" ? "text-white bg-amber-500 border-transparent shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+    : "text-white bg-red-500 border-transparent shadow-[0_0_15px_rgba(239,68,68,0.3)]";
 
   // ── COURSE VIEW ──────────────────────────────────────────
   if (activeQuest && courseData) {
@@ -592,20 +592,20 @@ export default function LearnPage() {
               <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
                 <div
                   onClick={() => startQuest(quest)}
-                  className={`group h-full flex flex-col rounded-[32px] border cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl relative ${
-                    isDone ? "bg-gradient-to-br from-green-500/[0.05] to-emerald-500/[0.01] border-green-500/20 shadow-green-500/10" : "bg-gradient-to-br from-white/[0.05] to-white/[0.01] border-white/10 hover:border-primary/40 shadow-primary/10"
+                  className={`group h-full flex flex-col rounded-[32px] border cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl relative ice-frost ${
+                    isDone ? "border-green-500/30 hover:border-green-400/60 shadow-[0_8px_32px_rgba(74,222,128,0.1)]" : "border-white/10 hover:border-primary/50 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
                   }`}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg ${isDone ? "bg-gradient-to-br from-green-500/20 to-emerald-500/5 border border-green-500/30" : "bg-gradient-to-br from-primary/20 to-accent/5 border border-primary/30"}`}>
-                        <Icon className={`w-6 h-6 ${isDone ? "text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]" : "text-primary drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]"}`} />
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg ${isDone ? "bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary shadow-[0_0_20px_rgba(100,206,251,0.4)]"}`}>
+                        <Icon className="w-6 h-6 text-black drop-shadow-sm" strokeWidth={2.5} />
                       </div>
                       {isDone && (
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/10 border border-green-500/20 shadow-[0_0_15px_rgba(74,222,128,0.15)]">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
-                          <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">Done</span>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-black" strokeWidth={3} />
+                          <span className="text-[10px] font-black text-black uppercase tracking-widest">Done</span>
                         </div>
                       )}
                     </div>
@@ -638,8 +638,8 @@ export default function LearnPage() {
                         </div>
                       </div>
                       
-                      <div className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg ${
-                        isDone ? "bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20" : "bg-primary text-white premium-shadow hover:scale-105 active:scale-95"
+                      <div className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 ${
+                        isDone ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary text-black shadow-[0_0_20px_rgba(100,206,251,0.4)]"
                       }`}>
                         {isDone ? "Review" : "Start"}
                       </div>
