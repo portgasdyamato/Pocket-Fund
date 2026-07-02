@@ -390,10 +390,10 @@ export default function AskCoach() {
                       className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                         listening
                           ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)] animate-pulse"
-                          : "bg-white/[0.05] text-white/40 hover:text-white hover:bg-white/[0.1] border border-white/5"
+                          : "bg-white/10 text-white hover:bg-white/20 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_25px_rgba(255,255,255,0.1)]"
                       }`}
                     >
-                      {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                      {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5 drop-shadow-md" />}
                     </button>
                   )}
 

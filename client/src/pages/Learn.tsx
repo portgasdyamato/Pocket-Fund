@@ -600,12 +600,12 @@ export default function LearnPage() {
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg ${isDone ? "bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary shadow-[0_0_20px_rgba(100,206,251,0.4)]"}`}>
-                        <Icon className="w-6 h-6 text-black drop-shadow-sm" strokeWidth={2.5} />
+                        <Icon className="w-6 h-6 text-white drop-shadow-sm" strokeWidth={2.5} />
                       </div>
                       {isDone && (
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-black" strokeWidth={3} />
-                          <span className="text-[10px] font-black text-black uppercase tracking-widest">Done</span>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                          <span className="text-[10px] font-black text-white uppercase tracking-widest">Done</span>
                         </div>
                       )}
                     </div>
@@ -639,7 +639,7 @@ export default function LearnPage() {
                       </div>
                       
                       <div className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 ${
-                        isDone ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary text-black shadow-[0_0_20px_rgba(100,206,251,0.4)]"
+                        isDone ? "bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "bg-primary text-white shadow-[0_0_20px_rgba(100,206,251,0.4)]"
                       }`}>
                         {isDone ? "Review" : "Start"}
                       </div>

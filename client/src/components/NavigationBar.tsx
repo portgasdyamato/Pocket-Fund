@@ -82,154 +82,159 @@ export function NavigationBar() {
   }
 
   return (
-    <div className="sticky top-0 z-[100]">
-      <nav className="ice-frost border-b border-white/[0.05]">
-        <div className="w-full px-6 sm:px-10 h-20 flex items-center justify-between">
-          <Link href="/" className="group transition-all shrink-0">
+    <div className="sticky top-4 sm:top-6 z-[100] w-full px-4 sm:px-6 md:px-10 flex flex-col items-center pointer-events-none">
+      <nav className="relative bg-[#0A0A0A]/90 backdrop-blur-3xl border border-white/[0.08] rounded-full h-[72px] flex items-center justify-between px-3 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] w-full max-w-7xl pointer-events-auto transition-all duration-300 hover:border-white/[0.12]">
+        <div className="flex items-center pl-4 pr-6 shrink-0">
+          <Link href="/" className="group transition-all hover:scale-105 active:scale-95">
             <Logo size="sm" />
           </Link>
-          
-          <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] p-1 rounded-2xl border border-white/[0.05]">
-            {menuItems.map((item) => {
-              const isActive = location === item.url;
-              return (
-                <Link
-                  key={item.title}
-                  href={item.url}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all duration-300 text-[10px] font-black uppercase tracking-widest ${
-                    isActive
-                      ? "bg-gradient-to-r from-blue-600 to-primary text-white shadow-[0_0_20px_rgba(100,206,251,0.4)]"
-                      : "text-white hover:bg-white/[0.1] hover:shadow-inner"
-                  }`}
-                >
-                  <item.icon className="w-3.5 h-3.5" />
-                  <span>{item.title}</span>
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="hidden xl:flex items-center gap-2 bg-white/[0.02] p-1 rounded-2xl border border-white/[0.05]">
-               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
-                  <Wallet className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-bold font-display tabular-nums">₹{walletBalance.toLocaleString('en-IN')}</span>
-               </div>
-               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5">
-                  <Lock className="w-3.5 h-3.5 text-accent" />
-                  <span className="text-xs font-bold font-display tabular-nums">₹{lockerBalance.toLocaleString('en-IN')}</span>
-               </div>
-            </div>
-
-            <div className="h-8 w-px bg-white/[0.05] hidden sm:block" />
-
-            <div className="flex items-center gap-1 sm:gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="relative h-10 w-10 flex-shrink-0 focus:outline-none group">
-                    <Avatar className="h-10 w-10 border border-white/10 p-0.5 bg-white/[0.05]">
-                      <AvatarImage src={user?.profileImageUrl || undefined} className="rounded-full object-cover" />
-                      <AvatarFallback className="bg-white/5 text-white text-[10px] font-bold">
-                        {user?.firstName?.[0] || user?.email?.[0] || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-72 border-white/[0.05] bg-black/95 backdrop-blur-3xl mt-4 p-2 rounded-3xl overflow-hidden shadow-2xl"
-                >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-2xl rounded-full transform translate-x-1/2 -translate-y-1/2" />
-                  <div className="p-4 flex items-center gap-4 relative z-10">
-                    <Avatar className="w-12 h-12 border-2 border-white/10 shrink-0">
-                      <AvatarImage src={user?.profileImageUrl || `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.email}`} />
-                      <AvatarFallback className="bg-primary/20 text-primary font-bold">
-                        {user?.firstName?.charAt(0) || user?.email?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1">
-                      <p className="font-bold text-white text-lg tracking-tight truncate w-32">{user?.firstName || 'User'}</p>
-                      <p className="text-[10px] font-bold uppercase text-white/50 tracking-widest">{user?.email?.split('@')[0]}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    {[
-                      { icon: User, label: "My Profile", url: "/profile" },
-                      { icon: Trophy, label: "Achievements", url: "/achievements" },
-                    ].map((item, i) => (
-                      <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.08] cursor-pointer rounded-xl p-3 focus:bg-white/[0.1] transition-all">
-                        <Link href={item.url} className="flex items-center gap-3">
-                          <item.icon className="w-4 h-4 text-white/60" />
-                          <span className="text-xs font-bold text-white/90">{item.label}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                  <DropdownMenuSeparator className="bg-white/10 mx-2 my-2" />
-                  <DropdownMenuItem onClick={handleLogout} className="blue-glass-button cursor-pointer rounded-xl p-3 transition-all hover:bg-white/[0.08]">
-                    <div className="flex items-center gap-3">
-                      <LogOut className="w-4 h-4 text-white/60" />
-                      <span className="text-xs font-bold text-white/90">Sign Out</span>
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <button
-                className={`lg:hidden w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                  isMobileMenuOpen ? 'bg-white text-black' : 'bg-white/[0.03] text-white/60 hover:text-white'
+        </div>
+        
+        <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
+          {menuItems.map((item) => {
+            const isActive = location === item.url;
+            return (
+              <Link
+                key={item.title}
+                href={item.url}
+                className={`flex items-center gap-2.5 px-6 py-3 rounded-full transition-all duration-300 text-[10px] font-black uppercase tracking-[0.15em] ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-600 to-[#64CEFB] text-white shadow-[0_0_24px_rgba(100,206,251,0.3)] hover:shadow-[0_0_32px_rgba(100,206,251,0.5)] hover:-translate-y-0.5"
+                    : "text-white/60 hover:text-white hover:bg-white/[0.06]"
                 }`}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
+                <item.icon className="w-4 h-4" />
+                <span>{item.title}</span>
+              </Link>
+            );
+          })}
         </div>
 
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="ice-frost border-white/5 p-6 h-full relative overflow-hidden group"
-            >
-              <div className="p-6 space-y-6">
-                 <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.05]">
-                       <p className="text-[8px] font-bold uppercase text-white/20 tracking-widest mb-1">Wallet</p>
-                       <p className="text-sm font-bold text-white">₹{walletBalance.toLocaleString('en-IN')}</p>
-                    </div>
-                    <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.05]">
-                       <p className="text-[8px] font-bold uppercase text-white/20 tracking-widest mb-1">Locker</p>
-                       <p className="text-sm font-bold text-white">₹{lockerBalance.toLocaleString('en-IN')}</p>
-                    </div>
-                 </div>
+        <div className="flex items-center gap-4 shrink-0 pr-1">
+          <div className="hidden xl:flex items-center gap-3">
+             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1A1A1A] border border-white/[0.06] transition-colors hover:bg-[#222]">
+                <Wallet className="w-4 h-4 text-primary drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]" />
+                <span className="text-sm font-bold font-display text-white tabular-nums tracking-wide">₹{walletBalance.toLocaleString('en-IN')}</span>
+             </div>
+             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1A1A1A] border border-white/[0.06] transition-colors hover:bg-[#222]">
+                <Lock className="w-4 h-4 text-[#64CEFB] drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]" />
+                <span className="text-sm font-bold font-display text-white tabular-nums tracking-wide">₹{lockerBalance.toLocaleString('en-IN')}</span>
+             </div>
+          </div>
 
-                 <div className="space-y-2">
-                    {menuItems.map((item, i) => (
-                      <Link 
-                        key={i} 
-                        href={item.url} 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-                          location === item.url ? 'bg-gradient-to-r from-blue-600 to-primary text-white border-transparent shadow-[0_0_20px_rgba(100,206,251,0.3)]' : 'bg-white/[0.02] text-white border-white/[0.05]'
-                        }`}
-                      >
-                         <div className="flex items-center gap-4">
-                            <item.icon className="w-4 h-4" />
-                            <span className="text-xs font-bold">{item.title}</span>
-                         </div>
-                         <ChevronRight className="w-4 h-4 opacity-40" />
+          <div className="h-10 w-px bg-white/[0.08] hidden sm:block mx-1 rounded-full" />
+
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="relative h-12 w-12 flex-shrink-0 focus:outline-none group hover:scale-105 active:scale-95 transition-all">
+                  <Avatar className="h-12 w-12 border-2 border-white/10 p-0.5 bg-[#1A1A1A] transition-all group-hover:border-primary/50 group-hover:shadow-[0_0_15px_rgba(100,206,251,0.3)]">
+                    <AvatarImage src={user?.profileImageUrl || undefined} className="rounded-full object-cover" />
+                    <AvatarFallback className="bg-white/5 text-white text-xs font-black">
+                      {user?.firstName?.[0] || user?.email?.[0] || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-72 border-white/[0.08] bg-[#0A0A0A]/95 backdrop-blur-3xl mt-6 p-2 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[40px] rounded-full transform translate-x-1/2 -translate-y-1/2" />
+                <div className="p-5 flex items-center gap-4 relative z-10">
+                  <Avatar className="w-14 h-14 border-2 border-white/10 shrink-0 shadow-lg">
+                    <AvatarImage src={user?.profileImageUrl || `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.email}`} />
+                    <AvatarFallback className="bg-primary/20 text-primary font-bold">
+                      {user?.firstName?.charAt(0) || user?.email?.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1 overflow-hidden">
+                    <p className="font-black text-white text-lg tracking-tight truncate w-full">{user?.firstName || 'User'}</p>
+                    <p className="text-[10px] font-bold uppercase text-white/50 tracking-widest truncate">{user?.email?.split('@')[0]}</p>
+                  </div>
+                </div>
+                <div className="space-y-1.5 p-1">
+                  {[
+                    { icon: User, label: "My Profile", url: "/profile" },
+                    { icon: Trophy, label: "Achievements", url: "/achievements" },
+                  ].map((item, i) => (
+                    <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.06] focus:bg-white/[0.08] cursor-pointer rounded-2xl p-3.5 transition-all outline-none">
+                      <Link href={item.url} className="flex items-center gap-4">
+                        <item.icon className="w-4 h-4 text-white/60" />
+                        <span className="text-xs font-bold text-white tracking-wide">{item.label}</span>
                       </Link>
-                    ))}
-                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                    </DropdownMenuItem>
+                  ))}
+                </div>
+                <div className="px-3 py-2">
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                </div>
+                <div className="p-1">
+                  <DropdownMenuItem onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 focus:bg-red-500/20 cursor-pointer rounded-2xl p-3.5 transition-all outline-none border border-red-500/10 group">
+                    <div className="flex items-center gap-4">
+                      <LogOut className="w-4 h-4 text-red-400 group-hover:text-red-300" />
+                      <span className="text-xs font-bold text-red-400 group-hover:text-red-300 tracking-wide">Sign Out</span>
+                    </div>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <button
+              className={`lg:hidden w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                isMobileMenuOpen ? 'bg-white text-black shadow-lg' : 'bg-[#1A1A1A] text-white/70 hover:text-white border border-white/[0.08]'
+              }`}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
       </nav>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            className="w-full max-w-7xl mt-4 bg-[#0A0A0A]/95 backdrop-blur-3xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] pointer-events-auto"
+          >
+            <div className="p-6 space-y-6 relative">
+               <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 blur-[60px] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+               <div className="grid grid-cols-2 gap-3 relative z-10">
+                  <div className="bg-[#1A1A1A] p-4 rounded-2xl border border-white/[0.05]">
+                     <p className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em] mb-1.5">Wallet</p>
+                     <p className="text-base font-bold font-display text-white">₹{walletBalance.toLocaleString('en-IN')}</p>
+                  </div>
+                  <div className="bg-[#1A1A1A] p-4 rounded-2xl border border-white/[0.05]">
+                     <p className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em] mb-1.5">Locker</p>
+                     <p className="text-base font-bold font-display text-white">₹{lockerBalance.toLocaleString('en-IN')}</p>
+                  </div>
+               </div>
+
+               <div className="space-y-2 relative z-10">
+                  {menuItems.map((item, i) => (
+                    <Link 
+                      key={i} 
+                      href={item.url} 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
+                        location === item.url ? 'bg-gradient-to-r from-blue-600 to-[#64CEFB] text-white shadow-[0_0_24px_rgba(100,206,251,0.3)]' : 'bg-white/[0.03] text-white border border-white/[0.05] hover:bg-white/[0.06]'
+                      }`}
+                    >
+                       <div className="flex items-center gap-4">
+                          <item.icon className="w-5 h-5" />
+                          <span className="text-sm font-bold tracking-wide">{item.title}</span>
+                       </div>
+                       <ChevronRight className="w-4 h-4 opacity-40" />
+                    </Link>
+                  ))}
+               </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
