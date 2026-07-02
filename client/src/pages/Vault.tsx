@@ -231,10 +231,7 @@ export default function GlowUp() {
           className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6"
         >
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="bg-primary/20 text-primary p-2 rounded-lg">
-                <Sparkles className="w-4 h-4" />
-              </div>
+            <div className="flex items-center mb-2">
               <span className="text-xs font-black uppercase tracking-[0.3em] text-primary/80">Savings Overview</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter">The Vault</h1>

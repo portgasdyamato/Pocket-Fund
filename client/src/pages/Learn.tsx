@@ -115,7 +115,7 @@ export default function LearnPage() {
   };
 
   const getDifficultyColor = (d: string) =>
-    d === "Easy" ? "text-white bg-[#22C55E] border-transparent"
+    d === "Easy" ? "text-white bg-[#10B981] border-transparent"
     : d === "Medium" ? "text-white bg-amber-500 border-transparent"
     : "text-white bg-red-500 border-transparent";
 
@@ -596,11 +596,11 @@ export default function LearnPage() {
                 >
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-[18px] flex items-center justify-center ${isDone ? "bg-[#22C55E]" : "bg-[#64CEFB]"}`}>
+                      <div className={`w-14 h-14 rounded-[18px] flex items-center justify-center ${isDone ? "bg-[#10B981]" : "bg-[#64CEFB]"}`}>
                         <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
                       </div>
                       {isDone && (
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#22C55E]">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10B981]">
                           <CheckCircle2 className="w-3.5 h-3.5 text-white" strokeWidth={3} />
                           <span className="text-[10px] font-black text-white uppercase tracking-widest mt-0.5">Done</span>
                         </div>
@@ -611,7 +611,7 @@ export default function LearnPage() {
                       <div className="flex items-center gap-2 mb-3">
                         <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest mt-0.5 ${getDifficultyColor(quest.difficulty)}`}>{quest.difficulty}</span>
                       </div>
-                      <h3 className={`text-[22px] leading-tight font-black tracking-tight mb-3 transition-colors ${isDone ? "group-hover:text-green-400" : "group-hover:text-[#64CEFB]"}`}>{quest.title}</h3>
+                      <h3 className="text-[22px] leading-tight font-black tracking-tight mb-3 text-white">{quest.title}</h3>
                       <p className="text-[13px] text-white/50 line-clamp-2 mb-6 leading-relaxed flex-1 font-medium">{quest.description}</p>
                     </div>
 
@@ -636,7 +636,7 @@ export default function LearnPage() {
                       </div>
                       
                       <div className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 mt-0.5 ${
-                        isDone ? "bg-[#22C55E] text-white" : "bg-[#64CEFB] text-black"
+                        isDone ? "bg-[#10B981] text-white" : "bg-[#64CEFB] text-black"
                       }`}>
                         {isDone ? "Review" : "Start"}
                       </div>
