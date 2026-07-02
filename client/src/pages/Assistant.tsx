@@ -249,18 +249,26 @@ export default function AskCoach() {
                           whileHover={{ scale: 1.02, y: -4 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => { setChatMessage(p.q); handleSend(); }}
-                          className={`group relative p-3 rounded-2xl bg-gradient-to-br ${p.gradient} transition-all duration-300 text-left overflow-hidden border border-white/10 ice-frost h-full min-h-[110px] flex flex-col justify-between shadow-xl hover:shadow-2xl`}
+                          className="group relative p-4 rounded-[1.5rem] transition-all duration-300 text-left overflow-hidden ice-frost hover:bg-white/[0.05] h-full min-h-[140px] flex flex-col justify-between"
                         >
                           {/* Shine overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                           
-                          <div className="relative">
-                            <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 shadow-inner">
-                              <Icon className="w-4 h-4 text-white" />
+                          <div className="relative h-full flex flex-col">
+                            <div className="flex justify-between items-start mb-4">
+                               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                 <Icon className="w-5 h-5 text-white" />
+                               </div>
+                               <ArrowRight className="w-4 h-4 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 mt-1" />
                             </div>
-                            <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1 text-white/70 italic">{p.label}</p>
-                            <p className="text-xs font-bold text-white leading-snug line-clamp-2">{p.q}</p>
-                            <ArrowRight className="w-4 h-4 mt-2 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                            <div className="mt-auto">
+                              <div className="mb-2">
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-[0.1em] text-white bg-gradient-to-r ${p.gradient} shadow-md`}>
+                                  {p.label}
+                                </span>
+                              </div>
+                              <p className="text-sm font-bold text-white leading-snug line-clamp-2">{p.q}</p>
+                            </div>
                           </div>
                         </motion.button>
                       );
