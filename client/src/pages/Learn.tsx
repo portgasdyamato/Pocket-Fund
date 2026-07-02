@@ -592,9 +592,7 @@ export default function LearnPage() {
               <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
                 <div
                   onClick={() => startQuest(quest)}
-                  className={`group h-full flex flex-col rounded-[24px] border cursor-pointer overflow-hidden transition-all duration-300 relative bg-[#0B0B0B] ${
-                    isDone ? "border-green-500/40 hover:border-green-400" : "border-white/5 hover:border-white/20"
-                  }`}
+                  className="group h-full flex flex-col rounded-[32px] cursor-pointer overflow-hidden transition-all duration-300 relative ice-frost hover:bg-white/[0.02]"
                 >
                   <div className="p-7 flex flex-col flex-1 relative z-10">
                     <div className="flex items-start justify-between mb-6">
