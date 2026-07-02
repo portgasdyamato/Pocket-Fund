@@ -82,25 +82,25 @@ export function NavigationBar() {
   }
 
   return (
-    <div className="sticky top-4 sm:top-6 z-[100] w-full px-4 sm:px-6 md:px-10 flex flex-col items-center pointer-events-none">
-      <nav className="relative bg-[#0A0A0A]/90 backdrop-blur-3xl border border-white/[0.08] rounded-full h-[72px] flex items-center justify-between px-3 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] w-full max-w-7xl pointer-events-auto transition-all duration-300 hover:border-white/[0.12]">
+    <div className="sticky top-6 z-[100] w-full px-4 flex justify-center pointer-events-none">
+      <nav className="relative ice-frost rounded-[40px] h-[72px] flex items-center justify-between px-3 shadow-2xl w-full max-w-[1200px] pointer-events-auto">
         <div className="flex items-center pl-4 pr-6 shrink-0">
-          <Link href="/" className="group transition-all hover:scale-105 active:scale-95">
+          <Link href="/" className="group transition-opacity hover:opacity-80">
             <Logo size="sm" />
           </Link>
         </div>
         
-        <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
+        <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
           {menuItems.map((item) => {
             const isActive = location === item.url;
             return (
               <Link
                 key={item.title}
                 href={item.url}
-                className={`flex items-center gap-2.5 px-6 py-3 rounded-full transition-all duration-300 text-[10px] font-black uppercase tracking-[0.15em] ${
+                className={`flex items-center gap-2.5 px-6 py-2.5 rounded-full transition-colors duration-200 text-[10px] font-black uppercase tracking-[0.15em] ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-600 to-[#64CEFB] text-white shadow-[0_0_24px_rgba(100,206,251,0.3)] hover:shadow-[0_0_32px_rgba(100,206,251,0.5)] hover:-translate-y-0.5"
-                    : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+                    ? "bg-gradient-to-r from-blue-500 to-[#64CEFB] text-white shadow-[0_0_20px_rgba(100,206,251,0.25)]"
+                    : "text-white/60 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
                 <item.icon className="w-4 h-4" />
@@ -110,25 +110,25 @@ export function NavigationBar() {
           })}
         </div>
 
-        <div className="flex items-center gap-4 shrink-0 pr-1">
-          <div className="hidden xl:flex items-center gap-3">
-             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1A1A1A] border border-white/[0.06] transition-colors hover:bg-[#222]">
-                <Wallet className="w-4 h-4 text-primary drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]" />
-                <span className="text-sm font-bold font-display text-white tabular-nums tracking-wide">₹{walletBalance.toLocaleString('en-IN')}</span>
+        <div className="flex items-center gap-3 shrink-0 pr-1">
+          <div className="hidden xl:flex items-center gap-2.5">
+             <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 transition-colors hover:bg-white/[0.05]">
+                <Wallet className="w-4 h-4 text-primary" />
+                <span className="text-xs font-bold font-display text-white tabular-nums tracking-wide">₹{walletBalance.toLocaleString('en-IN')}</span>
              </div>
-             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1A1A1A] border border-white/[0.06] transition-colors hover:bg-[#222]">
-                <Lock className="w-4 h-4 text-[#64CEFB] drop-shadow-[0_0_8px_rgba(100,206,251,0.5)]" />
-                <span className="text-sm font-bold font-display text-white tabular-nums tracking-wide">₹{lockerBalance.toLocaleString('en-IN')}</span>
+             <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 transition-colors hover:bg-white/[0.05]">
+                <Lock className="w-4 h-4 text-accent" />
+                <span className="text-xs font-bold font-display text-white tabular-nums tracking-wide">₹{lockerBalance.toLocaleString('en-IN')}</span>
              </div>
           </div>
 
-          <div className="h-10 w-px bg-white/[0.08] hidden sm:block mx-1 rounded-full" />
+          <div className="h-8 w-px bg-white/10 hidden sm:block mx-2" />
 
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="relative h-12 w-12 flex-shrink-0 focus:outline-none group hover:scale-105 active:scale-95 transition-all">
-                  <Avatar className="h-12 w-12 border-2 border-white/10 p-0.5 bg-[#1A1A1A] transition-all group-hover:border-primary/50 group-hover:shadow-[0_0_15px_rgba(100,206,251,0.3)]">
+                <button className="relative h-11 w-11 flex-shrink-0 focus:outline-none transition-opacity hover:opacity-80">
+                  <Avatar className="h-11 w-11 border-2 border-white/10 p-0.5 bg-white/5">
                     <AvatarImage src={user?.profileImageUrl || undefined} className="rounded-full object-cover" />
                     <AvatarFallback className="bg-white/5 text-white text-xs font-black">
                       {user?.firstName?.[0] || user?.email?.[0] || "U"}
@@ -138,7 +138,7 @@ export function NavigationBar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-72 border-white/[0.08] bg-[#0A0A0A]/95 backdrop-blur-3xl mt-6 p-2 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
+                className="w-72 border-white/10 bg-black/95 backdrop-blur-3xl mt-6 p-2 rounded-[24px] overflow-hidden shadow-2xl"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[40px] rounded-full transform translate-x-1/2 -translate-y-1/2" />
                 <div className="p-5 flex items-center gap-4 relative z-10">
@@ -153,12 +153,12 @@ export function NavigationBar() {
                     <p className="text-[10px] font-bold uppercase text-white/50 tracking-widest truncate">{user?.email?.split('@')[0]}</p>
                   </div>
                 </div>
-                <div className="space-y-1.5 p-1">
+                <div className="space-y-1 p-1">
                   {[
                     { icon: User, label: "My Profile", url: "/profile" },
                     { icon: Trophy, label: "Achievements", url: "/achievements" },
                   ].map((item, i) => (
-                    <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.06] focus:bg-white/[0.08] cursor-pointer rounded-2xl p-3.5 transition-all outline-none">
+                    <DropdownMenuItem key={i} asChild className="hover:bg-white/[0.06] focus:bg-white/[0.08] cursor-pointer rounded-[16px] p-3.5 transition-all outline-none">
                       <Link href={item.url} className="flex items-center gap-4">
                         <item.icon className="w-4 h-4 text-white/60" />
                         <span className="text-xs font-bold text-white tracking-wide">{item.label}</span>
@@ -167,10 +167,10 @@ export function NavigationBar() {
                   ))}
                 </div>
                 <div className="px-3 py-2">
-                  <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                  <div className="h-px w-full bg-white/10" />
                 </div>
                 <div className="p-1">
-                  <DropdownMenuItem onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 focus:bg-red-500/20 cursor-pointer rounded-2xl p-3.5 transition-all outline-none border border-red-500/10 group">
+                  <DropdownMenuItem onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 focus:bg-red-500/20 cursor-pointer rounded-[16px] p-3.5 transition-all outline-none border border-red-500/10 group">
                     <div className="flex items-center gap-4">
                       <LogOut className="w-4 h-4 text-red-400 group-hover:text-red-300" />
                       <span className="text-xs font-bold text-red-400 group-hover:text-red-300 tracking-wide">Sign Out</span>
@@ -181,8 +181,8 @@ export function NavigationBar() {
             </DropdownMenu>
 
             <button
-              className={`lg:hidden w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                isMobileMenuOpen ? 'bg-white text-black shadow-lg' : 'bg-[#1A1A1A] text-white/70 hover:text-white border border-white/[0.08]'
+              className={`lg:hidden w-11 h-11 rounded-full flex items-center justify-center transition-all ${
+                isMobileMenuOpen ? 'bg-white text-black' : 'bg-white/5 text-white/70 hover:text-white border border-white/10'
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
