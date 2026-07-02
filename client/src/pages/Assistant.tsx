@@ -170,7 +170,7 @@ export default function AskCoach() {
       <div className="flex-1 flex overflow-hidden relative border-t border-white/5">
         
         {/* Left Sidebar (Desktop Only) */}
-        <aside className="hidden xl:flex flex-col w-72 p-8 border-r border-white/5 bg-[#050505]/50 relative z-30">
+        <aside className="hidden xl:flex flex-col w-72 p-8 border-r border-white/10 bg-white/[0.02] backdrop-blur-2xl shadow-[1px_0_24px_-10px_rgba(0,0,0,0.5)] relative z-30">
           <div className="space-y-6">
             <div className="flex items-center justify-between pb-6 border-b border-white/5">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">Overview</p>
@@ -192,16 +192,16 @@ export default function AskCoach() {
              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">Capabilities</p>
              <div className="space-y-4">
                 {[
-                  { title: "Investment Strategy", icon: PieChart, color: "text-purple-400" },
-                  { title: "Expense Auditing", icon: FileText, color: "text-amber-400" },
-                  { title: "Wealth Scaling", icon: TrendingUp, color: "text-emerald-400" },
-                  { title: "Habit Tracking", icon: Target, color: "text-rose-400" }
+                  { title: "Investment Strategy", icon: PieChart, color: "bg-purple-500" },
+                  { title: "Expense Auditing", icon: FileText, color: "bg-amber-500" },
+                  { title: "Wealth Scaling", icon: TrendingUp, color: "bg-emerald-500" },
+                  { title: "Habit Tracking", icon: Target, color: "bg-rose-500" }
                 ].map((cap, i) => {
                   const Icon = cap.icon;
                   return (
                   <div key={i} className="flex items-center gap-4 group cursor-default">
-                    <div className="w-8 h-8 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all duration-300 group-hover:bg-white/[0.08] group-hover:scale-110">
-                      <Icon className={`w-3.5 h-3.5 ${cap.color} opacity-80 group-hover:opacity-100`} />
+                    <div className={`w-8 h-8 rounded-full ${cap.color} shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110`}>
+                      <Icon className="w-3.5 h-3.5 text-white opacity-90 group-hover:opacity-100" />
                     </div>
                     <span className="text-[11px] font-bold text-white/50 uppercase tracking-widest group-hover:text-white transition-colors">{cap.title}</span>
                   </div>
@@ -227,7 +227,7 @@ export default function AskCoach() {
         {/* Central Chat Column */}
         <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
           <div className="flex-1 overflow-y-auto scrollbar-hide px-6">
-            <div className={`max-w-5xl mx-auto space-y-4 w-full ${isFirstMessage ? "pt-6 pb-20" : "pt-8 pb-20"}`}>
+            <div className={`max-w-5xl mx-auto space-y-4 w-full pt-8 pb-4`}>
 
               {/* Quick prompt cards */}
               <AnimatePresence>
@@ -371,26 +371,26 @@ export default function AskCoach() {
                 )}
               </AnimatePresence>
 
-              <div ref={scrollRef} className="h-20 sm:h-32" />
+              <div ref={scrollRef} className="h-6 sm:h-12" />
             </div>
           </div>
 
           {/* ══════════ INPUT DOCK ══════════ */}
-          <div className="relative shrink-0 z-20 px-6 pb-8">
+          <div className="relative shrink-0 z-20 px-6 pb-8 pt-4 bg-gradient-to-t from-[#050505] via-[#050505]/95 to-transparent">
             <div className="max-w-5xl mx-auto">
-              <div className="relative p-2 rounded-[32px] ice-frost border-white/20 focus-within:border-primary/50 transition-all duration-500 shadow-2xl">
-                {/* Glow on focus */}
-                <div className="absolute inset-0 rounded-[32px] bg-primary/5 opacity-0 focus-within:opacity-100 transition-opacity pointer-events-none blur-xl" />
+              <div className="relative p-2.5 rounded-[2rem] bg-white/[0.03] border border-white/10 focus-within:border-primary/40 focus-within:bg-white/[0.05] transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl group/input">
+                {/* Subtle border glow on focus */}
+                <div className="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_20px_rgba(100,206,251,0)] group-focus-within/input:shadow-[inset_0_0_20px_rgba(100,206,251,0.15)] transition-shadow duration-500 pointer-events-none" />
 
                 <div className="relative flex items-center gap-3">
                   {/* Mic */}
                   {browserSupportsSpeechRecognition && (
                     <button
                       onClick={toggleListening}
-                      className={`shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                      className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                         listening
-                          ? "bg-red-500/20 text-red-400 ring-2 ring-red-500/40 animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.2)]"
-                          : "bg-white/[0.03] text-white/25 hover:text-white/60 hover:bg-white/[0.08] hover:border-white/10 border border-transparent"
+                          ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)] animate-pulse"
+                          : "bg-white/[0.05] text-white/40 hover:text-white hover:bg-white/[0.1] border border-white/5"
                       }`}
                     >
                       {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
@@ -403,15 +403,15 @@ export default function AskCoach() {
                     value={chatMessage}
                     onChange={e => setChatMessage(e.target.value)}
                     onKeyDown={handleKey}
-                    placeholder={listening ? "I'm listening..." : "Ask me anything..."}
-                    className="flex-1 bg-transparent border-none outline-none text-base text-white placeholder:text-white/15 font-black tracking-wide py-3 italic"
+                    placeholder={listening ? "Listening to your instructions..." : "Type your message to Coach..."}
+                    className="flex-1 bg-transparent border-none outline-none text-base text-white placeholder:text-white/30 font-medium tracking-wide py-3 px-2"
                   />
 
                   {/* Send button */}
                   <Button
                     onClick={handleSend}
                     disabled={!chatMessage.trim() || chatMutation.isPending}
-                    className="shrink-0 w-14 h-14 rounded-2xl bg-white text-black hover:bg-white/90 disabled:opacity-30 transition-all shadow-2xl hover:scale-105 active:scale-95 group"
+                    className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent text-black disabled:opacity-30 disabled:grayscale transition-all shadow-[0_0_20px_rgba(100,206,251,0.3)] hover:shadow-[0_0_30px_rgba(100,206,251,0.5)] hover:scale-105 active:scale-95 flex items-center justify-center p-0 group"
                   >
                     <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </Button>
