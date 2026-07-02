@@ -419,9 +419,9 @@ export default function AskCoach() {
                   <Button
                     onClick={handleSend}
                     disabled={!chatMessage.trim() || chatMutation.isPending}
-                    className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent text-black disabled:opacity-30 disabled:grayscale transition-all shadow-[0_0_20px_rgba(100,206,251,0.3)] hover:shadow-[0_0_30px_rgba(100,206,251,0.5)] hover:scale-105 active:scale-95 flex items-center justify-center p-0 group"
+                    className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-[#64CEFB] text-white disabled:opacity-30 disabled:grayscale transition-all shadow-[0_8px_32px_rgba(37,99,235,0.5)] hover:shadow-[0_8px_40px_rgba(37,99,235,0.7)] hover:scale-110 active:scale-95 flex items-center justify-center p-0 group border border-white/20"
                   >
-                    <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <Send className="w-5 h-5 drop-shadow-md group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </Button>
                 </div>
               </div>
