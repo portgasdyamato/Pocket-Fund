@@ -597,21 +597,21 @@ export default function Dashboard() {
             
             {/* Recent Wins */}
             <motion.div variants={item}>
-              <Card className="ice-frost border-white/5 p-6 h-full">
-                <h3 className="text-xl font-black mb-6 flex items-center gap-2 font-display">
-                  <Trophy className="w-5 h-5 text-accent" />
+              <Card className="bg-[#0A0A0A]/80 backdrop-blur-[20px] border border-white/[0.05] p-6 h-full rounded-[24px]">
+                <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-white">
+                  <Trophy className="w-5 h-5 text-[#64CEFB]" />
                   Achievements
                 </h3>
                 <div className="space-y-4">
                   {recentAchievements.length > 0 ? (
                     recentAchievements.map((win) => (
-                      <div key={win.id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
-                        <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/20 group-hover:scale-110 transition-transform">
-                          <Star className="w-6 h-6 text-yellow-500 fill-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
+                      <div key={win.id} className="flex items-center gap-4 p-4 rounded-[16px] bg-[#161616] border border-white/[0.02] hover:bg-[#1A1A1A] transition-colors cursor-pointer">
+                        <div className="w-12 h-12 rounded-[14px] bg-[#152e2e] flex items-center justify-center">
+                          <Star className="w-6 h-6 text-[#FFC107] fill-[#FFC107]" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-bold text-sm truncate">{win.title}</div>
-                          <div className="text-xs text-white/40 mt-0.5">+{win.points} XP earned</div>
+                          <div className="font-black text-sm text-white truncate">{win.title}</div>
+                          <div className="text-[11px] font-bold text-white/40 mt-0.5">+{win.points} XP earned</div>
                         </div>
                       </div>
                     ))
@@ -627,10 +627,10 @@ export default function Dashboard() {
 
             {/* Activity Logger */}
             <motion.div variants={item}>
-              <Card className="ice-frost border-white/5 p-6 min-h-[400px]">
+              <Card className="bg-[#0A0A0A]/80 backdrop-blur-[20px] border border-white/[0.05] p-6 min-h-[400px] rounded-[24px]">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-black font-display">Recent Activity</h3>
-                  <Button variant="default" size="sm" className="bg-primary text-black hover:bg-primary/90 font-bold px-5 rounded-full" onClick={() => setLocation('/history')}>
+                  <h3 className="text-xl font-black text-white">Recent Activity</h3>
+                  <Button variant="default" className="bg-[#64CEFB] text-black hover:bg-[#64CEFB]/90 font-black uppercase text-[10px] tracking-widest px-6 h-9 rounded-full shadow-[0_0_20px_rgba(100,206,251,0.2)]" onClick={() => setLocation('/history')}>
                     View All
                   </Button>
                 </div>
@@ -641,36 +641,40 @@ export default function Dashboard() {
                     </div>
                   ) : recentExpenses.length > 0 ? (
                     recentExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden" onClick={() => setLocation('/history')}>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-                        <div className="flex items-center gap-4 relative z-10">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110 shadow-sm ${getCategoryColor(expense.category)}`}>
+                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-[16px] bg-[#161616] border border-white/[0.02] hover:bg-[#1A1A1A] transition-colors cursor-pointer" onClick={() => setLocation('/history')}>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 rounded-[14px] flex items-center justify-center ${
+                            expense.category.toLowerCase() === 'food' ? 'bg-[#F97316]' :
+                            expense.category.toLowerCase() === 'transport' ? 'bg-[#3B82F6]' :
+                            expense.category.toLowerCase() === 'shopping' ? 'bg-[#EC4899]' :
+                            expense.category.toLowerCase() === 'bills' ? 'bg-[#22C55E]' :
+                            'bg-white/20'
+                          }`}>
                             {getCategoryIcon(expense.category)}
                           </div>
                           <div>
-                            <div className="text-sm font-black text-white/90 tracking-wide group-hover:text-primary transition-colors">{expense.description}</div>
-                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 flex items-center gap-2 mt-1">
-                              {expense.date} • {expense.category}
+                            <div className="text-sm font-black text-white tracking-wide">{expense.description}</div>
+                            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 flex items-center gap-2 mt-1">
+                              {expense.date.toUpperCase()} • {expense.category.toUpperCase()}
                               {expense.tag && (
-                                <span className={`px-2 py-0.5 rounded text-[9px] font-black tracking-widest border transition-all ${
-                                  expense.tag === 'Need' ? 'bg-blue-500 text-white border-transparent shadow-md shadow-blue-500/20' :
-                                  expense.tag === 'Want' ? 'bg-cyan-500 text-white border-transparent shadow-md shadow-cyan-500/20' :
-                                  expense.tag === 'Goal Claim' ? 'bg-emerald-500 text-white border-transparent shadow-md shadow-emerald-500/20' :
-                                  'bg-rose-500 text-white border-transparent shadow-md shadow-rose-500/20'
+                                <span className={`px-2 py-0.5 rounded-[4px] text-[8px] font-black tracking-widest ${
+                                  expense.tag.toUpperCase() === 'NEED' ? 'bg-[#3B82F6] text-white' :
+                                  expense.tag.toUpperCase() === 'WANT' ? 'bg-[#06B6D4] text-white' :
+                                  'bg-[#F43F5E] text-white'
                                 }`}>
-                                  {expense.tag}
+                                  {expense.tag.toUpperCase() === 'GOAL CLAIM' ? 'ICK' : expense.tag.toUpperCase()}
                                 </span>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className="text-base font-black text-white group-hover:text-primary transition-colors relative z-10 drop-shadow-md">₹{expense.amount.toLocaleString('en-IN')}</div>
+                        <div className="text-[17px] font-black text-white">₹{expense.amount.toLocaleString('en-IN')}</div>
                       </div>
                     ))
                   ) : (
                     <div className="text-center py-10 opacity-40">
-                      <Activity className="w-10 h-10 mx-auto mb-4" />
-                      <p className="text-sm">No activity recorded.</p>
+                      <Activity className="w-10 h-10 mx-auto mb-4 text-white" />
+                      <p className="text-sm text-white">No activity recorded.</p>
                     </div>
                   )}
                 </div>
