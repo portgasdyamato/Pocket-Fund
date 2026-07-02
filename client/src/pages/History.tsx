@@ -164,7 +164,7 @@ export default function ExpenseLog() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <main className="container mx-auto px-6 py-12 max-w-5xl space-y-12">
+      <main className="mx-auto px-4 sm:px-7 py-12 w-full max-w-[1200px] space-y-12">
         
         {/* Header Section */}
         <motion.div 

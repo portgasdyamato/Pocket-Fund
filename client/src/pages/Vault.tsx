@@ -222,7 +222,7 @@ export default function GlowUp() {
       <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full border border-primary/5 pointer-events-none" />
       <div className="absolute top-[-5%] right-[-5%] w-[40%] h-[40%] rounded-full border border-primary/5 pointer-events-none" />
 
-      <main className="container mx-auto px-6 py-12 space-y-12 max-w-7xl relative z-10">
+      <main className="mx-auto px-4 sm:px-7 py-12 space-y-12 w-full max-w-[1200px] relative z-10">
         
         {/* Header Section */}
         <motion.div 

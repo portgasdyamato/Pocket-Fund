@@ -482,7 +482,7 @@ export default function LearnPage() {
   // ── LIST VIEW ────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <main className="max-w-7xl mx-auto px-6 pb-16 pt-6 space-y-12">
+      <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-7 pb-16 pt-6 space-y-12">
 
         {/* Compact Mastery Hub Header */}
         <div className="relative overflow-hidden rounded-[32px] p-6 md:p-10">

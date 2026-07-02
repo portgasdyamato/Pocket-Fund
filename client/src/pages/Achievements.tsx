@@ -116,7 +116,7 @@ export default function AchievementsPage() {
       {/* Hand-crafted texture overlay (Dot grid) */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 0)", backgroundSize: "40px 40px" }} />
       
-      <main className="max-w-7xl mx-auto px-8 py-24 space-y-32 relative z-10">
+      <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-7 py-24 space-y-32 relative z-10">
         
         {/* Architectural Header Section */}
         <header className="flex flex-col lg:flex-row items-baseline justify-between gap-12 border-b border-white/[0.05] pb-20">
