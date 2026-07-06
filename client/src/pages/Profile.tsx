@@ -334,8 +334,9 @@ export default function Profile() {
               <div className="ice-frost p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[40px] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                 <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                    <User className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-[16px] bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                    <div className="absolute inset-0 bg-primary/20 blur-md rounded-full" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.8)] relative z-10" strokeWidth={2.5} />
                   </div>
                   <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Account Details</h2>
                 </div>
@@ -402,8 +403,9 @@ export default function Profile() {
                   <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-white/[0.02]" />
                 </div>
                 <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500">
-                    <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-[16px] bg-gradient-to-br from-orange-500/20 to-orange-500/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                    <div className="absolute inset-0 bg-orange-500/20 blur-md rounded-full" />
+                    <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400 drop-shadow-[0_0_10px_rgba(249,115,22,0.8)] relative z-10" strokeWidth={2.5} />
                   </div>
                   <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Account Status</h2>
                 </div>
