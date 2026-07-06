@@ -138,7 +138,7 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="lg:hidden mb-6"
         >
-          <div className="relative rounded-[32px] overflow-hidden p-6 border-t border-l border-white/20 border-b border-r border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.2)] backdrop-blur-xl bg-gradient-to-br from-[#64CEFB]/10 to-primary/5"
+          <div className="relative rounded-[32px] overflow-hidden p-6 border-t border-l border-white/20 border-b border-r border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.2)] backdrop-blur-xl bg-gradient-to-br from-[#64CEFB]/10 to-primary/5">
             {/* Action Bar */}
             <div className="flex justify-between items-start mb-6">
               <div>
