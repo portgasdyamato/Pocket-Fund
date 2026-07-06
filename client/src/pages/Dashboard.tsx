@@ -605,13 +605,15 @@ export default function Dashboard() {
                 <div className="space-y-4">
                   {recentAchievements.length > 0 ? (
                     recentAchievements.map((win) => (
-                      <div key={win.id} className="flex items-center gap-4 p-4 rounded-[16px] bg-[#161616] border border-white/[0.02] hover:bg-[#1A1A1A] transition-colors cursor-pointer">
-                        <div className="w-12 h-12 rounded-[14px] bg-[#152e2e] flex items-center justify-center">
-                          <Star className="w-6 h-6 text-[#FFC107] fill-[#FFC107]" />
+                      <div key={win.id} className="group relative flex items-center gap-4 p-4 rounded-[20px] bg-white/[0.02] border-t border-l border-white/10 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:bg-white/[0.04] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all duration-500 overflow-hidden cursor-pointer">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="relative shrink-0 w-12 h-12 rounded-[16px] bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                          <div className="absolute inset-0 bg-yellow-500/20 blur-md rounded-full" />
+                          <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)] relative z-10" strokeWidth={1.5} />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 relative z-10">
                           <div className="font-black text-sm text-white truncate">{win.title}</div>
-                          <div className="text-[11px] font-bold text-white/40 mt-0.5">+{win.points} XP earned</div>
+                          <div className="text-[11px] font-bold text-white/40 mt-0.5 tracking-wide">+{win.points} XP earned</div>
                         </div>
                       </div>
                     ))
@@ -641,26 +643,36 @@ export default function Dashboard() {
                     </div>
                   ) : recentExpenses.length > 0 ? (
                     recentExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-[16px] bg-[#161616] border border-white/[0.02] hover:bg-[#1A1A1A] transition-colors cursor-pointer" onClick={() => setLocation('/history')}>
-                        <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-[14px] flex items-center justify-center ${
-                            expense.category.toLowerCase() === 'food' ? 'bg-[#F97316]' :
-                            expense.category.toLowerCase() === 'transport' ? 'bg-[#3B82F6]' :
-                            expense.category.toLowerCase() === 'shopping' ? 'bg-[#EC4899]' :
-                            expense.category.toLowerCase() === 'bills' ? 'bg-[#22C55E]' :
-                            'bg-white/20'
+                      <div key={expense.id} className="group relative flex items-center justify-between p-4 rounded-[20px] bg-white/[0.02] border-t border-l border-white/10 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:bg-white/[0.04] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all duration-500 overflow-hidden cursor-pointer" onClick={() => setLocation('/history')}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className={`relative shrink-0 w-12 h-12 rounded-[16px] border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center group-hover:scale-110 transition-transform duration-500 ${
+                            expense.category.toLowerCase() === 'food' ? 'bg-gradient-to-br from-orange-500/20 to-orange-500/5 text-orange-400' :
+                            expense.category.toLowerCase() === 'transport' ? 'bg-gradient-to-br from-blue-500/20 to-blue-500/5 text-blue-400' :
+                            expense.category.toLowerCase() === 'shopping' ? 'bg-gradient-to-br from-pink-500/20 to-pink-500/5 text-pink-400' :
+                            expense.category.toLowerCase() === 'bills' ? 'bg-gradient-to-br from-green-500/20 to-green-500/5 text-green-400' :
+                            'bg-gradient-to-br from-white/10 to-white/5 text-white'
                           }`}>
-                            {getCategoryIcon(expense.category)}
+                            <div className={`absolute inset-0 blur-md rounded-full ${
+                              expense.category.toLowerCase() === 'food' ? 'bg-orange-500/20' :
+                              expense.category.toLowerCase() === 'transport' ? 'bg-blue-500/20' :
+                              expense.category.toLowerCase() === 'shopping' ? 'bg-pink-500/20' :
+                              expense.category.toLowerCase() === 'bills' ? 'bg-green-500/20' :
+                              'bg-white/10'
+                            }`} />
+                            <div className="relative z-10 drop-shadow-md">
+                              {getCategoryIcon(expense.category)}
+                            </div>
                           </div>
                           <div>
                             <div className="text-sm font-black text-white tracking-wide">{expense.description}</div>
                             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 flex items-center gap-2 mt-1">
                               {expense.date.toUpperCase()} • {expense.category.toUpperCase()}
                               {expense.tag && (
-                                <span className={`px-2 py-0.5 rounded-[4px] text-[8px] font-black tracking-widest ${
-                                  expense.tag.toUpperCase() === 'NEED' ? 'bg-[#3B82F6] text-white' :
-                                  expense.tag.toUpperCase() === 'WANT' ? 'bg-[#06B6D4] text-white' :
-                                  'bg-[#F43F5E] text-white'
+                                <span className={`px-2 py-0.5 rounded-[6px] text-[8px] font-black tracking-widest border ${
+                                  expense.tag.toUpperCase() === 'NEED' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                                  expense.tag.toUpperCase() === 'WANT' ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400' :
+                                  'bg-rose-500/10 border-rose-500/20 text-rose-400'
                                 }`}>
                                   {expense.tag.toUpperCase() === 'GOAL CLAIM' ? 'ICK' : expense.tag.toUpperCase()}
                                 </span>
@@ -668,7 +680,9 @@ export default function Dashboard() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-[17px] font-black text-white">₹{expense.amount.toLocaleString('en-IN')}</div>
+                        <div className="text-[17px] font-black text-white relative z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/60 transition-all">
+                          ₹{expense.amount.toLocaleString('en-IN')}
+                        </div>
                       </div>
                     ))
                   ) : (
