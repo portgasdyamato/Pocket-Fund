@@ -138,12 +138,7 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="lg:hidden mb-6"
         >
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 p-6"
-            style={{
-              background: "linear-gradient(135deg, rgba(100,206,251,0.12), rgba(100,206,251,0.06))",
-              backdropFilter: "blur(12px)"
-            }}
-          >
+          <div className="relative rounded-[32px] overflow-hidden p-6 border-t border-l border-white/20 border-b border-r border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.2)] backdrop-blur-xl bg-gradient-to-br from-[#64CEFB]/10 to-primary/5"
             {/* Action Bar */}
             <div className="flex justify-between items-start mb-6">
               <div>
@@ -238,9 +233,7 @@ export default function Profile() {
           {/* ──────── Left Column (Desktop Only Avatar Card) ──────── */}
           <div className="hidden lg:block lg:col-span-5 space-y-6">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-              <div className="flex flex-col items-center text-center p-10 rounded-[40px] border border-white/5 relative overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(12px)" }}
-              >
+              <div className="ice-frost flex flex-col items-center text-center p-10 rounded-[40px] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
                 
                 <div className="relative mb-8">
@@ -309,23 +302,24 @@ export default function Profile() {
               className="grid grid-cols-2 gap-4"
             >
               {[
-                { label: "Security", val: "Tier 1", icon: <Shield className="w-5 h-5" /> },
-                { label: "Activity", val: "High", icon: <Zap className="w-5 h-5" /> },
-                { label: "Tier", val: "Premium", icon: <Globe className="w-5 h-5" /> },
-                { label: "Status", val: "Active", icon: <Cpu className="w-5 h-5" /> },
-              ].map((s, i) => (
-                <div key={i} className="p-5 rounded-[24px] border border-white/5 flex items-center gap-4 hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group"
-                  style={{ background: "rgba(255,255,255,0.02)", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
-                >
-                  <div className="w-12 h-12 rounded-[18px] bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.2)]">
-                    {s.icon}
+                { label: "Security", val: "Tier 1", icon: Shield, color: "from-blue-400 to-indigo-500" },
+                { label: "Activity", val: "High", icon: Zap, color: "from-amber-400 to-orange-500" },
+                { label: "Tier", val: "Premium", icon: Globe, color: "from-emerald-400 to-teal-500" },
+                { label: "Status", val: "Active", icon: Cpu, color: "from-purple-400 to-pink-500" },
+              ].map((s, i) => {
+                const Icon = s.icon;
+                return (
+                <div key={i} className="relative flex flex-col items-center justify-center p-6 sm:p-8 rounded-[32px] bg-white/[0.04] border-t border-l border-white/20 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-xl hover:bg-white/[0.06] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.2)] transition-all duration-500 group overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-100 transition-opacity duration-500" />
+                  
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-4 scale-110 -translate-y-1 group-hover:scale-[1.2] group-hover:-translate-y-2 transition-all duration-500 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] group-hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.7),inset_0_1px_2px_rgba(255,255,255,0.6)] relative z-10`}>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-md" strokeWidth={2.5} />
                   </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase text-white/40 tracking-[0.2em] mb-0.5">{s.label}</p>
-                    <p className="text-base sm:text-lg font-black text-white group-hover:text-primary transition-colors">{s.val}</p>
-                  </div>
+                  
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase text-white/50 tracking-[0.2em] mb-1 relative z-10">{s.label}</p>
+                  <p className="text-sm sm:text-base font-black text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 transition-all relative z-10">{s.val}</p>
                 </div>
-              ))}
+              )})}
             </motion.div>
           </div>
 
@@ -337,9 +331,8 @@ export default function Profile() {
               className="space-y-4 sm:space-y-6"
             >
               {/* Profile Details Form */}
-              <div className="p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[40px] border border-white/5"
-                style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(12px)" }}
-              >
+              <div className="ice-frost p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[40px] relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                 <div className="flex items-center gap-3 mb-6 sm:mb-8">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -403,9 +396,8 @@ export default function Profile() {
               </div>
 
               {/* Security & System Status */}
-              <div className="p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[40px] border border-white/5 relative overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.02)", backdropFilter: "blur(12px)" }}
-              >
+              <div className="ice-frost p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[40px] relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                 <div className="absolute top-0 right-0 p-6 sm:p-8 pointer-events-none">
                   <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-white/[0.02]" />
                 </div>
@@ -418,14 +410,16 @@ export default function Profile() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {statusItems.map((item, i) => (
-                    <div key={i} className="flex items-center justify-between p-5 sm:p-6 rounded-[24px] border border-white/5 group hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
-                      style={{ background: "rgba(255,255,255,0.02)", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <div className={`w-2 h-2 rounded-full flex-shrink-0 animate-pulse ${item.dot}`} />
-                        <span className="text-sm sm:text-base font-bold text-white/70 group-hover:text-white transition-colors truncate">{item.label}</span>
+                    <div key={i} className="relative flex items-center justify-between p-5 sm:p-6 rounded-[24px] bg-white/[0.02] border-t border-l border-white/10 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:bg-white/[0.04] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all duration-500 group overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      
+                      <div className="flex items-center gap-4 min-w-0 relative z-10">
+                        <div className={`w-10 h-10 rounded-[14px] bg-black/20 flex items-center justify-center shadow-inner border border-white/5 group-hover:border-white/10 transition-colors`}>
+                           <div className={`w-2 h-2 rounded-full flex-shrink-0 animate-pulse ${item.dot}`} />
+                        </div>
+                        <span className="text-sm sm:text-base font-black tracking-wide text-white/80 group-hover:text-white transition-colors truncate">{item.label}</span>
                       </div>
-                      <div className={`px-4 py-2 rounded-2xl bg-white/5 border border-white/5 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] flex-shrink-0 ml-3 ${item.color} group-hover:border-white/10 transition-colors`}>
+                      <div className={`px-4 py-2 rounded-xl bg-black/40 border border-white/5 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] flex-shrink-0 ml-3 ${item.color} shadow-inner group-hover:border-white/10 transition-colors relative z-10`}>
                         {item.status}
                       </div>
                     </div>
