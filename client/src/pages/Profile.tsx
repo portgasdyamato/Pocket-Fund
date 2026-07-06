@@ -117,10 +117,10 @@ export default function Profile() {
   const displayImage = previewImage || user?.profileImageUrl;
 
   const statusItems = [
-    { label: "KYC Verification", status: user?.kycCompleted ? "Secured" : "Pending", color: user?.kycCompleted ? "text-green-400" : "text-orange-400", dot: user?.kycCompleted ? "bg-green-400" : "bg-orange-400" },
-    { label: "Account Aggregator", status: user?.aaToken ? "Connected" : "Inactive", color: user?.aaToken ? "text-[#64CEFB]" : "text-white/40", dot: user?.aaToken ? "bg-[#64CEFB]" : "bg-white/20" },
-    { label: "Account Tier", status: "Premium", color: "text-[#0ea5e9]", dot: "bg-[#0ea5e9]" },
-    { label: "UPI Authorization", status: user?.mandateId ? "Active" : "Disabled", color: user?.mandateId ? "text-green-400" : "text-red-400", dot: user?.mandateId ? "bg-green-400" : "bg-red-400" },
+    { label: "KYC Verification", status: user?.kycCompleted ? "Secured" : "Pending", color: user?.kycCompleted ? "text-green-400" : "text-orange-400", dot: user?.kycCompleted ? "bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.5)]" : "bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.5)]" },
+    { label: "Account Aggregator", status: user?.aaToken ? "Connected" : "Inactive", color: user?.aaToken ? "text-[#64CEFB]" : "text-white/40", dot: user?.aaToken ? "bg-[#64CEFB] shadow-[0_0_10px_rgba(100,206,251,0.5)]" : "bg-white/20 shadow-none" },
+    { label: "Account Tier", status: "Premium", color: "text-[#0ea5e9]", dot: "bg-[#0ea5e9] shadow-[0_0_10px_rgba(14,165,233,0.5)]" },
+    { label: "UPI Authorization", status: user?.mandateId ? "Active" : "Disabled", color: user?.mandateId ? "text-green-400" : "text-red-400", dot: user?.mandateId ? "bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.5)]" : "bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.5)]" },
   ];
 
   return (
@@ -184,10 +184,10 @@ export default function Profile() {
             {/* Avatar + Name Row */}
             <div className="flex items-center gap-4">
               <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-primary/30 relative">
-                  <Avatar className="w-full h-full rounded-2xl">
+                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/30 relative shadow-[0_0_15px_rgba(var(--primary),0.3)]">
+                  <Avatar className="w-full h-full rounded-full">
                     <AvatarImage src={displayImage || undefined} className="object-cover" />
-                    <AvatarFallback className="text-2xl font-black bg-primary/20 text-primary rounded-2xl">
+                    <AvatarFallback className="text-2xl font-black bg-primary/20 text-primary rounded-full">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -243,13 +243,12 @@ export default function Profile() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
                 
-                {/* Avatar */}
                 <div className="relative mb-8">
                   <div className="absolute inset-0 bg-primary/25 blur-3xl rounded-full scale-125 animate-pulse" />
-                  <div className="relative w-44 h-44 rounded-[32%] border-4 border-white/10 p-2 transform rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden">
-                    <Avatar className="w-full h-full rounded-[28%] border-2 border-primary/20">
+                  <div className="relative w-44 h-44 rounded-full border-4 border-white/10 p-2 transition-all duration-500 overflow-hidden group hover:border-primary/50 mx-auto">
+                    <Avatar className="w-full h-full rounded-full border-2 border-primary/20">
                       <AvatarImage src={displayImage || undefined} className="object-cover" />
-                      <AvatarFallback className="text-5xl font-black bg-white/5 text-primary rounded-[28%]">
+                      <AvatarFallback className="text-5xl font-black bg-white/5 text-primary rounded-full">
                         {initials}
                       </AvatarFallback>
                     </Avatar>
@@ -307,23 +306,23 @@ export default function Profile() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="grid grid-cols-2 gap-3"
+              className="grid grid-cols-2 gap-4"
             >
               {[
-                { label: "Security", val: "Tier 1", icon: <Shield className="w-4 h-4" /> },
-                { label: "Activity", val: "High", icon: <Zap className="w-4 h-4" /> },
-                { label: "Tier", val: "Premium", icon: <Globe className="w-4 h-4" /> },
-                { label: "Status", val: "Active", icon: <Cpu className="w-4 h-4" /> },
+                { label: "Security", val: "Tier 1", icon: <Shield className="w-5 h-5" /> },
+                { label: "Activity", val: "High", icon: <Zap className="w-5 h-5" /> },
+                { label: "Tier", val: "Premium", icon: <Globe className="w-5 h-5" /> },
+                { label: "Status", val: "Active", icon: <Cpu className="w-5 h-5" /> },
               ].map((s, i) => (
-                <div key={i} className="p-4 rounded-[22px] border border-white/5 flex items-center gap-3"
-                  style={{ background: "rgba(255,255,255,0.02)" }}
+                <div key={i} className="p-5 rounded-[24px] border border-white/5 flex items-center gap-4 hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group"
+                  style={{ background: "rgba(255,255,255,0.02)", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
                 >
-                  <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                  <div className="w-12 h-12 rounded-[18px] bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.2)]">
                     {s.icon}
                   </div>
                   <div>
-                    <p className="text-[9px] font-black uppercase text-white/30 tracking-widest">{s.label}</p>
-                    <p className="text-sm font-black mt-0.5">{s.val}</p>
+                    <p className="text-[10px] font-black uppercase text-white/40 tracking-[0.2em] mb-0.5">{s.label}</p>
+                    <p className="text-base sm:text-lg font-black text-white group-hover:text-primary transition-colors">{s.val}</p>
                   </div>
                 </div>
               ))}
@@ -417,18 +416,18 @@ export default function Profile() {
                   <h2 className="text-base sm:text-xl font-black uppercase tracking-widest">Account Status</h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {statusItems.map((item, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-white/5 group hover:bg-white/[0.05] transition-all"
-                      style={{ background: "rgba(255,255,255,0.03)" }}
+                    <div key={i} className="flex items-center justify-between p-5 sm:p-6 rounded-[24px] border border-white/5 group hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
+                      style={{ background: "rgba(255,255,255,0.02)", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse ${item.dot}`} />
-                        <span className="text-xs sm:text-sm font-bold text-white/60 truncate">{item.label}</span>
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <div className={`w-2 h-2 rounded-full flex-shrink-0 animate-pulse ${item.dot}`} />
+                        <span className="text-sm sm:text-base font-bold text-white/70 group-hover:text-white transition-colors truncate">{item.label}</span>
                       </div>
-                      <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest flex-shrink-0 ml-2 ${item.color}`}>
+                      <div className={`px-4 py-2 rounded-2xl bg-white/5 border border-white/5 text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] flex-shrink-0 ml-3 ${item.color} group-hover:border-white/10 transition-colors`}>
                         {item.status}
-                      </span>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -280,7 +280,6 @@ export default function AskCoach() {
                       transition={{ duration: 0.28, ease: "easeOut" }}
                       className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-end`}
                     >
-                      {/* Avatar */}
                       <div className={`shrink-0 mb-1 w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xl ${
                         msg.role === 'user'
                           ? 'bg-white/5 border-white/10 text-white/40'
@@ -288,7 +287,7 @@ export default function AskCoach() {
                       }`}>
                         {msg.role === 'user'
                           ? <User className="w-5 h-5" />
-                          : <Sparkles className="w-5 h-5" />}
+                          : <Logo showText={false} size="sm" />}
                       </div>
 
                       {/* Bubble */}
@@ -358,7 +357,7 @@ export default function AskCoach() {
                     className="flex gap-6 items-end pt-4"
                   >
                     <div className="w-10 h-10 mb-1 rounded-2xl bg-gradient-to-br from-primary/25 to-[#64CEFB]/10 border-primary/30 flex items-center justify-center ice-frost">
-                      <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+                      <Logo showText={false} size="sm" />
                     </div>
                     <div className="rounded-[32px] rounded-bl-sm px-8 py-7 ice-frost border-white/5">
                       <div className="flex items-center gap-2.5">
