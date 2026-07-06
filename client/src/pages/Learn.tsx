@@ -226,15 +226,17 @@ export default function LearnPage() {
                       <div className="absolute inset-0 architectural-grid opacity-10" />
                     </div>
 
-                    <div className="relative mb-8 w-24 h-24 rounded-3xl bg-gradient-to-tr from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shadow-[inset_0_0_20px_rgba(100,206,251,0.1)] group">
-                      <Trophy className="w-12 h-12 text-primary drop-shadow-[0_0_15px_rgba(100,206,251,0.5)]" />
-                      <div className="absolute inset-0 rounded-3xl shadow-[0_0_40px_rgba(100,206,251,0.2)] pointer-events-none" />
+                    <div className="relative mb-8 w-24 h-24 rounded-[24px] bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 flex items-center justify-center shadow-inner group">
+                      <div className="absolute inset-0 blur-xl rounded-full bg-primary/20" />
+                      <Trophy className="w-12 h-12 text-primary drop-shadow-[0_0_15px_rgba(100,206,251,0.8)] relative z-10" />
+                      <div className="absolute inset-0 rounded-[24px] shadow-[0_0_40px_rgba(100,206,251,0.2)] pointer-events-none" />
                     </div>
 
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 mb-6">
-                      <Star className="w-3.5 h-3.5 text-primary fill-primary" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Credential Validated</span>
-                      <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+                    <div className="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-t border-l border-white/20 border-b border-r border-white/5 bg-gradient-to-br from-primary/20 to-primary/5 shadow-inner mb-6">
+                      <div className="absolute inset-0 blur-md rounded-full bg-primary/20" />
+                      <Star className="w-3.5 h-3.5 text-primary fill-primary relative z-10 drop-shadow-md" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary relative z-10">Credential Validated</span>
+                      <Star className="w-3.5 h-3.5 text-primary fill-primary relative z-10 drop-shadow-md" />
                     </div>
                     
                     <h2 className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter leading-none text-white mb-8 drop-shadow-md">
@@ -288,7 +290,10 @@ export default function LearnPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {slides.slice(0, 4).map((s: any, i: number) => (
                       <div key={i} className="flex items-start gap-4 p-5 rounded-2xl bg-white/5 border border-white/10">
-                        <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 text-xs font-black text-primary">{i+1}</div>
+                        <div className="relative shrink-0 w-8 h-8 rounded-[12px] bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center text-xs font-black text-primary">
+                          <div className="absolute inset-0 blur-sm rounded-full bg-primary/20" />
+                          <span className="relative z-10 drop-shadow-md">{i+1}</span>
+                        </div>
                         <div>
                           <p className="font-bold text-sm text-white mb-1">{s.title}</p>
                           <p className="text-xs text-white/40 line-clamp-2">{s.text?.substring(0, 80)}...</p>

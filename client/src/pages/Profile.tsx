@@ -179,10 +179,11 @@ export default function Profile() {
             {/* Avatar + Name Row */}
             <div className="flex items-center gap-4">
               <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/30 relative shadow-[0_0_15px_rgba(var(--primary),0.3)]">
-                  <Avatar className="w-full h-full rounded-full">
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 p-[3px] shadow-[inset_0_0_20px_rgba(100,206,251,0.2)] flex items-center justify-center">
+                  <div className="absolute inset-0 blur-md rounded-full bg-primary/20" />
+                  <Avatar className="w-full h-full rounded-full relative z-10 shadow-lg">
                     <AvatarImage src={displayImage || undefined} className="object-cover" />
-                    <AvatarFallback className="text-2xl font-black bg-primary/20 text-primary rounded-full">
+                    <AvatarFallback className="text-2xl font-black bg-black/40 text-primary rounded-full backdrop-blur-md">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -216,8 +217,9 @@ export default function Profile() {
                 { label: "Tier", val: "Pro", icon: <Globe className="w-3 h-3" /> },
                 { label: "Status", val: "Active", icon: <Cpu className="w-3 h-3" /> },
               ].map((s, i) => (
-                <div key={i} className="flex flex-col items-center p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-                  <div className="text-primary mb-1">{s.icon}</div>
+                <div key={i} className="relative flex flex-col items-center p-3 rounded-[16px] bg-white/[0.02] border-t border-l border-white/10 border-b border-r border-white/5 shadow-inner hover:bg-white/[0.04] transition-colors overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent pointer-events-none" />
+                  <div className="text-primary mb-1.5 relative z-10">{s.icon}</div>
                   <p className="text-[8px] font-black text-white/30 uppercase tracking-widest">{s.label}</p>
                   <p className="text-[10px] font-black text-white mt-0.5">{s.val}</p>
                 </div>
@@ -238,10 +240,11 @@ export default function Profile() {
                 
                 <div className="relative mb-8">
                   <div className="absolute inset-0 bg-primary/25 blur-3xl rounded-full scale-125 animate-pulse" />
-                  <div className="relative w-44 h-44 rounded-full border-4 border-white/10 p-2 transition-all duration-500 overflow-hidden group hover:border-primary/50 mx-auto">
-                    <Avatar className="w-full h-full rounded-full border-2 border-primary/20">
+                  <div className="relative w-44 h-44 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 p-2 transition-all duration-500 group mx-auto shadow-inner hover:scale-105 flex items-center justify-center">
+                    <div className="absolute inset-0 blur-xl rounded-full bg-primary/20 opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <Avatar className="w-full h-full rounded-full relative z-10 shadow-2xl bg-black">
                       <AvatarImage src={displayImage || undefined} className="object-cover" />
-                      <AvatarFallback className="text-5xl font-black bg-white/5 text-primary rounded-full">
+                      <AvatarFallback className="text-5xl font-black bg-black/60 text-primary rounded-full backdrop-blur-xl">
                         {initials}
                       </AvatarFallback>
                     </Avatar>

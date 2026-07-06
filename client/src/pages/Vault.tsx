@@ -353,8 +353,9 @@ export default function GlowUp() {
                     className="space-y-8"
                   >
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                        <Lock className="w-10 h-10 text-primary" />
+                      <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner mb-6">
+                        <div className="absolute inset-0 blur-xl rounded-full bg-primary/20" />
+                        <Lock className="w-10 h-10 text-primary relative z-10 drop-shadow-md" />
                       </div>
                       <h2 className="text-3xl font-black tracking-tight">{user?.vaultPin ? 'Update PIN' : 'Set Vault PIN'}</h2>
                       <p className="text-white/40 mt-2 font-medium">Create a 4-digit PIN to secure your withdrawals.</p>
@@ -403,8 +404,9 @@ export default function GlowUp() {
                     className="space-y-8"
                   >
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                        <ShieldCheck className="w-10 h-10 text-primary" />
+                      <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner mb-6">
+                        <div className="absolute inset-0 blur-xl rounded-full bg-primary/20" />
+                        <ShieldCheck className="w-10 h-10 text-primary relative z-10 drop-shadow-md" />
                       </div>
                       <h2 className="text-3xl font-black tracking-tight">Verify PIN</h2>
                       <p className="text-white/40 mt-2 font-medium">Enter your secret 4-digit PIN to authorize this withdrawal.</p>
@@ -515,8 +517,9 @@ export default function GlowUp() {
                     <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div className="flex justify-between items-start mb-8">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
-                        <Target className="w-6 h-6 text-primary" />
+                      <div className="relative shrink-0 w-12 h-12 rounded-[16px] flex items-center justify-center border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner transition-all duration-500 group-hover:scale-110 bg-gradient-to-br from-primary/20 to-primary/5 text-primary">
+                        <div className="absolute inset-0 blur-md rounded-full bg-primary/20" />
+                        <Target className="w-6 h-6 relative z-10 drop-shadow-md" />
                       </div>
                       <div className="text-right">
                         <div className="text-3xl font-black text-white">{progress.toFixed(0)}%</div>
@@ -657,14 +660,21 @@ export default function GlowUp() {
                           className="p-6 flex justify-between items-center hover:bg-white/[0.02] transition-colors group"
                         >
                           <div className="flex items-center gap-4">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
-                              t.type === 'stash' ? 'bg-primary/10 border-primary/20 text-primary' : 
-                              t.type === 'claim' ? 'bg-green-500/10 border-green-500/20 text-green-500' :
-                              'bg-destructive/10 border-destructive/20 text-destructive'
+                            <div className={`relative shrink-0 w-12 h-12 rounded-[16px] flex items-center justify-center border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner ${
+                              t.type === 'stash' ? 'bg-gradient-to-br from-primary/20 to-primary/5 text-primary' : 
+                              t.type === 'claim' ? 'bg-gradient-to-br from-green-500/20 to-green-500/5 text-green-400' :
+                              'bg-gradient-to-br from-rose-500/20 to-rose-500/5 text-rose-400'
                             }`}>
-                              {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : 
-                               t.type === 'claim' ? <Trophy className="w-6 h-6" /> :
-                               <ArrowDownCircle className="w-6 h-6" />}
+                              <div className={`absolute inset-0 blur-md rounded-full ${
+                                t.type === 'stash' ? 'bg-primary/20' : 
+                                t.type === 'claim' ? 'bg-green-500/20' :
+                                'bg-rose-500/20'
+                              }`} />
+                              <div className="relative z-10 drop-shadow-md">
+                                {t.type === 'stash' ? <ArrowUpCircle className="w-6 h-6" /> : 
+                                 t.type === 'claim' ? <Trophy className="w-6 h-6" /> :
+                                 <ArrowDownCircle className="w-6 h-6" />}
+                              </div>
                             </div>
                             <div>
                               <p className="font-bold text-white group-hover:text-primary transition-colors flex items-center gap-2">

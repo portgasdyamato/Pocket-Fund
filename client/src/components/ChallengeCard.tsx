@@ -63,8 +63,11 @@ export default function ChallengeCard({
         
         <div className="relative z-10 flex flex-col h-full gap-5">
           <div className="flex items-start justify-between">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 ${isCompleted ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-primary/10 border-primary/20 text-primary group-hover:scale-110'}`}>
-              {getIcon()}
+            <div className={`relative shrink-0 w-12 h-12 rounded-[16px] flex items-center justify-center border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner transition-all duration-500 group-hover:scale-110 ${isCompleted ? 'bg-gradient-to-br from-green-500/20 to-green-500/5 text-green-400' : 'bg-gradient-to-br from-primary/20 to-primary/5 text-primary'}`}>
+              <div className={`absolute inset-0 blur-md rounded-full ${isCompleted ? 'bg-green-500/20' : 'bg-primary/20'}`} />
+              <div className="relative z-10 drop-shadow-md">
+                {getIcon()}
+              </div>
             </div>
             <Badge variant="outline" className={`rounded-full px-3 py-1 font-bold tracking-tight text-[10px] uppercase border ${getDifficultyStyles(difficulty)}`}>
               {difficulty}

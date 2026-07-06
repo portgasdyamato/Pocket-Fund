@@ -113,8 +113,9 @@ export default function BudgetPage() {
                 <div className="lg:col-span-5 flex flex-col justify-center">
                   <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/5 space-y-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                        <Target className="w-6 h-6" />
+                      <div className="relative shrink-0 w-12 h-12 rounded-[16px] bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <div className="absolute inset-0 blur-md rounded-full bg-primary/20" />
+                        <Target className="w-6 h-6 relative z-10 drop-shadow-md" />
                       </div>
                       <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Available Capital</p>

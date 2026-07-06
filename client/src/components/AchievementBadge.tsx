@@ -30,8 +30,9 @@ export default function AchievementBadge({ id, type, title, description, points 
       data-testid={`badge-achievement-${id}`}
     >
       <div className="relative">
-        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-          <div className="transition-transform group-hover:scale-110">
+        <div className="relative w-14 h-14 rounded-[16px] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner text-primary group-hover:from-primary/40 group-hover:to-primary/10 group-hover:text-white transition-all duration-500 overflow-hidden">
+          <div className="absolute inset-0 blur-md rounded-full bg-primary/20 opacity-50 group-hover:opacity-100 transition-opacity" />
+          <div className="relative z-10 drop-shadow-md transition-transform group-hover:scale-110">
             {getIcon()}
           </div>
         </div>

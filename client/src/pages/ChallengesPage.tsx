@@ -127,27 +127,30 @@ export default function ChallengesPage() {
                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10">
                   <div className="space-y-1 sm:space-y-2">
                     <div className="flex justify-center mb-2 sm:mb-4">
-                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                         <Zap className="w-5 sm:w-6 h-5 sm:h-6" />
-                       </div>
+                        <div className="relative shrink-0 w-10 sm:w-12 h-10 sm:h-12 rounded-[16px] bg-gradient-to-br from-primary/20 to-primary/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center text-primary">
+                          <div className="absolute inset-0 blur-md rounded-full bg-primary/20" />
+                          <Zap className="w-5 sm:w-6 h-5 sm:h-6 relative z-10 drop-shadow-md" />
+                        </div>
                     </div>
                     <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-primary">{stats.totalPoints}</p>
                     <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Rewards (XP)</p>
                   </div>
                   <div className="space-y-1 sm:space-y-2">
                     <div className="flex justify-center mb-2 sm:mb-4">
-                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
-                         <CheckCircle2 className="w-5 sm:w-6 h-5 sm:h-6" />
-                       </div>
+                        <div className="relative shrink-0 w-10 sm:w-12 h-10 sm:h-12 rounded-[16px] bg-gradient-to-br from-green-500/20 to-green-500/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center text-green-400">
+                          <div className="absolute inset-0 blur-md rounded-full bg-green-500/20" />
+                          <CheckCircle2 className="w-5 sm:w-6 h-5 sm:h-6 relative z-10 drop-shadow-md" />
+                        </div>
                     </div>
                     <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-green-500">{stats.completedCount}</p>
                     <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Completed</p>
                   </div>
                   <div className="space-y-1 sm:space-y-2">
                     <div className="flex justify-center mb-2 sm:mb-4">
-                       <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
-                         <Target className="w-5 sm:w-6 h-5 sm:h-6" />
-                       </div>
+                        <div className="relative shrink-0 w-10 sm:w-12 h-10 sm:h-12 rounded-[16px] bg-gradient-to-br from-accent/20 to-accent/5 border-t border-l border-white/20 border-b border-r border-white/5 shadow-inner flex items-center justify-center text-accent">
+                          <div className="absolute inset-0 blur-md rounded-full bg-accent/20" />
+                          <Target className="w-5 sm:w-6 h-5 sm:h-6 relative z-10 drop-shadow-md" />
+                        </div>
                     </div>
                     <p className="text-2xl sm:text-4xl font-black font-mono tracking-tighter text-accent">{stats.activeCount}</p>
                     <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Active</p>
