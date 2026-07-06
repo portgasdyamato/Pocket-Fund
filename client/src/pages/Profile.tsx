@@ -413,13 +413,13 @@ export default function Profile() {
                     <div key={i} className="relative flex items-center justify-between p-5 sm:p-6 rounded-[24px] bg-white/[0.02] border-t border-l border-white/10 border-b border-r border-white/5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:bg-white/[0.04] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all duration-500 group overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       
-                      <div className="flex items-center gap-4 min-w-0 relative z-10">
-                        <div className={`w-10 h-10 rounded-[14px] bg-black/20 flex items-center justify-center shadow-inner border border-white/5 group-hover:border-white/10 transition-colors`}>
-                           <div className={`w-2 h-2 rounded-full flex-shrink-0 animate-pulse ${item.dot}`} />
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0 relative z-10 flex-1">
+                        <div className={`shrink-0 w-10 h-10 rounded-[14px] bg-black/20 flex items-center justify-center shadow-inner border border-white/5 group-hover:border-white/10 transition-colors`}>
+                           <div className={`w-2 h-2 rounded-full shrink-0 animate-pulse ${item.dot}`} />
                         </div>
-                        <span className="text-sm sm:text-base font-black tracking-wide text-white/80 group-hover:text-white transition-colors truncate">{item.label}</span>
+                        <span className="text-xs sm:text-sm font-black tracking-wide text-white/80 group-hover:text-white transition-colors truncate">{item.label}</span>
                       </div>
-                      <div className={`px-4 py-2 rounded-xl bg-black/40 border border-white/5 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] flex-shrink-0 ml-3 ${item.color} shadow-inner group-hover:border-white/10 transition-colors relative z-10`}>
+                      <div className={`shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-black/40 border border-white/5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] ml-2 sm:ml-3 ${item.color} shadow-inner group-hover:border-white/10 transition-colors relative z-10`}>
                         {item.status}
                       </div>
                     </div>
